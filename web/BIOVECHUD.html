@@ -3,10 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
     <title>THE QUADRATURE // BIOLOGICAL VECTOR</title>
-    <script src="q-core.js"></script>
-    <script src="q-ui-planner.js"></script>
-    <script src="q-hub.js"></script>
+    <script src="q-ui-global.js?v=16.2"></script>
+    <script src="q-core.js?v=16.2"></script>
+    <script src="q-ui-planner.js?v=16.2"></script>
+    <script src="q-hub.js?v=16.2"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@100;400;700&family=Orbitron:wght@400;500;700;900&display=swap');
 
@@ -14,6 +18,7 @@
             --void: #05080f; 
             --neon-cyan: #00f3ff; 
             --neon-cyan-dim: rgba(0, 243, 255, 0.1);
+            --sys-cyan: #00f0ff;
             --bio-green: #39ff14; 
             --bio-dim: rgba(57, 255, 20, 0.15); 
             --warn-orange: #ffaa00; 
@@ -22,6 +27,7 @@
             --theme-dim: var(--bio-dim);
             --gold: #F4D068;
             --platinum: #E5E4E2;
+            --starlight: rgba(255, 255, 255, 0.6);
         }
 
         body { 
@@ -31,6 +37,7 @@
             color: #fff; font-family: 'JetBrains Mono', monospace; display: flex; 
             justify-content: center; align-items: center; user-select: none; 
             color-scheme: dark; perspective: 1500px; transform-style: preserve-3d; 
+            touch-action: manipulation;
         }
 
         /* --- HAPTIC & MODAL Z-INDEX OVERRIDES --- */
@@ -51,17 +58,20 @@
         .mod-br { bottom: 8vh; right: 2vw; } 
 
         .m-head { font-family: 'Orbitron'; font-size: 0.75rem; color: #fff; letter-spacing: 2px; text-transform: uppercase; border-bottom: 1px dashed rgba(0, 243, 255, 0.3); padding-bottom: 6px; margin-top: 2px; font-weight: 800; text-shadow: 0 0 8px var(--neon-cyan-dim); display: flex; justify-content: space-between; align-items: center;}
-        .sim-tag { background: var(--bio-green); color: #000; font-size: 0.45rem; padding: 2px 4px; border-radius: 2px; display: block; font-weight: 900; letter-spacing: 1px; }
-        .m-row { display: flex; justify-content: space-between; align-items: baseline; font-size: 0.65rem; color: rgba(255,255,255,0.7); margin-top: 8px; font-weight: 700;}
+        .sim-tag { background: var(--sys-cyan); color: #000; font-size: 0.45rem; padding: 2px 4px; border-radius: 2px; display: block; font-weight: 900; letter-spacing: 1px; }
+        
+        .m-row { display: flex; justify-content: space-between; align-items: baseline; font-size: 0.65rem; margin-top: 8px; }
+        
+        /* STANDARDIZED TELEMETRY AESTHETICS */
+        .m-row span:first-child { color: var(--starlight); font-family: 'JetBrains Mono'; font-weight: 700; }
+        .m-row span:last-child { color: var(--sys-cyan); font-weight: 700; text-shadow: 0 0 8px var(--neon-cyan-dim); }
+        .m-row span.val-alert { color: var(--friction-red) !important; text-shadow: 0 0 8px rgba(255, 51, 51, 0.4) !important; }
 
-        .val-highlight { font-weight: 700; color: var(--neon-cyan); text-shadow: 0 0 8px var(--neon-cyan-dim); }
-        .val-bio { font-weight: 700; color: var(--bio-green); text-shadow: 0 0 8px var(--bio-dim); }
-        .val-alert { font-weight: 700; color: var(--friction-red); text-shadow: 0 0 8px rgba(255, 51, 51, 0.4); }
-
-        .sync-matrix { background: rgba(0,0,0,0.4); border: 1px solid rgba(255,255,255,0.1); padding: 10px; border-radius: 8px; margin-top: 10px; font-size: 0.6rem; color: rgba(255,255,255,0.7); display: flex; flex-direction: column; gap: 6px; }
+        .sync-matrix { background: rgba(0,0,0,0.4); border: 1px solid rgba(255,255,255,0.1); padding: 10px; border-radius: 8px; margin-top: 10px; font-size: 0.6rem; color: var(--starlight); display: flex; flex-direction: column; gap: 6px; font-weight: 700; }
         .matrix-row { display: flex; justify-content: space-between; align-items: center; }
+        .matrix-row span:last-child { color: var(--sys-cyan); }
         .matrix-alert { font-family: 'Orbitron'; font-weight: 700; margin-top: 6px; text-align: center; letter-spacing: 1px; padding-top: 6px; border-top: 1px solid rgba(255,255,255,0.1); }
-        .alert-flow { color: var(--bio-green); text-shadow: 0 0 5px var(--bio-dim); }
+        .alert-flow { color: var(--sys-cyan); text-shadow: 0 0 5px var(--neon-cyan-dim); }
 
         .btn { background: transparent; border: 1px solid var(--neon-cyan); color: var(--neon-cyan); padding: 8px 12px; cursor: pointer; font-family: 'Orbitron'; font-size: 0.7rem; letter-spacing: 2px; border-radius: 4px; transition: 0.3s; width: 100%; margin-top: 6px; z-index: 50; position: relative; font-weight: 700;}
         .btn:hover { background: var(--neon-cyan-dim); color: #fff; }
@@ -75,17 +85,17 @@
         .ls-center-hud { position: absolute; width: 35%; height: 35%; border-radius: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 10; text-align: center; }
         
         /* DARK EARTH CORE GEOMETRY - SHADOW REDUCED */
-        .bio-earth-core { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border-radius: 50%; background-color: #020402; overflow: hidden; box-shadow: 0 0 30px var(--bio-dim), inset -10px -10px 20px rgba(0,0,0,0.9); pointer-events: none; }
+        .bio-earth-core { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border-radius: 50%; background-color: #020402; overflow: hidden; box-shadow: 0 0 30px var(--neon-cyan-dim), inset -10px -10px 20px rgba(0,0,0,0.9); pointer-events: none; }
         .bio-earth-surface { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 1; background-image: url('https://raw.githubusercontent.com/mrdoob/three.js/master/examples/textures/planets/earth_atmos_2048.jpg'); background-size: 200% 100%; filter: grayscale(100%) sepia(100%) hue-rotate(75deg) saturate(300%) brightness(0.65) contrast(1.2); opacity: 0.8; }
-        .night-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border-radius: 50%; z-index: 2; background: radial-gradient(circle at 70% 30%, rgba(57, 255, 20, 0.15) 0%, rgba(0,0,0,0.6) 60%, rgba(0,0,0,0.8) 100%); pointer-events: none; box-shadow: inset 0 0 30px rgba(0,0,0,0.7); }
+        .night-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border-radius: 50%; z-index: 2; background: radial-gradient(circle at 70% 30%, rgba(0, 240, 255, 0.15) 0%, rgba(0,0,0,0.6) 60%, rgba(0,0,0,0.8) 100%); pointer-events: none; box-shadow: inset 0 0 30px rgba(0,0,0,0.7); }
 
         .aura-glow { position: absolute; width: 100%; height: 100%; border-radius: 50%; transition: all 1s ease; opacity: 0.3; z-index: -1; }
-        .flow-aura { background: radial-gradient(circle, var(--bio-green) 0%, transparent 70%); box-shadow: 0 0 100px var(--bio-green); }
-        .vent-aura { background: radial-gradient(circle, var(--neon-cyan) 0%, transparent 70%); box-shadow: 0 0 80px var(--neon-cyan); animation: aura-pulse 3s infinite; }
+        .flow-aura { background: radial-gradient(circle, var(--sys-cyan) 0%, transparent 70%); box-shadow: 0 0 100px var(--sys-cyan); }
+        .vent-aura { background: radial-gradient(circle, var(--sys-cyan) 0%, transparent 70%); box-shadow: 0 0 80px var(--sys-cyan); animation: aura-pulse 3s infinite; }
         @keyframes aura-pulse { 0%, 100% { transform: scale(1); opacity: 0.2; } 50% { transform: scale(1.15); opacity: 0.4; } }
 
         .bar-bg { width: 100%; height: 4px; background: rgba(255,255,255,0.1); border-radius: 2px; overflow: hidden; margin-top: 10px; }
-        .bar-fill { height: 100%; background: var(--bio-green); width: 0%; box-shadow: 0 0 10px var(--bio-green); transition: width 1s linear; }
+        .bar-fill { height: 100%; background: var(--sys-cyan); width: 0%; box-shadow: 0 0 10px var(--sys-cyan); transition: width 1s linear; }
         
         #lunar-nodes-container { position: absolute; width: 100%; height: 100%; z-index: 6; pointer-events: none; }
         .lunar-phase-icon { transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), filter 0.3s ease; }
@@ -98,61 +108,73 @@
 
     <div class="wing wing-left telemetry-node">
         <div class="wing-content">
-            <span class="w-head">LEGACY OS</span>
-            <div class="w-lbl">DATE</div>
-            <div class="val-lg val-highlight" id="leg-date">--</div>
-            <div style="height:15px;"></div>
-            <div style="display:flex; align-items:center; justify-content:center; gap: 5px;">
-                <div class="w-lbl" style="margin:0;">TIME</div>
-                <div class="fmt-toggle" onclick="window.toggleTimeFmt('fmt-btn')" ontouchstart="window.toggleTimeFmt('fmt-btn')" id="fmt-btn">UTC</div>
+            <div style="display:flex; flex-direction:column; align-items:center;">
+                <span class="w-head">LEGACY OS</span>
+                <div class="w-lbl">DATE</div>
+                <div class="val-lg" id="leg-date" style="color: var(--sys-cyan); text-shadow: 0 0 10px var(--neon-cyan-dim);">--</div>
             </div>
-            <div class="val-lg val-highlight" id="leg-time">--</div>
-            <div style="font-size:0.45rem; color:var(--platinum); margin-top:12px; font-weight:bold; letter-spacing:1px;" id="status-axiom-left">THE ARC IS QUADRATURE</div>
+            <div style="display:flex; flex-direction:column; align-items:center; margin-top: 10px;">
+                <div style="display:flex; align-items:center; justify-content:center; gap: 5px;">
+                    <div class="w-lbl" style="margin:0;">TIME</div>
+                    <div class="fmt-toggle" onclick="window.toggleTimeFmt('fmt-btn')" ontouchstart="window.toggleTimeFmt('fmt-btn'); event.preventDefault();" id="fmt-btn" style="border-color: var(--sys-cyan); color: var(--sys-cyan);">UTC</div>
+                </div>
+                <div class="val-lg" id="leg-time" style="color: var(--sys-cyan); text-shadow: 0 0 10px var(--neon-cyan-dim);">--</div>
+            </div>
+            <div style="font-size:0.5rem; color:var(--starlight); margin-top:12px; border-top: 1px dashed rgba(0, 243, 255, 0.3); padding-top: 8px; width: 85%;">STATUS: CONTINUITY ACTIVE</div>
         </div>
     </div>
 
     <div class="wing wing-right telemetry-node">
         <div class="wing-content">
-            <span class="w-head">Q LOGIC</span>
-            <div class="w-lbl">COORDINATE</div>
-            <div class="val-lg val-bio" id="q-coord">--</div>
-            <div style="height:15px;"></div>
-            <div class="w-lbl">TRUE ELLIPSE</div>
-            <div class="val-lg val-bio" id="q-arc">--</div>
-            <div style="font-size:0.45rem; color:var(--platinum); margin-top:12px; font-weight:bold; letter-spacing:1px;" id="status-axiom-right">LOCATION IS TRUTH</div>
+            <div style="display:flex; flex-direction:column; align-items:center;">
+                <span class="w-head">QUAD OS</span>
+                <div class="w-lbl">Q COORDINATE</div>
+                <div class="val-lg" id="q-coord-wing" style="margin-top: 4px; color: var(--sys-cyan); text-shadow: 0 0 10px var(--neon-cyan-dim);">--</div>
+            </div>
+            <div style="display:flex; width: 100%; justify-content: space-around; margin-top: 10px;">
+                <div style="display:flex; flex-direction:column; align-items:center;">
+                    <div class="w-lbl">MEAN CIRCLE (CIVIL)</div>
+                    <div class="val-sm" id="mean-deg" style="color:var(--sys-cyan) !important; text-shadow:0 0 10px var(--neon-cyan-dim); margin-top: 4px;">--</div>
+                </div>
+                <div style="display:flex; flex-direction:column; align-items:center;">
+                    <div class="w-lbl">TRUE ELLIPSE (PHYSICS)</div>
+                    <div class="val-sm" id="true-deg" style="color:var(--sys-cyan) !important; text-shadow:0 0 10px var(--neon-cyan-dim); margin-top: 4px;">--</div>
+                </div>
+            </div>
+            <div style="font-size:0.5rem; color:var(--starlight); margin-top:12px; border-top: 1px dashed rgba(0, 243, 255, 0.3); padding-top: 8px; width: 85%;">DUAL-STATE ENGINE</div>
         </div>
     </div>
 
     <div class="corner-panel mod-tl telemetry-node">
         <div class="m-head">PHOTIC ALIGNMENT <span id="sync-badge-tl" class="sim-tag">SOVEREIGN</span></div>
-        <div class="m-row"><span>SOLAR LUX TARGET:</span> <span class="val-highlight" id="lux-avail">--</span></div>
+        <div class="m-row"><span>SOLAR LUX TARGET:</span> <span id="lux-avail">--</span></div>
         <div class="m-row"><span>UV INDEX EXPOSURE:</span> <span id="uv-index">--</span></div>
-        <div class="m-row" style="margin-top: 12px;"><span>SOLAR NOON (ZENITH):</span> <span class="val-highlight" id="solar-noon">--</span></div>
+        <div class="m-row" style="margin-top: 12px;"><span>SOLAR NOON (ZENITH):</span> <span id="solar-noon">--</span></div>
     </div>
     
     <div class="corner-panel mod-tr telemetry-node">
         <div class="m-head">NODAL & SAROS CYCLE <span id="sync-badge-tr" class="sim-tag">SOVEREIGN</span></div>
-        <div class="m-row"><span>SAROS SERIES:</span> <span class="val-highlight" id="saros-series">--</span></div>
+        <div class="m-row"><span>SAROS SERIES:</span> <span id="saros-series">--</span></div>
         <div class="m-row"><span>DRACONIC PRESCESSION:</span> <span id="draconic-phase">--</span></div>
-        <div class="m-row" style="margin-top: 12px;"><span>ECLIPSE PROXIMITY:</span> <span class="val-highlight" id="eclipse-prox">--</span></div>
+        <div class="m-row" style="margin-top: 12px;"><span>ECLIPSE PROXIMITY:</span> <span id="eclipse-prox">--</span></div>
     </div>
 
     <div class="corner-panel mod-bl telemetry-node">
         <div class="m-head">CIRCADIAN ANCHOR <span id="sync-badge-bl" class="sim-tag">SOVEREIGN</span></div>
         <div class="m-row"><span>MELATONIN ONSET:</span> <span id="melatonin-onset">--</span></div>
         <div class="sync-matrix" id="sync-matrix-block">
-            <div class="matrix-row"><span>ULTRADIAN OUTPUT:</span> <span id="mat-ultra" style="color:#fff;">--</span></div>
-            <div class="matrix-row"><span>BIOLOGICAL SYNC:</span> <span id="bio-sync-pct" style="font-weight:bold; font-size:0.75rem; color:var(--bio-green);">--%</span></div>
+            <div class="matrix-row"><span>ULTRADIAN OUTPUT:</span> <span id="mat-ultra">--</span></div>
+            <div class="matrix-row"><span>BIOLOGICAL SYNC:</span> <span id="bio-sync-pct">--%</span></div>
             <div class="matrix-alert" id="mat-alert">--</div>
         </div>
     </div>
 
     <div class="corner-panel mod-br telemetry-node">
         <div class="m-head">ULTRADIAN RHYTHM <span id="sync-badge-br" class="sim-tag">SOVEREIGN</span></div>
-        <div class="m-row"><span>STATE:</span> <span class="val-bio" id="bio-state">--</span></div>
+        <div class="m-row"><span>STATE:</span> <span id="bio-state">--</span></div>
         <div class="m-row"><span>ELAPSED:</span> <span id="bio-timer">-- / 90 MIN</span></div>
         <div class="bar-bg"><div class="bar-fill" id="bio-bar"></div></div>
-        <button class="btn" style="margin-top:16px;" onclick="openCalibration()" ontouchstart="event.stopPropagation(); openCalibration()">CALIBRATE RHYTHM</button>
+        <button class="btn" style="margin-top:16px;" onclick="openCalibration()" ontouchstart="event.stopPropagation(); openCalibration(); event.preventDefault();">CALIBRATE RHYTHM</button>
         
     </div>
 
@@ -185,7 +207,6 @@
                 document.getElementById('mat-alert').style.color = "var(--warn-orange)";
                 try {
                     const dynamicDuration = await window.Q_PHASE_III.syncBiometrics();
-                    // Only override if not strictly calibrated by user
                     if (!localStorage.getItem('q_bio_duration')) {
                         cycleDuration = dynamicDuration;
                     }
@@ -214,31 +235,26 @@
         }
 
         function getDynamicMoonSVG(phaseFloat, isApex, isPrimary) {
-            // Dynamic SVG Terminator Parser (Pixel-Perfect Phase Shadowing)
             let shadowColor = isApex ? 'rgba(0, 243, 255, 1)' : `rgba(0, 243, 255, ${(phaseFloat > 0.4 && phaseFloat < 0.6) ? 0.8 : 0.2})`;
             let shadowSize = isApex ? '15px' : (isPrimary ? '8px' : '3px');
             let html = `<svg viewBox="0 0 32 32" width="100%" height="100%" style="border-radius:50%; box-shadow: 0 0 ${shadowSize} ${shadowColor};">`;
             
-            // Base dark circle
             html += `<circle cx="16" cy="16" r="15" fill="#05080f" stroke="rgba(0,243,255,0.3)" stroke-width="1"/>`;
             
-            // Ensure minimum rx to prevent SVG rendering artifacts on absolute vertical arcs
             let rx = Math.max(0.01, Math.abs(15 * Math.cos(phaseFloat * 2 * Math.PI))); 
             let sweep;
             let path = "";
             
-            if (phaseFloat < 0.5) { // Waxing (Light builds on the right)
+            if (phaseFloat < 0.5) {
                 sweep = phaseFloat <= 0.25 ? 0 : 1;
                 path = `M 16 1 A 15 15 0 0 1 16 31 A ${rx} 15 0 0 ${sweep} 16 1`;
-            } else { // Waning (Light decays to the left)
+            } else {
                 sweep = phaseFloat <= 0.75 ? 0 : 1;
                 path = `M 16 1 A 15 15 0 0 0 16 31 A ${rx} 15 0 0 ${sweep} 16 1`;
             }
             
             if (phaseFloat === 0 || phaseFloat === 1) {
-                // Absolute New Moon - Remains dark base
             } else if (phaseFloat === 0.5) {
-                // Absolute Full Moon - Perfect Circle fill
                 html += `<circle cx="16" cy="16" r="15" fill="#E5E4E2"/>`;
             } else {
                 html += `<path d="${path}" fill="#E5E4E2"/>`;
@@ -254,14 +270,13 @@
             
             const synodicMonth = 29.530588;
             const C = Math.floor((daysElapsed + 1.555) / synodicMonth);
-            const windowDays = 100; // Render fade window (~3.4 months ahead/behind)
-            const phaseDensity = 16; // 16 Nodes per lunation (Doubled resolution)
+            const windowDays = 100;
+            const phaseDensity = 16; 
 
             let closestNode = null;
             let minDelta = Infinity;
             let allNodes = [];
 
-            // First Pass: Find the mathematical Apex Node (Closest physical coordinate)
             for (let c = C - 4; c <= C + 4; c++) {
                 for (let p = 0; p < phaseDensity; p++) {
                     let phaseFloat = p / phaseDensity;
@@ -276,7 +291,6 @@
                 }
             }
 
-            // Second Pass: Render the Celestial Rosary
             allNodes.forEach(n => {
                 if (Math.abs(n.deltaDays) <= windowDays) {
                     let opacity = 1 - (Math.abs(n.deltaDays) / windowDays);
@@ -287,9 +301,7 @@
                     
                     let rad = (meanArc - 90) * (Math.PI / 180);
                     
-                    // Offset radial distance based on primary vs interphase
                     let isPrimary = (n.p % (phaseDensity / 4) === 0);
-                    // R mapping: Shallow sinusoidal wave. New Moon at 38%, Full Moon at 54%
                     let rMap = 46 - 8 * Math.cos(n.phaseFloat * 2 * Math.PI);
                     let x = 50 + rMap * Math.cos(rad);
                     let y = 50 + rMap * Math.sin(rad);
@@ -299,7 +311,7 @@
                     let size;
                     if (isApex) size = 28;
                     else if (isPrimary) size = (n.p === 0 || n.p === phaseDensity/2) ? 20 : 16;
-                    else size = 10; // Micro-scale for fluid interphases
+                    else size = 10; 
                     
                     let zIndex = isApex ? 50 : (isPrimary ? 20 : 10);
                     
@@ -382,7 +394,7 @@
                 const parts = document.getElementById('cal-anchor').value.split(':');
                 anchorMins = (parseInt(parts[0]) * 60) + parseInt(parts[1]);
                 localStorage.setItem('q_bio_anchor', anchorMins);
-                isAutoAnchor = false; // Disable automation once manually locked
+                isAutoAnchor = false; 
                 
                 const newLoc = document.getElementById('cal-location').value;
                 if(newLoc) window.Q_UpdateState('location', 'name', newLoc.toUpperCase());
@@ -397,22 +409,51 @@
         window.addEventListener('q-tick', (e) => {
             const { t, isLive, activeTime, daysElapsed, qData, legacyDateStr, legacyTimeStr, activePostulate } = e.detail;
 
-            // Render fading moon comet tail (updating rapidly enough to track scrubbing seamlessly)
             if (lastRenderedScrub === null || Math.abs(daysElapsed - lastRenderedScrub) > 0.05) {
                 renderDynamicMoons(daysElapsed);
                 lastRenderedScrub = daysElapsed;
             }
 
+            function formatDualColor(str) {
+                const letterStyle = "color:var(--starlight); font-family:'Orbitron'; font-size:0.8rem; margin-right:2px;";
+                const numStyle = "color:var(--sys-cyan); font-size:1.1rem; font-weight:bold;";
+                let out = "";
+                let tokens = str.match(/([0-9]+)|([^0-9]+)/g);
+                if (tokens) {
+                    tokens.forEach(token => {
+                        if (/[0-9]/.test(token)) {
+                            out += `<span style="${numStyle}">${token}</span>`;
+                        } else {
+                            out += `<span style="${letterStyle}">${token}</span>`;
+                        }
+                    });
+                }
+                return out;
+            }
+
             document.getElementById('leg-date').innerText = legacyDateStr.toUpperCase();
-            document.getElementById('leg-time').innerText = legacyTimeStr;
-            let activeBlock = window.getQBlockByTime ? window.getQBlockByTime(t) : null;
-            document.getElementById('q-coord').innerText = (activeBlock && activeBlock.type === 'PYLON') ? activeBlock.name : `Q${qData.quad} S${qData.sect} DAY ${qData.day}`;
-            document.getElementById('q-arc').innerText = qData.trueArc.toFixed(4) + "°";
+            document.getElementById('leg-time').innerHTML = formatDualColor(legacyTimeStr);
             
-            // --- MACRO-OS INVERSION STATUS ROTATOR ---
+            document.getElementById('mean-deg').innerText = qData.meanArc.toFixed(2) + "°";
+            document.getElementById('true-deg').innerText = qData.trueArc.toFixed(2) + "°";
+            
+            let activeBlock = window.getQBlockByTime ? window.getQBlockByTime(t) : null;
+            const qCoordWing = document.getElementById('q-coord-wing');
+            
+            let smLetterStyle = "color:var(--starlight); font-family:'Orbitron'; font-size:0.8rem; margin-right:2px;";
+            let smNumStyle = "color:var(--sys-cyan); font-size:1.1rem; font-weight:bold;";
+            
+            if (activeBlock && activeBlock.type === 'PYLON') {
+                qCoordWing.innerHTML = `<span style="font-size:0.9rem; color:var(--sys-cyan); font-family:'Orbitron'; font-weight:bold; text-shadow: 0 0 10px var(--neon-cyan-dim);">${activeBlock.name}</span>`;
+            } else {
+                let cCycle = activeBlock ? activeBlock.cycle : 0;
+                qCoordWing.innerHTML = `<span style="${smLetterStyle}">QC</span><span style="${smNumStyle}">${cCycle}</span> ` +
+                                       `<span style="${smLetterStyle} margin-left:6px;">Q</span><span style="${smNumStyle}">${qData.quad}</span> ` +
+                                       `<span style="${smLetterStyle} margin-left:6px;">S</span><span style="${smNumStyle}">${qData.sect}</span> ` +
+                                       `<span style="${smLetterStyle} margin-left:6px;">DAY</span><span style="${smNumStyle}">${qData.day}</span>`;
+            }
+
             if(activePostulate) {
-                document.getElementById('status-axiom-left').innerText = activePostulate;
-                document.getElementById('status-axiom-right').innerText = activePostulate === "LOCATION IS TRUTH" ? "THE ARC IS QUADRATURE" : "LOCATION IS TRUTH";
                 const badges = ['sync-badge-tl', 'sync-badge-tr', 'sync-badge-bl', 'sync-badge-br'];
                 badges.forEach(id => {
                     const badge = document.getElementById(id);
@@ -434,7 +475,6 @@
             melDate.setUTCHours(Math.floor(noonHour) + 8 + solarMetrics.sunsetOffset, 0, 0, 0);
             document.getElementById('melatonin-onset').innerText = window.formatLegacyDate(melDate.getTime()).timeStr;
 
-            // Automate Nadir/Wake Anchor based on Melatonin Onset + 8 Hours (Sleep phase)
             if (isAutoAnchor) {
                 let wakeDate = new Date(melDate.getTime() + (8 * 3600000));
                 anchorMins = wakeDate.getUTCHours() * 60 + wakeDate.getUTCMinutes();
@@ -466,18 +506,16 @@
             document.getElementById('bio-bar').style.width = (cyclePos / cycleDuration * 100) + "%";
             document.getElementById('mat-ultra').innerText = document.getElementById('bio-state').innerText;
 
-            // Render Volumetric Dark Earth Core (180 degree offset from Mechanical Vector)
             const earthSurface = document.querySelector('.bio-earth-surface');
             if (earthSurface) {
                 const siderealDayMs = 86164090;
-                // Offset by 0.5 (180 degrees) for the dark side / opposite hemisphere
                 const dayProgress = ((t % siderealDayMs) / siderealDayMs + 0.5) % 1;
                 const bgPosition = 200 - (dayProgress * 200);
                 earthSurface.style.backgroundPosition = `${bgPosition}% 0`;
             }
         });
 
-        window.generateStars('stars');
+        if (window.generateStars) window.generateStars('stars');
     </script>
 </body>
 </html>

@@ -4,7 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>THE QUADRATURE // MECHANICAL VECTOR</title>
-    <script src="q-core.js"></script>
+    <script src="q-ui-global.js?v=16.1"></script>
+    <script src="q-core.js?v=16.1"></script>
     <script src="q-ui-planner.js"></script>
     <script src="q-hub.js"></script>
     <style>
@@ -17,18 +18,19 @@
             --titanium: #334155; --carbon: #0f172a; --steel: #64748b;
             --blur-heavy: blur(20px);
             --theme-main: var(--cyan-glow); --theme-dim: var(--cyan-dim); --gold: #F4D068;
+            --starlight: rgba(255, 255, 255, 0.6);
             
             /* Dynamic variables updated via JS */
             --dyn-phase-color: var(--magenta-glow);
             --dyn-phase-dim: var(--magenta-dim);
         }
 
-        body { margin: 0; padding: 0; height: 100vh; width: 100vw; overflow: hidden; background-color: var(--void); background: radial-gradient(circle at center, #0a0f1a 0%, var(--void) 85%); color: var(--core-plat); font-family: 'JetBrains Mono', monospace; display: flex; justify-content: center; align-items: center; user-select: none; color-scheme: dark; perspective: 1500px; transform-style: preserve-3d; }
+        body { margin: 0; padding: 0; height: 100vh; width: 100vw; overflow: hidden; background-color: var(--void); background: radial-gradient(circle at center, #0a0f1a 0%, var(--void) 85%); color: var(--core-plat); font-family: 'JetBrains Mono', monospace; display: flex; justify-content: center; align-items: center; user-select: none; color-scheme: dark; perspective: 1500px; transform-style: preserve-3d; touch-action: manipulation; }
         
         /* --- HAPTIC & MODAL Z-INDEX OVERRIDES --- */
         #q-universal-modal { z-index: 999999 !important; }
         .mech-panel { pointer-events: auto !important; z-index: 60 !important; }
-        .radar-box, .opt-btn, .globe { pointer-events: auto !important; position: relative; z-index: 100 !important; }
+        .radar-box, .opt-btn, .globe, .fmt-toggle { pointer-events: auto !important; position: relative; z-index: 100 !important; }
 
         .matrix-layer { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 2; background-image: linear-gradient(rgba(0, 240, 255, 0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(0, 240, 255, 0.03) 1px, transparent 1px); background-size: 40px 40px; pointer-events: none; }
         #stars { z-index: 1; }
@@ -43,7 +45,10 @@
 
         .m-head { font-family: 'Orbitron'; font-size: 0.55rem; color: var(--core-plat); letter-spacing: 2px; text-transform: uppercase; border-bottom: 1px dashed var(--core-dim); padding-bottom: 4px; margin-top: 2px; display: flex; justify-content: space-between; font-weight: 800;}
         .m-head span { background: rgba(0, 240, 255, 0.1); color: var(--cyan-glow); padding: 1px 5px; border-radius: 2px; border: 1px solid var(--cyan-dim); }
-        .m-row { display: flex; justify-content: space-between; align-items: baseline; font-size: 0.55rem; color: var(--steel); margin-top: 4px; font-weight: 700;}
+        
+        /* STANDARDIZED TELEMETRY AESTHETICS */
+        .m-row { display: flex; justify-content: space-between; align-items: baseline; font-size: 0.55rem; margin-top: 4px; font-weight: 700;}
+        .m-row span:first-child { color: var(--steel); }
         .m-val { color: var(--cyan-glow); font-family: 'Orbitron'; font-weight: 900; text-shadow: 0 0 8px var(--cyan-dim); }
 
         .respiration-wave { position: absolute; width: 200%; height: 100%; transition: background 1s ease, border 1s ease; left: 0; }
@@ -122,34 +127,48 @@
         .data-val-mg { color: var(--magenta-glow); text-shadow: 0 0 8px var(--magenta-dim); }
     </style>
 </head>
-<body>
+<body class="mode-q">
 
     <div class="matrix-layer"></div>
     <div class="star-container" id="stars"></div>
     <div id="needle-hud">SYSTEMIC CONTEXT</div>
 
     <div class="wing wing-left telemetry-node">
-        <div class="mech-panel wing-content">
-            <span class="w-head">CIVIL ARROGANCE (GREGORIAN)</span>
-            <div class="w-lbl">CIVIL DATE / TIME (UTC)</div>
-            <div class="val-display">
-                <div class="val-lg" style="color:var(--steel); text-shadow:none; font-size: 0.9rem;" id="leg-date">--</div>
-                <div class="val-lg" style="color:var(--steel); text-shadow:none; font-size: 0.8rem; margin-top: 4px;" id="leg-time">--</div>
+        <div class="wing-content">
+            <div style="display:flex; flex-direction:column; align-items:center;">
+                <span class="w-head">LEGACY OS</span>
+                <div class="w-lbl">DATE</div>
+                <div class="val-lg" id="leg-date" style="color: var(--cyan-glow); text-shadow: 0 0 10px var(--cyan-dim);">--</div>
             </div>
-            <div class="w-lbl">GREGORIAN ENTROPY (TOTAL DRIFT)</div>
-            <div class="val-display" style="margin-bottom:0;"><div class="val-lg val-red" id="civil-lag">--</div></div>
-            <div style="font-size:0.45rem; color:var(--steel); margin-top:4px; font-weight:bold; letter-spacing:1px;" id="status-axiom-left">LOCATION IS TRUTH</div>
+            <div style="display:flex; flex-direction:column; align-items:center; margin-top: 10px;">
+                <div style="display:flex; align-items:center; justify-content:center; gap: 5px;">
+                    <div class="w-lbl" style="margin:0;">TIME</div>
+                    <div class="fmt-toggle" onclick="window.toggleTimeFmt('fmt-btn')" ontouchstart="window.toggleTimeFmt('fmt-btn'); event.preventDefault();" id="fmt-btn" style="border-color: var(--cyan-glow); color: var(--cyan-glow);">UTC</div>
+                </div>
+                <div class="val-lg" id="leg-time" style="color: var(--cyan-glow); text-shadow: 0 0 10px var(--cyan-dim);">--</div>
+            </div>
+            <div style="font-size:0.5rem; color:var(--steel); margin-top:12px; border-top: 1px dashed rgba(0, 240, 255, 0.3); padding-top: 8px; width: 85%;">STATUS: CONTINUITY ACTIVE</div>
         </div>
     </div>
 
     <div class="wing wing-right telemetry-node">
-        <div class="mech-panel wing-content">
-            <span class="w-head holo-text">Q LOGIC (QUADRATURE)</span>
-            <div class="w-lbl">SOLAR COORDINATE</div>
-            <div class="val-display"><div class="val-lg" id="q-coord">--</div></div>
-            <div class="w-lbl">TRUE ORBITAL ARC</div>
-            <div class="val-display" style="margin-bottom:0;"><div class="val-lg" id="q-arc">--</div></div>
-            <div style="font-size:0.45rem; color:var(--steel); margin-top:4px; font-weight:bold; letter-spacing:1px;" id="status-axiom-right">THE ARC IS QUADRATURE</div>
+        <div class="wing-content">
+            <div style="display:flex; flex-direction:column; align-items:center;">
+                <span class="w-head">QUAD OS</span>
+                <div class="w-lbl">Q COORDINATE</div>
+                <div class="val-lg" id="q-coord-wing" style="margin-top: 4px; color: var(--cyan-glow); text-shadow: 0 0 10px var(--cyan-dim);">--</div>
+            </div>
+            <div style="display:flex; width: 100%; justify-content: space-around; margin-top: 10px;">
+                <div style="display:flex; flex-direction:column; align-items:center;">
+                    <div class="w-lbl">MEAN CIRCLE (CIVIL)</div>
+                    <div class="val-sm" id="mean-deg" style="color:var(--cyan-glow) !important; text-shadow:0 0 10px var(--cyan-dim); margin-top: 4px;">--</div>
+                </div>
+                <div style="display:flex; flex-direction:column; align-items:center;">
+                    <div class="w-lbl">TRUE ELLIPSE (PHYSICS)</div>
+                    <div class="val-sm" id="true-deg" style="color:var(--cyan-glow) !important; text-shadow:0 0 10px var(--cyan-dim); margin-top: 4px;">--</div>
+                </div>
+            </div>
+            <div style="font-size:0.5rem; color:var(--steel); margin-top:12px; border-top: 1px dashed rgba(0, 240, 255, 0.3); padding-top: 8px; width: 85%;">DUAL-STATE ENGINE</div>
         </div>
     </div>
 
@@ -209,17 +228,17 @@
                 CALCULATING OFFSET...
             </div>
         </div>
-        <div class="m-row" style="margin-top:8px; justify-content:center;"><button class="opt-btn" style="background:transparent; border:1px solid var(--cyan-glow); color:var(--cyan-glow); padding:4px 10px; border-radius:4px; font-family:'Orbitron'; font-size:0.6rem; cursor:pointer;" onclick="openDataView()" ontouchstart="event.stopPropagation(); openDataView()">VIEW DATA</button></div>
+        <div class="m-row" style="margin-top:8px; justify-content:center;"><button class="opt-btn" style="background:transparent; border:1px solid var(--cyan-glow); color:var(--cyan-glow); padding:4px 10px; border-radius:4px; font-family:'Orbitron'; font-size:0.6rem; cursor:pointer;" onclick="openDataView()" ontouchstart="event.stopPropagation(); openDataView(); event.preventDefault();">VIEW DATA</button></div>
     </div>
 
     <div class="gearbox q-center-dial">
         <div class="gear gear-outer">
             <div class="orbital-marker marker-peri" title="PERIHELION (14.00°): Maximum orbital velocity. True Ellipse acceleration."></div>
             <div class="orbital-marker marker-aph" title="APHELION (194.00°): Minimum orbital velocity. True Ellipse deceleration."></div>
-            <div class="globe silver-globe p-alpha" title="ALPHA: WINTER SOLSTICE (0.000°)" onclick="openPylonModal('ALPHA')" ontouchstart="event.stopPropagation(); openPylonModal('ALPHA')"></div>
-            <div class="globe gold-globe p-beta" title="BETA: VERNAL EQUINOX (90.000°)" onclick="openPylonModal('BETA')" ontouchstart="event.stopPropagation(); openPylonModal('BETA')"></div>
-            <div class="globe silver-globe p-gamma" title="GAMMA: SUMMER SOLSTICE (180.000°)" onclick="openPylonModal('GAMMA')" ontouchstart="event.stopPropagation(); openPylonModal('GAMMA')"></div>
-            <div class="globe gold-globe p-delta" title="DELTA: AUTUMNAL EQUINOX (270.000°)" onclick="openPylonModal('DELTA')" ontouchstart="event.stopPropagation(); openPylonModal('DELTA')"></div>
+            <div class="globe silver-globe p-alpha" title="ALPHA: WINTER SOLSTICE (0.000°)" onclick="openPylonModal('ALPHA')" ontouchstart="event.stopPropagation(); openPylonModal('ALPHA'); event.preventDefault();"></div>
+            <div class="globe gold-globe p-beta" title="BETA: VERNAL EQUINOX (90.000°)" onclick="openPylonModal('BETA')" ontouchstart="event.stopPropagation(); openPylonModal('BETA'); event.preventDefault();"></div>
+            <div class="globe silver-globe p-gamma" title="GAMMA: SUMMER SOLSTICE (180.000°)" onclick="openPylonModal('GAMMA')" ontouchstart="event.stopPropagation(); openPylonModal('GAMMA'); event.preventDefault();"></div>
+            <div class="globe gold-globe p-delta" title="DELTA: AUTUMNAL EQUINOX (270.000°)" onclick="openPylonModal('DELTA')" ontouchstart="event.stopPropagation(); openPylonModal('DELTA'); event.preventDefault();"></div>
         </div>
         <div class="gear gear-mid" id="kepler-ring"></div>
         <div class="gear gear-inner"></div>
@@ -374,21 +393,53 @@
         window.addEventListener('q-tick', (e) => {
             const { t, isLive, activeTime, daysElapsed, qData, lagDays, legacyDateStr, legacyTimeStr, activePostulate } = e.detail;
             
+            // Utility function to format legacy strings (grey letters/symbols, cyan numbers)
+            function formatDualColor(str) {
+                const letterStyle = "color:var(--steel); font-family:'Orbitron'; font-size:0.8rem; margin-right:2px;";
+                const numStyle = "color:var(--cyan-glow); font-size:1.1rem; font-weight:bold;";
+                let out = "";
+                let tokens = str.match(/([0-9]+)|([^0-9]+)/g);
+                if (tokens) {
+                    tokens.forEach(token => {
+                        if (/[0-9]/.test(token)) {
+                            out += `<span style="${numStyle}">${token}</span>`;
+                        } else {
+                            out += `<span style="${letterStyle}">${token}</span>`;
+                        }
+                    });
+                }
+                return out;
+            }
+
             document.getElementById('leg-date').innerText = legacyDateStr.toUpperCase();
-            document.getElementById('leg-time').innerText = legacyTimeStr;
-            document.getElementById('civil-lag').innerText = `-${lagDays.toFixed(6)} DAYS`;
+            document.getElementById('leg-time').innerHTML = formatDualColor(legacyTimeStr);
 
             // --- MACRO-OS INVERSION STATUS ROTATOR ---
             if(activePostulate) {
-                document.getElementById('status-axiom-left').innerText = activePostulate;
-                document.getElementById('status-axiom-right').innerText = activePostulate === "LOCATION IS TRUTH" ? "THE ARC IS QUADRATURE" : "LOCATION IS TRUTH";
+                const axLeft = document.getElementById('status-axiom-left');
+                const axRight = document.getElementById('status-axiom-right');
+                if(axLeft) axLeft.innerText = activePostulate;
+                if(axRight) axRight.innerText = activePostulate === "LOCATION IS TRUTH" ? "THE ARC IS QUADRATURE" : "LOCATION IS TRUTH";
             }
 
             let activeBlock = window.getQBlockByTime ? window.getQBlockByTime(t) : null;
-            document.getElementById('q-coord').innerHTML = (activeBlock && activeBlock.type === 'PYLON') 
-                ? `<span style="font-size:0.65rem; color:var(--cyan-glow); font-family:'Orbitron'; font-weight:bold;">${activeBlock.name}</span>`
-                : `<span style="font-size:0.6rem; color:var(--steel);">Q</span>${qData.quad} <span style="font-size:0.6rem; color:var(--steel);">S</span>${qData.sect} <span style="font-size:0.6rem; color:var(--steel);">DAY </span>${qData.day}`;
-            document.getElementById('q-arc').innerText = qData.trueArc.toFixed(4) + "°"; 
+            const qCoordWing = document.getElementById('q-coord-wing');
+            
+            let smLetterStyle = "color:var(--steel); font-family:'Orbitron'; font-size:0.8rem; margin-right:2px;";
+            let smNumStyle = "color:var(--cyan-glow); font-size:1.1rem; font-weight:bold;";
+            
+            if (activeBlock && activeBlock.type === 'PYLON') {
+                qCoordWing.innerHTML = `<span style="font-size:0.9rem; color:var(--cyan-glow); font-family:'Orbitron'; font-weight:bold; text-shadow: 0 0 10px var(--cyan-dim);">${activeBlock.name}</span>`;
+            } else {
+                let cCycle = activeBlock ? activeBlock.cycle : 0;
+                qCoordWing.innerHTML = `<span style="${smLetterStyle}">QC</span><span style="${smNumStyle}">${cCycle}</span> ` +
+                                       `<span style="${smLetterStyle} margin-left:6px;">Q</span><span style="${smNumStyle}">${qData.quad}</span> ` +
+                                       `<span style="${smLetterStyle} margin-left:6px;">S</span><span style="${smNumStyle}">${qData.sect}</span> ` +
+                                       `<span style="${smLetterStyle} margin-left:6px;">DAY</span><span style="${smNumStyle}">${qData.day}</span>`;
+            }
+
+            document.getElementById('mean-deg').innerText = qData.meanArc.toFixed(2) + "°";
+            document.getElementById('true-deg').innerText = qData.trueArc.toFixed(2) + "°";
             
             // --- DYNAMIC Q-DELTA DIAMOND & RING SHIFT ---
             document.getElementById('transit-diamond-arm').style.transform = `rotate(${qData.meanArc}deg)`;
@@ -447,6 +498,13 @@
                     document.getElementById('dv-q-arc').innerText = qData.trueArc.toFixed(4) + "°";
                     document.getElementById('dv-q-delta').innerText = (qData.delta > 0 ? "+" : "") + qData.delta.toFixed(4) + "°";
                     document.getElementById('dv-q-tmr').innerText = currentRadarStatus;
+                    
+                    const telMean = document.getElementById('tel-mean');
+                    if (telMean) {
+                        telMean.innerText = qData.meanArc.toFixed(3) + "°";
+                        document.getElementById('tel-true').innerText = qData.trueArc.toFixed(3) + "°";
+                        document.getElementById('tel-delta').innerText = (qData.delta > 0 ? "+" : "") + qData.delta.toFixed(4) + "°";
+                    }
                 }
             }
 
@@ -506,19 +564,6 @@
             else if(radarProximity > 0.85) { currentRadarStatus = 'THERMAL SPIKE'; radarText.innerText = "THERMAL SPIKE DETECTED"; radarText.style.color = "var(--cyan-glow)"; } 
             else { currentRadarStatus = 'STABLE'; radarText.innerText = "THERMODYNAMICS STABLE"; radarText.style.color = "var(--core-plat)"; }
 
-            if (modalTitle && modalTitle.innerText === 'COORDINATE DATA VIEW') {
-                const dvQCoord = document.getElementById('dv-q-coord');
-                if (dvQCoord) {
-                    document.getElementById('dv-leg-date').innerText = legacyDateStr.toUpperCase();
-                    document.getElementById('dv-leg-time').innerText = legacyTimeStr;
-                    document.getElementById('dv-leg-lag').innerText = `-${lagDays.toFixed(4)} D`;
-                    dvQCoord.innerText = (activeBlock && activeBlock.type === 'PYLON') ? activeBlock.name : `Q${qData.quad} S${qData.sect} DAY ${qData.day}`;
-                    document.getElementById('dv-q-arc').innerText = qData.trueArc.toFixed(4) + "°";
-                    document.getElementById('dv-q-delta').innerText = (qData.delta > 0 ? "+" : "") + qData.delta.toFixed(4) + "°";
-                    document.getElementById('dv-q-tmr').innerText = currentRadarStatus;
-                }
-            }
-
             const nanoString = (t / 1000).toFixed(9).split('.'); document.getElementById('nano-counter').innerText = `+${nanoString[1]}`;
             const smearValText = document.getElementById('smear-val');
             
@@ -530,7 +575,7 @@
             document.getElementById('civil-tension-readout').innerHTML = `<span style="color:var(--magenta-glow);">${offsetStr}</span>`; 
         });
 
-        window.generateStars('stars');
+        if(window.generateStars) window.generateStars('stars');
     </script>
 </body>
 </html>

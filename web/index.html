@@ -3,10 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
     <title>THE QUADRATURE // CHRONO-INTERFACE</title>
-    <script src="q-core.js"></script>
-    <script src="q-ui-planner.js"></script>
-    <script src="q-hub.js"></script>
+    <script src="q-ui-global.js?v=16.2"></script>
+    <script src="q-core.js?v=16.2"></script>
+    <script src="q-ui-planner.js?v=16.2"></script>
+    <script src="q-hub.js?v=16.2"></script>
     
     <script>
         // IRONCLAD MOBILE BYPASS: Force class if on native device, bypassing buggy WebView viewports
@@ -65,13 +69,11 @@
             touch-action: manipulation;
         }
 
-        /* --- NEW: IRONCLAD MOBILE OVERRIDES --- */
         html.is-mobile-device body { perspective: none !important; transform-style: flat !important; }
         html.is-mobile-device body:not(.telemetry-open) .vector-anchor { display: none !important; visibility: hidden !important; }
         html.is-mobile-device .q-nav-brand { font-size: 0.6rem !important; letter-spacing: 1px !important; }
         html.is-mobile-device #q-global-sim-badge { font-size: 0.4rem !important; padding: 2px 4px !important; letter-spacing: 0px !important; white-space: nowrap !important; margin-left: 0 !important; }
         
-        /* --- NEW: BOOT SEQUENCE UI SUPREMACY --- */
         body.boot-active .q-nav-bar,
         body.boot-active #mobile-telemetry-btn,
         body.boot-active #q-mic-fab,
@@ -95,7 +97,6 @@
             transform: translateZ(0);
         }
         
-        /* Strict Mobile Typography Fix */
         .boot-terminal h2 { font-family: 'Orbitron'; font-size: 1.8rem; letter-spacing: 6px; text-align: center; margin-top: 0; text-shadow: 0 0 10px var(--sys-cyan); white-space: nowrap; }
         @media (max-width: 768px) {
             .boot-terminal h2 { font-size: 1.1rem; letter-spacing: 4px; }
@@ -180,9 +181,7 @@
         
         .ring-node { position: absolute; left: 50%; transform: translateX(-50%); border-radius: 50%; z-index: 40; clip-path: polygon(50% 0%, 60% 40%, 100% 50%, 60% 60%, 50% 100%, 40% 60%, 0% 50%, 40% 40%); pointer-events: auto; cursor: help; }
         
-        /* Node Scaling: Enlarged for Maximum Visual Density */
         #node-cycle-mean { width: 56px; height: 56px; background: var(--platinum); filter: drop-shadow(0 0 10px #fff); top: -28px; animation: pulse-node 2s infinite; }
-        /* True Ellipse Node given a void border to distinctly punch out its shape when overlapping the Mean Circle Node */
         #node-cycle-true { width: 36px; height: 36px; background: var(--amber); filter: drop-shadow(0 0 12px var(--gold)); top: -18px; animation: pulse-node 2s infinite 0.5s; z-index: 45; border: 2px solid var(--void); }
         #node-sector { width: 36px; height: 36px; background: var(--gold); filter: drop-shadow(0 0 6px var(--amber)); top: -18px; animation: pulse-node 1.5s infinite 0.5s; }
         #node-week { width: 46px; height: 46px; background: var(--amber); filter: drop-shadow(0 0 12px var(--gold)); top: -23px; animation: pulse-node 3s infinite 1s; }
@@ -251,7 +250,7 @@
             <div style="display:flex; flex-direction:column; align-items:center;">
                 <span class="w-head">LEGACY OS</span>
                 <div class="w-lbl">DATE</div>
-                <div class="val-lg" id="leg-date">--</div>
+                <div class="val-lg" id="leg-date" style="color:var(--gold); text-shadow: 0 0 10px var(--gold-dim);">--</div>
             </div>
             <div style="display:flex; flex-direction:column; align-items:center; margin-top: 10px;">
                 <div style="display:flex; align-items:center; justify-content:center; gap: 5px;">
@@ -310,7 +309,6 @@
             
             inputs.style.display = 'none';
 
-            // Compressed sequence: Reduced from 8.0s to 3.2s
             log.innerHTML = "POSITION ACQUIRED.<br>";
             setTimeout(() => { log.innerHTML += "<br>ESTABLISHING CHRONOBIOLOGICAL STATE RESOLUTION... "; }, 300);
             setTimeout(() => { log.innerHTML += "<br>INITIATING LOCAL TRANSLATION OVERLAY... "; }, 600);
@@ -328,7 +326,6 @@
                 if(window.Q_LOG) window.Q_LOG('INFO', 'INTERFACE', 'BOOT_SEQUENCE_EXECUTED');
                 overlay.style.opacity = '0'; 
                 
-                // IRONCLAD: Removes the CSS block that hides the UI
                 document.body.classList.remove('boot-active'); 
                 
                 const ctrlBar = document.getElementById('q-universal-controls');
@@ -344,11 +341,9 @@
 
         window.generateStars('star-layer');
         
-        // SUBSCRIBE TO MASTER LOOP
         window.addEventListener('q-tick', (e) => {
             const { t, isLive, activeTime, daysElapsed, qData, legacyDateStr, legacyTimeStr, activePostulate } = e.detail;
 
-            // Utility function to format legacy strings (grey letters/symbols, gold numbers)
             function formatDualColor(str) {
                 const letterStyle = "color:var(--starlight); font-family:'Orbitron'; font-size:0.8rem; margin-right:2px;";
                 const numStyle = "color:var(--gold); font-size:1.1rem; font-weight:bold;";
@@ -366,7 +361,7 @@
                 return out;
             }
 
-            document.getElementById('leg-date').innerHTML = formatDualColor(legacyDateStr.toUpperCase());
+            document.getElementById('leg-date').innerHTML = `<span style="color:var(--gold); font-weight:bold; text-shadow:0 0 10px var(--gold-dim);">${legacyDateStr.toUpperCase()}</span>`;
             document.getElementById('leg-time').innerHTML = formatDualColor(legacyTimeStr);
 
             const continuousMeanDeg = daysElapsed * (360 / 365.24219);
@@ -407,7 +402,6 @@
             document.getElementById('face-bio-state').innerText = (window.Q_BIOMETRICS ? "LOCKED" : "STANDBY");
             document.getElementById('face-bio-natal').innerText = window.Q_STATE.metaphysical_layer.natal_anchor;
             
-            // COMMUNAL (Purged 'QC' cycle count, strictly aligned day count. Appending Sovereign Postulate)
             let smLetterStyle = "color:var(--starlight);";
             let smNumStyle = "color:var(--gold);";
             document.getElementById('face-com-node').innerHTML = (activeBlock && activeBlock.type === 'PYLON') ? `<span style="${smNumStyle}">${activeBlock.name}</span>` : `<span style="${smLetterStyle}">Q</span><span style="${smNumStyle}">${qData.quad}</span> <span style="${smLetterStyle}">S</span><span style="${smNumStyle}">${qData.sect}</span> <span style="${smLetterStyle}">DAY</span> <span style="${smNumStyle}">${qData.day}</span>`;

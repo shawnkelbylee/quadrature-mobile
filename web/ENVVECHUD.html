@@ -3,10 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
     <title>THE QUADRATURE // ENVIRONMENTAL VECTOR</title>
-    <script src="q-core.js"></script>
-    <script src="q-ui-planner.js"></script>
-    <script src="q-hub.js"></script>
+    <script src="q-ui-global.js?v=16.2"></script>
+    <script src="q-core.js?v=16.2"></script>
+    <script src="q-ui-planner.js?v=16.2"></script>
+    <script src="q-hub.js?v=16.2"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;800;900&family=JetBrains+Mono:wght@100;400;700&display=swap');
 
@@ -14,7 +18,6 @@
             --void: #020617; 
             --atmos-blue: #0ea5e9; 
             --atmos-dim: rgba(14, 165, 233, 0.15);
-            --frost-cyan: #e0f2fe; 
             --squall-amber: #f59e0b; 
             --alert-red: #ef4444; 
             --perihelion-mag: #c026d3;
@@ -26,23 +29,23 @@
             --gold: #F4D068;
             --platinum: #E5E4E2;
             --white-pure: #ffffff;
+            --starlight: rgba(255, 255, 255, 0.6);
         }
 
         body { 
             margin: 0; padding: 0; height: 100vh; width: 100vw; overflow: hidden; 
             background-color: var(--void); 
             background: radial-gradient(circle at center, #0a1122 0%, var(--void) 100%); 
-            color: var(--frost-cyan); font-family: 'JetBrains Mono', monospace; 
+            color: var(--env-green); font-family: 'JetBrains Mono', monospace; 
             display: flex; justify-content: center; align-items: center; 
             user-select: none; perspective: 1500px; transform-style: preserve-3d; color-scheme: dark; 
+            touch-action: manipulation;
         }
 
         /* --- HAPTIC & MODAL Z-INDEX OVERRIDES --- */
         #q-universal-modal { z-index: 999999 !important; }
         .wind-panel { pointer-events: auto !important; z-index: 60 !important; }
-        .sys-badge.opt-badge, .val-highlight, .val-alert, .val-warn, .val-frost, .fmt-toggle { pointer-events: auto !important; position: relative; z-index: 100 !important; }
-        
-        .val-atmos { color: var(--env-green); text-shadow: 0 0 15px var(--env-green-dim); }
+        .sys-badge.opt-badge, .val-highlight, .val-alert, .val-warn, .fmt-toggle { pointer-events: auto !important; position: relative; z-index: 100 !important; }
 
         .wind-panel { 
             position: absolute; width: var(--mod-w); padding: 12px 15px; box-sizing: border-box; 
@@ -65,15 +68,18 @@
             padding-bottom: 3px; margin-top: 4px; display: flex; justify-content: space-between;
         }
         .h-label:first-child { margin-top: 0; }
-        .h-val { font-family: 'JetBrains Mono'; font-size: 0.75rem; color: #fff; display: flex; justify-content: space-between; align-items: baseline; margin-top: 1px; }
         
-        .val-highlight { font-weight: 700; color: var(--env-green); text-shadow: 0 0 8px var(--env-green-dim); transition: 0.3s; cursor: pointer; border-bottom: 1px dotted var(--env-green); }
-        .val-highlight:hover { color: #fff; text-shadow: 0 0 15px var(--env-green); }
-        .val-frost { font-weight: 700; color: var(--frost-cyan); text-shadow: 0 0 8px rgba(224, 242, 254, 0.3); transition: 0.3s; }
-        .val-alert { font-weight: 700; color: var(--alert-red); text-shadow: 0 0 10px rgba(239, 68, 68, 0.5); transition: 0.3s; cursor: pointer; border-bottom: 1px dotted var(--alert-red); }
-        .val-alert:hover { color: #fff; text-shadow: 0 0 15px var(--alert-red); }
-        .val-warn { font-weight: 700; color: var(--squall-amber); text-shadow: 0 0 10px rgba(245, 158, 11, 0.4); transition: 0.3s; cursor: pointer; border-bottom: 1px dotted var(--squall-amber); }
-        .val-warn:hover { color: #fff; text-shadow: 0 0 15px var(--squall-amber); }
+        /* STANDARDIZED TELEMETRY AESTHETICS */
+        .h-val { font-size: 0.65rem; margin-top: 8px; display: flex; justify-content: space-between; align-items: baseline; }
+        .h-val span:first-child { color: var(--starlight); font-family: 'JetBrains Mono'; font-weight: 700; }
+        .h-val span:last-child { color: var(--env-green); font-weight: 700; text-shadow: 0 0 8px var(--env-green-dim); transition: 0.3s; }
+        
+        .h-val span.val-highlight { cursor: pointer; border-bottom: 1px dotted var(--env-green); }
+        .h-val span.val-highlight:hover { color: #fff; text-shadow: 0 0 15px var(--env-green); }
+        .h-val span.val-alert { color: var(--alert-red) !important; text-shadow: 0 0 10px rgba(239, 68, 68, 0.5) !important; cursor: pointer; border-bottom: 1px dotted var(--alert-red); }
+        .h-val span.val-alert:hover { color: #fff !important; text-shadow: 0 0 15px var(--alert-red) !important; }
+        .h-val span.val-warn { color: var(--squall-amber) !important; text-shadow: 0 0 10px rgba(245, 158, 11, 0.4) !important; cursor: pointer; border-bottom: 1px dotted var(--squall-amber); }
+        .h-val span.val-warn:hover { color: #fff !important; text-shadow: 0 0 15px var(--squall-amber) !important; }
 
         .sparkline-container { width: 100%; height: 16px; display: flex; align-items: flex-end; gap: 2px; margin-top: 4px; }
         .spark-bar { flex-grow: 1; background: var(--env-green); border-radius: 1px 1px 0 0; transition: height 0.5s ease, background 0.5s ease; opacity: 0.8; box-shadow: 0 0 5px var(--env-green-glow);}
@@ -100,8 +106,8 @@
         .sun-fulcrum { position: absolute; width: 24px; height: 24px; border-radius: 50%; background: var(--squall-amber); top: 50%; left: 50%; transform: translate(-50%, -50%); animation: solar-pulse-low 3s ease-in-out infinite; z-index: 12; }
 
         .wheel-ring { position: absolute; border-radius: 50%; display: flex; justify-content: center; align-items: center; transition: transform 0.1s linear, box-shadow 0.3s ease; }
-        .r-outer { width: 95%; height: 95%; border: 2px solid var(--frost-cyan); box-shadow: 0 0 15px var(--env-green-glow), inset 0 0 20px rgba(0,0,0,0.5); }
-        .r-mid { width: 78%; height: 78%; background: conic-gradient(from 0deg, var(--frost-cyan) 0deg, var(--env-green) 45deg, var(--frost-cyan) 90deg, var(--env-green) 135deg, var(--frost-cyan) 180deg, var(--env-green) 225deg, var(--frost-cyan) 270deg, var(--env-green) 315deg, var(--frost-cyan) 360deg); -webkit-mask: radial-gradient(transparent 65%, black 66%); opacity: 0.8; box-shadow: inset 0 0 20px rgba(0,0,0,0.8); }
+        .r-outer { width: 95%; height: 95%; border: 2px solid var(--env-green); opacity: 0.7; box-shadow: 0 0 15px var(--env-green-glow), inset 0 0 20px rgba(0,0,0,0.5); }
+        .r-mid { width: 78%; height: 78%; background: conic-gradient(from 0deg, var(--void) 0deg, var(--env-green) 45deg, var(--void) 90deg, var(--env-green) 135deg, var(--void) 180deg, var(--env-green) 225deg, var(--void) 270deg, var(--env-green) 315deg, var(--void) 360deg); -webkit-mask: radial-gradient(transparent 65%, black 66%); opacity: 0.8; box-shadow: inset 0 0 20px rgba(0,0,0,0.8); }
         .r-inner { width: 55%; height: 55%; border: 2px solid var(--env-green-dim); box-shadow: 0 0 0 1px var(--env-green), inset 0 0 30px var(--env-green-dim); background: rgba(0,0,0,0.4); }
 
         .horizon-cone { position: absolute; top: -10px; width: 0; height: 0; border-left: 15px solid transparent; border-right: 15px solid transparent; border-bottom: 30px solid var(--env-green); filter: drop-shadow(0 -5px 15px var(--env-green)); pointer-events: none; }
@@ -131,7 +137,7 @@
         .earth-volumetric { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border-radius: 50%; z-index: 4; pointer-events: none; background: radial-gradient(circle at 35% 35%, rgba(255,255,255,0.4) 0%, rgba(0,0,0,0) 50%, rgba(0,0,0,0.2) 100%); box-shadow: inset -2px -2px 6px rgba(0,0,0,0.35), inset 2px 2px 6px rgba(255,255,255,0.4), 0 0 10px rgba(167, 255, 131, 0.2); }
     </style>
 </head>
-<body>
+<body class="mode-q">
 
     <div class="matrix-layer"></div>
     <div class="star-container" id="stars"></div>
@@ -139,35 +145,46 @@
 
     <div class="wing wing-left telemetry-node">
         <div class="wing-content">
-            <span class="w-head">LEGACY OS</span>
-            <div class="w-lbl">DATE</div>
-            <div class="val-lg val-atmos" id="leg-date">--</div>
-            <div style="height:10px;"></div>
-            <div style="display:flex; align-items:center; justify-content:center;">
-                <div class="w-lbl">TIME (UTC)</div><div class="fmt-toggle" onclick="window.toggleTimeFmt('fmt-btn')" ontouchstart="event.stopPropagation(); window.toggleTimeFmt('fmt-btn')" id="fmt-btn">24H</div>
+            <div style="display:flex; flex-direction:column; align-items:center;">
+                <span class="w-head">LEGACY OS</span>
+                <div class="w-lbl">DATE</div>
+                <div class="val-lg" id="leg-date" style="color: var(--env-green); text-shadow: 0 0 10px var(--env-green-dim);">--</div>
             </div>
-            <div class="val-lg val-atmos" id="leg-time">--</div>
-            <div style="font-size:0.45rem; color:var(--platinum); margin-top:12px; font-weight:bold; letter-spacing:1px;" id="status-axiom-left">LOCATION IS TRUTH</div>
+            <div style="display:flex; flex-direction:column; align-items:center; margin-top: 10px;">
+                <div style="display:flex; align-items:center; justify-content:center; gap: 5px;">
+                    <div class="w-lbl" style="margin:0;">TIME</div>
+                    <div class="fmt-toggle" onclick="window.toggleTimeFmt('fmt-btn')" ontouchstart="window.toggleTimeFmt('fmt-btn'); event.preventDefault();" id="fmt-btn" style="border-color: var(--env-green); color: var(--env-green);">UTC</div>
+                </div>
+                <div class="val-lg" id="leg-time" style="color: var(--env-green); text-shadow: 0 0 10px var(--env-green-dim);">--</div>
+            </div>
+            <div style="font-size:0.5rem; color:var(--starlight); margin-top:12px; border-top: 1px dashed rgba(167, 255, 131, 0.3); padding-top: 8px; width: 85%;">STATUS: CONTINUITY ACTIVE</div>
         </div>
     </div>
 
     <div class="wing wing-right telemetry-node">
         <div class="wing-content">
-            <span class="w-head holo-text">Q LOGIC</span>
-            <div class="w-lbl">COORD</div>
-            <div style="display:flex; align-items: baseline; justify-content:center;">
-                <div id="q-coord-wing">--</div>
+            <div style="display:flex; flex-direction:column; align-items:center;">
+                <span class="w-head">QUAD OS</span>
+                <div class="w-lbl">Q COORDINATE</div>
+                <div class="val-lg" id="q-coord-wing" style="margin-top: 4px; color: var(--env-green); text-shadow: 0 0 10px var(--env-green-dim);">--</div>
             </div>
-            <div style="height:10px;"></div>
-            <div class="w-lbl">TRUE ELLIPSE</div>
-            <div class="val-lg q-val" id="q-deg-wing" style="font-size:1.4rem;">--</div>
-            <div style="font-size:0.45rem; color:var(--platinum); margin-top:12px; font-weight:bold; letter-spacing:1px;" id="status-axiom-right">THE ARC IS QUADRATURE</div>
+            <div style="display:flex; width: 100%; justify-content: space-around; margin-top: 10px;">
+                <div style="display:flex; flex-direction:column; align-items:center;">
+                    <div class="w-lbl">MEAN CIRCLE (CIVIL)</div>
+                    <div class="val-sm" id="mean-deg" style="color:var(--env-green) !important; text-shadow:0 0 10px var(--env-green-dim); margin-top: 4px;">--</div>
+                </div>
+                <div style="display:flex; flex-direction:column; align-items:center;">
+                    <div class="w-lbl">TRUE ELLIPSE (PHYSICS)</div>
+                    <div class="val-sm" id="true-deg" style="color:var(--env-green) !important; text-shadow:0 0 10px var(--env-green-dim); margin-top: 4px;">--</div>
+                </div>
+            </div>
+            <div style="font-size:0.5rem; color:var(--starlight); margin-top:12px; border-top: 1px dashed rgba(167, 255, 131, 0.3); padding-top: 8px; width: 85%;">DUAL-STATE ENGINE</div>
         </div>
     </div>
 
     <div class="wind-panel wind-tl telemetry-node">
         <div class="h-label" style="margin-top:0;"><span>RISK ASSESSMENT</span> <span class="sys-badge" id="iot-status-badge">IOT: ACTIVE</span></div>
-        <div class="h-val"><span>PROBABILITY INDEX:</span> <span class="val-frost" id="risk-index">EPHEMERIS SYNCED</span></div>
+        <div class="h-val"><span>PROBABILITY INDEX:</span> <span class="val-highlight" id="risk-index">EPHEMERIS SYNCED</span></div>
         <div class="sparkline-container" id="risk-sparkline"></div>
         <div class="h-label" style="margin-top:6px;">HAZARD STATUS</div>
         <div class="h-val"><span>ADVERSE CONDITION:</span> <span class="val-highlight" id="hazard-status" onclick="openImpact()" ontouchstart="event.stopPropagation(); openImpact()">MONITORED</span></div>
@@ -176,22 +193,22 @@
     <div class="wind-panel wind-tr telemetry-node" onclick="toggleDeltaView()" ontouchstart="event.stopPropagation(); toggleDeltaView()">
         <div class="h-label" style="margin-top:0;"><span>METEOROLOGICAL DATA</span> <span class="sys-badge" id="meteo-badge">ATMOS DELTA: LIVE</span></div>
         <div class="h-val"><span id="lbl-pressure">ATMOSPHERIC PRESSURE:</span> <span class="val-highlight" id="val-pressure">1013 hPa</span></div>
-        <div class="h-val"><span id="lbl-irradiance">SOLAR IRRADIANCE:</span> <span class="val-frost" id="val-irradiance">ACTIVE</span></div>
+        <div class="h-val"><span id="lbl-irradiance">SOLAR IRRADIANCE:</span> <span class="val-highlight" id="val-irradiance">ACTIVE</span></div>
         <div class="h-label" style="margin-top:6px;">PRECIPITATION VECTOR</div>
         <div class="h-val"><span id="lbl-precip">VOLUME / TREND:</span> <span class="val-highlight" id="val-precip">0.0mm / STABLE</span></div>
     </div>
 
     <div class="wind-panel wind-bl telemetry-node">
         <div class="h-label" style="margin-top:0;"><span id="strat-header">EXPOSURE MODELING</span> <span class="sys-badge">PHASE III</span></div>
-        <div class="h-val"><span id="lbl-yield">YIELD PROJECTION:</span> <span class="val-frost" id="strat-yield" onclick="openImpact()" ontouchstart="event.stopPropagation(); openImpact()">OPTIMAL</span></div>
+        <div class="h-val"><span id="lbl-yield">YIELD PROJECTION:</span> <span class="val-highlight" id="strat-yield" onclick="openImpact()" ontouchstart="event.stopPropagation(); openImpact()">OPTIMAL</span></div>
         <div class="h-val"><span id="lbl-alloc">RESOURCE ALLOC:</span> <span class="val-highlight" id="strat-alloc" onclick="openImpact()" ontouchstart="event.stopPropagation(); openImpact()">PHASE 2 (GROWTH)</span></div>
         <div class="h-label" style="margin-top:6px;">EXECUTION METRICS</div>
         <div class="h-val"><span>ACTION HORIZON:</span> <span class="val-highlight" id="strat-horizon">+14.00°</span></div>
     </div>
 
     <div class="wind-panel wind-br telemetry-node">
-        <div class="h-label" style="margin-top:0;"><span>ENVIRONMENTAL PHASE</span> <span class="sys-badge opt-badge" style="color:var(--white-pure); border-color:var(--platinum); transition:0.3s; cursor:pointer;" onclick="openOptions()" ontouchstart="event.stopPropagation(); openOptions()">[ OPT ]</span></div>
-        <div class="h-val"><span>AMBIENT TEMP:</span> <span class="val-frost" id="val-temp">-- °C</span></div>
+        <div class="h-label" style="margin-top:0;"><span>ENVIRONMENTAL PHASE</span> <span class="sys-badge opt-badge" style="color:var(--env-green); border-color:var(--env-green-dim); transition:0.3s; cursor:pointer;" onclick="openOptions()" ontouchstart="event.stopPropagation(); openOptions()">[ OPT ]</span></div>
+        <div class="h-val"><span>AMBIENT TEMP:</span> <span class="val-highlight" id="val-temp">-- °C</span></div>
         <div class="h-val"><span>BIOME TENSION:</span> <span class="val-highlight" id="agri-tension">DORMANT / GATHER</span></div>
         <div class="h-label" style="margin-top:6px;">CROSS-VECTOR TELEMETRY</div>
         <div class="h-val" style="font-size: 0.65rem;"><span>EQUATION OF TIME:</span> <span class="val-highlight" id="cross-ephem">--° (Q-DELTA)</span></div>
@@ -395,7 +412,7 @@
                     </select>
                 </div>
                 <div style="margin-top: 10px;">
-                    <label style="font-size: 0.6rem; color: rgba(255,255,255,0.6); font-family: 'Orbitron'; letter-spacing: 1px;">RISK THRESHOLD SENSITIVITY: <span id="thresh-val" style="color:var(--frost-cyan);">${alertThreshold}%</span></label>
+                    <label style="font-size: 0.6rem; color: rgba(255,255,255,0.6); font-family: 'Orbitron'; letter-spacing: 1px;">RISK THRESHOLD SENSITIVITY: <span id="thresh-val" style="color:var(--env-green);">${alertThreshold}%</span></label>
                     <input type="range" id="risk-thresh" min="50" max="95" value="${alertThreshold}" class="modal-input" oninput="document.getElementById('thresh-val').innerText = this.value + '%'">
                 </div>
             `;
@@ -450,13 +467,26 @@
         window.addEventListener('q-tick', (e) => {
             const { t, isLive, activeTime, daysElapsed, qData, legacyDateStr, legacyTimeStr, activePostulate } = e.detail;
 
-            // --- MACRO-OS INVERSION STATUS ROTATOR ---
-            if(activePostulate) {
-                const axLeft = document.getElementById('status-axiom-left');
-                const axRight = document.getElementById('status-axiom-right');
-                if(axLeft) axLeft.innerText = activePostulate;
-                if(axRight) axRight.innerText = activePostulate === "LOCATION IS TRUTH" ? "THE ARC IS QUADRATURE" : "LOCATION IS TRUTH";
+            // Utility function to format legacy strings (grey letters/symbols, env-green numbers)
+            function formatDualColor(str) {
+                const letterStyle = "color:var(--starlight); font-family:'Orbitron'; font-size:0.8rem; margin-right:2px;";
+                const numStyle = "color:var(--env-green); font-size:1.1rem; font-weight:bold;";
+                let out = "";
+                let tokens = str.match(/([0-9]+)|([^0-9]+)/g);
+                if (tokens) {
+                    tokens.forEach(token => {
+                        if (/[0-9]/.test(token)) {
+                            out += `<span style="${numStyle}">${token}</span>`;
+                        } else {
+                            out += `<span style="${letterStyle}">${token}</span>`;
+                        }
+                    });
+                }
+                return out;
             }
+
+            document.getElementById('leg-date').innerText = legacyDateStr.toUpperCase();
+            document.getElementById('leg-time').innerHTML = formatDualColor(legacyTimeStr);
             
             if(window.Q_STATE && window.Q_STATE.hardware_hooks) {
                 const badge = document.getElementById('iot-status-badge');
@@ -464,19 +494,30 @@
             }
 
             const trueArc = qData.trueArc;
+            const meanArc = qData.meanArc;
             
             if (Math.abs(qData.delta) > 0.025 && window.Q_PHASE_III) {
                 window.Q_PHASE_III.executeThermicOverride(qData.delta);
             }
             
-            document.getElementById('leg-date').innerText = legacyDateStr.toUpperCase();
-            document.getElementById('leg-time').innerText = legacyTimeStr;
-            
             let activeBlock = window.getQBlockByTime ? window.getQBlockByTime(t) : null;
-            document.getElementById('q-coord-wing').innerHTML = (activeBlock && activeBlock.type === 'PYLON') 
-                ? `<span style="font-size:0.75rem; color:var(--env-green); font-family:'Orbitron'; font-weight:bold;">${activeBlock.name}</span>` 
-                : `<span class="q-prefix">Q</span><span class="q-val">${qData.quad}</span><span class="q-prefix">S</span><span class="q-val">${qData.sect}</span><span class="q-prefix">DAY </span><span class="q-val">${qData.day}</span>`;
-            document.getElementById('q-deg-wing').innerText = trueArc.toFixed(2) + '°'; 
+            const qCoordWing = document.getElementById('q-coord-wing');
+            
+            let smLetterStyle = "color:var(--starlight); font-family:'Orbitron'; font-size:0.8rem; margin-right:2px;";
+            let smNumStyle = "color:var(--env-green); font-size:1.1rem; font-weight:bold;";
+            
+            if (activeBlock && activeBlock.type === 'PYLON') {
+                qCoordWing.innerHTML = `<span style="font-size:0.9rem; color:var(--env-green); font-family:'Orbitron'; font-weight:bold; text-shadow: 0 0 10px var(--env-green-dim);">${activeBlock.name}</span>`;
+            } else {
+                let cCycle = activeBlock ? activeBlock.cycle : 0;
+                qCoordWing.innerHTML = `<span style="${smLetterStyle}">QC</span><span style="${smNumStyle}">${cCycle}</span> ` +
+                                       `<span style="${smLetterStyle} margin-left:6px;">Q</span><span style="${smNumStyle}">${qData.quad}</span> ` +
+                                       `<span style="${smLetterStyle} margin-left:6px;">S</span><span style="${smNumStyle}">${qData.sect}</span> ` +
+                                       `<span style="${smLetterStyle} margin-left:6px;">DAY</span><span style="${smNumStyle}">${qData.day}</span>`;
+            }
+
+            document.getElementById('mean-deg').innerText = meanArc.toFixed(2) + "°";
+            document.getElementById('true-deg').innerText = trueArc.toFixed(2) + "°";
 
             const continuousMeanDeg = daysElapsed * (360 / 365.24219);
             const continuousTrueDeg = continuousMeanDeg + qData.delta;
@@ -503,7 +544,7 @@
             } else if (currentRiskVal >= alertThreshold - 25) {
                 riskEl.className = "val-warn"; hazardEl.innerText = "ELEVATED CONCERN"; hazardEl.className = "val-warn";
             } else {
-                riskEl.className = "val-frost"; hazardEl.innerText = "MONITORED / STABLE"; hazardEl.className = "val-highlight";
+                riskEl.className = "val-highlight"; hazardEl.innerText = "MONITORED / STABLE"; hazardEl.className = "val-highlight";
             }
 
             sparkBars.forEach((bar, index) => {
@@ -519,9 +560,9 @@
                 document.getElementById('val-pressure').className = currentRiskVal >= alertThreshold ? "val-alert" : "val-warn";
                 document.getElementById('val-irradiance').innerText = (currentRiskVal > 50 ? '-12' : '+4') + ' W/m²';
                 document.getElementById('val-precip').innerText = (currentRiskVal > 50 ? '+45%' : '-5%') + ' FROM NORM';
-                document.getElementById('val-precip').className = currentRiskVal > 50 ? "val-alert" : "val-frost";
+                document.getElementById('val-precip').className = currentRiskVal > 50 ? "val-alert" : "val-highlight";
                 document.getElementById('val-temp').innerText = (currentRiskVal > 50 ? '+' : '-') + (currentRiskVal / 15).toFixed(1) + ' °C';
-                document.getElementById('val-temp').className = currentRiskVal > 50 ? "val-alert" : "val-frost";
+                document.getElementById('val-temp').className = currentRiskVal > 50 ? "val-alert" : "val-highlight";
             } else {
                 if (liveWeather && isLive) {
                     document.getElementById('val-pressure').innerText = liveWeather.surface_pressure.toFixed(1) + ' hPa';
@@ -538,7 +579,7 @@
                     document.getElementById('val-precip').innerText = "0.0mm / STABLE";
                     document.getElementById('val-precip').className = "val-highlight";
                     document.getElementById('val-temp').innerText = "22.0 °C / STATIC";
-                    document.getElementById('val-temp').className = "val-frost";
+                    document.getElementById('val-temp').className = "val-highlight";
                 }
             }
 
@@ -553,7 +594,7 @@
                     yieldEl.innerText = "BEHAVIORAL SHIFT"; yieldEl.className = "val-warn";
                     allocEl.innerText = "ADJUST CALORIC BURN"; allocEl.className = "val-warn";
                 } else {
-                    yieldEl.innerText = "NOMINAL EXPOSURE"; yieldEl.className = "val-frost";
+                    yieldEl.innerText = "NOMINAL EXPOSURE"; yieldEl.className = "val-highlight";
                     allocEl.innerText = "STANDARD ROUTINE"; allocEl.className = "val-highlight";
                 }
             } else {
@@ -564,7 +605,7 @@
                     yieldEl.innerText = "MODERATE VARIANCE"; yieldEl.className = "val-warn";
                     allocEl.innerText = "CONSERVATION MODE"; allocEl.className = "val-warn";
                 } else {
-                    yieldEl.innerText = "OPTIMAL / GROWTH"; yieldEl.className = "val-frost";
+                    yieldEl.innerText = "OPTIMAL / GROWTH"; yieldEl.className = "val-highlight";
                     allocEl.innerText = "PHASE 2 (EXPANSION)"; allocEl.className = "val-highlight";
                 }
             }
@@ -574,9 +615,28 @@
             else if (qData.quad === 2) { tensionEl.innerText = "AWAKENING / PUSH"; }
             else if (qData.quad === 3) { tensionEl.innerText = "CLIMAX / SUSTAIN"; }
             else { tensionEl.innerText = "RECESSION / HARVEST"; }
+            
+            const radarText = document.getElementById('radar-readout');
+            if(currentRiskVal >= alertThreshold) { 
+                currentRadarStatus = 'CRON STORM'; radarText.innerText = "⚠ THERMODYNAMIC FRICTION"; radarText.style.color = "var(--alert-red)"; 
+            } else if(currentRiskVal >= alertThreshold - 25) { 
+                currentRadarStatus = 'THERMAL SPIKE'; radarText.innerText = "THERMAL SPIKE DETECTED"; radarText.style.color = "var(--squall-amber)"; 
+            } else { 
+                currentRadarStatus = 'STABLE'; radarText.innerText = "THERMODYNAMICS STABLE"; radarText.style.color = "var(--env-green)"; 
+            }
+            
+            const phaseTextEl = document.getElementById('resp-phase-text');
+            if (currentRadarStatus === 'CRON STORM') {
+                 phaseTextEl.style.color = "var(--alert-red)";
+            } else if (currentRadarStatus === 'THERMAL SPIKE') {
+                 phaseTextEl.style.color = "var(--squall-amber)";
+            } else {
+                 phaseTextEl.style.color = "var(--env-green)";
+            }
+            
         });
 
-        window.generateStars('stars');
+        if(window.generateStars) window.generateStars('stars');
         initSparklines();
         renderSeasonalMarkers(currentAssetMode); 
         renderOrbitalNodes();

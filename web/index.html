@@ -43,7 +43,8 @@
             --theme-main: var(--amber);
             --theme-dim: var(--amber-dim);
             --sys-cyan: #00f0ff;
-            --bio-green: #39ff14;
+            --bio-purple: #b829ff;
+            --bio-purple-dim: rgba(184, 41, 255, 0.15);
             --mech-red: #ff003c;
             --env-green: #a7ff83;
             --starlight: rgba(255, 255, 255, 0.6);
@@ -177,31 +178,31 @@
     <div class="star-container" id="star-layer"></div>
 
     <div class="vector-anchor telemetry-node tl">
-        <div class="v-head holo-text" style="color:var(--sys-cyan); text-shadow:0 0 10px var(--sys-cyan);">BIOLOGICAL</div>
-        <div class="t-row"><span>HRV / ELASTICITY:</span> <span id="face-bio-state" style="color:var(--sys-cyan);">SYNCING..</span></div>
-        <div class="t-row"><span>NATAL ANCHOR:</span> <span id="face-bio-natal" style="color:var(--sys-cyan);">--</span></div>
-        <div class="t-row"><span>ULTRADIAN PHASE:</span> <span id="face-bio-phase" style="color:var(--sys-cyan);">ACTIVE</span></div>
+        <div class="v-head holo-text" style="color:var(--bio-purple); text-shadow:0 0 10px var(--bio-purple-dim);">BIOLOGICAL</div>
+        <div class="t-row"><span>HRV / ELASTICITY:</span> <span id="face-bio-state" style="color:var(--bio-purple);">SYNCING..</span></div>
+        <div class="t-row"><span>NATAL ANCHOR:</span> <span id="face-bio-natal" style="color:var(--bio-purple);">--</span></div>
+        <div class="t-row"><span>ULTRADIAN PHASE:</span> <span id="face-bio-phase" style="color:var(--bio-purple);">ACTIVE</span></div>
     </div>
     
     <div class="vector-anchor telemetry-node tr">
-        <div class="v-head holo-text" style="color:var(--gold); text-shadow:0 0 10px var(--gold);">COMMUNAL</div>
+        <div class="v-head holo-text" style="color:var(--gold); text-shadow:0 0 10px var(--gold-dim);">COMMUNAL</div>
         <div class="t-row"><span>Q-COORDINATE:</span> <span id="face-com-node" style="color:var(--gold);">SEARCHING..</span></div>
         <div class="t-row"><span>ZODIACAL EVENT:</span> <span id="face-com-zod" style="color:var(--gold);">--</span></div>
         <div class="t-row"><span>SOVEREIGN STATUS:</span> <span id="face-com-postulate" style="color:var(--gold);">QUADRATURE</span></div>
     </div>
     
     <div class="vector-anchor telemetry-node bl">
-        <div class="v-head holo-text" style="color:var(--env-green); text-shadow:0 0 10px var(--env-green);">ENVIRONMENTAL</div>
+        <div class="v-head holo-text" style="color:var(--env-green); text-shadow:0 0 10px var(--env-green-dim);">ENVIRONMENTAL</div>
         <div class="t-row"><span>RISK INDEX:</span> <span id="face-env-risk" style="color:var(--env-green);">CALCULATING..</span></div>
         <div class="t-row"><span>CLIMATIC BASELOAD:</span> <span id="face-env-tension" style="color:var(--env-green);">--</span></div>
         <div class="t-row"><span>GEOLOCATION:</span> <span id="face-env-geo" style="color:var(--env-green);">SYNCING..</span></div>
     </div>
     
     <div class="vector-anchor telemetry-node br">
-        <div class="v-head holo-text" style="color:var(--mech-red); text-shadow:0 0 10px var(--mech-red);">MECHANICAL</div>
-        <div class="t-row"><span>EQUATION OF TIME:</span> <span id="face-mech-delta" style="color:var(--mech-red);">--</span></div>
-        <div class="t-row"><span>ENTROPIC SMEAR:</span> <span id="face-mech-smear" style="color:var(--mech-red);">--</span></div>
-        <div class="t-row"><span>KEPLERIAN VELOCITY:</span> <span id="face-mech-vel" style="color:var(--mech-red);">NOMINAL</span></div>
+        <div class="v-head holo-text" style="color:var(--sys-cyan); text-shadow:0 0 10px var(--sys-cyan-dim);">MECHANICAL</div>
+        <div class="t-row"><span>EQUATION OF TIME:</span> <span id="face-mech-delta" style="color:var(--sys-cyan);">--</span></div>
+        <div class="t-row"><span>ENTROPIC SMEAR:</span> <span id="face-mech-smear" style="color:var(--sys-cyan);">--</span></div>
+        <div class="t-row"><span>KEPLERIAN VELOCITY:</span> <span id="face-mech-vel" style="color:var(--sys-cyan);">NOMINAL</span></div>
     </div>
 
     <div class="gear-container q-center-dial">
@@ -229,7 +230,7 @@
 
             function formatDualColor(str) {
                 const letterStyle = "color:var(--starlight); font-family:'Orbitron'; font-size:0.8rem; margin-right:2px;";
-                const numStyle = "color:var(--gold); font-size:1.1rem; font-weight:bold;";
+                const numStyle = "color:var(--theme-main); font-size:1.1rem; font-weight:bold;";
                 let out = "";
                 let tokens = str.match(/([0-9]+)|([^0-9]+)/g);
                 if (tokens) {
@@ -244,10 +245,9 @@
                 return out;
             }
 
-            // Force globally injected wings to render perfectly in Gold for Chrono-face
             const legDateEl = document.getElementById('leg-date');
             if (legDateEl) {
-                legDateEl.innerHTML = `<span style="color:var(--gold); font-weight:bold; text-shadow:0 0 10px var(--gold-dim);">${legacyDateStr.toUpperCase()}</span>`;
+                legDateEl.innerHTML = `<span style="color:var(--theme-main); font-weight:bold; text-shadow:0 0 10px var(--theme-dim);">${legacyDateStr.toUpperCase()}</span>`;
             }
 
             const legTimeEl = document.getElementById('leg-time');
@@ -257,8 +257,8 @@
 
             const fmtBtn = document.getElementById('fmt-btn');
             if (fmtBtn) { 
-                fmtBtn.style.color = "var(--gold)"; 
-                fmtBtn.style.borderColor = "var(--gold)"; 
+                fmtBtn.style.color = "var(--theme-main)"; 
+                fmtBtn.style.borderColor = "var(--theme-main)"; 
             }
 
             const continuousMeanDeg = daysElapsed * (360 / 365.24219);
@@ -277,26 +277,26 @@
             const meanDegEl = document.getElementById('mean-deg');
             if (meanDegEl) { 
                 meanDegEl.innerText = qData.meanArc.toFixed(2) + "°";
-                meanDegEl.style.setProperty('color', 'var(--gold)', 'important');
-                meanDegEl.style.textShadow = '0 0 10px var(--gold-dim)';
+                meanDegEl.style.setProperty('color', 'var(--theme-main)', 'important');
+                meanDegEl.style.textShadow = '0 0 10px var(--theme-dim)';
             }
             
             const trueDegEl = document.getElementById('true-deg');
             if (trueDegEl) { 
                 trueDegEl.innerText = qData.trueArc.toFixed(2) + "°";
-                trueDegEl.style.setProperty('color', 'var(--gold)', 'important');
-                trueDegEl.style.textShadow = '0 0 10px var(--gold-dim)';
+                trueDegEl.style.setProperty('color', 'var(--theme-main)', 'important');
+                trueDegEl.style.textShadow = '0 0 10px var(--theme-dim)';
             }
             
             let activeBlock = window.getQBlockByTime ? window.getQBlockByTime(t) : null;
             const qCoordWing = document.getElementById('q-coord-wing');
             
             let letterStyle = "color:var(--starlight); font-family:'Orbitron'; font-size:0.8rem; margin-right:2px;";
-            let numStyle = "color:var(--gold); font-size:1.1rem; font-weight:bold;";
+            let numStyle = "color:var(--theme-main); font-size:1.1rem; font-weight:bold;";
             
             if (qCoordWing) {
                 if (activeBlock && activeBlock.type === 'PYLON') {
-                    qCoordWing.innerHTML = `<span style="font-size:0.9rem; color:var(--gold); font-family:'Orbitron'; font-weight:bold; text-shadow: 0 0 10px var(--gold-dim);">${activeBlock.name}</span>`;
+                    qCoordWing.innerHTML = `<span style="font-size:0.9rem; color:var(--theme-main); font-family:'Orbitron'; font-weight:bold; text-shadow: 0 0 10px var(--theme-dim);">${activeBlock.name}</span>`;
                 } else {
                     let cCycle = activeBlock ? activeBlock.cycle : 0;
                     qCoordWing.innerHTML = `<span style="${letterStyle}">QC</span><span style="${numStyle}">${cCycle}</span> ` +
@@ -332,8 +332,8 @@
             // MECHANICAL
             const faceMechDelta = document.getElementById('face-mech-delta');
             faceMechDelta.innerText = (qData.delta > 0 ? "+" : "") + qData.delta.toFixed(4) + "°";
-            faceMechDelta.style.color = qData.delta > 0 ? "var(--mech-red)" : "var(--sys-cyan)";
-            faceMechDelta.style.textShadow = qData.delta > 0 ? "0 0 10px rgba(255, 0, 60, 0.4)" : "0 0 10px rgba(0, 240, 255, 0.4)";
+            faceMechDelta.style.color = "var(--sys-cyan)";
+            faceMechDelta.style.textShadow = "0 0 10px rgba(0, 240, 255, 0.4)";
             
             const expected = Math.round(t / 1000) * 1000;
             const smearVal = (t - expected) / 1000;

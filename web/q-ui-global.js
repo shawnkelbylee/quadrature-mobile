@@ -36,25 +36,25 @@ window.injectUniversalUI = function() {
     let micGlow = "var(--neon-cyan-dim, rgba(0,240,255,0.2))";
 
     if (bActive) {
-        wingAesthetic = `background: linear-gradient(135deg, rgba(5, 8, 15, 0.8) 0%, rgba(10, 15, 30, 0.95) 100%); border: 1px solid rgba(0, 243, 255, 0.2); border-top: 1px solid var(--neon-cyan, #00f3ff); border-radius: 8px; box-shadow: 0 15px 35px rgba(0,0,0,0.8), inset 0 0 20px rgba(0,243,255,0.05);`;
-        micColor = "var(--sys-cyan, #00f0ff)";
-        micGlow = "var(--neon-cyan-dim, rgba(0, 240, 255, 0.1))";
+        wingAesthetic = `background: linear-gradient(135deg, rgba(5, 8, 15, 0.8) 0%, rgba(10, 15, 30, 0.95) 100%); border: 1px solid rgba(0, 85, 255, 0.3); border-top: 1px solid var(--bio-cobalt, #0055ff); border-radius: 8px; box-shadow: 0 15px 35px rgba(0,0,0,0.8), inset 0 0 20px rgba(0,85,255,0.15);`;
+        micColor = "var(--bio-purple, #b829ff)";
+        micGlow = "var(--bio-purple-dim, rgba(184, 41, 255, 0.2))";
     } else if (eActive) {
         wingAesthetic = `background: radial-gradient(circle at center, var(--env-green-dim, rgba(167, 255, 131, 0.2)) 0%, var(--glass-med, rgba(2, 12, 25, 0.65)) 80%); backdrop-filter: var(--blur-med, blur(16px)); -webkit-backdrop-filter: var(--blur-med, blur(16px)); box-shadow: 0 15px 40px rgba(0,0,0,0.7), inset 0 0 20px rgba(0,0,0,0.4); border-radius: 12px; border: 1px solid var(--env-green-dim, rgba(167, 255, 131, 0.2));`;
         micColor = "var(--env-green, #a7ff83)";
         micGlow = "var(--env-green-dim, rgba(167, 255, 131, 0.2))";
     } else if (mActive) {
-        wingAesthetic = `backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); background: linear-gradient(135deg, rgba(15, 23, 42, 0.8) 0%, rgba(3, 4, 6, 0.95) 100%); border: 1px solid var(--titanium, #334155); border-top: 1px solid var(--theme-main, #f43f5e); border-radius: 4px; box-shadow: 0 20px 50px rgba(0,0,0,0.9), inset 0 0 30px rgba(0,0,0,0.5);`;
-        micColor = "var(--magenta-glow, #ff003c)";
-        micGlow = "var(--magenta-dim, rgba(255, 0, 60, 0.2))";
+        wingAesthetic = `backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); background: linear-gradient(135deg, rgba(15, 23, 42, 0.8) 0%, rgba(3, 4, 6, 0.95) 100%); border: 1px solid var(--titanium, #334155); border-top: 1px solid var(--sys-cyan, #00f0ff); border-radius: 4px; box-shadow: 0 20px 50px rgba(0,0,0,0.9), inset 0 0 30px rgba(0,240,255,0.05);`;
+        micColor = "var(--sys-cyan, #00f0ff)";
+        micGlow = "var(--neon-cyan-dim, rgba(0, 240, 255, 0.2))";
     } else if (cActive) {
         wingAesthetic = `background: linear-gradient(120deg, rgba(25,20,5,0.85) 0%, rgba(255,215,0,0.1) 40%, rgba(255,255,255,0.15) 50%, rgba(255,215,0,0.1) 60%, rgba(25,20,5,0.85) 100%); background-size: 300% 100%; backdrop-filter: var(--blur-med, blur(16px)); -webkit-backdrop-filter: var(--blur-med, blur(16px)); border: 2px solid var(--gold-bright, #ffd700); border-top: 1px solid rgba(255,215,0,0.5); border-radius: 20px; box-shadow: 0 10px 40px rgba(0,0,0,0.9), inset 0 0 20px rgba(255,215,0,0.1);`;
         micColor = "var(--gold-bright, #ffd700)";
         micGlow = "var(--gold-dim, rgba(255, 215, 0, 0.15))";
     } else { 
-        wingAesthetic = `background: rgba(15, 12, 10, 0.9); backdrop-filter: var(--blur-med, blur(16px)); -webkit-backdrop-filter: var(--blur-med, blur(16px)); border-radius: 8px; box-shadow: 0 15px 35px rgba(0,0,0,0.8), inset 0 0 20px rgba(229, 228, 226, 0.1); border: 1px solid rgba(244, 208, 104, 0.3);`;
-        micColor = "var(--gold, #F4D068)";
-        micGlow = "var(--gold-dim, rgba(244, 208, 104, 0.15))";
+        wingAesthetic = `background: rgba(15, 12, 10, 0.9); backdrop-filter: var(--blur-med, blur(16px)); -webkit-backdrop-filter: var(--blur-med, blur(16px)); border-radius: 8px; box-shadow: 0 15px 35px rgba(0,0,0,0.8), inset 0 0 20px rgba(229, 228, 226, 0.1); border: 1px solid rgba(185, 122, 53, 0.3);`;
+        micColor = "var(--chrono-amber, #B97A35)";
+        micGlow = "var(--chrono-amber-dim, rgba(185, 122, 53, 0.2))";
     }
 
     const style = document.createElement('style');
@@ -68,7 +68,7 @@ window.injectUniversalUI = function() {
         }
         #mobile-telemetry-btn { display: none !important; pointer-events: none !important; }
 
-        :root { --wing-w: 240px; --mod-w: 320px; --dial-size: 60vh; --wing-offset: calc((var(--dial-size) / 2) + 4vw); --glass-med: rgba(2, 12, 25, 0.65); --blur-med: blur(16px); --white-pure: #ffffff; --starlight: rgba(255, 255, 255, 0.7); --platinum: #E5E4E2; }
+        :root { --wing-w: 240px; --mod-w: 320px; --dial-size: 60vh; --wing-offset: calc((var(--dial-size) / 2) + 4vw); --glass-med: rgba(2, 12, 25, 0.65); --blur-med: blur(16px); --white-pure: #ffffff; --starlight: rgba(255, 255, 255, 0.7); --platinum: #E5E4E2; --chrono-amber: #B97A35; --chrono-amber-dim: rgba(185, 122, 53, 0.2); --bio-purple: #b829ff; --bio-purple-dim: rgba(184, 41, 255, 0.15); --bio-cobalt: #0055ff; --bio-cobalt-dim: rgba(0, 85, 255, 0.3); }
         
         .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); backdrop-filter: blur(10px); z-index: 10000; display: none; justify-content: center; align-items: center; cursor: pointer; }
         .modal-box { width: 400px; background: rgba(2, 6, 15, 0.95); border: 1px solid var(--theme-main, #00f0ff); border-radius: 12px; padding: 25px; box-shadow: 0 20px 50px rgba(0,0,0,0.9); display: flex; flex-direction: column; gap: 16px; cursor: default; pointer-events: auto; }
@@ -82,11 +82,11 @@ window.injectUniversalUI = function() {
         .q-nav-btn:hover { border-color: #fff; color: #fff; box-shadow: 0 0 10px rgba(255, 255, 255, 0.3); }
         
         /* AGGRESSIVE OAUTH CACHE OVERRIDES (!important forces vector colors through any lingering CSS) */
-        .q-nav-btn.face-btn.active { border-color: var(--gold, #F4D068) !important; color: var(--gold, #F4D068) !important; box-shadow: inset 0 0 10px rgba(244,208,104,0.2) !important; }
-        .q-nav-btn.bio-btn.active { border-color: var(--sys-cyan, #00f0ff) !important; color: var(--sys-cyan, #00f0ff) !important; box-shadow: inset 0 0 10px rgba(0,240,255,0.2) !important; }
+        .q-nav-btn.face-btn.active { border-color: var(--chrono-amber) !important; color: var(--chrono-amber) !important; box-shadow: inset 0 0 10px var(--chrono-amber-dim) !important; }
+        .q-nav-btn.bio-btn.active { border-color: var(--bio-purple) !important; color: var(--bio-purple) !important; box-shadow: inset 0 0 10px var(--bio-purple-dim) !important; }
         .q-nav-btn.com-btn.active { border-color: var(--gold, #F4D068) !important; color: var(--gold, #F4D068) !important; box-shadow: inset 0 0 10px rgba(244,208,104,0.2) !important; }
         .q-nav-btn.env-btn.active { border-color: var(--env-green, #a7ff83) !important; color: var(--env-green, #a7ff83) !important; box-shadow: inset 0 0 10px rgba(167,255,131,0.2) !important; }
-        .q-nav-btn.mec-btn.active { border-color: var(--theme-main, #f43f5e) !important; color: var(--theme-main, #f43f5e) !important; box-shadow: inset 0 0 10px rgba(244,63,94,0.2) !important; }
+        .q-nav-btn.mec-btn.active { border-color: var(--sys-cyan, #00f0ff) !important; color: var(--sys-cyan, #00f0ff) !important; box-shadow: inset 0 0 10px rgba(0,240,255,0.2) !important; }
 
         /* DESKTOP MIC: BOUND TO DYNAMIC THEME */
         #q-mic-fab-desktop { position: fixed; bottom: 20px; right: 20px; width: 50px; height: 50px; border-radius: 50%; background: rgba(5, 8, 15, 0.9); border: 1px solid ${micColor}; color: ${micColor}; display: flex; justify-content: center; align-items: center; z-index: 100000; box-shadow: 0 0 15px rgba(0,0,0,0.8); cursor: pointer; font-size: 1.2rem; transition: all 0.3s ease; pointer-events: auto !important; }
@@ -173,16 +173,16 @@ window.injectUniversalUI = function() {
             .strip-btn svg { transition: 0.3s; }
             
             /* Aggressive Mobile Strip Active States */
-            .strip-btn.face-strip.active svg { color: var(--gold, #F4D068) !important; filter: drop-shadow(0 0 8px var(--gold, #F4D068)) !important; }
-            .strip-btn.face-strip.active .strip-lbl { color: var(--gold, #F4D068) !important; }
-            .strip-btn.bio-strip.active svg { color: var(--sys-cyan, #00f0ff) !important; filter: drop-shadow(0 0 8px var(--sys-cyan, #00f0ff)) !important; }
-            .strip-btn.bio-strip.active .strip-lbl { color: var(--sys-cyan, #00f0ff) !important; }
+            .strip-btn.face-strip.active svg { color: var(--chrono-amber) !important; filter: drop-shadow(0 0 8px var(--chrono-amber)) !important; }
+            .strip-btn.face-strip.active .strip-lbl { color: var(--chrono-amber) !important; }
+            .strip-btn.bio-strip.active svg { color: var(--bio-purple) !important; filter: drop-shadow(0 0 8px var(--bio-purple)) !important; }
+            .strip-btn.bio-strip.active .strip-lbl { color: var(--bio-purple) !important; }
             .strip-btn.com-strip.active svg { color: var(--gold, #F4D068) !important; filter: drop-shadow(0 0 8px var(--gold, #F4D068)) !important; }
             .strip-btn.com-strip.active .strip-lbl { color: var(--gold, #F4D068) !important; }
             .strip-btn.env-strip.active svg { color: var(--env-green, #a7ff83) !important; filter: drop-shadow(0 0 8px var(--env-green, #a7ff83)) !important; }
             .strip-btn.env-strip.active .strip-lbl { color: var(--env-green, #a7ff83) !important; }
-            .strip-btn.mec-strip.active svg { color: var(--theme-main, #f43f5e) !important; filter: drop-shadow(0 0 8px var(--theme-main, #f43f5e)) !important; }
-            .strip-btn.mec-strip.active .strip-lbl { color: var(--theme-main, #f43f5e) !important; }
+            .strip-btn.mec-strip.active svg { color: var(--sys-cyan, #00f0ff) !important; filter: drop-shadow(0 0 8px var(--sys-cyan, #00f0ff)) !important; }
+            .strip-btn.mec-strip.active .strip-lbl { color: var(--sys-cyan, #00f0ff) !important; }
 
             .strip-lbl { font-family: 'Orbitron'; font-size: 0.4rem; font-weight: 900; letter-spacing: 1px; color: rgba(255,255,255,0.5); transition: 0.3s; }
             
@@ -268,7 +268,7 @@ window.injectUniversalUI = function() {
         <div class="q-nav-bar">
             <div style="display:flex; align-items:center; gap:8px; flex-wrap: nowrap; overflow: hidden;">
                 <span class="q-nav-brand" style="white-space: nowrap;">THE QUADRATURE</span>
-                <div id="q-global-sim-badge" style="display: none; background: var(--gold, #F4D068); color: #000; font-family: 'Orbitron'; font-size: 0.55rem; font-weight: 900; padding: 4px 8px; border-radius: 4px; cursor: pointer; white-space: nowrap; flex-shrink: 0; position: relative; z-index: 100000; pointer-events: auto !important;" onclick="if(window.Q_Auth) window.Q_Auth.triggerOAuth();" ontouchstart="if(window.Q_Auth) window.Q_Auth.triggerOAuth(); event.preventDefault();">[ IN THE QUAD ]</div>
+                <div id="q-global-sim-badge" style="display: none; background: var(--chrono-amber); color: #000; font-family: 'Orbitron'; font-size: 0.55rem; font-weight: 900; padding: 4px 8px; border-radius: 4px; cursor: pointer; white-space: nowrap; flex-shrink: 0; position: relative; z-index: 100000; pointer-events: auto !important;" onclick="if(window.Q_Auth) window.Q_Auth.triggerOAuth();" ontouchstart="if(window.Q_Auth) window.Q_Auth.triggerOAuth(); event.preventDefault();">[ IN THE QUAD ]</div>
             </div>
             <div class="q-nav-menu" id="q-nav-menu">
                 <a href="index.html?v=16.4" class="q-nav-btn face-btn vector-link ${faceActive ? 'active' : ''}" ontouchstart="window.location.href=this.href; event.preventDefault();">CHRONO-FACE</a>
@@ -276,8 +276,8 @@ window.injectUniversalUI = function() {
                 <a href="COMVECHUD.html?v=16.4" class="q-nav-btn com-btn vector-link ${cActive ? 'active' : ''}" ontouchstart="window.location.href=this.href; event.preventDefault();">COMMUNAL</a>
                 <a href="ENVVECHUD.html?v=16.4" class="q-nav-btn env-btn vector-link ${eActive ? 'active' : ''}" ontouchstart="window.location.href=this.href; event.preventDefault();">ENVIRONMENTAL</a>
                 <a href="MECVECHUD.html?v=16.4" class="q-nav-btn mec-btn vector-link ${mActive ? 'active' : ''}" ontouchstart="window.location.href=this.href; event.preventDefault();">MECHANICAL</a>
-                <button class="q-nav-btn omni desktop-only" style="border-color: var(--gold, #F4D068); color: var(--gold, #F4D068);" onclick="if(typeof window.Q_OmniPlanner !== 'undefined') window.Q_OmniPlanner.openPlanner()" ontouchstart="if(typeof window.Q_OmniPlanner !== 'undefined') window.Q_OmniPlanner.openPlanner(); event.preventDefault();">[ OMNI-PLANNER ]</button>
-                <button class="q-nav-btn special desktop-only" style="border-color: var(--gold, #F4D068); color: var(--gold, #F4D068);" onclick="if(typeof window.Q_IntegrationHub !== 'undefined') window.Q_IntegrationHub.openHub()" ontouchstart="if(typeof window.Q_IntegrationHub !== 'undefined') window.Q_IntegrationHub.openHub(); event.preventDefault();">[ DASHBOARD ]</button>
+                <button class="q-nav-btn omni desktop-only" style="border-color: var(--chrono-amber); color: var(--chrono-amber);" onclick="if(typeof window.Q_OmniPlanner !== 'undefined') window.Q_OmniPlanner.openPlanner()" ontouchstart="if(typeof window.Q_OmniPlanner !== 'undefined') window.Q_OmniPlanner.openPlanner(); event.preventDefault();">[ OMNI-PLANNER ]</button>
+                <button class="q-nav-btn special desktop-only" style="border-color: var(--chrono-amber); color: var(--chrono-amber);" onclick="if(typeof window.Q_IntegrationHub !== 'undefined') window.Q_IntegrationHub.openHub()" ontouchstart="if(typeof window.Q_IntegrationHub !== 'undefined') window.Q_IntegrationHub.openHub(); event.preventDefault();">[ DASHBOARD ]</button>
             </div>
             <button class="mobile-only-flex" style="background:transparent; border:none; color:var(--theme-main, #00f0ff); font-size:1.5rem; padding:0; margin:0; cursor:pointer;" onclick="if(typeof window.Q_IntegrationHub !== 'undefined') window.Q_IntegrationHub.openHub()" ontouchstart="if(typeof window.Q_IntegrationHub !== 'undefined') window.Q_IntegrationHub.openHub(); event.preventDefault();">☰</button>
         </div>
@@ -285,8 +285,8 @@ window.injectUniversalUI = function() {
         <div id="mobile-telemetry-ribbon" class="mobile-only-flex">
             <span id="ribbon-leg-date" style="font-family:'Orbitron'; font-size:0.65rem; color:var(--starlight); font-weight:bold; letter-spacing:1px; white-space:nowrap;">--</span>
             <div style="display:flex; align-items:center; gap: 4px;">
-                <span class="val-gold" id="ribbon-leg" style="color:var(--gold); font-family:'JetBrains Mono'; font-size:0.65rem; font-weight:bold; margin-top:2px; white-space:nowrap;">--</span>
-                <div class="fmt-toggle" onclick="window.toggleTimeFmt('ribbon-fmt')" ontouchstart="window.toggleTimeFmt('ribbon-fmt'); event.preventDefault();" id="ribbon-fmt" style="border-color:var(--gold); color:var(--gold); padding:2px 6px; font-size:0.5rem; pointer-events:auto; position:relative; z-index:100000; white-space:nowrap;">UTC</div>
+                <span class="val-gold" id="ribbon-leg" style="color:var(--chrono-amber); font-family:'JetBrains Mono'; font-size:0.65rem; font-weight:bold; margin-top:2px; white-space:nowrap;">--</span>
+                <div class="fmt-toggle" onclick="window.toggleTimeFmt('ribbon-fmt')" ontouchstart="window.toggleTimeFmt('ribbon-fmt'); event.preventDefault();" id="ribbon-fmt" style="border-color:var(--chrono-amber); color:var(--chrono-amber); padding:2px 6px; font-size:0.5rem; pointer-events:auto; position:relative; z-index:100000; white-space:nowrap;">UTC</div>
             </div>
         </div>
         
@@ -333,7 +333,7 @@ window.injectUniversalUI = function() {
                 <div style="display:flex; flex-direction:column; align-items:center; margin-top: 10px;">
                     <div style="display:flex; align-items:center; justify-content:center; gap: 5px;">
                         <div class="w-lbl" style="margin:0;">TIME</div>
-                        <div class="fmt-toggle" onclick="window.toggleTimeFmt('fmt-btn')" ontouchstart="window.toggleTimeFmt('fmt-btn'); event.preventDefault();" id="fmt-btn">UTC</div>
+                        <div class="fmt-toggle" onclick="window.toggleTimeFmt('fmt-btn')" ontouchstart="window.toggleTimeFmt('fmt-btn'); event.preventDefault();" id="fmt-btn" style="border-color: ${micColor}; color: ${micColor};">UTC</div>
                     </div>
                     <div class="val-lg" id="leg-time" style="color: ${micColor}; text-shadow: 0 0 10px ${micGlow};">--</div>
                 </div>
@@ -410,7 +410,7 @@ window.injectUniversalUI = function() {
                 badge.style.color = "#fff";
                 badge.style.border = "none";
             } else {
-                badge.style.background = "var(--gold, #F4D068)";
+                badge.style.background = "var(--chrono-amber)";
                 badge.style.color = "#000";
             }
         }
@@ -422,7 +422,7 @@ window.injectUniversalUI = function() {
         if (ribbonLeg && ribbonLegDate) {
             function formatDualColorMobile(str) {
                 const letterStyle = "color:var(--starlight); font-family:'Orbitron'; font-size:0.6rem; margin-right:2px;";
-                const numStyle = "color:var(--gold); font-size:0.75rem; font-weight:bold;";
+                const numStyle = "color:var(--chrono-amber); font-size:0.75rem; font-weight:bold;";
                 let out = "";
                 let tokens = str.match(/([0-9]+)|([^0-9]+)/g);
                 if (tokens) {
@@ -443,12 +443,12 @@ window.injectUniversalUI = function() {
                 let activeBlock = window.getQBlockByTime ? window.getQBlockByTime(t) : null;
                 let cCycle = activeBlock ? activeBlock.cycle : 0;
                 let qcStr = (activeBlock && activeBlock.type === 'PYLON') ? 
-                    `<span style="color:var(--gold, #F4D068);">QC</span> <span style="color:#fff;">${cCycle}</span> <span style="color:var(--gold, #F4D068);">${activeBlock.name}</span>` : 
-                    `<span style="color:var(--gold, #F4D068);">QC</span> <span style="color:#fff;">${cCycle}</span> <span style="color:var(--gold, #F4D068);">Q</span><span style="color:#fff;">${qData.quad}</span> <span style="color:var(--gold, #F4D068);">S</span><span style="color:#fff;">${qData.sect}</span> <span style="color:var(--gold, #F4D068);">DAY</span> <span style="color:#fff;">${qData.day}</span>`;
+                    `<span style="color:var(--chrono-amber);">QC</span> <span style="color:#fff;">${cCycle}</span> <span style="color:var(--chrono-amber);">${activeBlock.name}</span>` : 
+                    `<span style="color:var(--chrono-amber);">QC</span> <span style="color:#fff;">${cCycle}</span> <span style="color:var(--chrono-amber);">Q</span><span style="color:#fff;">${qData.quad}</span> <span style="color:var(--chrono-amber);">S</span><span style="color:#fff;">${qData.sect}</span> <span style="color:var(--chrono-amber);">DAY</span> <span style="color:#fff;">${qData.day}</span>`;
                 
                 ribbonLegDate.innerHTML = qcStr;
             } else {
-                ribbonLegDate.innerHTML = `<span style="color:var(--theme-main, #F4D068); font-size:0.75rem; font-weight:bold;">${e.detail.legacyDateStr.toUpperCase()}</span>`;
+                ribbonLegDate.innerHTML = `<span style="color:var(--chrono-amber); font-size:0.75rem; font-weight:bold;">${e.detail.legacyDateStr.toUpperCase()}</span>`;
             }
         }
     });

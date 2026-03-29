@@ -83,34 +83,6 @@
             pointer-events: none !important;
         }
 
-        .boot-overlay {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: #000; z-index: 999999; display: flex; flex-direction: column;
-            justify-content: center; align-items: center; font-family: 'JetBrains Mono', monospace;
-            color: var(--sys-cyan); transition: opacity 1.5s ease-in-out;
-        }
-        .boot-terminal {
-            width: 90%; max-width: 500px; border: 1px solid var(--sys-cyan); padding: 30px;
-            background: rgba(0, 240, 255, 0.05); box-shadow: 0 0 30px rgba(0, 240, 255, 0.15);
-            border-radius: 4px;
-            backface-visibility: hidden;
-            transform: translateZ(0);
-        }
-        
-        .boot-terminal h2 { font-family: 'Orbitron'; font-size: 1.8rem; letter-spacing: 6px; text-align: center; margin-top: 0; text-shadow: 0 0 10px var(--sys-cyan); white-space: nowrap; }
-        @media (max-width: 768px) {
-            .boot-terminal h2 { font-size: 1.1rem; letter-spacing: 4px; }
-        }
-        
-        .boot-desc { font-size: 0.7rem; color: #aaa; text-align: center; margin-bottom: 25px; line-height: 1.5; }
-        .boot-btn-row { display: flex; gap: 15px; margin-top: 15px; }
-        .boot-btn { 
-            flex: 1; background: transparent; border: 1px solid var(--sys-cyan); color: var(--sys-cyan); 
-            font-family: 'Orbitron'; font-weight: 700; padding: 12px; cursor: pointer; transition: 0.3s; letter-spacing: 2px; font-size: 0.75rem;
-        }
-        .boot-btn:hover { background: var(--sys-cyan); color: #000; box-shadow: 0 0 20px var(--sys-cyan); }
-        .boot-log { margin-top: 20px; font-size: 0.85rem; min-height: 80px; text-align: center; line-height: 1.6; text-shadow: 0 0 8px var(--sys-cyan); }
-
         .vector-anchor {
             position: absolute; width: calc(var(--mod-w) + 50px); height: auto; min-height: 160px; z-index: 100; cursor: default; pointer-events: auto; 
             display: flex; flex-direction: column; justify-content: flex-start; align-items: center; text-align: center;
@@ -202,19 +174,6 @@
 </head>
 <body class="mode-q boot-active">
 
-    <div class="boot-overlay" id="boot-overlay">
-        <div class="boot-terminal">
-            <h2>INITIALIZATION</h2>
-            <div class="boot-desc">Establish Sovereign Identity to engage the Quadrature Structure.</div>
-            <div id="boot-inputs">
-                <div class="boot-btn-row">
-                    <button class="boot-btn" onclick="runBootSequence()" ontouchstart="runBootSequence()">ENGAGE SEQUENCE</button>
-                </div>
-            </div>
-            <div class="boot-log" id="boot-log"></div>
-        </div>
-    </div>
-
     <div class="star-container" id="star-layer"></div>
 
     <div class="vector-anchor telemetry-node tl">
@@ -245,44 +204,6 @@
         <div class="t-row"><span>KEPLERIAN VELOCITY:</span> <span id="face-mech-vel" style="color:var(--mech-red);">NOMINAL</span></div>
     </div>
 
-    <div class="wing wing-left telemetry-node">
-        <div class="wing-content">
-            <div style="display:flex; flex-direction:column; align-items:center;">
-                <span class="w-head">LEGACY OS</span>
-                <div class="w-lbl">DATE</div>
-                <div class="val-lg" id="leg-date" style="color:var(--gold); text-shadow: 0 0 10px var(--gold-dim);">--</div>
-            </div>
-            <div style="display:flex; flex-direction:column; align-items:center; margin-top: 10px;">
-                <div style="display:flex; align-items:center; justify-content:center; gap: 5px;">
-                    <div class="w-lbl" style="margin:0;">TIME</div><div class="fmt-toggle" onclick="window.toggleTimeFmt('fmt-btn')" ontouchstart="window.toggleTimeFmt('fmt-btn')" id="fmt-btn">UTC</div>
-                </div>
-                <div class="val-lg" id="leg-time">--</div>
-            </div>
-            <div style="font-size:0.5rem; color:var(--starlight); margin-top:12px; border-top: 1px dashed rgba(255,215,0,0.3); padding-top: 8px; width: 85%;">STATUS: CONTINUITY ACTIVE</div>
-        </div>
-    </div>
-
-    <div class="wing wing-right telemetry-node">
-        <div class="wing-content">
-            <div style="display:flex; flex-direction:column; align-items:center;">
-                <span class="w-head">QUAD OS</span>
-                <div class="w-lbl">Q COORDINATE</div>
-                <div class="val-lg" id="q-coord-wing" style="margin-top: 4px;">--</div>
-            </div>
-            <div style="display:flex; width: 100%; justify-content: space-around; margin-top: 10px;">
-                <div style="display:flex; flex-direction:column; align-items:center;">
-                    <div class="w-lbl">MEAN CIRCLE (CIVIL)</div>
-                    <div class="val-sm" id="mean-deg" style="color:var(--gold) !important; text-shadow:0 0 10px var(--gold-dim); margin-top: 4px;">--</div>
-                </div>
-                <div style="display:flex; flex-direction:column; align-items:center;">
-                    <div class="w-lbl">TRUE ELLIPSE (PHYSICS)</div>
-                    <div class="val-sm" id="true-deg" style="color:var(--gold) !important; text-shadow:0 0 10px var(--gold-dim); margin-top: 4px;">--</div>
-                </div>
-            </div>
-            <div style="font-size:0.5rem; color:var(--starlight); margin-top:12px; border-top: 1px dashed rgba(255,215,0,0.3); padding-top: 8px; width: 85%;">DUAL-STATE ENGINE</div>
-        </div>
-    </div>
-
     <div class="gear-container q-center-dial">
         <div class="ring r-cycle" id="ring-cycle-mean"><div class="ring-node" id="node-cycle-mean" title="MEAN ARC"></div></div>
         <div class="ring r-cycle" id="ring-cycle-true" style="border:none; box-shadow:none;"><div class="ring-node" id="node-cycle-true" title="TRUE ARC"></div></div>
@@ -301,45 +222,7 @@
     </div>
 
     <script>
-        function runBootSequence() {
-            sessionStorage.setItem('Q_BOOT_COMPLETE', 'true');
-            const log = document.getElementById('boot-log');
-            const overlay = document.getElementById('boot-overlay');
-            const inputs = document.getElementById('boot-inputs');
-            
-            inputs.style.display = 'none';
-
-            log.innerHTML = "POSITION ACQUIRED.<br>";
-            setTimeout(() => { log.innerHTML += "<br>ESTABLISHING CHRONOBIOLOGICAL STATE RESOLUTION... "; }, 300);
-            setTimeout(() => { log.innerHTML += "<br>INITIATING LOCAL TRANSLATION OVERLAY... "; }, 600);
-            setTimeout(() => { log.innerHTML += "<br>ENFORCING DUAL-STATE GEOMETRY... "; }, 900);
-            setTimeout(() => { log.innerHTML += "3... "; }, 1200);
-            setTimeout(() => { log.innerHTML += "2... "; }, 1500);
-            setTimeout(() => { log.innerHTML += "1... "; }, 1800);
-            setTimeout(() => { log.innerHTML += "<span style='color:var(--white); font-family:Orbitron; font-weight:900;'>YOU... </span>"; }, 2000);
-            setTimeout(() => { log.innerHTML += "<span style='color:var(--white); font-family:Orbitron; font-weight:900;'>ARE... </span>"; }, 2200);
-            setTimeout(() => { log.innerHTML += "<span style='color:var(--platinum); font-family:Orbitron; font-weight:900; font-size:1.2rem; letter-spacing:4px; text-shadow: 0 0 15px var(--platinum);'>HERE.</span>"; }, 2400);
-            setTimeout(() => { log.innerHTML += "<br><span style='color:var(--gold); font-family:Orbitron; font-weight:700; font-size:0.8rem; letter-spacing:2px; opacity:0.8;'>HERE IS NOW.</span>"; }, 2600);
-            setTimeout(() => { log.innerHTML += "<br><br><span style='color:var(--sys-cyan); font-family:Orbitron; font-weight:900; font-size:0.9rem; letter-spacing:2px; text-shadow: 0 0 15px var(--sys-cyan);'>HERE AND NOW ARE INFINITELY ONE!</span>"; }, 2800);
-            
-            setTimeout(() => { 
-                if(window.Q_LOG) window.Q_LOG('INFO', 'INTERFACE', 'BOOT_SEQUENCE_EXECUTED');
-                overlay.style.opacity = '0'; 
-                
-                document.body.classList.remove('boot-active'); 
-                
-                const ctrlBar = document.getElementById('q-universal-controls');
-                if(ctrlBar) {
-                    ctrlBar.style.display = 'flex';
-                    ctrlBar.style.opacity = '1';
-                    ctrlBar.style.pointerEvents = 'auto';
-                }
-
-                setTimeout(() => overlay.style.display = 'none', 400);
-            }, 3200);
-        }
-
-        window.generateStars('star-layer');
+        if (window.generateStars) window.generateStars('star-layer');
         
         window.addEventListener('q-tick', (e) => {
             const { t, isLive, activeTime, daysElapsed, qData, legacyDateStr, legacyTimeStr, activePostulate } = e.detail;
@@ -361,8 +244,22 @@
                 return out;
             }
 
-            document.getElementById('leg-date').innerHTML = `<span style="color:var(--gold); font-weight:bold; text-shadow:0 0 10px var(--gold-dim);">${legacyDateStr.toUpperCase()}</span>`;
-            document.getElementById('leg-time').innerHTML = formatDualColor(legacyTimeStr);
+            // Force globally injected wings to render perfectly in Gold for Chrono-face
+            const legDateEl = document.getElementById('leg-date');
+            if (legDateEl) {
+                legDateEl.innerHTML = `<span style="color:var(--gold); font-weight:bold; text-shadow:0 0 10px var(--gold-dim);">${legacyDateStr.toUpperCase()}</span>`;
+            }
+
+            const legTimeEl = document.getElementById('leg-time');
+            if (legTimeEl) {
+                legTimeEl.innerHTML = formatDualColor(legacyTimeStr);
+            }
+
+            const fmtBtn = document.getElementById('fmt-btn');
+            if (fmtBtn) { 
+                fmtBtn.style.color = "var(--gold)"; 
+                fmtBtn.style.borderColor = "var(--gold)"; 
+            }
 
             const continuousMeanDeg = daysElapsed * (360 / 365.24219);
             const continuousTrueDeg = continuousMeanDeg + qData.delta;
@@ -377,8 +274,19 @@
             document.getElementById('ring-week').style.transform = `rotate(${continuousWeekDeg}deg)`;
             document.getElementById('ring-day').style.transform = `rotate(${continuousDayDeg}deg)`;
 
-            document.getElementById('mean-deg').innerText = qData.meanArc.toFixed(2) + "°";
-            document.getElementById('true-deg').innerText = qData.trueArc.toFixed(2) + "°";
+            const meanDegEl = document.getElementById('mean-deg');
+            if (meanDegEl) { 
+                meanDegEl.innerText = qData.meanArc.toFixed(2) + "°";
+                meanDegEl.style.setProperty('color', 'var(--gold)', 'important');
+                meanDegEl.style.textShadow = '0 0 10px var(--gold-dim)';
+            }
+            
+            const trueDegEl = document.getElementById('true-deg');
+            if (trueDegEl) { 
+                trueDegEl.innerText = qData.trueArc.toFixed(2) + "°";
+                trueDegEl.style.setProperty('color', 'var(--gold)', 'important');
+                trueDegEl.style.textShadow = '0 0 10px var(--gold-dim)';
+            }
             
             let activeBlock = window.getQBlockByTime ? window.getQBlockByTime(t) : null;
             const qCoordWing = document.getElementById('q-coord-wing');
@@ -386,14 +294,16 @@
             let letterStyle = "color:var(--starlight); font-family:'Orbitron'; font-size:0.8rem; margin-right:2px;";
             let numStyle = "color:var(--gold); font-size:1.1rem; font-weight:bold;";
             
-            if (activeBlock && activeBlock.type === 'PYLON') {
-                qCoordWing.innerHTML = `<span style="font-size:0.9rem; color:var(--gold); font-family:'Orbitron'; font-weight:bold; text-shadow: 0 0 10px var(--gold-dim);">${activeBlock.name}</span>`;
-            } else {
-                let cCycle = activeBlock ? activeBlock.cycle : 0;
-                qCoordWing.innerHTML = `<span style="${letterStyle}">QC</span><span style="${numStyle}">${cCycle}</span> ` +
-                                       `<span style="${letterStyle} margin-left:6px;">Q</span><span style="${numStyle}">${qData.quad}</span> ` +
-                                       `<span style="${letterStyle} margin-left:6px;">S</span><span style="${numStyle}">${qData.sect}</span> ` +
-                                       `<span style="${letterStyle} margin-left:6px;">DAY</span><span style="${numStyle}">${qData.day}</span>`;
+            if (qCoordWing) {
+                if (activeBlock && activeBlock.type === 'PYLON') {
+                    qCoordWing.innerHTML = `<span style="font-size:0.9rem; color:var(--gold); font-family:'Orbitron'; font-weight:bold; text-shadow: 0 0 10px var(--gold-dim);">${activeBlock.name}</span>`;
+                } else {
+                    let cCycle = activeBlock ? activeBlock.cycle : 0;
+                    qCoordWing.innerHTML = `<span style="${letterStyle}">QC</span><span style="${numStyle}">${cCycle}</span> ` +
+                                           `<span style="${letterStyle} margin-left:6px;">Q</span><span style="${numStyle}">${qData.quad}</span> ` +
+                                           `<span style="${letterStyle} margin-left:6px;">S</span><span style="${numStyle}">${qData.sect}</span> ` +
+                                           `<span style="${letterStyle} margin-left:6px;">DAY</span><span style="${numStyle}">${qData.day}</span>`;
+                }
             }
 
             // --- MASTER TELEMETRY ROLLUPS POPULATION ---

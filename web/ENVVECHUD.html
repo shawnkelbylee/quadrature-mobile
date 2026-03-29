@@ -143,45 +143,6 @@
     <div class="star-container" id="stars"></div>
     <div id="axis-hud">GEOMETRIC AXIS DATA</div>
 
-    <div class="wing wing-left telemetry-node">
-        <div class="wing-content">
-            <div style="display:flex; flex-direction:column; align-items:center;">
-                <span class="w-head">LEGACY OS</span>
-                <div class="w-lbl">DATE</div>
-                <div class="val-lg" id="leg-date" style="color: var(--env-green); text-shadow: 0 0 10px var(--env-green-dim);">--</div>
-            </div>
-            <div style="display:flex; flex-direction:column; align-items:center; margin-top: 10px;">
-                <div style="display:flex; align-items:center; justify-content:center; gap: 5px;">
-                    <div class="w-lbl" style="margin:0;">TIME</div>
-                    <div class="fmt-toggle" onclick="window.toggleTimeFmt('fmt-btn')" ontouchstart="window.toggleTimeFmt('fmt-btn'); event.preventDefault();" id="fmt-btn" style="border-color: var(--env-green); color: var(--env-green);">UTC</div>
-                </div>
-                <div class="val-lg" id="leg-time" style="color: var(--env-green); text-shadow: 0 0 10px var(--env-green-dim);">--</div>
-            </div>
-            <div style="font-size:0.5rem; color:var(--starlight); margin-top:12px; border-top: 1px dashed rgba(167, 255, 131, 0.3); padding-top: 8px; width: 85%;">STATUS: CONTINUITY ACTIVE</div>
-        </div>
-    </div>
-
-    <div class="wing wing-right telemetry-node">
-        <div class="wing-content">
-            <div style="display:flex; flex-direction:column; align-items:center;">
-                <span class="w-head">QUAD OS</span>
-                <div class="w-lbl">Q COORDINATE</div>
-                <div class="val-lg" id="q-coord-wing" style="margin-top: 4px; color: var(--env-green); text-shadow: 0 0 10px var(--env-green-dim);">--</div>
-            </div>
-            <div style="display:flex; width: 100%; justify-content: space-around; margin-top: 10px;">
-                <div style="display:flex; flex-direction:column; align-items:center;">
-                    <div class="w-lbl">MEAN CIRCLE (CIVIL)</div>
-                    <div class="val-sm" id="mean-deg" style="color:var(--env-green) !important; text-shadow:0 0 10px var(--env-green-dim); margin-top: 4px;">--</div>
-                </div>
-                <div style="display:flex; flex-direction:column; align-items:center;">
-                    <div class="w-lbl">TRUE ELLIPSE (PHYSICS)</div>
-                    <div class="val-sm" id="true-deg" style="color:var(--env-green) !important; text-shadow:0 0 10px var(--env-green-dim); margin-top: 4px;">--</div>
-                </div>
-            </div>
-            <div style="font-size:0.5rem; color:var(--starlight); margin-top:12px; border-top: 1px dashed rgba(167, 255, 131, 0.3); padding-top: 8px; width: 85%;">DUAL-STATE ENGINE</div>
-        </div>
-    </div>
-
     <div class="wind-panel wind-tl telemetry-node">
         <div class="h-label" style="margin-top:0;"><span>RISK ASSESSMENT</span> <span class="sys-badge" id="iot-status-badge">IOT: ACTIVE</span></div>
         <div class="h-val"><span>PROBABILITY INDEX:</span> <span class="val-highlight" id="risk-index">EPHEMERIS SYNCED</span></div>
@@ -255,6 +216,7 @@
         let alertThreshold = 75;
         let currentAssetMode = "FLORA";
         let currentRiskVal = 0;
+        let currentRadarStatus = 'STABLE';
 
         function showAxisHUD(text) {
             const hud = document.getElementById('axis-hud');
@@ -397,7 +359,7 @@
             const html = `
                 <div>
                     <label style="font-size: 0.6rem; color: rgba(255,255,255,0.6); font-family: 'Orbitron'; letter-spacing: 1px;">MICRO-CLIMATE ANCHOR</label>
-                    <select id="climate-anchor" class="modal-input">
+                    <select id="climate-anchor" class="modal-input" style="background: rgba(0,0,0,0.6); border: 1px solid var(--env-green); color: #fff; padding: 10px; font-family: 'JetBrains Mono'; font-size: 0.8rem; border-radius: 4px; outline: none; margin-top: 4px; width: 100%;">
                         <option value="CLW" selected>Clearwater, FL (Current Base)</option>
                         <option value="PHL">Philadelphia, PA (Eastern Seaboard)</option>
                         <option value="ENC">Encino, CA (Western Coastal)</option>
@@ -406,14 +368,14 @@
                 </div>
                 <div style="margin-top: 10px;">
                     <label style="font-size: 0.6rem; color: rgba(255,255,255,0.6); font-family: 'Orbitron'; letter-spacing: 1px;">DOMAIN TRACKING MODE</label>
-                    <select id="asset-track" onchange="window.updateAssetLabels()" class="modal-input">
+                    <select id="asset-track" onchange="window.updateAssetLabels()" class="modal-input" style="background: rgba(0,0,0,0.6); border: 1px solid var(--env-green); color: #fff; padding: 10px; font-family: 'JetBrains Mono'; font-size: 0.8rem; border-radius: 4px; outline: none; margin-top: 4px; width: 100%;">
                         <option value="FLORA" ${currentAssetMode === 'FLORA' ? 'selected' : ''}>FLORA / AGRARIAN (Agriculture & Biome)</option>
                         <option value="FAUNA" ${currentAssetMode === 'FAUNA' ? 'selected' : ''}>FAUNA / BIOLOGICAL (Livestock & Animal Care)</option>
                     </select>
                 </div>
                 <div style="margin-top: 10px;">
                     <label style="font-size: 0.6rem; color: rgba(255,255,255,0.6); font-family: 'Orbitron'; letter-spacing: 1px;">RISK THRESHOLD SENSITIVITY: <span id="thresh-val" style="color:var(--env-green);">${alertThreshold}%</span></label>
-                    <input type="range" id="risk-thresh" min="50" max="95" value="${alertThreshold}" class="modal-input" oninput="document.getElementById('thresh-val').innerText = this.value + '%'">
+                    <input type="range" id="risk-thresh" min="50" max="95" value="${alertThreshold}" class="modal-input" oninput="document.getElementById('thresh-val').innerText = this.value + '%'" style="width: 100%; margin-top: 4px;">
                 </div>
             `;
             window.Q_ModalEngine.render('VECTOR PERSONALIZATION', html, 'APPLY & CALIBRATE', saveOptions);
@@ -485,8 +447,11 @@
                 return out;
             }
 
-            document.getElementById('leg-date').innerText = legacyDateStr.toUpperCase();
-            document.getElementById('leg-time').innerHTML = formatDualColor(legacyTimeStr);
+            const legDateEl = document.getElementById('leg-date');
+            if (legDateEl) legDateEl.innerText = legacyDateStr.toUpperCase();
+            
+            const legTimeEl = document.getElementById('leg-time');
+            if (legTimeEl) legTimeEl.innerHTML = formatDualColor(legacyTimeStr);
             
             if(window.Q_STATE && window.Q_STATE.hardware_hooks) {
                 const badge = document.getElementById('iot-status-badge');
@@ -506,18 +471,23 @@
             let smLetterStyle = "color:var(--starlight); font-family:'Orbitron'; font-size:0.8rem; margin-right:2px;";
             let smNumStyle = "color:var(--env-green); font-size:1.1rem; font-weight:bold;";
             
-            if (activeBlock && activeBlock.type === 'PYLON') {
-                qCoordWing.innerHTML = `<span style="font-size:0.9rem; color:var(--env-green); font-family:'Orbitron'; font-weight:bold; text-shadow: 0 0 10px var(--env-green-dim);">${activeBlock.name}</span>`;
-            } else {
-                let cCycle = activeBlock ? activeBlock.cycle : 0;
-                qCoordWing.innerHTML = `<span style="${smLetterStyle}">QC</span><span style="${smNumStyle}">${cCycle}</span> ` +
-                                       `<span style="${smLetterStyle} margin-left:6px;">Q</span><span style="${smNumStyle}">${qData.quad}</span> ` +
-                                       `<span style="${smLetterStyle} margin-left:6px;">S</span><span style="${smNumStyle}">${qData.sect}</span> ` +
-                                       `<span style="${smLetterStyle} margin-left:6px;">DAY</span><span style="${smNumStyle}">${qData.day}</span>`;
+            if (qCoordWing) {
+                if (activeBlock && activeBlock.type === 'PYLON') {
+                    qCoordWing.innerHTML = `<span style="font-size:0.9rem; color:var(--env-green); font-family:'Orbitron'; font-weight:bold; text-shadow: 0 0 10px var(--env-green-dim);">${activeBlock.name}</span>`;
+                } else {
+                    let cCycle = activeBlock ? activeBlock.cycle : 0;
+                    qCoordWing.innerHTML = `<span style="${smLetterStyle}">QC</span><span style="${smNumStyle}">${cCycle}</span> ` +
+                                           `<span style="${smLetterStyle} margin-left:6px;">Q</span><span style="${smNumStyle}">${qData.quad}</span> ` +
+                                           `<span style="${smLetterStyle} margin-left:6px;">S</span><span style="${smNumStyle}">${qData.sect}</span> ` +
+                                           `<span style="${smLetterStyle} margin-left:6px;">DAY</span><span style="${smNumStyle}">${qData.day}</span>`;
+                }
             }
 
-            document.getElementById('mean-deg').innerText = meanArc.toFixed(2) + "°";
-            document.getElementById('true-deg').innerText = trueArc.toFixed(2) + "°";
+            const meanDegEl = document.getElementById('mean-deg');
+            if (meanDegEl) meanDegEl.innerText = meanArc.toFixed(2) + "°";
+            
+            const trueDegEl = document.getElementById('true-deg');
+            if (trueDegEl) trueDegEl.innerText = trueArc.toFixed(2) + "°";
 
             const continuousMeanDeg = daysElapsed * (360 / 365.24219);
             const continuousTrueDeg = continuousMeanDeg + qData.delta;
@@ -618,7 +588,7 @@
             
             const radarText = document.getElementById('radar-readout');
             if(currentRiskVal >= alertThreshold) { 
-                currentRadarStatus = 'CRON STORM'; radarText.innerText = "⚠ THERMODYNAMIC FRICTION"; radarText.style.color = "var(--alert-red)"; 
+                currentRadarStatus = 'THERMODYNAMIC FRICTION'; radarText.innerText = "⚠ THERMODYNAMIC FRICTION"; radarText.style.color = "var(--alert-red)"; 
             } else if(currentRiskVal >= alertThreshold - 25) { 
                 currentRadarStatus = 'THERMAL SPIKE'; radarText.innerText = "THERMAL SPIKE DETECTED"; radarText.style.color = "var(--squall-amber)"; 
             } else { 
@@ -626,7 +596,7 @@
             }
             
             const phaseTextEl = document.getElementById('resp-phase-text');
-            if (currentRadarStatus === 'CRON STORM') {
+            if (currentRadarStatus === 'THERMODYNAMIC FRICTION') {
                  phaseTextEl.style.color = "var(--alert-red)";
             } else if (currentRadarStatus === 'THERMAL SPIKE') {
                  phaseTextEl.style.color = "var(--squall-amber)";

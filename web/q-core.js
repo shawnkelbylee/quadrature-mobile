@@ -1,6 +1,6 @@
 // THE QUADRATURE: MASTER CORE LOGIC (ZERO-REDUNDANCY ENGINE)
 // Architect: Kelby | Engineer: Kairos
-// STATUS: Phase II Active. UI Decoupled. Supabase OAuth Engaged. Dynamic URL Redirect.
+// STATUS: Phase II Active. UI Decoupled. Supabase OAuth Engaged. Automated Spatial Lock Active.
 
 window.MS_DAY = 86400000;
 
@@ -418,7 +418,7 @@ window.Q_KairosVoice = {
 // --- SOVEREIGN ONBOARDING (FIRST-BOOT INITIATION) ---
 window.Q_Onboarding = {
     check: function() {
-        const currentVersion = "16.1.1"; // VERSION BUMP
+        const currentVersion = "16.1.1"; 
         if (localStorage.getItem('Q_CORE_VERSION') !== currentVersion) {
             localStorage.removeItem('q_dob');
             localStorage.removeItem('q_current_loc_name');
@@ -505,7 +505,7 @@ window.Q_Auth = {
             const { error } = await window.supabaseClient.auth.signInWithOAuth({
                 provider: provider,
                 options: {
-                    redirectTo: window.location.href // FIXED: Now anchors redirect to your active vector HUD
+                    redirectTo: window.location.href 
                 }
             });
             if (error) throw error;
@@ -574,7 +574,7 @@ window.Q_Auth = {
             const { error } = await window.supabaseClient.auth.signInWithOtp({
                 email: email,
                 options: {
-                    emailRedirectTo: window.location.href // FIXED
+                    emailRedirectTo: window.location.href 
                 }
             });
 
@@ -782,6 +782,7 @@ window.syncGeoLocation = async function() {
     } catch (e) {
         window.Q_LOG('WARN', 'CORE', 'GLOBAL_GEO_FAILED', { using_fallback: true, error: e.message });
         
+        // Regional Baseline Fallback Logic
         if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(
                 (pos) => {
@@ -963,9 +964,14 @@ window.addEventListener('DOMContentLoaded', async () => {
     
     await window.initCloudBridge();
     
-    // Check if returning from a Magic Link redirect
+    // Check if returning from a Magic Link redirect or standard OAuth
     if (window.Q_Auth && window.Q_Auth.handleAuthRedirect) {
         await window.Q_Auth.handleAuthRedirect();
+        
+        // AUTOMATED SPATIAL LOCK: Trigger geo-sync immediately upon auth resolution
+        if (window.Q_STATE.persistence.auth_status === 'SOVEREIGN_AUTHENTICATED') {
+            await window.syncGeoLocation();
+        }
     }
     
     await window.fetchCloudState();

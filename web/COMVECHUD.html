@@ -124,45 +124,6 @@
 
     <div class="star-container" id="stars"></div>
 
-    <div class="wing wing-left telemetry-node">
-        <div class="wing-content">
-            <div style="display:flex; flex-direction:column; align-items:center;">
-                <span class="w-head">LEGACY OS</span>
-                <div class="w-lbl">DATE</div>
-                <div class="val-lg" id="leg-date" style="color: var(--gold-bright); text-shadow: 0 0 10px var(--gold-dim);">--</div>
-            </div>
-            <div style="display:flex; flex-direction:column; align-items:center; margin-top: 10px;">
-                <div style="display:flex; align-items:center; justify-content:center; gap: 5px;">
-                    <div class="w-lbl" style="margin:0;">TIME</div>
-                    <div class="fmt-toggle" onclick="window.toggleTimeFmt('fmt-btn')" ontouchstart="window.toggleTimeFmt('fmt-btn'); event.preventDefault();" id="fmt-btn" style="border-color: var(--gold-bright); color: var(--gold-bright);">UTC</div>
-                </div>
-                <div class="val-lg" id="leg-time" style="color: var(--gold-bright); text-shadow: 0 0 10px var(--gold-dim);">--</div>
-            </div>
-            <div style="font-size:0.5rem; color:var(--starlight); margin-top:12px; border-top: 1px dashed rgba(255, 215, 0, 0.3); padding-top: 8px; width: 85%;">STATUS: CONTINUITY ACTIVE</div>
-        </div>
-    </div>
-
-    <div class="wing wing-right telemetry-node">
-        <div class="wing-content">
-            <div style="display:flex; flex-direction:column; align-items:center;">
-                <span class="w-head">QUAD OS</span>
-                <div class="w-lbl">Q COORDINATE</div>
-                <div class="val-lg" id="q-coord-wing" style="margin-top: 4px; color: var(--gold-bright); text-shadow: 0 0 10px var(--gold-dim);">--</div>
-            </div>
-            <div style="display:flex; width: 100%; justify-content: space-around; margin-top: 10px;">
-                <div style="display:flex; flex-direction:column; align-items:center;">
-                    <div class="w-lbl">MEAN CIRCLE (CIVIL)</div>
-                    <div class="val-sm" id="mean-deg" style="color:var(--gold-bright) !important; text-shadow:0 0 10px var(--gold-dim); margin-top: 4px;">--</div>
-                </div>
-                <div style="display:flex; flex-direction:column; align-items:center;">
-                    <div class="w-lbl">TRUE ELLIPSE (PHYSICS)</div>
-                    <div class="val-sm" id="true-deg" style="color:var(--gold-bright) !important; text-shadow:0 0 10px var(--gold-dim); margin-top: 4px;">--</div>
-                </div>
-            </div>
-            <div style="font-size:0.5rem; color:var(--starlight); margin-top:12px; border-top: 1px dashed rgba(255, 215, 0, 0.3); padding-top: 8px; width: 85%;">DUAL-STATE ENGINE</div>
-        </div>
-    </div>
-
     <div class="scroll-block tl telemetry-node" id="btn-rel" onclick="setMode('rel')" ontouchstart="setMode('rel')">
         <div class="s-head">RELIGIOUS OVERLAY</div>
         <div class="s-data" id="data-rel">
@@ -493,7 +454,7 @@
                 const activeTheme = window.Q_REGISTRY.SOLAR_TERMS.find(t => t.name === activeTermName)?.theme || "";
                 html = `<div style="color:var(--gold-bright); font-size:0.7rem; font-family:'Orbitron';">TERM: ${activeTermName.toUpperCase()}</div>
                 <div style="color:rgba(255,255,255,0.6); font-size:0.6rem; font-family:'JetBrains Mono'; margin-bottom:10px;">THEME: ${activeTheme}</div>
-                <textarea id="journal-text" class="modal-textarea" style="height:120px;" placeholder="Record introspection diary entry...">${savedData}</textarea>
+                <textarea id="journal-text" class="modal-textarea" placeholder="Record introspection diary entry...">${savedData}</textarea>
                 <div style="font-size:0.5rem; color:var(--platinum); margin-top:5px; text-align:center;">ENTRIES SYNC TO OMNI-PLANNER AS [DIARY]</div>`;
             }
             window.Q_ModalEngine.render(title, html, 'SAVE & CLOSE', saveOptions);
@@ -680,29 +641,37 @@
                 return out;
             }
 
-            document.getElementById('leg-date').innerText = legacyDateStr.toUpperCase();
-            document.getElementById('leg-time').innerHTML = formatDualColor(legacyTimeStr);
+            const legDateEl = document.getElementById('leg-date');
+            if (legDateEl) legDateEl.innerText = legacyDateStr.toUpperCase();
+            
+            const legTimeEl = document.getElementById('leg-time');
+            if (legTimeEl) legTimeEl.innerHTML = formatDualColor(legacyTimeStr);
             
             const meanArc = qData.meanArc;
 
             let activeBlock = window.getQBlockByTime ? window.getQBlockByTime(t) : null;
             const qCoordWing = document.getElementById('q-coord-wing');
             
-            let smLetterStyle = "color:var(--starlight); font-family:'Orbitron'; font-size:0.8rem; margin-right:2px;";
-            let smNumStyle = "color:var(--gold-bright); font-size:1.1rem; font-weight:bold;";
-            
-            if (activeBlock && activeBlock.type === 'PYLON') {
-                qCoordWing.innerHTML = `<span style="font-size:0.9rem; color:var(--gold-bright); font-family:'Orbitron'; font-weight:bold; text-shadow: 0 0 10px var(--gold-dim);">${activeBlock.name}</span>`;
-            } else {
-                let cCycle = activeBlock ? activeBlock.cycle : 0;
-                qCoordWing.innerHTML = `<span style="${smLetterStyle}">QC</span><span style="${smNumStyle}">${cCycle}</span> ` +
-                                       `<span style="${smLetterStyle} margin-left:6px;">Q</span><span style="${smNumStyle}">${qData.quad}</span> ` +
-                                       `<span style="${smLetterStyle} margin-left:6px;">S</span><span style="${smNumStyle}">${qData.sect}</span> ` +
-                                       `<span style="${smLetterStyle} margin-left:6px;">DAY</span><span style="${smNumStyle}">${qData.day}</span>`;
+            if (qCoordWing) {
+                let smLetterStyle = "color:var(--starlight); font-family:'Orbitron'; font-size:0.8rem; margin-right:2px;";
+                let smNumStyle = "color:var(--gold-bright); font-size:1.1rem; font-weight:bold;";
+                
+                if (activeBlock && activeBlock.type === 'PYLON') {
+                    qCoordWing.innerHTML = `<span style="font-size:0.9rem; color:var(--gold-bright); font-family:'Orbitron'; font-weight:bold; text-shadow: 0 0 10px var(--gold-dim);">${activeBlock.name}</span>`;
+                } else {
+                    let cCycle = activeBlock ? activeBlock.cycle : 0;
+                    qCoordWing.innerHTML = `<span style="${smLetterStyle}">QC</span><span style="${smNumStyle}">${cCycle}</span> ` +
+                                           `<span style="${smLetterStyle} margin-left:6px;">Q</span><span style="${smNumStyle}">${qData.quad}</span> ` +
+                                           `<span style="${smLetterStyle} margin-left:6px;">S</span><span style="${smNumStyle}">${qData.sect}</span> ` +
+                                           `<span style="${smLetterStyle} margin-left:6px;">DAY</span><span style="${smNumStyle}">${qData.day}</span>`;
+                }
             }
 
-            document.getElementById('mean-deg').innerText = meanArc.toFixed(2) + "°";
-            document.getElementById('true-deg').innerText = qData.trueArc.toFixed(2) + "°";
+            const meanDegEl = document.getElementById('mean-deg');
+            if (meanDegEl) meanDegEl.innerText = meanArc.toFixed(2) + "°";
+            
+            const trueDegEl = document.getElementById('true-deg');
+            if (trueDegEl) trueDegEl.innerText = qData.trueArc.toFixed(2) + "°";
             
             const continuousMeanDeg = daysElapsed * (360 / 365.24219);
             document.getElementById('transit-arm').style.transform = `rotate(${continuousMeanDeg}deg)`;

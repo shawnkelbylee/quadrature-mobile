@@ -106,45 +106,6 @@
 
     <div class="star-container" id="stars" style="z-index: 1;"></div>
 
-    <div class="wing wing-left telemetry-node">
-        <div class="wing-content">
-            <div style="display:flex; flex-direction:column; align-items:center;">
-                <span class="w-head">LEGACY OS</span>
-                <div class="w-lbl">DATE</div>
-                <div class="val-lg" id="leg-date" style="color: var(--sys-cyan) !important; text-shadow: 0 0 10px var(--neon-cyan-dim);">--</div>
-            </div>
-            <div style="display:flex; flex-direction:column; align-items:center; margin-top: 10px;">
-                <div style="display:flex; align-items:center; justify-content:center; gap: 5px;">
-                    <div class="w-lbl" style="margin:0;">TIME</div>
-                    <div class="fmt-toggle" onclick="window.toggleTimeFmt('fmt-btn')" ontouchstart="window.toggleTimeFmt('fmt-btn'); event.preventDefault();" id="fmt-btn" style="border-color: var(--sys-cyan); color: var(--sys-cyan);">UTC</div>
-                </div>
-                <div class="val-lg" id="leg-time" style="color: var(--sys-cyan); text-shadow: 0 0 10px var(--neon-cyan-dim);">--</div>
-            </div>
-            <div style="font-size:0.5rem; color:var(--starlight); margin-top:12px; border-top: 1px dashed rgba(0, 243, 255, 0.3); padding-top: 8px; width: 85%;">STATUS: CONTINUITY ACTIVE</div>
-        </div>
-    </div>
-
-    <div class="wing wing-right telemetry-node">
-        <div class="wing-content">
-            <div style="display:flex; flex-direction:column; align-items:center;">
-                <span class="w-head">QUAD OS</span>
-                <div class="w-lbl">Q COORDINATE</div>
-                <div class="val-lg" id="q-coord-wing" style="margin-top: 4px; color: var(--sys-cyan); text-shadow: 0 0 10px var(--neon-cyan-dim);">--</div>
-            </div>
-            <div style="display:flex; width: 100%; justify-content: space-around; margin-top: 10px;">
-                <div style="display:flex; flex-direction:column; align-items:center;">
-                    <div class="w-lbl">MEAN CIRCLE (CIVIL)</div>
-                    <div class="val-sm" id="mean-deg" style="color:var(--sys-cyan) !important; text-shadow:0 0 10px var(--neon-cyan-dim); margin-top: 4px;">--</div>
-                </div>
-                <div style="display:flex; flex-direction:column; align-items:center;">
-                    <div class="w-lbl">TRUE ELLIPSE (PHYSICS)</div>
-                    <div class="val-sm" id="true-deg" style="color:var(--sys-cyan) !important; text-shadow:0 0 10px var(--neon-cyan-dim); margin-top: 4px;">--</div>
-                </div>
-            </div>
-            <div style="font-size:0.5rem; color:var(--starlight); margin-top:12px; border-top: 1px dashed rgba(0, 243, 255, 0.3); padding-top: 8px; width: 85%;">DUAL-STATE ENGINE</div>
-        </div>
-    </div>
-
     <div class="corner-panel mod-tl telemetry-node">
         <div class="m-head">PHOTIC ALIGNMENT <span id="sync-badge-tl" class="sim-tag">SOVEREIGN</span></div>
         <div class="m-row"><span>SOLAR LUX TARGET:</span> <span id="lux-avail">--</span></div>

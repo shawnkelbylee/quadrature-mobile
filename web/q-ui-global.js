@@ -32,16 +32,29 @@ window.injectUniversalUI = function() {
     }
     
     let wingAesthetic = "";
+    let micColor = "var(--sys-cyan, #00f0ff)";
+    let micGlow = "var(--neon-cyan-dim, rgba(0,240,255,0.2))";
+
     if (bActive) {
         wingAesthetic = `background: linear-gradient(135deg, rgba(5, 8, 15, 0.8) 0%, rgba(10, 15, 30, 0.95) 100%); border: 1px solid rgba(0, 243, 255, 0.2); border-top: 1px solid var(--neon-cyan, #00f3ff); border-radius: 8px; box-shadow: 0 15px 35px rgba(0,0,0,0.8), inset 0 0 20px rgba(0,243,255,0.05);`;
+        micColor = "var(--sys-cyan, #00f0ff)";
+        micGlow = "var(--neon-cyan-dim, rgba(0, 240, 255, 0.1))";
     } else if (eActive) {
         wingAesthetic = `background: radial-gradient(circle at center, var(--env-green-dim, rgba(167, 255, 131, 0.2)) 0%, var(--glass-med, rgba(2, 12, 25, 0.65)) 80%); backdrop-filter: var(--blur-med, blur(16px)); -webkit-backdrop-filter: var(--blur-med, blur(16px)); box-shadow: 0 15px 40px rgba(0,0,0,0.7), inset 0 0 20px rgba(0,0,0,0.4); border-radius: 12px; border: 1px solid var(--env-green-dim, rgba(167, 255, 131, 0.2));`;
+        micColor = "var(--env-green, #a7ff83)";
+        micGlow = "var(--env-green-dim, rgba(167, 255, 131, 0.2))";
     } else if (mActive) {
         wingAesthetic = `backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); background: linear-gradient(135deg, rgba(15, 23, 42, 0.8) 0%, rgba(3, 4, 6, 0.95) 100%); border: 1px solid var(--titanium, #334155); border-top: 1px solid var(--theme-main, #f43f5e); border-radius: 4px; box-shadow: 0 20px 50px rgba(0,0,0,0.9), inset 0 0 30px rgba(0,0,0,0.5);`;
+        micColor = "var(--magenta-glow, #ff003c)";
+        micGlow = "var(--magenta-dim, rgba(255, 0, 60, 0.2))";
     } else if (cActive) {
         wingAesthetic = `background: linear-gradient(120deg, rgba(25,20,5,0.85) 0%, rgba(255,215,0,0.1) 40%, rgba(255,255,255,0.15) 50%, rgba(255,215,0,0.1) 60%, rgba(25,20,5,0.85) 100%); background-size: 300% 100%; backdrop-filter: var(--blur-med, blur(16px)); -webkit-backdrop-filter: var(--blur-med, blur(16px)); border: 2px solid var(--gold-bright, #ffd700); border-top: 1px solid rgba(255,215,0,0.5); border-radius: 20px; box-shadow: 0 10px 40px rgba(0,0,0,0.9), inset 0 0 20px rgba(255,215,0,0.1);`;
+        micColor = "var(--gold-bright, #ffd700)";
+        micGlow = "var(--gold-dim, rgba(255, 215, 0, 0.15))";
     } else { 
         wingAesthetic = `background: rgba(15, 12, 10, 0.9); backdrop-filter: var(--blur-med, blur(16px)); -webkit-backdrop-filter: var(--blur-med, blur(16px)); border-radius: 8px; box-shadow: 0 15px 35px rgba(0,0,0,0.8), inset 0 0 20px rgba(229, 228, 226, 0.1); border: 1px solid rgba(244, 208, 104, 0.3);`;
+        micColor = "var(--gold, #F4D068)";
+        micGlow = "var(--gold-dim, rgba(244, 208, 104, 0.15))";
     }
 
     const style = document.createElement('style');
@@ -75,10 +88,12 @@ window.injectUniversalUI = function() {
         .q-nav-btn.env-btn.active { border-color: var(--env-green, #a7ff83) !important; color: var(--env-green, #a7ff83) !important; box-shadow: inset 0 0 10px rgba(167,255,131,0.2) !important; }
         .q-nav-btn.mec-btn.active { border-color: var(--theme-main, #f43f5e) !important; color: var(--theme-main, #f43f5e) !important; box-shadow: inset 0 0 10px rgba(244,63,94,0.2) !important; }
 
-        #q-mic-fab-desktop { position: fixed; bottom: 20px; right: 20px; width: 50px; height: 50px; border-radius: 50%; background: rgba(5, 8, 15, 0.9); border: 1px solid var(--theme-main, #00f0ff); color: var(--theme-main, #00f0ff); display: flex; justify-content: center; align-items: center; z-index: 100000; box-shadow: 0 0 15px rgba(0,0,0,0.8); cursor: pointer; font-size: 1.2rem; transition: all 0.3s ease; pointer-events: auto !important; }
-        #q-mic-fab-desktop:hover { background: var(--theme-main, #00f0ff); color: #000; box-shadow: 0 0 20px var(--theme-main, #00f0ff); }
-        #q-mic-fab-desktop.listening { background: var(--theme-main, #00f0ff); color: #000; box-shadow: 0 0 20px var(--theme-main, #00f0ff); animation: pulse-mic 1.5s infinite; }
-        
+        /* DESKTOP MIC: BOUND TO DYNAMIC THEME */
+        #q-mic-fab-desktop { position: fixed; bottom: 20px; right: 20px; width: 50px; height: 50px; border-radius: 50%; background: rgba(5, 8, 15, 0.9); border: 1px solid ${micColor}; color: ${micColor}; display: flex; justify-content: center; align-items: center; z-index: 100000; box-shadow: 0 0 15px rgba(0,0,0,0.8); cursor: pointer; font-size: 1.2rem; transition: all 0.3s ease; pointer-events: auto !important; }
+        #q-mic-fab-desktop:hover { background: ${micColor}; color: #000; box-shadow: 0 0 20px ${micColor}; }
+        #q-mic-fab-desktop.listening { background: ${micColor}; color: #000; box-shadow: 0 0 20px ${micColor}; animation: pulse-mic-desktop 1.5s infinite; }
+        @keyframes pulse-mic-desktop { 0% { transform: scale(1); box-shadow: 0 0 10px ${micColor}; } 50% { transform: scale(1.1); box-shadow: 0 0 25px ${micColor}; } 100% { transform: scale(1); box-shadow: 0 0 10px ${micColor}; } }
+
         .q-control-strip { display: none; }
         .star-container { position: absolute; top: 0; left: 0; width: 100vw; height: var(--app-height, 100vh); z-index: 1; pointer-events: none; overflow: hidden; transform: translateZ(0); backface-visibility: hidden; }
         
@@ -90,11 +105,29 @@ window.injectUniversalUI = function() {
         .w-lbl { font-family: 'JetBrains Mono'; font-size: 0.55rem; color: var(--starlight); letter-spacing: 1px; text-transform: uppercase; margin-bottom: 2px; z-index: 20;}
         .val-lg { font-family: 'Orbitron'; font-size: 1.2rem; font-weight: 700; letter-spacing: 1px; white-space: nowrap; color: #fff; text-shadow: 0 4px 10px rgba(0,0,0,0.5); z-index: 20;}
         .q-prefix { font-size: 0.6rem; color: rgba(255,255,255,0.4); font-family: 'JetBrains Mono'; margin-right: 2px; z-index: 20;}
-        .q-val { color: var(--theme-main); font-family: 'Orbitron'; font-weight: 700; text-shadow: 0 0 15px var(--theme-dim); margin-right: 6px; z-index: 20;}
+        .q-val { color: ${micColor}; font-family: 'Orbitron'; font-weight: 700; text-shadow: 0 0 15px ${micGlow}; margin-right: 6px; z-index: 20;}
 
-        .fmt-toggle { font-family: 'JetBrains Mono'; font-weight: bold; font-size: 0.6rem; color: var(--theme-main); cursor: pointer; border: 1px solid var(--theme-dim); padding: 2px 8px; border-radius: 4px; background: rgba(0,0,0,0.6); pointer-events: auto; transition: 0.3s; white-space: nowrap; }
-        .fmt-toggle:hover { background: var(--theme-main); color: #000; box-shadow: 0 0 10px var(--theme-main); }
+        .fmt-toggle { font-family: 'JetBrains Mono'; font-weight: bold; font-size: 0.6rem; color: ${micColor}; cursor: pointer; border: 1px solid ${micGlow}; padding: 2px 8px; border-radius: 4px; background: rgba(0,0,0,0.6); pointer-events: auto; transition: 0.3s; white-space: nowrap; }
+        .fmt-toggle:hover { background: ${micColor}; color: #000; box-shadow: 0 0 10px ${micColor}; }
         
+        /* --- PHASE II: BOOT SEQUENCE & SCRUBBER CSS INJECTION --- */
+        .boot-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #000; z-index: 9999999; display: flex; flex-direction: column; justify-content: center; align-items: center; font-family: 'JetBrains Mono', monospace; color: var(--theme-main, #00f0ff); transition: opacity 1.5s ease-in-out; }
+        .boot-terminal { width: 90%; max-width: 500px; border: 1px solid var(--theme-main, #00f0ff); padding: 30px; background: rgba(0, 0, 0, 0.5); box-shadow: 0 0 30px var(--theme-dim, rgba(0, 240, 255, 0.15)); border-radius: 4px; backface-visibility: hidden; transform: translateZ(0); }
+        .boot-terminal h2 { font-family: 'Orbitron'; font-size: 1.8rem; letter-spacing: 6px; text-align: center; margin-top: 0; text-shadow: 0 0 10px var(--theme-main, #00f0ff); white-space: nowrap; }
+        .boot-desc { font-size: 0.7rem; color: #aaa; text-align: center; margin-bottom: 25px; line-height: 1.5; }
+        .boot-btn-row { display: flex; gap: 15px; margin-top: 15px; justify-content: center; }
+        .boot-btn { flex: 1; background: transparent; border: 1px solid var(--theme-main, #00f0ff); color: var(--theme-main, #00f0ff); font-family: 'Orbitron'; font-weight: 700; padding: 12px; cursor: pointer; transition: 0.3s; letter-spacing: 2px; font-size: 0.75rem; }
+        .boot-btn:hover { background: var(--theme-main, #00f0ff); color: #000; box-shadow: 0 0 20px var(--theme-main, #00f0ff); }
+        .boot-log { margin-top: 20px; font-size: 0.85rem; min-height: 80px; text-align: center; line-height: 1.6; text-shadow: 0 0 8px var(--theme-main, #00f0ff); }
+        
+        .q-global-controls { position: fixed; bottom: 85px; left: 50%; transform: translateX(-50%); z-index: 9995; display: flex; align-items: center; gap: 12px; background: rgba(10, 12, 18, 0.95); backdrop-filter: blur(20px); border-radius: 50px; padding: 10px 25px; min-width: 480px; justify-content: space-between; box-shadow: 0 10px 40px rgba(0,0,0,0.9), 0 0 20px rgba(255,255,255,0.05); border: 1px solid rgba(255, 255, 255, 0.1); pointer-events: auto; }
+        .q-ctrl-btn { background: transparent; border: 1px solid var(--theme-main, #00f0ff); color: var(--theme-main, #00f0ff); padding: 8px 14px; cursor: pointer; font-family: 'Orbitron'; font-size: 0.65rem; font-weight: 700; border-radius: 6px; transition: 0.3s; letter-spacing: 1px; white-space: nowrap; pointer-events: auto; }
+        .q-ctrl-btn:hover { background: rgba(255,255,255,0.1); color: #fff; }
+        .q-ctrl-btn.active { background: var(--theme-main, #00f0ff); color: #000; }
+        .q-scrubber { flex-grow: 1; accent-color: var(--theme-main, #00f0ff); cursor: pointer; height: 4px; -webkit-appearance: none; margin: 0 10px; border-radius: 2px; background: rgba(255,255,255,0.1); pointer-events: auto; }
+        .q-scrubber::-webkit-slider-thumb { -webkit-appearance: none; height: 22px; width: 22px; background: var(--theme-main, #00f0ff); clip-path: polygon(50% 0%, 60% 40%, 100% 50%, 60% 60%, 50% 100%, 40% 60%, 0% 50%, 40% 40%); cursor: grab; pointer-events: auto; }
+        .q-scrubber::-webkit-slider-thumb:active { cursor: grabbing; }
+
         .desktop-only { display: block !important; }
         .mobile-only-flex { display: none !important; }
 
@@ -153,8 +186,29 @@ window.injectUniversalUI = function() {
 
             .strip-lbl { font-family: 'Orbitron'; font-size: 0.4rem; font-weight: 900; letter-spacing: 1px; color: rgba(255,255,255,0.5); transition: 0.3s; }
             
-            #q-mic-fab { position: fixed; bottom: 85px; right: 15px; width: 45px; height: 45px; border-radius: 50%; background: rgba(5, 8, 15, 0.9); border: 1px solid var(--sys-cyan, #00f0ff); color: var(--sys-cyan, #00f0ff); display: flex; justify-content: center; align-items: center; z-index: 100000; box-shadow: 0 0 15px rgba(0,0,0,0.8); cursor: pointer; font-size: 1.1rem; transition: all 0.3s ease; pointer-events: auto !important;}
-            #q-mic-fab.listening { background: var(--sys-cyan, #00f0ff); color: #000; box-shadow: 0 0 20px var(--sys-cyan, #00f0ff); animation: pulse-mic 1.5s infinite; }
+            /* MOBILE MIC: BOUND TO DYNAMIC THEME */
+            #q-mic-fab { 
+                position: fixed; 
+                bottom: 140px; 
+                left: 50%; 
+                transform: translateX(-50%); 
+                width: 50px; 
+                height: 50px; 
+                border-radius: 50%; 
+                background: rgba(5, 8, 15, 0.9); 
+                border: 1px solid ${micColor}; 
+                color: ${micColor}; 
+                display: flex; 
+                justify-content: center; 
+                align-items: center; 
+                z-index: 100000; 
+                box-shadow: 0 0 20px rgba(0,0,0,0.8), 0 0 10px ${micGlow}; 
+                cursor: pointer; 
+                font-size: 1.2rem; 
+                transition: all 0.3s ease; 
+                pointer-events: auto !important;
+            }
+            #q-mic-fab.listening { background: ${micColor}; color: #000; box-shadow: 0 0 25px ${micColor}; animation: pulse-mic 1.5s infinite; }
 
             /* STRICT RIBBON WRAP FIX */
             #mobile-telemetry-ribbon { 
@@ -198,7 +252,13 @@ window.injectUniversalUI = function() {
             #mobile-telemetry-viewport .wing { display: none !important; }
             
             body.telemetry-open .q-center-dial { display: none !important; }
+            
+            /* Phase II Mobile Patches */
+            .boot-terminal h2 { font-size: 1.1rem; letter-spacing: 4px; }
+            .q-global-controls { min-width: 95vw; padding: 8px 12px; gap: 5px; bottom: 85px; } 
         }
+
+        @keyframes pulse-mic { 0% { transform: translateX(-50%) scale(1); box-shadow: 0 0 10px ${micColor}; } 50% { transform: translateX(-50%) scale(1.1); box-shadow: 0 0 25px ${micColor}; } 100% { transform: translateX(-50%) scale(1); box-shadow: 0 0 10px ${micColor}; } }
     `;
     document.head.appendChild(style);
 
@@ -262,10 +322,83 @@ window.injectUniversalUI = function() {
         </div>
 
         <button id="q-mic-fab" class="mobile-only-flex" onclick="if(window.Q_KairosVoice) window.Q_KairosVoice.toggle()" ontouchstart="if(window.Q_KairosVoice) window.Q_KairosVoice.toggle(); event.preventDefault();">🎙</button>
+
+        <div class="wing wing-left telemetry-node" id="q-wing-left">
+            <div class="wing-content">
+                <div style="display:flex; flex-direction:column; align-items:center;">
+                    <span class="w-head">LEGACY OS</span>
+                    <div class="w-lbl">DATE</div>
+                    <div class="val-lg" id="leg-date" style="color: ${micColor}; text-shadow: 0 0 10px ${micGlow};">--</div>
+                </div>
+                <div style="display:flex; flex-direction:column; align-items:center; margin-top: 10px;">
+                    <div style="display:flex; align-items:center; justify-content:center; gap: 5px;">
+                        <div class="w-lbl" style="margin:0;">TIME</div>
+                        <div class="fmt-toggle" onclick="window.toggleTimeFmt('fmt-btn')" ontouchstart="window.toggleTimeFmt('fmt-btn'); event.preventDefault();" id="fmt-btn">UTC</div>
+                    </div>
+                    <div class="val-lg" id="leg-time" style="color: ${micColor}; text-shadow: 0 0 10px ${micGlow};">--</div>
+                </div>
+                <div style="font-size:0.5rem; color:var(--starlight); margin-top:12px; border-top: 1px dashed ${micGlow}; padding-top: 8px; width: 85%; text-align:center;">STATUS: CONTINUITY ACTIVE</div>
+            </div>
+        </div>
+
+        <div class="wing wing-right telemetry-node" id="q-wing-right">
+            <div class="wing-content">
+                <div style="display:flex; flex-direction:column; align-items:center;">
+                    <span class="w-head">QUAD OS</span>
+                    <div class="w-lbl">Q COORDINATE</div>
+                    <div class="val-lg" id="q-coord-wing" style="margin-top: 4px; color: ${micColor}; text-shadow: 0 0 10px ${micGlow};">--</div>
+                </div>
+                <div style="display:flex; width: 100%; justify-content: space-around; margin-top: 10px;">
+                    <div style="display:flex; flex-direction:column; align-items:center;">
+                        <div class="w-lbl">MEAN CIRCLE (CIVIL)</div>
+                        <div class="val-sm" id="mean-deg" style="color:${micColor} !important; text-shadow:0 0 10px ${micGlow}; margin-top: 4px;">--</div>
+                    </div>
+                    <div style="display:flex; flex-direction:column; align-items:center;">
+                        <div class="w-lbl">TRUE ELLIPSE (PHYSICS)</div>
+                        <div class="val-sm" id="true-deg" style="color:${micColor} !important; text-shadow:0 0 10px ${micGlow}; margin-top: 4px;">--</div>
+                    </div>
+                </div>
+                <div style="font-size:0.5rem; color:var(--starlight); margin-top:12px; border-top: 1px dashed ${micGlow}; padding-top: 8px; width: 85%; text-align:center;">DUAL-STATE ENGINE</div>
+            </div>
+        </div>
+
+        <div class="boot-overlay" id="boot-overlay" style="display: none;">
+            <div class="boot-terminal">
+                <h2>INITIALIZATION</h2>
+                <div class="boot-desc">Establish Sovereign Identity to engage the Quadrature Structure.</div>
+                <div id="boot-inputs">
+                    <div class="boot-btn-row">
+                        <button class="boot-btn" onclick="window.runBootSequence()" ontouchstart="window.runBootSequence(); event.preventDefault();">ENGAGE SEQUENCE</button>
+                    </div>
+                </div>
+                <div class="boot-log" id="boot-log"></div>
+            </div>
+        </div>
+
+        <div class="q-global-controls" id="q-universal-controls" style="display: none;">
+            <button class="q-ctrl-btn" onclick="window.stepScrubber(-1)">&lt;</button>
+            <input type="range" min="0" max="365" step="1" value="0" class="q-scrubber" id="q-global-scrubber" oninput="window.scrubTime(this.value)">
+            <button class="q-ctrl-btn" onclick="window.stepScrubber(1)">&gt;</button>
+            <button class="q-ctrl-btn" id="q-live-toggle" onclick="window.setLiveClock()">LIVE</button>
+        </div>
     `;
     
     const refNode = document.body.firstChild;
     while (uiContainer.firstChild) document.body.insertBefore(uiContainer.firstChild, refNode);
+
+    // --- PHASE II INITIALIZATION LOGIC ---
+    if(sessionStorage.getItem('Q_BOOT_COMPLETE') !== 'true') {
+        document.body.classList.add('boot-active');
+        let bootOverlay = document.getElementById('boot-overlay');
+        if (bootOverlay) bootOverlay.style.display = 'flex';
+    } else {
+        document.body.classList.remove('boot-active');
+        let ctrlBar = document.getElementById('q-universal-controls');
+        if(ctrlBar) ctrlBar.style.display = 'flex';
+    }
+    
+    window.bindMasterTickScrubber();
+    window.syncScrubberUI();
 
     window.addEventListener('q-tick', (e) => {
         const badge = document.getElementById('q-global-sim-badge');
@@ -315,7 +448,6 @@ window.injectUniversalUI = function() {
                 
                 ribbonLegDate.innerHTML = qcStr;
             } else {
-                // FIXED: Hard-binds the date string to the main theme color, dropping the dual-color regex
                 ribbonLegDate.innerHTML = `<span style="color:var(--theme-main, #F4D068); font-size:0.75rem; font-weight:bold;">${e.detail.legacyDateStr.toUpperCase()}</span>`;
             }
         }
@@ -427,6 +559,112 @@ window.generateStars = function(containerId) {
         requestAnimationFrame(tick);
     });
 })();
+
+// --- PHASE II: GLOBAL BOOT & SCRUBBER LOGIC MIGRATION ---
+
+window.runBootSequence = function() {
+    sessionStorage.setItem('Q_BOOT_COMPLETE', 'true');
+    const log = document.getElementById('boot-log');
+    const overlay = document.getElementById('boot-overlay');
+    const inputs = document.getElementById('boot-inputs');
+    
+    if(inputs) inputs.style.display = 'none';
+
+    log.innerHTML = "POSITION ACQUIRED.<br>";
+    setTimeout(() => { log.innerHTML += "<br>ESTABLISHING CHRONOBIOLOGICAL STATE RESOLUTION... "; }, 300);
+    setTimeout(() => { log.innerHTML += "<br>INITIATING LOCAL TRANSLATION OVERLAY... "; }, 600);
+    setTimeout(() => { log.innerHTML += "<br>ENFORCING DUAL-STATE GEOMETRY... "; }, 900);
+    setTimeout(() => { log.innerHTML += "3... "; }, 1200);
+    setTimeout(() => { log.innerHTML += "2... "; }, 1500);
+    setTimeout(() => { log.innerHTML += "1... "; }, 1800);
+    setTimeout(() => { log.innerHTML += "<span style='color:var(--white-pure, #fff); font-family:Orbitron; font-weight:900;'>YOU... </span>"; }, 2000);
+    setTimeout(() => { log.innerHTML += "<span style='color:var(--white-pure, #fff); font-family:Orbitron; font-weight:900;'>ARE... </span>"; }, 2200);
+    setTimeout(() => { log.innerHTML += "<span style='color:var(--platinum); font-family:Orbitron; font-weight:900; font-size:1.2rem; letter-spacing:4px; text-shadow: 0 0 15px var(--platinum);'>HERE.</span>"; }, 2400);
+    setTimeout(() => { log.innerHTML += "<br><span style='color:var(--gold); font-family:Orbitron; font-weight:700; font-size:0.8rem; letter-spacing:2px; opacity:0.8;'>HERE IS NOW.</span>"; }, 2600);
+    setTimeout(() => { log.innerHTML += "<br><br><span style='color:var(--theme-main); font-family:Orbitron; font-weight:900; font-size:0.9rem; letter-spacing:2px; text-shadow: 0 0 15px var(--theme-main);'>HERE AND NOW ARE INFINITELY ONE!</span>"; }, 2800);
+    
+    setTimeout(() => { 
+        if(window.Q_LOG) window.Q_LOG('INFO', 'INTERFACE', 'BOOT_SEQUENCE_EXECUTED');
+        overlay.style.opacity = '0'; 
+        document.body.classList.remove('boot-active'); 
+        
+        const ctrlBar = document.getElementById('q-universal-controls');
+        if(ctrlBar) {
+            ctrlBar.style.display = 'flex';
+        }
+        setTimeout(() => overlay.style.display = 'none', 400);
+    }, 3200);
+};
+
+window.bindMasterTickScrubber = function() {
+    window.addEventListener('q-tick', (e) => {
+        const { isLive, daysElapsed } = e.detail;
+        if (isLive) {
+            const scrubber = document.getElementById('q-global-scrubber');
+            if (scrubber) {
+                let cycleDay = Math.floor(daysElapsed % 365.24219);
+                if (cycleDay < 0) cycleDay += 365; 
+                scrubber.value = cycleDay;
+            }
+        }
+    });
+};
+
+window.scrubTime = function(val) {
+    if(!window.getSimState || !window.PYLON_ALPHA_DYNAMIC) return;
+    const saved = window.getSimState();
+    const baseTime = saved.isLive ? Date.now() : saved.simTime;
+    const currentDays = (baseTime - window.PYLON_ALPHA_DYNAMIC) / window.MS_DAY;
+    const cycleBaseDays = Math.floor(currentDays / 365.24219) * 365.24219;
+    const discreteDays = parseInt(val, 10);
+    
+    const targetMs = window.PYLON_ALPHA_DYNAMIC + ((cycleBaseDays + discreteDays) * window.MS_DAY);
+    const d = new Date(targetMs);
+    d.setUTCHours(12, 0, 0, 0);
+    
+    window.updateMasterClock(false, d.getTime());
+    if(window.Q_MobileBridge) window.Q_MobileBridge.pulse('LIGHT');
+};
+
+window.stepScrubber = function(n) {
+    if(!window.getSimState) return;
+    const saved = window.getSimState();
+    const baseTime = saved.isLive ? Date.now() : saved.simTime;
+    const targetMs = baseTime + (n * window.MS_DAY);
+    window.updateMasterClock(false, targetMs);
+    if(window.Q_MobileBridge) window.Q_MobileBridge.pulse('MEDIUM');
+};
+
+window.setLiveClock = function() {
+    window.updateMasterClock(true, Date.now());
+    if(window.Q_MobileBridge) window.Q_MobileBridge.pulse('HEAVY');
+};
+
+window.updateMasterClock = function(isLive, simTime) {
+    const payload = JSON.stringify({ isLive, simTime, scrubSpeed: 0 });
+    localStorage.setItem('Q_MASTER_CLOCK', payload);
+    window.dispatchEvent(new StorageEvent('storage', { key: 'Q_MASTER_CLOCK', newValue: payload }));
+    window.syncScrubberUI();
+};
+
+window.syncScrubberUI = function() {
+    if(!window.getSimState) return;
+    const state = window.getSimState();
+    const liveBtn = document.getElementById('q-live-toggle');
+    const scrubber = document.getElementById('q-global-scrubber');
+    
+    if(liveBtn) {
+        liveBtn.classList.toggle('active', state.isLive);
+        liveBtn.innerText = state.isLive ? "LIVE" : "RESYNC";
+    }
+    
+    if(scrubber && state.isLive === false && window.PYLON_ALPHA_DYNAMIC) {
+        let daysElapsed = (state.simTime - window.PYLON_ALPHA_DYNAMIC) / window.MS_DAY;
+        let cycleDay = Math.floor(daysElapsed % 365.24219);
+        if (cycleDay < 0) cycleDay += 365;
+        scrubber.value = cycleDay;
+    }
+};
 
 // Auto-init UI if logic hasn't yet, or standard load
 window.addEventListener('DOMContentLoaded', () => {

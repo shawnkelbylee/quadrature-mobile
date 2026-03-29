@@ -133,45 +133,6 @@
     <div class="star-container" id="stars"></div>
     <div id="needle-hud">SYSTEMIC CONTEXT</div>
 
-    <div class="wing wing-left telemetry-node">
-        <div class="wing-content">
-            <div style="display:flex; flex-direction:column; align-items:center;">
-                <span class="w-head">LEGACY OS</span>
-                <div class="w-lbl">DATE</div>
-                <div class="val-lg" id="leg-date" style="color: var(--cyan-glow); text-shadow: 0 0 10px var(--cyan-dim);">--</div>
-            </div>
-            <div style="display:flex; flex-direction:column; align-items:center; margin-top: 10px;">
-                <div style="display:flex; align-items:center; justify-content:center; gap: 5px;">
-                    <div class="w-lbl" style="margin:0;">TIME</div>
-                    <div class="fmt-toggle" onclick="window.toggleTimeFmt('fmt-btn')" ontouchstart="window.toggleTimeFmt('fmt-btn'); event.preventDefault();" id="fmt-btn" style="border-color: var(--cyan-glow); color: var(--cyan-glow);">UTC</div>
-                </div>
-                <div class="val-lg" id="leg-time" style="color: var(--cyan-glow); text-shadow: 0 0 10px var(--cyan-dim);">--</div>
-            </div>
-            <div style="font-size:0.5rem; color:var(--steel); margin-top:12px; border-top: 1px dashed rgba(0, 240, 255, 0.3); padding-top: 8px; width: 85%;">STATUS: CONTINUITY ACTIVE</div>
-        </div>
-    </div>
-
-    <div class="wing wing-right telemetry-node">
-        <div class="wing-content">
-            <div style="display:flex; flex-direction:column; align-items:center;">
-                <span class="w-head">QUAD OS</span>
-                <div class="w-lbl">Q COORDINATE</div>
-                <div class="val-lg" id="q-coord-wing" style="margin-top: 4px; color: var(--cyan-glow); text-shadow: 0 0 10px var(--cyan-dim);">--</div>
-            </div>
-            <div style="display:flex; width: 100%; justify-content: space-around; margin-top: 10px;">
-                <div style="display:flex; flex-direction:column; align-items:center;">
-                    <div class="w-lbl">MEAN CIRCLE (CIVIL)</div>
-                    <div class="val-sm" id="mean-deg" style="color:var(--cyan-glow) !important; text-shadow:0 0 10px var(--cyan-dim); margin-top: 4px;">--</div>
-                </div>
-                <div style="display:flex; flex-direction:column; align-items:center;">
-                    <div class="w-lbl">TRUE ELLIPSE (PHYSICS)</div>
-                    <div class="val-sm" id="true-deg" style="color:var(--cyan-glow) !important; text-shadow:0 0 10px var(--cyan-dim); margin-top: 4px;">--</div>
-                </div>
-            </div>
-            <div style="font-size:0.5rem; color:var(--steel); margin-top:12px; border-top: 1px dashed rgba(0, 240, 255, 0.3); padding-top: 8px; width: 85%;">DUAL-STATE ENGINE</div>
-        </div>
-    </div>
-
     <div class="corner-gearbox mech-panel mod-tl telemetry-node">
         <div class="m-head holo-text">STATE RESOLUTION <span>MODULE 01</span></div>
         <div class="m-row"><span>MECHANISM:</span> <span class="m-val">DETERMINISTIC</span></div>
@@ -366,7 +327,7 @@
 
         function openRadarModal() {
             let iconStr, statusStr, descStr, colorStr;
-            if(currentRadarStatus === 'CRON STORM') {
+            if(currentRadarStatus === 'THERMODYNAMIC FRICTION') {
                 iconStr = "🌪"; colorStr = "var(--magenta-glow)";
                 statusStr = "THERMODYNAMIC FRICTION";
                 descStr = "Approaching Cardinal Node. Thermodynamic friction elevated. Predictive modeling active.";
@@ -411,9 +372,6 @@
                 return out;
             }
 
-            document.getElementById('leg-date').innerText = legacyDateStr.toUpperCase();
-            document.getElementById('leg-time').innerHTML = formatDualColor(legacyTimeStr);
-
             // --- MACRO-OS INVERSION STATUS ROTATOR ---
             if(activePostulate) {
                 const axLeft = document.getElementById('status-axiom-left');
@@ -422,24 +380,35 @@
                 if(axRight) axRight.innerText = activePostulate === "LOCATION IS TRUTH" ? "THE ARC IS QUADRATURE" : "LOCATION IS TRUTH";
             }
 
+            const legDateEl = document.getElementById('leg-date');
+            if (legDateEl) legDateEl.innerText = legacyDateStr.toUpperCase();
+            
+            const legTimeEl = document.getElementById('leg-time');
+            if (legTimeEl) legTimeEl.innerHTML = formatDualColor(legacyTimeStr);
+
             let activeBlock = window.getQBlockByTime ? window.getQBlockByTime(t) : null;
             const qCoordWing = document.getElementById('q-coord-wing');
             
             let smLetterStyle = "color:var(--steel); font-family:'Orbitron'; font-size:0.8rem; margin-right:2px;";
             let smNumStyle = "color:var(--cyan-glow); font-size:1.1rem; font-weight:bold;";
             
-            if (activeBlock && activeBlock.type === 'PYLON') {
-                qCoordWing.innerHTML = `<span style="font-size:0.9rem; color:var(--cyan-glow); font-family:'Orbitron'; font-weight:bold; text-shadow: 0 0 10px var(--cyan-dim);">${activeBlock.name}</span>`;
-            } else {
-                let cCycle = activeBlock ? activeBlock.cycle : 0;
-                qCoordWing.innerHTML = `<span style="${smLetterStyle}">QC</span><span style="${smNumStyle}">${cCycle}</span> ` +
-                                       `<span style="${smLetterStyle} margin-left:6px;">Q</span><span style="${smNumStyle}">${qData.quad}</span> ` +
-                                       `<span style="${smLetterStyle} margin-left:6px;">S</span><span style="${smNumStyle}">${qData.sect}</span> ` +
-                                       `<span style="${smLetterStyle} margin-left:6px;">DAY</span><span style="${smNumStyle}">${qData.day}</span>`;
+            if (qCoordWing) {
+                if (activeBlock && activeBlock.type === 'PYLON') {
+                    qCoordWing.innerHTML = `<span style="font-size:0.9rem; color:var(--cyan-glow); font-family:'Orbitron'; font-weight:bold; text-shadow: 0 0 10px var(--cyan-dim);">${activeBlock.name}</span>`;
+                } else {
+                    let cCycle = activeBlock ? activeBlock.cycle : 0;
+                    qCoordWing.innerHTML = `<span style="${smLetterStyle}">QC</span><span style="${smNumStyle}">${cCycle}</span> ` +
+                                           `<span style="${smLetterStyle} margin-left:6px;">Q</span><span style="${smNumStyle}">${qData.quad}</span> ` +
+                                           `<span style="${smLetterStyle} margin-left:6px;">S</span><span style="${smNumStyle}">${qData.sect}</span> ` +
+                                           `<span style="${smLetterStyle} margin-left:6px;">DAY</span><span style="${smNumStyle}">${qData.day}</span>`;
+                }
             }
 
-            document.getElementById('mean-deg').innerText = qData.meanArc.toFixed(2) + "°";
-            document.getElementById('true-deg').innerText = qData.trueArc.toFixed(2) + "°";
+            const meanDegEl = document.getElementById('mean-deg');
+            if (meanDegEl) meanDegEl.innerText = qData.meanArc.toFixed(2) + "°";
+            
+            const trueDegEl = document.getElementById('true-deg');
+            if (trueDegEl) trueDegEl.innerText = qData.trueArc.toFixed(2) + "°";
             
             // --- DYNAMIC Q-DELTA DIAMOND & RING SHIFT ---
             document.getElementById('transit-diamond-arm').style.transform = `rotate(${qData.meanArc}deg)`;
@@ -560,7 +529,7 @@
             }
 
             const radarProximity = Math.abs(Math.sin((qData.trueArc * Math.PI) / 45)); const radarText = document.getElementById('radar-readout');
-            if(radarProximity > 0.98) { currentRadarStatus = 'CRON STORM'; radarText.innerText = "⚠ THERMODYNAMIC FRICTION"; radarText.style.color = "var(--magenta-glow)"; } 
+            if(radarProximity > 0.98) { currentRadarStatus = 'THERMODYNAMIC FRICTION'; radarText.innerText = "⚠ THERMODYNAMIC FRICTION"; radarText.style.color = "var(--magenta-glow)"; } 
             else if(radarProximity > 0.85) { currentRadarStatus = 'THERMAL SPIKE'; radarText.innerText = "THERMAL SPIKE DETECTED"; radarText.style.color = "var(--cyan-glow)"; } 
             else { currentRadarStatus = 'STABLE'; radarText.innerText = "THERMODYNAMICS STABLE"; radarText.style.color = "var(--core-plat)"; }
 
@@ -572,7 +541,10 @@
             smearValText.innerText = `${smearVal > 0 ? '+' : ''} ${smearVal.toFixed(10)}`;
 
             const offsetStr = `[LAG: +${(lagDays * 24).toFixed(2)}h]`; 
-            document.getElementById('civil-tension-readout').innerHTML = `<span style="color:var(--magenta-glow);">${offsetStr}</span>`; 
+            const civilTensionReadout = document.getElementById('civil-tension-readout');
+            if (civilTensionReadout) {
+                civilTensionReadout.innerHTML = `<span style="color:var(--magenta-glow);">${offsetStr}</span>`; 
+            }
         });
 
         if(window.generateStars) window.generateStars('stars');

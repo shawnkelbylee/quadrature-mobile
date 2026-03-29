@@ -23,8 +23,8 @@
             --bio-dim: rgba(57, 255, 20, 0.15); 
             --warn-orange: #ffaa00; 
             --friction-red: #ff3333;
-            --theme-main: var(--bio-green); 
-            --theme-dim: var(--bio-dim);
+            --theme-main: var(--sys-cyan); 
+            --theme-dim: var(--neon-cyan-dim);
             --gold: #F4D068;
             --platinum: #E5E4E2;
             --starlight: rgba(255, 255, 255, 0.6);
@@ -111,7 +111,7 @@
             <div style="display:flex; flex-direction:column; align-items:center;">
                 <span class="w-head">LEGACY OS</span>
                 <div class="w-lbl">DATE</div>
-                <div class="val-lg" id="leg-date" style="color: var(--sys-cyan); text-shadow: 0 0 10px var(--neon-cyan-dim);">--</div>
+                <div class="val-lg" id="leg-date" style="color: var(--sys-cyan) !important; text-shadow: 0 0 10px var(--neon-cyan-dim);">--</div>
             </div>
             <div style="display:flex; flex-direction:column; align-items:center; margin-top: 10px;">
                 <div style="display:flex; align-items:center; justify-content:center; gap: 5px;">
@@ -407,7 +407,7 @@
         }
 
         window.addEventListener('q-tick', (e) => {
-            const { t, isLive, activeTime, daysElapsed, qData, legacyDateStr, legacyTimeStr, activePostulate } = e.detail;
+            const { t, isLive, activeTime, daysElapsed, qData, lagDays, legacyDateStr, legacyTimeStr, activePostulate } = e.detail;
 
             if (lastRenderedScrub === null || Math.abs(daysElapsed - lastRenderedScrub) > 0.05) {
                 renderDynamicMoons(daysElapsed);

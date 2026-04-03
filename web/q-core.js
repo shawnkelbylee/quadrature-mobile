@@ -337,10 +337,19 @@ window.Q_KairosVoice = {
         }
     },
     processCommand: function(cmd) {
-        const normalized = cmd.toLowerCase().replace(/[^a-z0-9\s]/g, '').trim();
+        const normalized = cmd.toLowerCase().trim();
 
-        if (normalized.includes("close") || normalized.includes("dismiss") || normalized.includes("hide")) {
-            window.Q_LOG('INFO', 'INTERFACE', 'VOICE_INTENT_CLOSE');
+        // OPTIMIZED REGEX INTENT PARSER
+        const rxFlush = /\b(flush|close|dismiss|hide|clear|reset)\b/i;
+        const rxTelemetry = /\b(telemetry|data|scan|environmental)\b/i;
+        const rxElasticity = /\b(elasticity|bio|biological|heart rate|hrv)\b/i;
+        const rxPlanner = /\b(open planner|launch planner|omni planner|plan)\b/i;
+        const rxCommunal = /\b(communal|com vector|society|metaphysical)\b/i;
+        const rxMechanical = /\b(mechanical|mech vector|physics|core)\b/i;
+        const rxChrono = /\b(chrono|main face|home|index)\b/i;
+
+        if (rxFlush.test(normalized)) {
+            window.Q_LOG('INFO', 'INTERFACE', 'VOICE_INTENT_FLUSH');
             if (window.Q_ModalEngine) window.Q_ModalEngine.close();
             if (window.Q_IntegrationHub) window.Q_IntegrationHub.closeHub();
             if (window.Q_OmniPlanner) window.Q_OmniPlanner.closePlanner();
@@ -349,28 +358,13 @@ window.Q_KairosVoice = {
             return;
         }
 
-        if (normalized.includes("biological") || normalized.includes("bio vector")) {
-            window.location.href = "BIOVECHUD.html";
-            return;
-        }
-        if (normalized.includes("communal") || normalized.includes("com vector")) {
-            window.location.href = "COMVECHUD.html";
-            return;
-        }
-        if (normalized.includes("environmental") || normalized.includes("env vector")) {
-            window.location.href = "ENVVECHUD.html";
-            return;
-        }
-        if (normalized.includes("mechanical") || normalized.includes("mech vector")) {
-            window.location.href = "MECVECHUD.html";
-            return;
-        }
-        if (normalized.includes("chrono") || normalized.includes("main face") || normalized.includes("home")) {
-            window.location.href = "index.html";
-            return;
-        }
+        if (rxElasticity.test(normalized)) { window.location.href = "BIOVECHUD.html"; return; }
+        if (rxTelemetry.test(normalized)) { window.location.href = "ENVVECHUD.html"; return; }
+        if (rxCommunal.test(normalized)) { window.location.href = "COMVECHUD.html"; return; }
+        if (rxMechanical.test(normalized)) { window.location.href = "MECVECHUD.html"; return; }
+        if (rxChrono.test(normalized)) { window.location.href = "index.html"; return; }
 
-        if (normalized.includes("open planner") || normalized.includes("launch planner") || normalized.includes("omni planner")) {
+        if (rxPlanner.test(normalized)) {
             window.Q_LOG('INFO', 'INTERFACE', 'VOICE_INTENT_PLANNER_OPEN');
             if (window.Q_OmniPlanner && window.Q_OmniPlanner.openPlanner) {
                 window.Q_OmniPlanner.openPlanner();
@@ -379,34 +373,18 @@ window.Q_KairosVoice = {
             return;
         }
         
+        // PLANNER-SPECIFIC STATE MODIFICATIONS
         if (sessionStorage.getItem('Q_PLANNER_ACTIVE') === 'true') {
-            if (normalized.includes("view cycle") || normalized.includes("annual view")) {
-                window.Q_OmniPlanner.setViewMode('cycle');
-            }
-            else if (normalized.includes("view quad") || normalized.includes("quadrant view")) {
-                window.Q_OmniPlanner.setViewMode('quad');
-            }
-            else if (normalized.includes("view sect") || normalized.includes("sector view") || normalized.includes("month view")) {
-                window.Q_OmniPlanner.setViewMode('sect');
-            }
-            else if (normalized.includes("view day") || normalized.includes("daily view")) {
-                window.Q_OmniPlanner.setViewMode('day');
-            }
-            else if (normalized.includes("next day") || normalized.includes("step forward")) {
-                window.Q_OmniPlanner.stepDay(1);
-            }
-            else if (normalized.includes("previous day") || normalized.includes("step back")) {
-                window.Q_OmniPlanner.stepDay(-1);
-            }
-            else if (normalized.includes("next sector") || normalized.includes("next month")) {
-                window.Q_OmniPlanner.stepSector(1);
-            }
-            else if (normalized.includes("previous sector") || normalized.includes("previous month")) {
-                window.Q_OmniPlanner.stepSector(-1);
-            }
-            else if (normalized.includes("toggle format") || normalized.includes("switch format")) {
-                window.Q_OmniPlanner.toggleFormat();
-            }
+            if (/\b(view cycle|annual view)\b/i.test(normalized)) window.Q_OmniPlanner.setViewMode('cycle');
+            else if (/\b(view quad|quadrant view)\b/i.test(normalized)) window.Q_OmniPlanner.setViewMode('quad');
+            else if (/\b(view sect|sector view|month view)\b/i.test(normalized)) window.Q_OmniPlanner.setViewMode('sect');
+            else if (/\b(view day|daily view)\b/i.test(normalized)) window.Q_OmniPlanner.setViewMode('day');
+            else if (/\b(next day|step forward)\b/i.test(normalized)) window.Q_OmniPlanner.stepDay(1);
+            else if (/\b(previous day|step back)\b/i.test(normalized)) window.Q_OmniPlanner.stepDay(-1);
+            else if (/\b(next sector|next month)\b/i.test(normalized)) window.Q_OmniPlanner.stepSector(1);
+            else if (/\b(previous sector|previous month)\b/i.test(normalized)) window.Q_OmniPlanner.stepSector(-1);
+            else if (/\b(toggle format|switch format)\b/i.test(normalized)) window.Q_OmniPlanner.toggleFormat();
+            
             window.Q_MobileBridge.pulse('LIGHT');
             return;
         }
@@ -756,6 +734,7 @@ window.Q_PHASE_III = {
 window.Q_EVENT_BUFFER = [];
 window.PYLON_ALPHA_DYNAMIC = null;
 window.EPHEMERIS_LIVE = false;
+window.EPHEMERIS_DATA = null;
 
 window.syncGeoLocation = async function() {
     if (window.Q_STATE.location.synced) return;
@@ -886,13 +865,30 @@ window.fetchJPLTelemetry = async function() {
         const startStr = fmt(tDate);
         const stopStr = fmt(eDate);
 
-        const response = await fetch(`https://ssd.jpl.nasa.gov/api/horizons.api?format=json&COMMAND=%27399%27&OBJ_DATA=%27YES%27&MAKE_EPHEM=%27YES%27&EPHEM_TYPE=%27OBSERVER%27&CENTER=%27500@10%27&START_TIME=%27${startStr}%27&STOP_TIME=%27${stopStr}%27&STEP_SIZE=%271%20d%27&QUANTITIES=%2718%27`);
+        // API HOOK: JPL Horizons directly pulling Live X, Y, Z vector telemetry mapped to the Solar System Barycenter
+        const response = await fetch(`https://ssd.jpl.nasa.gov/api/horizons.api?format=json&COMMAND='399'&OBJ_DATA='YES'&MAKE_EPHEM='YES'&EPHEM_TYPE='VECTORS'&CENTER='@0'&START_TIME='${startStr}'&STOP_TIME='${stopStr}'&STEP_SIZE='1 d'&OUT_UNITS='AU-D'`);
+        
         if (!response.ok) throw new Error('Telemetry endpoint unreachable or rate-limited.');
         const data = await response.json();
         
         if (data && data.result) {
             window.EPHEMERIS_LIVE = true;
-            window.Q_LOG('INFO', 'CORE', 'JPL_TELEMETRY_SYNCED', { source: 'NASA JPL HORIZONS', window: `${startStr} to ${stopStr}` });
+            
+            const lines = data.result.split('\n');
+            let x=0, y=0, z=0;
+            for(let i=0; i<lines.length; i++) {
+                if(lines[i].includes('X =')) {
+                    let matchX = lines[i].match(/X =\s*([-\d.E+]+)/);
+                    let matchY = lines[i].match(/Y =\s*([-\d.E+]+)/);
+                    let matchZ = lines[i].match(/Z =\s*([-\d.E+]+)/);
+                    if(matchX) x = parseFloat(matchX[1]);
+                    if(matchY) y = parseFloat(matchY[1]);
+                    if(matchZ) z = parseFloat(matchZ[1]);
+                    break;
+                }
+            }
+            window.EPHEMERIS_DATA = { x, y, z };
+            window.Q_LOG('INFO', 'CORE', 'JPL_BARYCENTRIC_TELEMETRY_SYNCED', { x, y, z, source: 'NASA JPL HORIZONS' });
         } else {
             throw new Error("Invalid telemetry payload.");
         }
@@ -907,11 +903,21 @@ window.getOrbitalData = function(daysElapsed) {
     let meanArc = (daysElapsed * meanVelocity) % 360;
     if (meanArc < 0) meanArc += 360;
 
-    const meanAnomaly = (daysElapsed / 365.24219) * Math.PI * 2;
-    const e = 0.0167; 
-    const trueAnomaly = meanAnomaly + (2 * e * Math.sin(meanAnomaly)) + (1.25 * e * e * Math.sin(2 * meanAnomaly));
-    let trueArc = (trueAnomaly * (180 / Math.PI)) % 360;
-    if (trueArc < 0) trueArc += 360;
+    let trueArc;
+    
+    // PRIMARY OBSERVATION ENGINE: Live Barycentric Data overrides historical simulation variables
+    if (window.EPHEMERIS_LIVE && window.EPHEMERIS_DATA && daysElapsed >= 0 && daysElapsed < 1) {
+         let rad = Math.atan2(window.EPHEMERIS_DATA.y, window.EPHEMERIS_DATA.x);
+         let deg = rad * (180 / Math.PI);
+         trueArc = (deg + 360) % 360;
+    } else {
+        // SECONDARY FAILOVER: Baseline Keplerian Simulation
+        const meanAnomaly = (daysElapsed / 365.24219) * Math.PI * 2;
+        const e = 0.0167; 
+        const trueAnomaly = meanAnomaly + (2 * e * Math.sin(meanAnomaly)) + (1.25 * e * e * Math.sin(2 * meanAnomaly));
+        trueArc = (trueAnomaly * (180 / Math.PI)) % 360;
+        if (trueArc < 0) trueArc += 360;
+    }
 
     let delta = trueArc - meanArc;
     if (delta > 180) delta -= 360;
@@ -958,17 +964,14 @@ window.getOrbitalData = function(daysElapsed) {
 
 // INITIALIZATION SEQUENCE
 window.addEventListener('DOMContentLoaded', async () => {
-    // Note: UI Injection is now handled by q-ui-global.js
     if (window.Q_Onboarding) window.Q_Onboarding.check(); 
     window.loadPlannerData(); 
     
     await window.initCloudBridge();
     
-    // Check if returning from a Magic Link redirect or standard OAuth
     if (window.Q_Auth && window.Q_Auth.handleAuthRedirect) {
         await window.Q_Auth.handleAuthRedirect();
         
-        // AUTOMATED SPATIAL LOCK: Trigger geo-sync immediately upon auth resolution
         if (window.Q_STATE.persistence.auth_status === 'SOVEREIGN_AUTHENTICATED') {
             await window.syncGeoLocation();
         }
@@ -985,7 +988,6 @@ window.addEventListener('DOMContentLoaded', async () => {
         setInterval(window.fetchJPLTelemetry, 300000);
     });
 
-    // MOBILE DATA POPULATION SYNC
     setTimeout(() => {
         if (window.innerWidth <= 768 && window.PYLON_ALPHA_DYNAMIC) {
             const state = window.getSimState ? window.getSimState() : { simTime: Date.now(), isLive: true };

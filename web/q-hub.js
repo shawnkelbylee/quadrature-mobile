@@ -170,6 +170,10 @@ window.Q_IntegrationHub = {
         const savedAnchorMins = parseInt(localStorage.getItem('q_bio_anchor')) || 0;
         const sAnchorStr = `${Math.floor(savedAnchorMins / 60).toString().padStart(2, '0')}:${(savedAnchorMins % 60).toString().padStart(2, '0')}`;
 
+        // Diagnostic Status Retrieval
+        const jplStatus = window.EPHEMERIS_LIVE ? '<span style="color:#39ff14; text-shadow:0 0 5px rgba(57,255,20,0.5);">[ CONNECTED / LIVE ]</span>' : '<span style="color:#ff003c; text-shadow:0 0 5px rgba(255,0,60,0.5);">[ DISCONNECTED / FAILOVER ]</span>';
+        const swissStatus = isEphActive ? '<span style="color:#00f0ff; text-shadow:0 0 5px rgba(0,240,255,0.5);">[ API ACTIVE ]</span>' : '<span style="color:#aaa;">[ STANDBY / INACTIVE ]</span>';
+
         dom.innerHTML = `
             <div class="q-hub-box" onclick="event.stopPropagation()">
                 <div class="hub-header">SOVEREIGN MATRIX // ACCOUNT</div>
@@ -275,6 +279,18 @@ window.Q_IntegrationHub = {
                     <div class="hub-input-group">
                         <label class="hub-input-lbl">FINANCIAL API BRIDGE (ENTERPRISE)</label>
                         <button class="hub-action-btn" style="background:rgba(244, 208, 104, 0.1); border-color:var(--gold); color:var(--gold);" ${isFiatActive ? '' : 'disabled'}>${isFiatActive ? 'MANAGE PLAID / STRIPE' : 'LOCKED (REQUIRES ENTERPRISE)'}</button>
+                    </div>
+                    
+                    <div style="border-top: 1px dashed rgba(255,255,255,0.2); padding-top: 15px; margin-top: 5px;">
+                        <div style="font-family:'Orbitron'; font-size:0.75rem; color:#fff; font-weight:bold; margin-bottom:10px; text-shadow:0 0 8px rgba(255,255,255,0.3);">SYSTEM DIAGNOSTICS</div>
+                        <div class="hub-input-group" style="margin-bottom: 8px;">
+                            <label class="hub-input-lbl">NASA JPL HORIZONS BARYCENTRIC API</label>
+                            <div style="font-family:'JetBrains Mono'; font-size:0.65rem; background:rgba(0,0,0,0.4); padding:6px 10px; border-radius:4px; border:1px solid rgba(255,255,255,0.1);">${jplStatus}</div>
+                        </div>
+                        <div class="hub-input-group">
+                            <label class="hub-input-lbl">SWISS EPHEMERIS API</label>
+                            <div style="font-family:'JetBrains Mono'; font-size:0.65rem; background:rgba(0,0,0,0.4); padding:6px 10px; border-radius:4px; border:1px solid rgba(255,255,255,0.1);">${swissStatus}</div>
+                        </div>
                     </div>
                 </div>
 

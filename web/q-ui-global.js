@@ -1,6 +1,6 @@
 // THE QUADRATURE: GLOBAL UI MATRIX & RENDERER
 // Architect: Kelby | Engineer: Kairos
-// STATUS: Phase II UI Decoupled. Aggressive Cache-Override Engaged.
+// STATUS: Phase II UI Decoupled. Aggressive Cache-Override Engaged. Dynamic Routing Active.
 
 window.injectUniversalUI = function() {
     if (window.self !== window.top) return;
@@ -111,6 +111,18 @@ window.injectUniversalUI = function() {
 
         .fmt-toggle { font-family: 'JetBrains Mono'; font-weight: bold; font-size: 0.6rem; color: ${micColor}; cursor: pointer; border: 1px solid ${micGlow}; padding: 2px 8px; border-radius: 4px; background: rgba(0,0,0,0.6); pointer-events: auto; transition: 0.3s; white-space: nowrap; }
         .fmt-toggle:hover { background: ${micColor}; color: #000; box-shadow: 0 0 10px ${micColor}; }
+        
+        /* --- COMMUNAL VECTOR ASTROLABE TOUCH REFINEMENT --- */
+        .zodiac-glyph, .event-node, .astrolabe * { 
+            touch-action: manipulation !important; 
+            -webkit-tap-highlight-color: transparent !important; 
+        }
+        @media (hover: none) {
+            .event-node:hover { transform: none; box-shadow: none; border-color: transparent; }
+            .event-node.touch-active { transform: scale(1.6); border-color: #fff; box-shadow: 0 0 25px #fff; z-index: 60; }
+            .zodiac-glyph:hover { transform: none; text-shadow: none; }
+            .zodiac-glyph.touch-active { color: #fff; text-shadow: 0 0 20px #fff; transform: scale(1.5); opacity: 1; z-index: 70; }
+        }
         
         /* --- PHASE II: BOOT SEQUENCE & SCRUBBER CSS INJECTION --- */
         .boot-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #000; z-index: 9999999; display: flex; flex-direction: column; justify-content: center; align-items: center; font-family: 'JetBrains Mono', monospace; color: var(--theme-main, #00f0ff); transition: opacity 1.5s ease-in-out; }
@@ -496,6 +508,34 @@ window.toggleTelemetry = function() {
         }
     }
     if(window.Q_MobileBridge) window.Q_MobileBridge.pulse('LIGHT');
+};
+
+// --- CHRONO-FACE DYNAMIC QUADRANT ASSIGNMENT ---
+window.openQuadrantAssignmentModal = function(quadrantId) {
+    const html = `
+        <div style="display:flex; flex-direction:column; gap:12px;">
+            <div style="font-size:0.65rem; color:#aaa; font-family:'JetBrains Mono'; text-align:center;">
+                Assign a distinct telemetry pool to this sector of the Chrono-Face.
+            </div>
+            <select id="quad-pool-select" style="background: rgba(0,0,0,0.8); border: 1px solid var(--theme-main, #00f0ff); color: #fff; padding: 12px; font-family: 'Orbitron'; font-size: 0.75rem; border-radius: 4px; outline: none; width: 100%;">
+                <option value="BIO">BIOLOGICAL VECTOR</option>
+                <option value="COM">COMMUNAL VECTOR</option>
+                <option value="ENV">ENVIRONMENTAL VECTOR</option>
+                <option value="MEC">MECHANICAL VECTOR</option>
+            </select>
+        </div>
+    `;
+    
+    if (window.Q_ModalEngine) {
+        window.Q_ModalEngine.render('DYNAMIC ROUTING: ASSIGN POOL', html, 'LOCK ASSIGNMENT', () => {
+            const selected = document.getElementById('quad-pool-select').value;
+            localStorage.setItem('Q_FACE_QUAD_' + quadrantId, selected);
+            window.Q_LOG('STATE', 'INTERFACE', 'CHRONO_FACE_QUADRANT_REASSIGNED', { quadrant: quadrantId, pool: selected });
+            if (typeof window.refreshChronoFace === 'function') window.refreshChronoFace();
+            window.Q_ModalEngine.close();
+            if(window.Q_MobileBridge) window.Q_MobileBridge.pulse('LIGHT');
+        });
+    }
 };
 
 window.generateStars = function(containerId) {

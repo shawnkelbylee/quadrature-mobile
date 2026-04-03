@@ -4,10 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>THE QUADRATURE // MECHANICAL VECTOR</title>
-    <script src="q-ui-global.js?v=16.1"></script>
-    <script src="q-core.js?v=16.1"></script>
-    <script src="q-ui-planner.js"></script>
-    <script src="q-hub.js"></script>
+    <script src="q-ui-global.js?v=16.4"></script>
+    <script src="q-core.js?v=16.4"></script>
+    <script src="q-ui-planner.js?v=16.4"></script>
+    <script src="q-hub.js?v=16.4"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;800;900&family=JetBrains+Mono:wght@100;400;700;800&display=swap');
 
@@ -134,22 +134,22 @@
     <div id="needle-hud">SYSTEMIC CONTEXT</div>
 
     <div class="corner-gearbox mech-panel mod-tl telemetry-node">
-        <div class="m-head holo-text">STATE RESOLUTION <span>MODULE 01</span></div>
-        <div class="m-row"><span>MECHANISM:</span> <span class="m-val">DETERMINISTIC</span></div>
-        <div class="m-row"><span>NEXT PYLON ANCHOR:</span> <span class="m-val" id="next-pylon">BETA</span></div>
-        <div class="m-row"><span>TEMPORAL MGMT (TMR):</span> <span class="m-val" style="color:var(--cyan-glow);">ACTIVE</span></div>
-        <div class="m-row"><span>MIDDLEWARE:</span> <span class="m-val" id="daemon-status" style="color:var(--steel);">CONTINUOUS</span></div>
+        <div class="m-head holo-text">ORBITAL POSITION <span>MODULE 01</span></div>
+        <div class="m-row"><span>NEXT PYLON:</span> <span class="m-val" id="next-pylon">--</span></div>
+        <div class="m-row"><span>DRIFT TO PYLON:</span> <span class="m-val" id="drift-to-pylon">--</span></div>
+        <div class="m-row"><span>PYLON DURATION:</span> <span class="m-val" style="color:var(--cyan-glow);" id="pylon-duration">--</span></div>
+        <div class="m-row"><span>ATOMIC FREQUENCY:</span> <span class="m-val" style="color:var(--steel);">SYNCED</span></div>
         <div style="width:100%; height:3px; background:#000; margin-top:6px; border:1px solid var(--core-dim);">
             <div id="macro-bar" style="height:100%; width:0%; background:var(--cyan-glow); box-shadow:0 0 8px var(--cyan-glow); transition: width 0.3s;"></div>
         </div>
     </div>
 
     <div class="corner-gearbox mech-panel mod-tr telemetry-node" onclick="openTelemetry()" ontouchstart="event.stopPropagation(); openTelemetry()" style="cursor: pointer;">
-        <div class="m-head holo-text">CHRONOMETRIC TRANSLATION <span>MODULE 02</span></div>
-        <div class="m-row" style="margin-top:4px;"><span>SPATIAL TIME PROTOCOL:</span></div>
-        <div style="margin-top:2px; font-size:0.55rem; padding:6px; text-align:center; border: 1px solid var(--cyan-glow); background: rgba(0, 240, 255, 0.1); color: var(--cyan-glow); font-family: 'Orbitron'; font-weight: 900; letter-spacing: 2px;">UTC -> Q GEOMETRY</div>
-        <div class="m-row" style="margin-top:8px;"><span>EQUATION OF TIME (Q-DELTA):</span> <span class="m-val" id="rt-delta" style="font-size:0.55rem; color:var(--cyan-glow);">--</span></div>
-        <div class="m-row" style="margin-top:4px;"><span>SYNC STATUS:</span> <span class="m-val" style="color:var(--cyan-glow); text-shadow:0 0 5px var(--cyan-glow);">QUADRATURE</span></div>
+        <div class="m-head holo-text">TIME DRIFT / Q-DELTA <span>MODULE 02</span></div>
+        <div class="m-row" style="margin-top:4px;"><span>ORBITAL ECCENTRICITY:</span> <span class="m-val">0.0167</span></div>
+        <div class="m-row" style="margin-top:4px;"><span>SYMMETRY LOSS:</span> <span class="m-val" id="sym-loss" style="color:var(--magenta-glow);">--%</span></div>
+        <div class="m-row" style="margin-top:8px;"><span>EQUATION OF TIME (Q-DELTA):</span></div>
+        <div style="margin-top:2px; font-size:0.8rem; padding:6px; text-align:center; border: 1px solid var(--cyan-glow); background: rgba(0, 240, 255, 0.1); color: var(--cyan-glow); font-family: 'Orbitron'; font-weight: 900; letter-spacing: 2px;" id="rt-delta">--</div>
     </div>
 
     <div class="corner-gearbox mech-panel mod-bl telemetry-node">
@@ -172,7 +172,7 @@
     </div>
 
     <div class="corner-gearbox mech-panel mod-br telemetry-node" id="atomic-panel">
-        <div class="m-head holo-text">Q-DELTA (FRICTION) <span>MODULE 04</span></div>
+        <div class="m-head holo-text">CIVIL TIME LAG <span>MODULE 04</span></div>
         
         <div class="m-row" style="margin-bottom:2px;"><span>STANDARDIZED INTERVAL:</span> <span class="m-val" style="color:var(--core-plat); text-shadow:0 0 5px #fff;" id="si-lock">ACTIVE</span></div>
         <div class="val-display" style="padding:4px 8px; margin-bottom:4px;"><div class="val-lg" id="nano-counter" style="font-size:0.9rem; text-align:right;">0.000000000</div></div>
@@ -184,12 +184,11 @@
         </div>
         
         <div class="m-row" style="margin-top:8px;"><span>CIVIL TENSION:</span></div>
-        <div class="val-display" style="padding:4px 8px; margin-bottom:0;">
+        <div class="val-display" style="padding:4px 8px; margin-bottom:0; cursor:pointer;" onclick="openTelemetry()" ontouchstart="event.stopPropagation(); openTelemetry(); event.preventDefault();">
             <div class="val-lg" id="civil-tension-readout" style="font-size:0.65rem; color:var(--magenta-glow); text-shadow: 0 0 8px var(--magenta-dim); text-align: center; font-family:'JetBrains Mono'; font-weight:700;">
                 CALCULATING OFFSET...
             </div>
         </div>
-        <div class="m-row" style="margin-top:8px; justify-content:center;"><button class="opt-btn" style="background:transparent; border:1px solid var(--cyan-glow); color:var(--cyan-glow); padding:4px 10px; border-radius:4px; font-family:'Orbitron'; font-size:0.6rem; cursor:pointer;" onclick="openDataView()" ontouchstart="event.stopPropagation(); openDataView(); event.preventDefault();">VIEW DATA</button></div>
     </div>
 
     <div class="gearbox q-center-dial">
@@ -474,8 +473,16 @@
                 earthSurface.style.backgroundPosition = `${bgPosition}% 0`;
             }
 
+            // MODAL DUAL-STATE DATA HOOK FIX
             const modalTitle = document.getElementById('q-modal-title');
-            if (modalTitle && modalTitle.innerText === 'COORDINATE DATA VIEW') {
+            if (modalTitle && modalTitle.innerText === 'DUAL-STATE TELEMETRY') {
+                const telMean = document.getElementById('tel-mean');
+                if (telMean) {
+                    telMean.innerText = qData.meanArc.toFixed(3) + "°";
+                    document.getElementById('tel-true').innerText = qData.trueArc.toFixed(3) + "°";
+                    document.getElementById('tel-delta').innerText = (qData.delta > 0 ? "+" : "") + qData.delta.toFixed(4) + "°";
+                }
+            } else if (modalTitle && modalTitle.innerText === 'COORDINATE DATA VIEW') {
                 const dvQCoord = document.getElementById('dv-q-coord');
                 if (dvQCoord) {
                     document.getElementById('dv-leg-date').innerText = legacyDateStr.toUpperCase();
@@ -485,35 +492,45 @@
                     document.getElementById('dv-q-arc').innerText = qData.trueArc.toFixed(4) + "°";
                     document.getElementById('dv-q-delta').innerText = (qData.delta > 0 ? "+" : "") + qData.delta.toFixed(4) + "°";
                     document.getElementById('dv-q-tmr').innerText = currentRadarStatus;
-                    
-                    const telMean = document.getElementById('tel-mean');
-                    if (telMean) {
-                        telMean.innerText = qData.meanArc.toFixed(3) + "°";
-                        document.getElementById('tel-true').innerText = qData.trueArc.toFixed(3) + "°";
-                        document.getElementById('tel-delta').innerText = (qData.delta > 0 ? "+" : "") + qData.delta.toFixed(4) + "°";
-                    }
                 }
             }
 
             // Asymmetrical Pylon Detection logic including Epsilon Phase
             let pylonName = "ALPHA";
             let progressToPylon = 0;
+            let driftDeg = 0;
+            let pylonDurMs = window.Q_GEAR_CONSTANTS ? window.Q_GEAR_CONSTANTS.ALPHA : 86400000;
+            
             if (qData.trueArc >= 0 && qData.trueArc < 90) { 
                 pylonName = "BETA"; 
+                driftDeg = 90 - qData.trueArc;
                 progressToPylon = (qData.trueArc / 90) * 100; 
+                pylonDurMs = window.Q_GEAR_CONSTANTS ? window.Q_GEAR_CONSTANTS.BETA : 84600000;
             } else if (qData.trueArc >= 90 && qData.trueArc < 180) { 
                 pylonName = "GAMMA"; 
+                driftDeg = 180 - qData.trueArc;
                 progressToPylon = ((qData.trueArc - 90) / 90) * 100; 
+                pylonDurMs = window.Q_GEAR_CONSTANTS ? window.Q_GEAR_CONSTANTS.GAMMA : 89662680;
             } else if (qData.trueArc >= 180 && qData.trueArc < 270) { 
                 pylonName = "DELTA"; 
+                driftDeg = 270 - qData.trueArc;
                 progressToPylon = ((qData.trueArc - 180) / 90) * 100; 
+                pylonDurMs = window.Q_GEAR_CONSTANTS ? window.Q_GEAR_CONSTANTS.DELTA : 102599640;
             } else { 
                 pylonName = "EPSILON"; 
+                driftDeg = 360 - qData.trueArc;
                 progressToPylon = ((qData.trueArc - 270) / 90) * 100; 
+                pylonDurMs = window.Q_GEAR_CONSTANTS ? window.Q_GEAR_CONSTANTS.EPSILON : 89662680;
             }
             
             document.getElementById('next-pylon').innerText = pylonName;
+            document.getElementById('drift-to-pylon').innerText = driftDeg.toFixed(2) + "° REMAINING";
+            document.getElementById('pylon-duration').innerText = (pylonDurMs / 3600000).toFixed(4) + "h";
             document.getElementById('macro-bar').style.width = `${progressToPylon}%`;
+            
+            let symLoss = Math.abs(qData.delta) / 180 * 100; 
+            let symLossEl = document.getElementById('sym-loss');
+            if(symLossEl) symLossEl.innerText = symLoss.toFixed(2) + "%";
 
             const waveEl = document.getElementById('resp-wave');
             const phaseTextEl = document.getElementById('resp-phase-text');

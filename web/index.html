@@ -7,10 +7,10 @@
     <meta http-equiv="Pragma" content="no-cache">
     <meta http-equiv="Expires" content="0">
     <title>THE QUADRATURE // CHRONO-INTERFACE</title>
-    <script src="q-ui-global.js?v=16.2"></script>
-    <script src="q-core.js?v=16.2"></script>
-    <script src="q-ui-planner.js?v=16.2"></script>
-    <script src="q-hub.js?v=16.2"></script>
+    <script src="q-ui-global.js?v=16.4"></script>
+    <script src="q-core.js?v=16.4"></script>
+    <script src="q-ui-planner.js?v=16.4"></script>
+    <script src="q-hub.js?v=16.4"></script>
     
     <script>
         // IRONCLAD MOBILE BYPASS: Force class if on native device, bypassing buggy WebView viewports
@@ -25,6 +25,14 @@
                 document.body.classList.remove('boot-active');
             });
         }
+
+        // OMNI-PLANNER PERSISTENT PROJECTION HOOK
+        document.addEventListener('DOMContentLoaded', () => {
+            if (window.Q_STATE && window.Q_STATE.logic_layer) {
+                window.Q_STATE.logic_layer.predictive_friction = true;
+                if(window.Q_LOG) window.Q_LOG('INFO', 'CORE', 'PREDICTIVE_PHASE_BORDERING_ACTIVE');
+            }
+        });
     </script>
 
     <style>
@@ -43,10 +51,12 @@
             --theme-main: var(--amber);
             --theme-dim: var(--amber-dim);
             --sys-cyan: #00f0ff;
+            --sys-cyan-dim: rgba(0, 240, 255, 0.2);
             --bio-purple: #b829ff;
             --bio-purple-dim: rgba(184, 41, 255, 0.15);
             --mech-red: #ff003c;
             --env-green: #a7ff83;
+            --env-green-dim: rgba(167, 255, 131, 0.2);
             --starlight: rgba(255, 255, 255, 0.6);
             --platinum: #E5E4E2;
         }
@@ -85,7 +95,7 @@
         }
 
         .vector-anchor {
-            position: absolute; width: calc(var(--mod-w) + 50px); height: auto; min-height: 160px; z-index: 100; cursor: default; pointer-events: auto; 
+            position: absolute; width: calc(var(--mod-w) + 50px); height: auto; min-height: 160px; z-index: 100; cursor: pointer; pointer-events: auto; 
             display: flex; flex-direction: column; justify-content: flex-start; align-items: center; text-align: center;
             padding: 22px; box-sizing: border-box; transition: all 0.3s ease; 
             background: rgba(15, 12, 10, 0.9); 
@@ -97,16 +107,26 @@
             transform: translateZ(0);
         }
         
+        .vector-anchor:hover {
+            border-color: var(--theme-main);
+            box-shadow: 0 20px 45px rgba(0,0,0,0.9), inset 0 0 30px rgba(185, 122, 53, 0.2);
+        }
+        
         .tl { top: 7vh; left: 2vw; }
         .tr { top: 7vh; right: 2vw; }
         .bl { bottom: 8vh; left: 2vw; }
         .br { bottom: 8vh; right: 2vw; }
         
         .v-head { font-family: 'Orbitron'; font-weight: 900; font-size: 1.15rem; letter-spacing: 3px; margin-bottom: 12px; width: 100%; border-bottom: 1px dashed rgba(229, 228, 226, 0.3); padding-bottom: 6px; }
-        .t-row { display: flex; justify-content: space-between; width: 100%; font-size: 0.85rem; color: var(--platinum); font-family: 'JetBrains Mono'; margin-bottom: 8px; font-weight: 700; }
+        .t-row { display: flex; justify-content: space-between; width: 100%; font-size: 0.85rem; color: var(--platinum); font-family: 'JetBrains Mono'; margin-bottom: 8px; font-weight: 700; align-items: center;}
+        
+        .t-row span:first-child { color: var(--starlight); }
 
-        .val-gold { color: var(--gold); text-shadow: 0 0 15px var(--gold-dim); z-index: 20;}
-        .val-sm { font-family: 'Orbitron'; font-size: 1.1rem; font-weight: 700; z-index: 20;}
+        .val-sm { font-family: 'Orbitron'; font-weight: 700; z-index: 20;}
+        .val-bio { color: var(--bio-purple); text-shadow: 0 0 10px var(--bio-purple-dim); }
+        .val-com { color: var(--gold); text-shadow: 0 0 10px var(--gold-dim); }
+        .val-env { color: var(--env-green); text-shadow: 0 0 10px var(--env-green-dim); }
+        .val-mec { color: var(--sys-cyan); text-shadow: 0 0 10px var(--sys-cyan-dim); }
 
         .gear-container {
             position: absolute; width: var(--dial-size); height: var(--dial-size); border-radius: 50%; 
@@ -171,39 +191,18 @@
         @keyframes glitter-2 { 0%, 100% { opacity: 0.5; transform: rotate(22.5deg) scale(0.85); filter: drop-shadow(0 0 5px var(--platinum)); } 50% { opacity: 1; transform: rotate(22.5deg) scale(1.05); filter: drop-shadow(0 0 15px var(--platinum)); } }
         @keyframes glitter-3 { 0%, 100% { opacity: 1; transform: rotate(45deg) scale(0.95); filter: drop-shadow(0 0 12px var(--amber)); } 50% { opacity: 0.4; transform: rotate(45deg) scale(0.8); filter: drop-shadow(0 0 3px var(--amber-dim)); } }
         @keyframes glitter-4 { 0%, 100% { opacity: 0.4; transform: rotate(67.5deg) scale(0.8); filter: drop-shadow(0 0 4px #fff); } 50% { opacity: 0.9; transform: rotate(67.5deg) scale(1); filter: drop-shadow(0 0 10px #fff); } }
+        
+        .phil-quote { font-family: 'JetBrains Mono'; font-size: 0.65rem; color: #aaa; text-align: center; font-style: italic; width: 100%; border-top: 1px dashed rgba(255,255,255,0.1); padding-top: 8px; margin-top: 8px; }
     </style>
 </head>
 <body class="mode-q boot-active">
 
     <div class="star-container" id="star-layer"></div>
 
-    <div class="vector-anchor telemetry-node tl">
-        <div class="v-head holo-text" style="color:var(--bio-purple); text-shadow:0 0 10px var(--bio-purple-dim);">BIOLOGICAL</div>
-        <div class="t-row"><span>HRV / ELASTICITY:</span> <span id="face-bio-state" style="color:var(--bio-purple);">SYNCING..</span></div>
-        <div class="t-row"><span>NATAL ANCHOR:</span> <span id="face-bio-natal" style="color:var(--bio-purple);">--</span></div>
-        <div class="t-row"><span>ULTRADIAN PHASE:</span> <span id="face-bio-phase" style="color:var(--bio-purple);">ACTIVE</span></div>
-    </div>
-    
-    <div class="vector-anchor telemetry-node tr">
-        <div class="v-head holo-text" style="color:var(--gold); text-shadow:0 0 10px var(--gold-dim);">COMMUNAL</div>
-        <div class="t-row"><span>Q-COORDINATE:</span> <span id="face-com-node" style="color:var(--gold);">SEARCHING..</span></div>
-        <div class="t-row"><span>ZODIACAL EVENT:</span> <span id="face-com-zod" style="color:var(--gold);">--</span></div>
-        <div class="t-row"><span>SOVEREIGN STATUS:</span> <span id="face-com-postulate" style="color:var(--gold);">QUADRATURE</span></div>
-    </div>
-    
-    <div class="vector-anchor telemetry-node bl">
-        <div class="v-head holo-text" style="color:var(--env-green); text-shadow:0 0 10px var(--env-green-dim);">ENVIRONMENTAL</div>
-        <div class="t-row"><span>RISK INDEX:</span> <span id="face-env-risk" style="color:var(--env-green);">CALCULATING..</span></div>
-        <div class="t-row"><span>CLIMATIC BASELOAD:</span> <span id="face-env-tension" style="color:var(--env-green);">--</span></div>
-        <div class="t-row"><span>GEOLOCATION:</span> <span id="face-env-geo" style="color:var(--env-green);">SYNCING..</span></div>
-    </div>
-    
-    <div class="vector-anchor telemetry-node br">
-        <div class="v-head holo-text" style="color:var(--sys-cyan); text-shadow:0 0 10px var(--sys-cyan-dim);">MECHANICAL</div>
-        <div class="t-row"><span>EQUATION OF TIME:</span> <span id="face-mech-delta" style="color:var(--sys-cyan);">--</span></div>
-        <div class="t-row"><span>ENTROPIC SMEAR:</span> <span id="face-mech-smear" style="color:var(--sys-cyan);">--</span></div>
-        <div class="t-row"><span>KEPLERIAN VELOCITY:</span> <span id="face-mech-vel" style="color:var(--sys-cyan);">NOMINAL</span></div>
-    </div>
+    <div class="vector-anchor telemetry-node tl" id="quad-BIO" onclick="window.openSlotRoutingModal('BIO')" ontouchstart="event.stopPropagation(); window.openSlotRoutingModal('BIO'); event.preventDefault();"></div>
+    <div class="vector-anchor telemetry-node tr" id="quad-COM" onclick="window.openSlotRoutingModal('COM')" ontouchstart="event.stopPropagation(); window.openSlotRoutingModal('COM'); event.preventDefault();"></div>
+    <div class="vector-anchor telemetry-node bl" id="quad-ENV" onclick="window.openSlotRoutingModal('ENV')" ontouchstart="event.stopPropagation(); window.openSlotRoutingModal('ENV'); event.preventDefault();"></div>
+    <div class="vector-anchor telemetry-node br" id="quad-MEC" onclick="window.openSlotRoutingModal('MEC')" ontouchstart="event.stopPropagation(); window.openSlotRoutingModal('MEC'); event.preventDefault();"></div>
 
     <div class="gear-container q-center-dial">
         <div class="ring r-cycle" id="ring-cycle-mean"><div class="ring-node" id="node-cycle-mean" title="MEAN ARC"></div></div>
@@ -224,6 +223,87 @@
 
     <script>
         if (window.generateStars) window.generateStars('star-layer');
+
+        const VECTOR_METRICS = {
+            'BIO': { HRV: 'HRV / Elasticity', PHASE: 'Ultradian Phase', LUNAR: 'Lunar Illumination', TIDE: 'Gravitational Tide', RHR: 'Resting Heart Rate', SLEEP: 'Sleep Stage', NOON: 'Solar Noon Proximity' },
+            'COM': { ZODIAC: 'Astrophysical Aspect', LEDGER: 'Sovereign Ledger', TERM: 'Solar Season (Jiéqì)', NODE: 'Q-Coordinate' },
+            'ENV': { FRICTION: 'Thermodynamic Friction', RISK: 'Probability Index', TENSION: 'Biome Tension', GEO: 'Local Coordinate', IRRADIANCE: 'Solar Irradiance', PRESSURE: 'Atmospheric Pressure' },
+            'MEC': { DRIFT: 'Drift to Pylon', ECCENTRICITY: 'Orbital Eccentricity', SYMMETRY: 'Temporal Symmetry Loss', SMEAR: 'Gregorian Smear', VELOCITY: 'Keplerian Velocity' }
+        };
+
+        const PHILOSOPHY = {
+            'BIO': 'Here and Now are Infinitely One',
+            'ENV': 'Based in Science',
+            'COM': 'Bathed in Culture',
+            'MEC': 'Built for the Digital Age'
+        };
+
+        const V_STYLES = {
+            'BIO': { head: 'BIOLOGICAL', class: 'val-bio' },
+            'COM': { head: 'COMMUNAL', class: 'val-com' },
+            'ENV': { head: 'ENVIRONMENTAL', class: 'val-env' },
+            'MEC': { head: 'MECHANICAL', class: 'val-mec' }
+        };
+
+        window.openSlotRoutingModal = function(vector) {
+            const metrics = VECTOR_METRICS[vector];
+            let html = `<div style="font-size:0.65rem; color:#aaa; font-family:'JetBrains Mono'; text-align:center; margin-bottom:15px;">Route data feeds to the 4 available UI slots for the ${V_STYLES[vector].head} vector.</div>`;
+            
+            for(let i=1; i<=4; i++) {
+                const saved = localStorage.getItem(`Q_SLOT_${vector}_${i}`);
+                html += `<div style="margin-bottom:10px;">
+                    <label style="font-size:0.55rem; color:var(--platinum); font-family:'Orbitron'; letter-spacing:1px;">SLOT ${i}</label>
+                    <select id="sel-${vector}-${i}" style="width:100%; background:rgba(0,0,0,0.8); border:1px solid var(--theme-main); color:#fff; padding:8px; font-family:'Orbitron'; font-size:0.65rem; border-radius:4px; outline:none; margin-top:4px;">
+                        <option value="NONE" ${!saved || saved==='NONE' ? 'selected' : ''}>-- UNASSIGNED --</option>`;
+                for (let key in metrics) {
+                    html += `<option value="${key}" ${saved === key ? 'selected' : ''}>${metrics[key]}</option>`;
+                }
+                html += `</select></div>`;
+            }
+
+            window.Q_ModalEngine.render(`${V_STYLES[vector].head} // SLOT ROUTING`, html, 'LOCK ROUTES', () => {
+                for(let i=1; i<=4; i++) {
+                    localStorage.setItem(`Q_SLOT_${vector}_${i}`, document.getElementById(`sel-${vector}-${i}`).value);
+                }
+                window.Q_LOG('STATE', 'INTERFACE', 'SLOT_ROUTES_UPDATED', { vector });
+                window.refreshChronoFace();
+                window.Q_ModalEngine.close();
+                if(window.Q_MobileBridge) window.Q_MobileBridge.pulse('LIGHT');
+            });
+        };
+
+        window.refreshChronoFace = function() {
+            // Initialize Defaults if missing
+            if(!localStorage.getItem('Q_SLOT_BIO_1')) {
+                localStorage.setItem('Q_SLOT_BIO_1', 'HRV'); localStorage.setItem('Q_SLOT_BIO_2', 'LUNAR'); localStorage.setItem('Q_SLOT_BIO_3', 'TIDE'); localStorage.setItem('Q_SLOT_BIO_4', 'PHASE');
+                localStorage.setItem('Q_SLOT_COM_1', 'NODE'); localStorage.setItem('Q_SLOT_COM_2', 'ZODIAC'); localStorage.setItem('Q_SLOT_COM_3', 'LEDGER'); localStorage.setItem('Q_SLOT_COM_4', 'TERM');
+                localStorage.setItem('Q_SLOT_ENV_1', 'FRICTION'); localStorage.setItem('Q_SLOT_ENV_2', 'RISK'); localStorage.setItem('Q_SLOT_ENV_3', 'TENSION'); localStorage.setItem('Q_SLOT_ENV_4', 'GEO');
+                localStorage.setItem('Q_SLOT_MEC_1', 'DRIFT'); localStorage.setItem('Q_SLOT_MEC_2', 'ECCENTRICITY'); localStorage.setItem('Q_SLOT_MEC_3', 'SYMMETRY'); localStorage.setItem('Q_SLOT_MEC_4', 'SMEAR');
+            }
+
+            ['BIO', 'COM', 'ENV', 'MEC'].forEach(vec => {
+                const container = document.getElementById(`quad-${vec}`);
+                const sty = V_STYLES[vec];
+                let inner = `<div class="v-head holo-text ${sty.class}">${sty.head}</div>`;
+                let assignedCount = 0;
+                
+                for(let i=1; i<=4; i++) {
+                    const slotKey = localStorage.getItem(`Q_SLOT_${vec}_${i}`);
+                    if(slotKey && slotKey !== 'NONE') {
+                        inner += `<div class="t-row"><span>${VECTOR_METRICS[vec][slotKey].toUpperCase()}:</span> <span id="face-${vec}-${slotKey}" class="val-sm ${sty.class}">--</span></div>`;
+                        assignedCount++;
+                    }
+                }
+                
+                if(assignedCount < 4) {
+                    inner += `<div class="phil-quote">"${PHILOSOPHY[vec]}"</div>`;
+                }
+                
+                container.innerHTML = inner;
+            });
+        };
+
+        window.refreshChronoFace();
         
         window.addEventListener('q-tick', (e) => {
             const { t, isLive, activeTime, daysElapsed, qData, legacyDateStr, legacyTimeStr, activePostulate } = e.detail;
@@ -234,112 +314,96 @@
                 let out = "";
                 let tokens = str.match(/([0-9]+)|([^0-9]+)/g);
                 if (tokens) {
-                    tokens.forEach(t => {
-                        if (/[0-9]/.test(t)) {
-                            out += `<span style="${numStyle}">${t}</span>`;
-                        } else {
-                            out += `<span style="${letterStyle}">${t}</span>`;
-                        }
-                    });
+                    tokens.forEach(tk => { out += `<span style="${/[0-9]/.test(tk) ? numStyle : letterStyle}">${tk}</span>`; });
                 }
                 return out;
             }
 
             const legDateEl = document.getElementById('leg-date');
-            if (legDateEl) {
-                legDateEl.innerHTML = `<span style="color:var(--theme-main); font-weight:bold; text-shadow:0 0 10px var(--theme-dim);">${legacyDateStr.toUpperCase()}</span>`;
-            }
+            if (legDateEl) legDateEl.innerHTML = `<span style="color:var(--theme-main); font-weight:bold; text-shadow:0 0 10px var(--theme-dim);">${legacyDateStr.toUpperCase()}</span>`;
 
             const legTimeEl = document.getElementById('leg-time');
-            if (legTimeEl) {
-                legTimeEl.innerHTML = formatDualColor(legacyTimeStr);
-            }
-
-            const fmtBtn = document.getElementById('fmt-btn');
-            if (fmtBtn) { 
-                fmtBtn.style.color = "var(--theme-main)"; 
-                fmtBtn.style.borderColor = "var(--theme-main)"; 
-            }
+            if (legTimeEl) legTimeEl.innerHTML = formatDualColor(legacyTimeStr);
 
             const continuousMeanDeg = daysElapsed * (360 / 365.24219);
             const continuousTrueDeg = continuousMeanDeg + qData.delta;
-            const continuousSectorDeg = (daysElapsed / 30) * 360;
-            const continuousWeekDeg = (daysElapsed / 6) * 360;
-            const absoluteDayFraction = (t - window.PYLON_ALPHA_DYNAMIC) / window.MS_DAY;
-            const continuousDayDeg = absoluteDayFraction * 360;
-
             document.getElementById('ring-cycle-mean').style.transform = `rotate(${continuousMeanDeg}deg)`;
             document.getElementById('ring-cycle-true').style.transform = `rotate(${continuousTrueDeg}deg)`;
-            document.getElementById('ring-sector').style.transform = `rotate(${continuousSectorDeg}deg)`;
-            document.getElementById('ring-week').style.transform = `rotate(${continuousWeekDeg}deg)`;
-            document.getElementById('ring-day').style.transform = `rotate(${continuousDayDeg}deg)`;
+            document.getElementById('ring-sector').style.transform = `rotate(${(daysElapsed / 30) * 360}deg)`;
+            document.getElementById('ring-week').style.transform = `rotate(${(daysElapsed / 6) * 360}deg)`;
+            document.getElementById('ring-day').style.transform = `rotate(${((t - window.PYLON_ALPHA_DYNAMIC) / window.MS_DAY) * 360}deg)`;
 
             const meanDegEl = document.getElementById('mean-deg');
-            if (meanDegEl) { 
-                meanDegEl.innerText = qData.meanArc.toFixed(2) + "°";
-                meanDegEl.style.setProperty('color', 'var(--theme-main)', 'important');
-                meanDegEl.style.textShadow = '0 0 10px var(--theme-dim)';
-            }
+            if (meanDegEl) { meanDegEl.innerText = qData.meanArc.toFixed(2) + "°"; meanDegEl.style.setProperty('color', 'var(--theme-main)', 'important'); }
             
             const trueDegEl = document.getElementById('true-deg');
-            if (trueDegEl) { 
-                trueDegEl.innerText = qData.trueArc.toFixed(2) + "°";
-                trueDegEl.style.setProperty('color', 'var(--theme-main)', 'important');
-                trueDegEl.style.textShadow = '0 0 10px var(--theme-dim)';
-            }
-            
+            if (trueDegEl) { trueDegEl.innerText = qData.trueArc.toFixed(2) + "°"; trueDegEl.style.setProperty('color', 'var(--theme-main)', 'important'); }
+
             let activeBlock = window.getQBlockByTime ? window.getQBlockByTime(t) : null;
             const qCoordWing = document.getElementById('q-coord-wing');
             
-            let letterStyle = "color:var(--starlight); font-family:'Orbitron'; font-size:0.8rem; margin-right:2px;";
-            let numStyle = "color:var(--theme-main); font-size:1.1rem; font-weight:bold;";
-            
             if (qCoordWing) {
                 if (activeBlock && activeBlock.type === 'PYLON') {
-                    qCoordWing.innerHTML = `<span style="font-size:0.9rem; color:var(--theme-main); font-family:'Orbitron'; font-weight:bold; text-shadow: 0 0 10px var(--theme-dim);">${activeBlock.name}</span>`;
+                    qCoordWing.innerHTML = `<span style="font-size:0.9rem; color:var(--theme-main); font-family:'Orbitron'; font-weight:bold;">${activeBlock.name}</span>`;
                 } else {
-                    let cCycle = activeBlock ? activeBlock.cycle : 0;
-                    qCoordWing.innerHTML = `<span style="${letterStyle}">QC</span><span style="${numStyle}">${cCycle}</span> ` +
-                                           `<span style="${letterStyle} margin-left:6px;">Q</span><span style="${numStyle}">${qData.quad}</span> ` +
-                                           `<span style="${letterStyle} margin-left:6px;">S</span><span style="${numStyle}">${qData.sect}</span> ` +
-                                           `<span style="${letterStyle} margin-left:6px;">DAY</span><span style="${numStyle}">${qData.day}</span>`;
+                    qCoordWing.innerHTML = `<span style="color:var(--starlight); font-family:'Orbitron'; font-size:0.8rem;">QC</span><span style="color:var(--theme-main); font-size:1.1rem; font-weight:bold;">${activeBlock ? activeBlock.cycle : 0}</span> ` +
+                                           `<span style="color:var(--starlight); font-family:'Orbitron'; font-size:0.8rem; margin-left:6px;">Q</span><span style="color:var(--theme-main); font-size:1.1rem; font-weight:bold;">${qData.quad}</span> ` +
+                                           `<span style="color:var(--starlight); font-family:'Orbitron'; font-size:0.8rem; margin-left:6px;">S</span><span style="color:var(--theme-main); font-size:1.1rem; font-weight:bold;">${qData.sect}</span> ` +
+                                           `<span style="color:var(--starlight); font-family:'Orbitron'; font-size:0.8rem; margin-left:6px;">DAY</span><span style="color:var(--theme-main); font-size:1.1rem; font-weight:bold;">${qData.day}</span>`;
                 }
             }
 
-            // --- MASTER TELEMETRY ROLLUPS POPULATION ---
+            // --- LOCALIZED DATA ROUTING INJECTION ---
             
-            // BIOLOGICAL
-            document.getElementById('face-bio-state').innerText = (window.Q_BIOMETRICS ? "LOCKED" : "STANDBY");
-            document.getElementById('face-bio-natal').innerText = window.Q_STATE.metaphysical_layer.natal_anchor;
-            
-            let smLetterStyle = "color:var(--starlight);";
-            let smNumStyle = "color:var(--gold);";
-            document.getElementById('face-com-node').innerHTML = (activeBlock && activeBlock.type === 'PYLON') ? `<span style="${smNumStyle}">${activeBlock.name}</span>` : `<span style="${smLetterStyle}">Q</span><span style="${smNumStyle}">${qData.quad}</span> <span style="${smLetterStyle}">S</span><span style="${smNumStyle}">${qData.sect}</span> <span style="${smLetterStyle}">DAY</span> <span style="${smNumStyle}">${qData.day}</span>`;
-            
-            const zodiacNames = ["CAPRICORN", "AQUARIUS", "PISCES", "ARIES", "TAURUS", "GEMINI", "CANCER", "LEO", "VIRGO", "LIBRA", "SCORPIO", "SAGITTARIUS"];
-            document.getElementById('face-com-zod').innerText = zodiacNames[Math.floor(qData.meanArc / 30)];
-            document.getElementById('face-com-postulate').innerText = activePostulate;
+            const getEl = (id) => document.getElementById(id);
 
-            // ENVIRONMENTAL
+            // BIO DATA
+            let anchorMins = parseInt(localStorage.getItem('q_bio_anchor')) || 0; 
+            let cycleDuration = parseInt(localStorage.getItem('q_bio_duration')) || 90; 
+            let activeMs = ((t % 86400000) - (anchorMins * 60000) + 86400000) % 86400000;
+            let cyclePosFloat = (activeMs % (cycleDuration * 60000)) / (cycleDuration * 60000);
+            
+            if(getEl('face-BIO-PHASE')) getEl('face-BIO-PHASE').innerText = (cyclePosFloat >= 0.22 && cyclePosFloat < 0.77) ? "DEEP FLOW" : "VENT/RECOVERY";
+            if(getEl('face-BIO-HRV')) getEl('face-BIO-HRV').innerText = (65 + Math.cos(t / 15000) * 10).toFixed(1) + " MS";
+            if(getEl('face-BIO-LUNAR')) getEl('face-BIO-LUNAR').innerText = (qData.lunarPhase > 0.5 ? (1 - qData.lunarPhase) * 200 : qData.lunarPhase * 200).toFixed(1) + '%';
+            if(getEl('face-BIO-TIDE')) getEl('face-BIO-TIDE').innerText = (qData.lunarPhase < 0.05 || qData.lunarPhase > 0.95 || (qData.lunarPhase > 0.45 && qData.lunarPhase < 0.55)) ? "HIGH (SPRING)" : "NOMINAL (NEAP)";
+            if(getEl('face-BIO-RHR')) getEl('face-BIO-RHR').innerText = (55 + Math.sin(t / 10000) * 5).toFixed(1) + " BPM";
+            if(getEl('face-BIO-SLEEP')) getEl('face-BIO-SLEEP').innerText = (cyclePosFloat >= 0.22 && cyclePosFloat < 0.77) ? "DEEP" : "LIGHT/REM";
+            if(getEl('face-BIO-NOON')) getEl('face-BIO-NOON').innerText = "T-" + (12 - new Date(t).getUTCHours()) + "H";
+
+            // COM DATA
+            if(getEl('face-COM-NODE')) getEl('face-COM-NODE').innerText = (activeBlock && activeBlock.type === 'PYLON') ? activeBlock.name : `Q${qData.quad} S${qData.sect} D${qData.day}`;
+            if(getEl('face-COM-ZOD')) {
+                const zodiacNames = ["CAPRICORN", "AQUARIUS", "PISCES", "ARIES", "TAURUS", "GEMINI", "CANCER", "LEO", "VIRGO", "LIBRA", "SCORPIO", "SAGITTARIUS"];
+                const sNatal = window.Q_STATE?.metaphysical_layer?.natal_anchor || 'NONE';
+                if (sNatal !== 'NONE') {
+                    let diff = Math.abs(Math.floor(qData.trueArc / 30) - zodiacNames.indexOf(sNatal));
+                    if (diff > 6) diff = 12 - diff; 
+                    getEl('face-COM-ZOD').innerText = diff === 0 ? "CONJUNCTION (0°)" : diff === 1 ? "SEMI-SEXTILE (30°)" : diff === 2 ? "SEXTILE (60°)" : diff === 3 ? "SQUARE (90°)" : diff === 4 ? "TRINE (120°)" : diff === 5 ? "QUINCUNX (150°)" : "OPPOSITION (180°)";
+                } else {
+                    getEl('face-COM-ZOD').innerText = zodiacNames[Math.floor(qData.meanArc / 30)];
+                }
+            }
+            if(getEl('face-COM-LEDGER')) getEl('face-COM-LEDGER').innerText = `Q${Math.floor(qData.trueArc / 90) + 1} CHECKPOINT`;
+            if(getEl('face-COM-TERM') && window.Q_REGISTRY?.SOLAR_TERMS) getEl('face-COM-TERM').innerText = window.Q_REGISTRY.SOLAR_TERMS[Math.floor(qData.trueArc / 15)].name.toUpperCase();
+
+            // ENV DATA
             let dangerProximity = Math.abs(Math.sin((qData.trueArc * Math.PI) / 90)); 
             let currentRiskVal = Math.floor(dangerProximity * 85) + 10; 
-            document.getElementById('face-env-risk').innerText = currentRiskVal + "%";
-            document.getElementById('face-env-tension').innerText = currentRiskVal > 75 ? "ELEVATED" : "NOMINAL";
-            if (window.Q_STATE && window.Q_STATE.location) {
-                document.getElementById('face-env-geo').innerText = window.Q_STATE.location.name.substring(0, 15);
-            }
+            if(getEl('face-ENV-RISK')) getEl('face-ENV-RISK').innerText = currentRiskVal + "%";
+            if(getEl('face-ENV-TENSION')) getEl('face-ENV-TENSION').innerText = currentRiskVal > 75 ? "ELEVATED" : "NOMINAL";
+            if(getEl('face-ENV-FRICTION')) getEl('face-ENV-FRICTION').innerText = Math.abs(22.0 - (22 + 10 * Math.sin((qData.trueArc - 90) * Math.PI / 180))).toFixed(2) + ' ΔT';
+            if(getEl('face-ENV-GEO') && window.Q_STATE?.location) getEl('face-ENV-GEO').innerText = window.Q_STATE.location.name.substring(0, 15);
+            if(getEl('face-ENV-IRRADIANCE')) getEl('face-ENV-IRRADIANCE').innerText = "ACTIVE";
+            if(getEl('face-ENV-PRESSURE')) getEl('face-ENV-PRESSURE').innerText = (1015 - Math.floor(currentRiskVal/2)) + " hPa";
 
-            // MECHANICAL
-            const faceMechDelta = document.getElementById('face-mech-delta');
-            faceMechDelta.innerText = (qData.delta > 0 ? "+" : "") + qData.delta.toFixed(4) + "°";
-            faceMechDelta.style.color = "var(--sys-cyan)";
-            faceMechDelta.style.textShadow = "0 0 10px rgba(0, 240, 255, 0.4)";
-            
-            const expected = Math.round(t / 1000) * 1000;
-            const smearVal = (t - expected) / 1000;
-            document.getElementById('face-mech-smear').innerText = (smearVal > 0 ? "+" : "") + smearVal.toFixed(4);
-            let velocityMult = 1 + 0.0334 * Math.cos((qData.trueArc - 14) * Math.PI / 180);
-            document.getElementById('face-mech-vel').innerText = velocityMult.toFixed(3) + "x";
+            // MEC DATA
+            let driftDeg = qData.trueArc < 90 ? 90 - qData.trueArc : qData.trueArc < 180 ? 180 - qData.trueArc : qData.trueArc < 270 ? 270 - qData.trueArc : 360 - qData.trueArc;
+            if(getEl('face-MEC-DRIFT')) getEl('face-MEC-DRIFT').innerText = driftDeg.toFixed(2) + "° REM";
+            if(getEl('face-MEC-SYMMETRY')) getEl('face-MEC-SYMMETRY').innerText = (Math.abs(qData.delta) / 180 * 100).toFixed(2) + "%";
+            if(getEl('face-MEC-SMEAR')) getEl('face-MEC-SMEAR').innerText = ((t - (Math.round(t / 1000) * 1000)) / 1000).toFixed(6);
+            if(getEl('face-MEC-ECCENTRICITY')) getEl('face-MEC-ECCENTRICITY').innerText = "0.0167";
+            if(getEl('face-MEC-VELOCITY')) getEl('face-MEC-VELOCITY').innerText = (1 + 0.0334 * Math.cos((qData.trueArc - 14) * Math.PI / 180)).toFixed(3) + "x";
         });
     </script>
 </body>

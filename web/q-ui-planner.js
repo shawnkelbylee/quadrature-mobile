@@ -1,6 +1,6 @@
 // THE QUADRATURE: OMNI-PLANNER & UI ABSTRACTION (ZERO-REDUNDANCY ENGINE)
 // Architect: Kelby | Builder: Kairos
-// PROTOCOL: Component Abstraction, Universal Modal Engine, & Mobile HUD Refactor
+// PROTOCOL: Pragmatic Interoperability, Predictive Phase Bordering, & Civil Tension Scoring
 
 // --- DUAL-STATE ASYMMETRICAL GEAR ENGINE ---
 
@@ -242,6 +242,31 @@ window.Q_OmniPlanner = {
         this.refreshView();
     },
 
+    calculateCivilTension: function(blocksData) {
+        let tensionScore = 0;
+        let constraintsCount = 0;
+        
+        blocksData.forEach(b => {
+            if (b.text && (b.text.includes('[FIXED]') || b.text.includes('[CIVIL]'))) {
+                constraintsCount++;
+                if (b.bioState === 'VENT/RECOVERY') {
+                    tensionScore += 25; 
+                } else {
+                    tensionScore += 10; 
+                }
+            }
+        });
+        
+        let advice = "SCHEDULE ALIGNED. True Ellipse resonance maintained.";
+        if (tensionScore > 75) {
+            advice = "SEVERE JAGGEDNESS DETECTED. You have forced Fixed Civil Constraints into Vent/Recovery windows. Burnout probability: HIGH. Resonance Re-alignment strongly advised.";
+        } else if (tensionScore > 30) {
+            advice = "MODERATE FRICTION. Civil logic is overriding biological flow. Consider shifting non-essential legacy meetings to Bio-Green sectors.";
+        }
+
+        return { score: Math.min(tensionScore, 99), advice: advice, constraints: constraintsCount };
+    },
+
     injectCSS: function() {
         const style = document.createElement('style');
         style.innerHTML = `
@@ -327,8 +352,19 @@ window.Q_OmniPlanner = {
             
             .q-cal-jump { background: rgba(0,0,0,0.6); border: 1px solid rgba(255,255,255,0.2); color: var(--theme-main, #ff003c); font-family: 'Orbitron'; font-size: 0.65rem; padding: 6px 10px; border-radius: 4px; outline: none; text-align: center; color-scheme: dark; margin-left: 15px; cursor: pointer; transition: 0.3s; }
 
+            /* --- PREDICTIVE PHASE BORDERING & TENSION SCORING --- */
+            .time-block { display: flex; flex-direction: column; justify-content: space-between; padding: 15px 20px; border-bottom: 1px solid rgba(255,255,255,0.05); font-family: 'JetBrains Mono'; color: #fff; position: relative; overflow: hidden; transition: 0.3s; }
+            .time-block:hover { background: rgba(255,255,255,0.05); }
+            .time-block.flow-state { border-left: 4px solid var(--env-green, #a7ff83); background: rgba(167, 255, 131, 0.05); }
+            .time-block.vent-state { border-left: 4px solid var(--sys-cyan, #00f0ff); background: rgba(0, 240, 255, 0.05); }
+            
+            .tension-dashboard { background: rgba(0,0,0,0.6); border: 1px dashed var(--magenta-glow, #ff003c); border-radius: 6px; padding: 15px; margin: 15px 20px 0 20px; display: flex; justify-content: space-between; align-items: center; }
+            .tension-score { font-family: 'Orbitron'; font-size: 1.5rem; font-weight: 900; color: var(--magenta-glow, #ff003c); text-shadow: 0 0 15px var(--magenta-dim, rgba(255,0,60,0.3)); }
+            .consultant-advice { font-family: 'JetBrains Mono'; font-size: 0.65rem; color: #aaa; max-width: 60%; line-height: 1.4; }
+            
+            .fixed-civil-constraint { border: 1px solid var(--magenta-glow, #ff003c) !important; background: rgba(255,0,60,0.08) !important; box-shadow: inset 0 0 15px rgba(255,0,60,0.15); margin: 4px 10px; border-radius: 4px; }
+            
         @media (max-width: 950px) { 
-            /* Fix Grid Bleed and Box Shrinkage */
             .planner-matrix { padding: 5px; gap: 2px; } 
             .editor-matrix { grid-template-columns: 1fr; padding: 10px; } 
             
@@ -336,18 +372,10 @@ window.Q_OmniPlanner = {
             .p-day > div:first-child { font-size: 0.75rem !important; }
             .p-day > div:last-child { font-size: 0.4rem !important; margin-top: 2px !important; }
 
-            /* SCROLL FIX: Pads out bottom strip */
             .q-planner-box { width: 100vw; height: 100vh; border-radius: 0; border: none; padding-bottom: 75px; box-sizing: border-box; } 
             
-            /* STRICT MOBILE HEADER GRID */
-            .cal-header { 
-                padding: 60px 10px 15px 10px; 
-                gap: 10px; 
-                display: flex !important;
-                flex-direction: column;
-            } 
+            .cal-header { padding: 60px 10px 15px 10px; gap: 10px; display: flex !important; flex-direction: column; } 
             
-            /* ROW 1: TITLE (DYNAMIC) */
             #cal-title-container { order: 1; padding: 0; margin-bottom: 0px; display: flex; justify-content: center; }
             .cal-title-wrapper { font-size: 1.1rem; gap: 8px; flex-wrap: nowrap; justify-content: center; }
             
@@ -356,55 +384,24 @@ window.Q_OmniPlanner = {
             .cal-title-wrapper.show-quad .title-leg { display: none; }
             .cal-title-wrapper.show-quad .title-divider { display: none; }
 
-            /* ROW 2: MACRO TABS */
-            .macro-hierarchy-nav { 
-                order: 2; 
-                display: grid !important; 
-                grid-template-columns: repeat(4, 1fr); 
-                gap: 6px; 
-                width: 100%; 
-                background: transparent; 
-                border: none; 
-                padding: 0; 
-            }
+            .macro-hierarchy-nav { order: 2; display: grid !important; grid-template-columns: repeat(4, 1fr); gap: 6px; width: 100%; background: transparent; border: none; padding: 0; }
             .macro-btn { padding: 12px 0; font-size: 0.65rem; background: rgba(0,0,0,0.6); border: 1px solid rgba(255,255,255,0.1); }
 
-            /* ROW 3: STEP BUTTONS */
-            .step-nav-group { 
-                order: 3; 
-                display: grid !important; 
-                grid-template-columns: repeat(4, 1fr); 
-                gap: 6px; 
-                width: 100%; 
-                justify-content: stretch;
-            }
+            .step-nav-group { order: 3; display: grid !important; grid-template-columns: repeat(4, 1fr); gap: 6px; width: 100%; justify-content: stretch; }
             .nav-btn { padding: 12px 0; font-size: 0.55rem; margin: 0; text-align: center; white-space: nowrap; }
             
-            /* ROW 4: ACTION BUTTONS */
-            .header-controls-row { display: contents; } /* Break wrapper to allow direct grid placement */
-            #action-btn-container { 
-                order: 4; 
-                display: grid !important; 
-                grid-template-columns: repeat(auto-fit, minmax(0, 1fr)); 
-                gap: 6px; 
-                width: 100%; 
-                margin: 0;
-            }
+            .header-controls-row { display: contents; } 
+            #action-btn-container { order: 4; display: grid !important; grid-template-columns: repeat(auto-fit, minmax(0, 1fr)); gap: 6px; width: 100%; margin: 0; }
             
-            .back-btn, .open-ledger-btn, .close-planner-btn { 
-                padding: 12px 0; 
-                font-size: 0.6rem; 
-                margin: 0; 
-                text-align: center; 
-                display: flex; 
-                justify-content: center; 
-                align-items: center; 
-                border-radius: 4px;
-            }
+            .back-btn, .open-ledger-btn, .close-planner-btn { padding: 12px 0; font-size: 0.6rem; margin: 0; text-align: center; display: flex; justify-content: center; align-items: center; border-radius: 4px; }
 
             .q-cal-jump { display: none !important; } 
             .vector-context-mobile-hide { display: none !important; }
             .macro-month-box { width: 100%; min-width: 0; } 
+            
+            .tension-dashboard { flex-direction: column; text-align: center; gap: 10px; margin: 10px; }
+            .consultant-advice { max-width: 100%; }
+            .time-block { padding: 10px; }
         }
         `;
         document.head.appendChild(style);
@@ -1074,67 +1071,88 @@ window.Q_OmniPlanner = {
 
     renderDay: function(container, title) {
         title.innerHTML = window.getDualTitle(this.selectedDate, this.isLegacy);
-        const daysElapsed = (this.selectedDate - window.PYLON_ALPHA_DYNAMIC) / window.MS_DAY;
-        const oData = window.getOrbitalData(daysElapsed);
-        const isLegacy = this.isLegacy;
+        const list = document.createElement('div'); 
+        list.style.overflowY = "auto"; list.style.flexGrow = "1";
 
-        const contextBlock = document.createElement('div');
-        contextBlock.className = 'slot-block vector-context-mobile-hide';
-        contextBlock.style.margin = '15px 20px 0 20px';
-        contextBlock.style.borderColor = 'var(--theme-main, #00f0ff)';
+        let dailyBlocksData = [];
+        let savedAnchor = localStorage.getItem('q_bio_anchor');
+        let anchorMins = (savedAnchor === null || savedAnchor === "") ? 0 : parseInt(savedAnchor); 
+        let cycleDuration = parseInt(localStorage.getItem('q_bio_duration')) || 90; 
         
-        let contextText = "NOMINAL TRANSIT";
-        
-        let driftBanner = "";
-        if (!isLegacy) {
-            let driftDeg = oData.trueArc - oData.meanArc;
-            let driftColor = driftDeg > 0 ? '#ff003c' : '#00f0ff';
-            let driftState = driftDeg > 0 ? "AHEAD" : "BEHIND";
-            let driftStr = driftDeg > 0 ? `+${driftDeg.toFixed(4)}` : driftDeg.toFixed(4);
-
-            driftBanner = `
-                <div style="background: rgba(244, 208, 104, 0.1); border-left: 2px solid var(--gold, #F4D068); padding: 8px 10px; margin-top: 10px; font-size: 0.65rem; color: #fff; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; text-align: center;">
-                    <span style="color:var(--gold, #F4D068); font-weight:bold; letter-spacing:1px; font-family:'Orbitron'; margin-right: 4px;">DRIFT:</span> TRUE ELLIPSE ${driftState} <span style="color:${driftColor}; font-weight:bold; margin-left: 4px;">| ${driftStr}°</span>
-                </div>
-            `;
-        }
-
-        contextBlock.innerHTML = `
-            <div style="font-family:'Orbitron'; font-size:0.6rem; color:var(--theme-main);">VECTOR CONTEXT</div>
-            <div style="font-family:'JetBrains Mono'; font-size:0.8rem; margin-top:8px; color:#fff;">${contextText}</div>
-            ${driftBanner}
-        `;
-        container.appendChild(contextBlock);
-
-        const list = document.createElement('div'); list.style.overflowY = "auto"; list.style.flexGrow = "1";
+        const selectedDateObj = new Date(this.selectedDate);
         
         for(let h=0; h<24; h++) {
-            const row = document.createElement('div'); 
-            row.style.padding = "15px 20px"; row.style.borderBottom = "1px solid rgba(255,255,255,0.05)"; 
-            row.style.cursor = "pointer"; row.style.fontFamily = "JetBrains Mono"; row.style.color = "#fff"; 
-            row.style.display = "flex"; row.style.justifyContent = "space-between"; row.style.alignItems = "center";
+            const blockMs = new Date(selectedDateObj.getFullYear(), selectedDateObj.getMonth(), selectedDateObj.getDate(), h, 0, 0).getTime();
+            const key = window.getDataKey(selectedDateObj, h, 0);
+            const data = window.qData[key] || { text: "" };
             
-            let targetMs = this.selectedDate + (h * 3600000);
-            let statusIndicator = window.hasDataInHour(new Date(targetMs), h) ? '<span style="color:#ff003c; font-weight:bold; font-size:0.7rem;">[ LOGGED ]</span>' : '<span style="color:#555; font-size:0.7rem;">[ EMPTY ]</span>';
+            let activeMs = ((blockMs % 86400000) - (anchorMins * 60000) + 86400000) % 86400000;
+            let cycleDurMs = cycleDuration * 60000;
+            let cyclePosFloat = (activeMs % cycleDurMs) / cycleDurMs;
+            let currentBioState = (cyclePosFloat >= 0.22 && cyclePosFloat < 0.77) ? "DEEP FLOW" : "VENT/RECOVERY";
             
+            dailyBlocksData.push({ hour: h, text: data.text, bioState: currentBioState, key: key, ms: blockMs });
+        }
+        
+        const tensionData = this.calculateCivilTension(dailyBlocksData);
+        
+        const dashboard = document.createElement('div');
+        dashboard.innerHTML = `
+            <div class="tension-dashboard">
+                <div style="display:flex; flex-direction:column;">
+                    <span style="font-family:'Orbitron'; font-size:0.6rem; color:#aaa;">CIVIL TENSION SCORE</span>
+                    <span class="tension-score">${tensionData.score}%</span>
+                </div>
+                <div class="consultant-advice">${tensionData.advice}</div>
+            </div>
+        `;
+        list.appendChild(dashboard);
+
+        dailyBlocksData.forEach(b => {
+            const isCivilConstraint = b.text.includes('[FIXED]') || b.text.includes('[CIVIL]');
+            let blockClass = b.bioState === 'DEEP FLOW' ? 'flow-state' : 'vent-state';
+            if (isCivilConstraint) blockClass += ' fixed-civil-constraint';
+            
+            const block = document.createElement('div');
+            block.className = `time-block ${blockClass}`;
+            
+            let timeHeaderHtml = "";
             if (this.isLegacy) {
-                row.innerHTML = `<span>${h.toString().padStart(2,'0')}:00 LOCAL</span> ${statusIndicator}`;
+                let civilFmt = window.formatLegacyDate(b.ms);
+                timeHeaderHtml = `<div class="time-header" style="font-size:0.9rem; color:var(--theme-main, #00f0ff); font-family:'Orbitron'; font-weight:bold;">${civilFmt.timeStr.split(' ')[0]} LOCAL</div>`;
             } else {
-                let civilFmt = window.formatLegacyDate(targetMs);
-                row.innerHTML = `
-                    <div style="display:flex; flex-direction:column; gap:4px;">
-                        <span style="color:var(--theme-main, #ff003c); font-weight:bold; font-family:'Orbitron';">Q-HR ${h.toString().padStart(2,'0')}</span>
-                        <span style="color:#aaa; font-size:0.6rem;">[CIVIL EQUIV: ${civilFmt.timeStr}]</span>
-                    </div>
-                    ${statusIndicator}
-                `;
+                let civilFmt = window.formatLegacyDate(b.ms);
+                timeHeaderHtml = `<div class="time-header" style="display:flex; gap: 8px; align-items:baseline;"><span style="font-size:0.9rem; color:var(--theme-main, #00f0ff); font-family:'Orbitron'; font-weight:bold;">Q:${b.hour.toString().padStart(2,'0')}</span><span style="font-size:0.55rem; color:#aaa; font-weight:bold;">(${civilFmt.timeStr.split(' ')[0]})</span></div>`;
+            }
+            
+            let badgeHtml = b.bioState === 'DEEP FLOW' 
+                ? `<span style="color:var(--env-green, #a7ff83); font-size:0.5rem; font-weight:bold; font-family:'Orbitron';">DEEP FLOW</span>` 
+                : `<span style="color:var(--sys-cyan, #00f0ff); font-size:0.5rem; font-weight:bold; font-family:'Orbitron';">VENT / RECOVERY</span>`;
+
+            if (isCivilConstraint) {
+                badgeHtml += ` <span style="background:var(--magenta-glow, #ff003c); color:#000; padding:2px 6px; border-radius:2px; font-size:0.5rem; font-weight:bold; font-family:'Orbitron'; margin-left:5px;">FIXED CIVIL CONSTRAINT</span>`;
             }
 
-            row.onmouseover = function() { this.style.background = 'rgba(255,255,255,0.05)'; }; 
-            row.onmouseout = function() { this.style.background = 'transparent'; };
-            row.onclick = () => { this.selectedHour = h; this.selectedHourDur = 3600000; this.viewState = 'hour'; this.refreshView(); }; 
-            list.appendChild(row);
-        }
+            block.innerHTML = `
+                <div style="display:flex; justify-content:space-between; align-items:baseline; margin-bottom: 8px;">
+                    ${timeHeaderHtml}
+                    <div>${badgeHtml}</div>
+                </div>
+                <div style="font-size:0.6rem; color:#aaa; font-family:'JetBrains Mono'; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; opacity:0.8;">
+                    ${b.text ? b.text : "..."}
+                </div>
+            `;
+            
+            block.onclick = () => { 
+                this.selectedHour = b.hour; 
+                this.selectedHourDur = 3600000; 
+                this.viewState = 'hour'; 
+                this.refreshView(); 
+            };
+            
+            list.appendChild(block);
+        });
+
         container.appendChild(list);
     },
 
@@ -1184,6 +1202,10 @@ window.Q_OmniPlanner = {
         const matrix = document.createElement('div'); matrix.className = 'editor-matrix';
         let totalMins = Math.ceil(this.selectedHourDur / 60000);
         
+        let savedAnchor = localStorage.getItem('q_bio_anchor');
+        let anchorMins = (savedAnchor === null || savedAnchor === "") ? 0 : parseInt(savedAnchor); 
+        let cycleDuration = parseInt(localStorage.getItem('q_bio_duration')) || 90; 
+        
         for(let m=0; m<totalMins; m+=5) {
             let targetMs = baseMs + (this.selectedHour * 3600000) + (m * 60000);
             const key = window.getDataKey(new Date(targetMs), this.selectedHour, m);
@@ -1191,15 +1213,27 @@ window.Q_OmniPlanner = {
             const diff = (targetMs - window.PYLON_ALPHA_DYNAMIC) / window.MS_DAY; 
             const orbital = window.getOrbitalData(diff);
             
-            const block = document.createElement('div'); block.className = 'slot-block';
+            // Precise Bio-State tinting for the exact minute block
+            let activeMs = ((targetMs % 86400000) - (anchorMins * 60000) + 86400000) % 86400000;
+            let cycleDurMs = cycleDuration * 60000;
+            let cyclePosFloat = (activeMs % cycleDurMs) / cycleDurMs;
+            let currentBioState = (cyclePosFloat >= 0.22 && cyclePosFloat < 0.77) ? "DEEP FLOW" : "VENT/RECOVERY";
+            
+            const isCivilConstraint = data.text.includes('[FIXED]') || data.text.includes('[CIVIL]');
+            let blockClass = currentBioState === 'DEEP FLOW' ? 'flow-state' : 'vent-state';
+            if (isCivilConstraint) blockClass += ' fixed-civil-constraint';
+            
+            const block = document.createElement('div'); 
+            block.className = `slot-block time-block ${blockClass}`;
+            
             let timeHeaderHtml = "";
             if (isPylon) {
                 timeHeaderHtml = `<div style="font-size:0.8rem; color:var(--gold, #F4D068); font-family:'Orbitron'; font-weight:bold;">GEAR MIN:${m.toString().padStart(2,'0')}</div>`;
             } else if (this.isLegacy) {
-                timeHeaderHtml = `<div style="font-size:0.8rem; color:var(--theme-main, #ff003c); font-family:'Orbitron'; font-weight:bold;">:${m.toString().padStart(2,'0')}</div>`;
+                timeHeaderHtml = `<div style="font-size:0.8rem; color:var(--theme-main, #ff003c); font-family:'Orbitron'; font-weight:bold;">:${m.toString().padStart(2,'0')} LOCAL</div>`;
             } else {
                 let civilFmt = window.formatLegacyDate(targetMs);
-                timeHeaderHtml = `<div style="display:flex; gap: 8px; align-items:baseline;"><span style="font-size:0.8rem; color:var(--theme-main, #ff003c); font-family:'Orbitron'; font-weight:bold;">Q:${m.toString().padStart(2,'0')}</span><span style="font-size:0.55rem; color:#aaa; font-weight:bold;">(${civilFmt.timeStr})</span></div>`;
+                timeHeaderHtml = `<div style="display:flex; gap: 8px; align-items:baseline;"><span style="font-size:0.8rem; color:var(--theme-main, #ff003c); font-family:'Orbitron'; font-weight:bold;">Q:${m.toString().padStart(2,'0')}</span><span style="font-size:0.55rem; color:#aaa; font-weight:bold;">(${civilFmt.timeStr.split(' ')[0]})</span></div>`;
             }
 
             block.innerHTML = `
@@ -1207,8 +1241,10 @@ window.Q_OmniPlanner = {
                     ${timeHeaderHtml}
                     <div style="font-size:0.5rem; color:#aaa; font-family:'JetBrains Mono';">COORD: ${orbital.trueArc.toFixed(2)}°</div>
                 </div>
-                <textarea style="width:100%; min-height: 60px; background:transparent; color:#fff; border:none; border-bottom:1px solid rgba(255,255,255,0.2); margin-top: 8px; font-family:'JetBrains Mono'; resize:vertical; outline:none;" placeholder="Enter quadrature intent..." oninput="window.qData['${key}'].text=this.value; window.savePlannerData();">${data.text}</textarea>`;
-            if(!window.qData[key]) window.qData[key] = { text: "", link: "" }; matrix.appendChild(block);
+                <textarea style="width:100%; min-height: 60px; background:transparent; color:#fff; border:none; border-bottom:1px solid rgba(255,255,255,0.2); margin-top: 8px; font-family:'JetBrains Mono'; resize:vertical; outline:none;" placeholder="Enter quadrature intent or [FIXED] civil event..." oninput="window.qData['${key}'].text=this.value; window.savePlannerData();">${data.text}</textarea>`;
+            
+            if(!window.qData[key]) window.qData[key] = { text: "", link: "" }; 
+            matrix.appendChild(block);
         }
         container.appendChild(matrix);
     }

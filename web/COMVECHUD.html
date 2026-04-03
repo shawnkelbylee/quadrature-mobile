@@ -7,10 +7,10 @@
     <meta http-equiv="Pragma" content="no-cache">
     <meta http-equiv="Expires" content="0">
     <title>THE QUADRATURE // COMMUNAL VECTOR</title>
-    <script src="q-ui-global.js?v=16.2"></script>
-    <script src="q-core.js?v=16.2"></script>
-    <script src="q-ui-planner.js?v=16.2"></script>
-    <script src="q-hub.js?v=16.2"></script>
+    <script src="q-ui-global.js?v=16.4"></script>
+    <script src="q-core.js?v=16.4"></script>
+    <script src="q-ui-planner.js?v=16.4"></script>
+    <script src="q-hub.js?v=16.4"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;800;900&family=JetBrains+Mono:wght@100;400;700&display=swap');
 
@@ -100,7 +100,7 @@
         .node-tao { color: #ffffff; border-color: rgba(255,255,255,0.3); box-shadow: inset 0 0 10px rgba(255,255,255,0.2); }
         .node-hol { color: #ff66b2; border-color: rgba(255,102,178,0.3); box-shadow: inset 0 0 10px rgba(255,102,178,0.2); }
         .node-pyl { color: var(--gold-bright); border-color: var(--gold-bright); box-shadow: inset 0 0 10px var(--gold-dim); font-size: 1rem; z-index: 32; }
-        .node-sys { color: #00f0ff; border-color: rgba(0,240,255,0.3); box-shadow: inset 0 0 10px rgba(0,240,255,0.2); }
+        .node-sys { color: #00f0ff; border-color: rgba(0,240,255,0.3); box-shadow: inset 0 0 10px rgba(0,240,255,0.2); font-weight: bold; }
 
         .event-label { position: absolute; font-family: 'JetBrains Mono'; font-size: 0.6rem; width: auto; white-space: nowrap; text-align: center; margin-top: 25px; transition: 0.3s; opacity: 0; font-weight: 700; color: var(--platinum); text-shadow: 0 0 8px #000, 0 0 15px var(--brass); background: rgba(0,0,0,0.8); border: 1px solid rgba(255,215,0,0.3); padding: 4px 8px; border-radius: 4px; pointer-events: none; z-index: 50; }
         .event-node:hover { transform: scale(1.6); border-color: #fff; box-shadow: 0 0 25px #fff; z-index: 60; }
@@ -125,34 +125,34 @@
     <div class="star-container" id="stars"></div>
 
     <div class="scroll-block tl telemetry-node" id="btn-rel" onclick="setMode('rel')" ontouchstart="setMode('rel')">
-        <div class="s-head">RELIGIOUS OVERLAY</div>
+        <div class="s-head">GLOBAL OBSERVANCES</div>
         <div class="s-data" id="data-rel">
             <div style="display:flex; justify-content:space-between;"><span>SUB-SET:</span> <span class="s-highlight" id="rel-active">MULTI-FAITH</span></div>
-            <div style="display:flex; justify-content:space-between;"><span>NEXT:</span> <span id="rel-next">--</span></div>
+            <div style="display:flex; justify-content:space-between;"><span>NEXT (TRUE ARC):</span> <span id="rel-next">--</span></div>
         </div>
         <div class="opt-btn" onclick="openOptions(event, 'rel')" ontouchstart="event.stopPropagation(); openOptions(event, 'rel')">[OPT]</div>
     </div>
 
     <div class="scroll-block tr mode-active telemetry-node" id="btn-zod" onclick="setMode('zod')" ontouchstart="setMode('zod')">
-        <div class="s-head">ZODIACAL TRANSIT</div>
+        <div class="s-head">ASTROPHYSICAL ALIGNMENT</div>
         <div class="s-data" id="data-zod">
-            <div style="display:flex; justify-content:space-between;"><span>HOUSE:</span> <span class="s-highlight" id="zod-house">--</span></div>
-            <div style="display:flex; justify-content:space-between;"><span>PHASE:</span> <span id="zod-phase">--</span></div>
+            <div style="display:flex; justify-content:space-between;"><span>NATAL ANCHOR:</span> <span class="s-highlight" id="zod-house">--</span></div>
+            <div style="display:flex; justify-content:space-between;"><span>TRUE ASPECT:</span> <span id="zod-phase">--</span></div>
         </div>
         <div class="opt-btn" onclick="openOptions(event, 'zod')" ontouchstart="event.stopPropagation(); openOptions(event, 'zod')">[OPT]</div>
     </div>
 
     <div class="scroll-block bl telemetry-node" id="btn-civ" onclick="setMode('civ')" ontouchstart="setMode('civ')">
-        <div class="s-head">CIVIL ANCHOR</div>
+        <div class="s-head">SOVEREIGN MICRO-LEDGER</div>
         <div class="s-data" id="data-civ">
-            <div style="display:flex; justify-content:space-between;"><span>LOCALE:</span> <span class="s-highlight" id="civ-active">US (STATIC)</span></div>
-            <div style="display:flex; justify-content:space-between;"><span>NEXT:</span> <span id="civ-next">--</span></div>
+            <div style="display:flex; justify-content:space-between;"><span>CHECKPOINT:</span> <span class="s-highlight" id="civ-active">90° FISCAL</span></div>
+            <div style="display:flex; justify-content:space-between;"><span>NEXT EVENT:</span> <span id="civ-next">--</span></div>
         </div>
         <div class="opt-btn" onclick="openOptions(event, 'civ')" ontouchstart="event.stopPropagation(); openOptions(event, 'civ')">[OPT]</div>
     </div>
 
-    <div class="scroll-block br telemetry-node" id="btn-int" onclick="setMode('int')" ontouchstart="setMode('int')">
-        <div class="s-head">INTROSPECTION</div>
+    <div class="scroll-block br telemetry-node" id="btn-int" onclick="openSovereignDiary(event)" ontouchstart="openSovereignDiary(event)">
+        <div class="s-head">SOLAR SEASONS (JIÉQÌ)</div>
         <div class="s-data" id="data-int">
             <div style="display:flex; justify-content:space-between;"><span>JIÉQÌ:</span> <span class="s-highlight" id="int-term">--</span></div>
             <div style="display:flex; justify-content:space-between;"><span>GROWTH ARC:</span> <span id="int-pct">--%</span></div>
@@ -194,7 +194,13 @@
         let CIV_DB = [];
         let HOL_DB = [];
         let ISL_DB = [];
-        let SYS_DB = [ { name: "Tax Day (US)", coord: 113.4, type: 'node-sys', glyph: '$' } ];
+        let SYS_DB = [ 
+            { name: "Q1 Fiscal Ledger (90°)", coord: 90.0, type: 'node-sys', glyph: '$' },
+            { name: "Q2 Fiscal Ledger (180°)", coord: 180.0, type: 'node-sys', glyph: '$' },
+            { name: "Q3 Fiscal Ledger (270°)", coord: 270.0, type: 'node-sys', glyph: '$' },
+            { name: "Q4 Fiscal Ledger (360°)", coord: 360.0, type: 'node-sys', glyph: '$' },
+            { name: "Tax Proximity (US)", coord: 113.4, type: 'node-sys', glyph: '¢' } 
+        ];
         
         function setMode(mode) {
             currentMode = mode;
@@ -262,7 +268,7 @@
                     let diff = ev.time - window.PYLON_ALPHA_DYNAMIC;
                     let days = diff / window.MS_DAY;
                     let qData = window.getOrbitalData(days);
-                    ev.coord = qData.meanArc;
+                    ev.coord = qData.trueArc; // Purged Mean Circle, now accurately reflecting True Ellipse
                 });
             });
         }
@@ -408,7 +414,7 @@
             let title = ""; let html = "";
             
             if(target === 'rel') {
-                title = "RELIGIOUS OVERLAY MULTI-SELECT";
+                title = "GLOBAL OBSERVANCES MULTI-SELECT";
                 html = `
                     <div style="display:flex; flex-direction:column; gap:8px;">
                         <label class="chk-row" style="font-family:'JetBrains Mono'; font-size:0.75rem; color:var(--platinum);"><input type="checkbox" value="jud" id="chk-jud" ${activeFaiths.includes('jud')?'checked':''} style="accent-color:var(--gold-bright);"> HEBREW (JUD) - ✡</label>
@@ -419,13 +425,13 @@
                         <label class="chk-row" style="font-family:'JetBrains Mono'; font-size:0.75rem; color:var(--platinum);"><input type="checkbox" value="tao" id="chk-tao" ${activeFaiths.includes('tao')?'checked':''} style="accent-color:var(--gold-bright);"> TAOISM/ZEN - ☯</label>
                     </div>`;
             } else if(target === 'zod') {
-                title = "ZODIACAL CONFIGURATION";
+                title = "ASTROPHYSICAL CONFIGURATION";
                 const savedAnchor = window.Q_STATE.metaphysical_layer.natal_anchor;
                 let ephStatus = (window.Q_STATE && window.Q_STATE.metaphysical_layer) ? window.Q_STATE.metaphysical_layer.swiss_ephemeris : 'STANDBY';
                 html = `
                     <label class="chk-row" style="margin-bottom:10px; border-bottom:1px solid rgba(255,215,0,0.2); padding-bottom:10px; font-family:'JetBrains Mono'; font-size:0.75rem; color:var(--platinum);"><input type="checkbox" id="chk-show-zod" ${activeZodiac ? 'checked' : ''} style="accent-color:var(--gold-bright);"> DISPLAY ZODIACAL RING</label>
                     <label style="font-size:0.6rem; color:rgba(255,255,255,0.6); font-family:'Orbitron';">CALCULATION BASE:</label>
-                    <select class="modal-input"><option>TROPICAL (SEASONAL)</option><option>SIDEREAL (ASTRONOMICAL)</option></select>
+                    <select class="modal-input"><option>SWISS EPHEMERIS (TRUE ARC)</option><option>SIDEREAL (ASTRONOMICAL)</option></select>
                     <label style="font-size:0.6rem; color:rgba(255,255,255,0.6); margin-top:5px; font-family:'Orbitron';">NATAL ANCHOR (BIRTH SIGN):</label>
                     <select id="natal-select" class="modal-input">
                         <option value="NONE" ${savedAnchor==='NONE'?'selected':''}>-- SELECT --</option>
@@ -435,9 +441,9 @@
                         <option value="CAPRICORN" ${savedAnchor==='CAPRICORN'?'selected':''}>CAPRICORN</option><option value="AQUARIUS" ${savedAnchor==='AQUARIUS'?'selected':''}>AQUARIUS</option><option value="PISCES" ${savedAnchor==='PISCES'?'selected':''}>PISCES</option>
                     </select>
                     <div style="font-size:0.5rem; color:var(--platinum); margin-top:5px; text-align:center;">UPDATE VIA BIOLOGICAL VECTOR CALIBRATION FOR FULL SYNC</div>
-                    <div style="font-size:0.5rem; color:var(--gold-bright); margin-top:10px; text-align:center; padding-top:5px; border-top:1px dashed var(--gold-dim);" id="eph-api-status">EPHEMERIS API: ${ephStatus} (PHASE V)</div>`;
+                    <div style="font-size:0.5rem; color:var(--gold-bright); margin-top:10px; text-align:center; padding-top:5px; border-top:1px dashed var(--gold-dim);" id="eph-api-status">EPHEMERIS API: ${ephStatus}</div>`;
             } else if(target === 'civ') {
-                title = "CIVIL ANCHOR LOCALE"; 
+                title = "SOVEREIGN MICRO-LEDGER"; 
                 html = `<label style="font-size:0.6rem; color:rgba(255,255,255,0.6); font-family:'Orbitron';">ORIGIN MATRIX:</label>
                 <select class="modal-input"><option>US (STATIC)</option><option>GLOBAL (UN)</option><option>GEOLOCATION (AUTO)</option></select>
                 <div style="margin-top:15px; border-top:1px dashed var(--copper); padding-top:10px;">
@@ -445,7 +451,7 @@
                     <div style="display:flex; justify-content:space-around;">
                         <button class="opt-btn ${activeHolidays ? 'active' : ''}" onclick="toggleVisibility('hol', this)" id="btn-hol">HOLIDAYS</button>
                         <button class="opt-btn ${activePylons ? 'active' : ''}" onclick="toggleVisibility('pyl', this)" id="btn-pyl">PYLONS</button>
-                        <button class="opt-btn ${activeSys ? 'active' : ''}" onclick="toggleVisibility('sys', this)" id="btn-sys">SYS MARKS</button>
+                        <button class="opt-btn ${activeSys ? 'active' : ''}" onclick="toggleVisibility('sys', this)" id="btn-sys">LEDGER MARKS</button>
                     </div>
                 </div>`;
             } else if(target === 'int') {
@@ -458,6 +464,12 @@
                 <div style="font-size:0.5rem; color:var(--platinum); margin-top:5px; text-align:center;">ENTRIES SYNC TO OMNI-PLANNER AS [DIARY]</div>`;
             }
             window.Q_ModalEngine.render(title, html, 'SAVE & CLOSE', saveOptions);
+        }
+
+        function openSovereignDiary(e) {
+            if(e) e.stopPropagation();
+            setMode('int');
+            openOptions(e, 'int');
         }
 
         function openNodeModal(eventObj) {
@@ -483,7 +495,7 @@
             if(eventObj.type.includes('hin') || eventObj.type.includes('bud') || eventObj.type.includes('tao')) descType = "Eastern Traditional alignment node.";
             if(eventObj.type.includes('hol')) descType = "Societal Holiday resonance marker.";
             if(eventObj.type.includes('pyl')) descType = "Quadrature Physics cardinal anchor.";
-            if(eventObj.type.includes('sys')) descType = "Systematic Civil/Financial checkpoint.";
+            if(eventObj.type.includes('sys')) descType = "Systematic Sovereign Micro-Ledger checkpoint.";
 
             const savedNote = localStorage.getItem('q_note_' + eventObj.name) || "";
 
@@ -497,7 +509,7 @@
                         <span style="color: var(--gold-bright); font-size: 0.85rem; font-weight: bold; text-shadow: 0 0 8px var(--gold-dim);">Q${nData.quad} S${nData.sect} DAY ${nData.day}</span>
                     </div>
                     <div style="display: flex; flex-direction: column;">
-                        <span style="font-size: 0.5rem; color: rgba(255,255,255,0.5); font-family: 'Orbitron'; letter-spacing: 1px;">MEAN CIRCLE</span>
+                        <span style="font-size: 0.5rem; color: rgba(255,255,255,0.5); font-family: 'Orbitron'; letter-spacing: 1px;">TRUE ELLIPSE</span>
                         <span style="color: var(--gold-bright); font-size: 0.85rem; font-weight: bold; text-shadow: 0 0 8px var(--gold-dim);">${eventObj.coord.toFixed(3)}°</span>
                     </div>
                     <div style="display: flex; flex-direction: column;">
@@ -533,7 +545,7 @@
                 
                 relationshipHtml = `
                     <div style="font-size:0.6rem; color:var(--platinum); margin-top:5px;">NATAL ANCHOR: <span style="color:var(--gold-bright);">${savedAnchor}</span></div>
-                    <div style="font-size:0.6rem; color:var(--platinum); margin-top:5px;">GEOMETRIC ASPECT: <span style="color:var(--gold-bright); text-shadow: 0 0 10px var(--gold-dim);">${aspect}</span></div>
+                    <div style="font-size:0.6rem; color:var(--platinum); margin-top:5px;">TRUE ELLIPSE ASPECT: <span style="color:var(--gold-bright); text-shadow: 0 0 10px var(--gold-dim);">${aspect}</span></div>
                     <div style="font-size:0.7rem; color:var(--starlight); margin-top:15px; line-height:1.5; border-top:1px dashed rgba(255,215,0,0.3); padding-top:15px; text-align:center;">
                         ${aspectDesc}
                     </div>
@@ -544,7 +556,7 @@
             
             const html = `
                 <div style="font-size:0.65rem; color:var(--platinum); border-bottom:1px solid rgba(255,215,0,0.3); padding-bottom:10px; margin-bottom:10px; text-align:center;">
-                    Astrological Transit Node
+                    Astrophysical Alignment Node
                 </div>
                 ${relationshipHtml}
             `;
@@ -647,8 +659,7 @@
             const legTimeEl = document.getElementById('leg-time');
             if (legTimeEl) legTimeEl.innerHTML = formatDualColor(legacyTimeStr);
             
-            const meanArc = qData.meanArc;
-
+            const trueArc = qData.trueArc;
             let activeBlock = window.getQBlockByTime ? window.getQBlockByTime(t) : null;
             const qCoordWing = document.getElementById('q-coord-wing');
             
@@ -668,16 +679,16 @@
             }
 
             const meanDegEl = document.getElementById('mean-deg');
-            if (meanDegEl) meanDegEl.innerText = meanArc.toFixed(2) + "°";
+            if (meanDegEl) meanDegEl.innerText = qData.meanArc.toFixed(2) + "°";
             
             const trueDegEl = document.getElementById('true-deg');
-            if (trueDegEl) trueDegEl.innerText = qData.trueArc.toFixed(2) + "°";
+            if (trueDegEl) trueDegEl.innerText = trueArc.toFixed(2) + "°";
             
             const continuousMeanDeg = daysElapsed * (360 / 365.24219);
-            document.getElementById('transit-arm').style.transform = `rotate(${continuousMeanDeg}deg)`;
+            document.getElementById('transit-arm').style.transform = `rotate(${continuousMeanDeg + qData.delta}deg)`;
             
             document.querySelectorAll('.event-node').forEach(node => {
-                let nodeDeg = parseFloat(node.dataset.coord); let dist = Math.abs(nodeDeg - meanArc); if (dist > 180) dist = 360 - dist; 
+                let nodeDeg = parseFloat(node.dataset.coord); let dist = Math.abs(nodeDeg - trueArc); if (dist > 180) dist = 360 - dist; 
                 if (dist < 5.0) { node.classList.add('flare'); } else { node.classList.remove('flare'); }
             });
 
@@ -688,17 +699,36 @@
             }); 
             combinedRel.sort((a,b)=>a.coord-b.coord);
             
-            let nextRel = getNextEvent(meanArc, combinedRel);
+            let nextRel = getNextEvent(trueArc, combinedRel);
             document.getElementById('rel-next').innerText = nextRel ? `${nextRel.name.substring(0,8).toUpperCase()}.. (${nextRel.coord.toFixed(1)}°)` : "--";
 
-            const zodiacNames = ["Capricorn", "Aquarius", "Pisces", "Aries", "Taurus", "Gemini", "Cancer", "Leo", "Virgo", "Libra", "Scorpio", "Sagittarius"];
-            let zIndex = Math.floor(meanArc / 30); let zProgress = ((meanArc % 30) / 30) * 100;
-            document.getElementById('zod-house').innerText = zodiacNames[zIndex].toUpperCase(); document.getElementById('zod-phase').innerText = `${zProgress.toFixed(1)}% TRANSIT`;
+            const zodiacNames = ["CAPRICORN", "AQUARIUS", "PISCES", "ARIES", "TAURUS", "GEMINI", "CANCER", "LEO", "VIRGO", "LIBRA", "SCORPIO", "SAGITTARIUS"];
+            const savedAnchor = window.Q_STATE?.metaphysical_layer?.natal_anchor || 'NONE';
+            document.getElementById('zod-house').innerText = savedAnchor !== 'NONE' ? savedAnchor : "UNASSIGNED";
+            
+            if (savedAnchor !== 'NONE') {
+                let natalIndex = zodiacNames.indexOf(savedAnchor);
+                let currentIndex = Math.floor(trueArc / 30);
+                let diff = Math.abs(currentIndex - natalIndex);
+                if (diff > 6) diff = 12 - diff; 
+                
+                let aspect = "";
+                if (diff === 0) aspect = "CONJUNCTION (0°)";
+                else if (diff === 1) aspect = "SEMI-SEXTILE (30°)";
+                else if (diff === 2) aspect = "SEXTILE (60°)";
+                else if (diff === 3) aspect = "SQUARE (90°)";
+                else if (diff === 4) aspect = "TRINE (120°)";
+                else if (diff === 5) aspect = "QUINCUNX (150°)";
+                else if (diff === 6) aspect = "OPPOSITION (180°)";
+                document.getElementById('zod-phase').innerText = aspect;
+            } else {
+                document.getElementById('zod-phase').innerText = "PENDING CALIBRATION";
+            }
 
-            let nextCiv = getNextEvent(meanArc, CIV_DB);
-            document.getElementById('civ-next').innerText = nextCiv ? `${nextCiv.name.substring(0,8).toUpperCase()}.. (${nextCiv.coord.toFixed(1)}°)` : "--";
+            let nextCiv = getNextEvent(trueArc, CIV_DB.concat(SYS_DB));
+            document.getElementById('civ-next').innerText = nextCiv ? `${nextCiv.name.substring(0,10).toUpperCase()}.. (${nextCiv.coord.toFixed(1)}°)` : "--";
 
-            const termIndex = Math.floor(meanArc / 15); const activeTerm = window.Q_REGISTRY.SOLAR_TERMS[termIndex]; activeTermName = activeTerm.name; const termProgress = ((meanArc - activeTerm.start) / 15) * 100;
+            const termIndex = Math.floor(trueArc / 15); const activeTerm = window.Q_REGISTRY.SOLAR_TERMS[termIndex]; activeTermName = activeTerm.name; const termProgress = ((trueArc - activeTerm.start) / 15) * 100;
             document.getElementById('int-term').innerText = activeTermName.substring(0,10).toUpperCase(); document.getElementById('int-pct').innerText = `${termProgress.toFixed(1)}% REALIZED`;
         });
 

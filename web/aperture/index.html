@@ -24,8 +24,7 @@
     </script>
 
     <style>
-        /* Imported Cinzel Decorative for the engraved Q aesthetic */
-        @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@100;400;700&family=Orbitron:wght@400;500;700;900&family=Cinzel+Decorative:wght@700;900&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@100;400;700&family=Orbitron:wght@400;500;700;900&family=Playfair+Display:wght@700;900&display=swap');
 
         /* ========================================================================= */
         /* --- APERTURE GATEWAY OVERRIDES: FROSTED ASYMMETRIC METALLIC ---           */
@@ -40,7 +39,7 @@
 
         /* 2. VOID BACKGROUND (Grid Removed) */
         body {
-            background-color: #000000 !important;
+            background-color: #030508 !important;
             background-image: none !important;
             margin: 0; height: 100dvh; width: 100vw; overflow: hidden;
             display: flex; justify-content: center; align-items: center;
@@ -49,33 +48,35 @@
         /* METALLIC CHROME GRADIENT DEFINITION */
         :root {
             --chrome-grad: linear-gradient(135deg, #ffffff 0%, #777777 25%, #222222 50%, #999999 75%, #ffffff 100%);
+            --frost-bg: rgba(20, 25, 35, 0.4);
         }
 
-        /* COSMIC DUST BACKGROUND LAYER */
-        .cosmic-dust-layer {
+        /* COSMIC CLOUD BACKGROUND LAYER */
+        .cosmic-cloud-layer {
             position: absolute;
             top: 0; left: 0; width: 100vw; height: 100vh;
-            background: radial-gradient(circle at 50% 50%, rgba(20, 30, 45, 0.3) 0%, rgba(0, 0, 0, 0) 80%);
             z-index: 0;
             pointer-events: none;
+            overflow: hidden;
         }
-        .dust-mote {
+        .nebula-cloud {
             position: absolute;
             border-radius: 50%;
-            background: rgba(255, 255, 255, 0.3);
-            filter: blur(3px);
-            animation: drift linear infinite;
+            background: radial-gradient(circle, rgba(50, 70, 100, 0.2) 0%, transparent 60%);
+            filter: blur(60px);
+            animation: cloud-drift linear infinite alternate;
         }
-        @keyframes drift {
-            0% { transform: translateY(0) scale(1); opacity: 0; }
-            20% { opacity: 0.6; }
-            80% { opacity: 0.6; }
-            100% { transform: translateY(-150px) scale(1.5); opacity: 0; }
+        @keyframes cloud-drift {
+            0% { transform: translate(0, 0) scale(1); opacity: 0.4; }
+            100% { transform: translate(10vw, -10vh) scale(1.2); opacity: 0.8; }
         }
 
-        /* 3. WING OVERRIDES (Frosted Glass & Asymmetric Metallic Borders) */
+        /* 3. WING OVERRIDES (Clean Frosted Glass & Asymmetric Metallic Borders) */
         .wing-content {
-            background: linear-gradient(rgba(15, 20, 25, 0.4), rgba(15, 20, 25, 0.4)) padding-box, var(--chrome-grad) border-box !important;
+            background-color: var(--frost-bg) !important;
+            background-image: linear-gradient(var(--frost-bg), var(--frost-bg)), var(--chrome-grad) !important;
+            background-origin: padding-box, border-box !important;
+            background-clip: padding-box, border-box !important;
             backdrop-filter: blur(12px) !important;
             -webkit-backdrop-filter: blur(12px) !important;
             border-style: solid !important;
@@ -91,7 +92,7 @@
         .val-lg, .q-val, .fmt-toggle, .val-sm, .t-row span, .w-lbl { color: #ffffff !important; text-shadow: none !important; }
         .fmt-toggle { border: 1px solid #ffffff !important; background: #000000 !important; }
 
-        /* 4. THE 4 GATEWAY CORNERS (Frosted Glass & Asymmetric Metallic Borders) */
+        /* 4. THE 4 GATEWAY CORNERS (Clean Frosted Glass & Asymmetric Metallic Borders) */
         .vector-anchor {
             position: absolute; 
             width: calc(320px + 50px); 
@@ -99,7 +100,10 @@
             z-index: 100; cursor: pointer; pointer-events: auto; 
             display: flex; justify-content: center; align-items: center; text-align: center;
             box-sizing: border-box; transition: all 0.3s ease; 
-            background: linear-gradient(rgba(15, 20, 25, 0.4), rgba(15, 20, 25, 0.4)) padding-box, var(--chrome-grad) border-box !important;
+            background-color: var(--frost-bg) !important;
+            background-image: linear-gradient(var(--frost-bg), var(--frost-bg)), var(--chrome-grad) !important;
+            background-origin: padding-box, border-box !important;
+            background-clip: padding-box, border-box !important;
             backdrop-filter: blur(12px) !important;
             -webkit-backdrop-filter: blur(12px) !important;
             border-style: solid !important;
@@ -134,7 +138,10 @@
             border-radius: 50%; 
             display: flex; justify-content: center; align-items: center; 
             z-index: 30; 
-            background: linear-gradient(rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.8)) padding-box, var(--chrome-grad) border-box;
+            background-color: #000000;
+            background-image: linear-gradient(#000, #000), var(--chrome-grad);
+            background-origin: padding-box, border-box;
+            background-clip: padding-box, border-box;
             border: 5px solid transparent; 
             box-shadow: 0 0 40px rgba(255, 255, 255, 0.1);
             overflow: hidden; 
@@ -151,18 +158,19 @@
             transform-style: preserve-3d;
         }
 
-        /* 6. ENGRAVED, ROTATING "Q" */
+        /* 6. ENGRAVED, ROTATING CLASSIC "Q" */
         .mercury-q {
-            font-family: 'Cinzel Decorative', serif;
-            font-size: 28vh; 
+            font-family: 'Playfair Display', serif; /* Tighter, classic Roman Serif */
+            font-size: 32vh; 
             font-weight: 900; 
             background: var(--chrome-grad);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            -webkit-text-stroke: 1.5px rgba(255, 255, 255, 0.5); /* Inner engraved line */
+            -webkit-text-stroke: 2px rgba(255, 255, 255, 0.5); /* Inner engraved line */
             filter: drop-shadow(0 0 15px rgba(255,255,255,0.3));
             animation: rotate-mercury 10s linear infinite;
             z-index: 10;
+            line-height: 1;
         }
 
         @keyframes rotate-mercury {
@@ -189,7 +197,7 @@
 </head>
 <body class="mode-q boot-active">
 
-    <div class="cosmic-dust-layer" id="cosmic-dust"></div>
+    <div class="cosmic-cloud-layer" id="cosmic-clouds"></div>
 
     <div class="vector-anchor tl" onclick="window.location.href='../personal/index.html'">
         <div class="gateway-title">PERSONAL QUAD</div>
@@ -214,19 +222,19 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            // 1. Generate Cosmic Dust Motes (Background)
-            const dustLayer = document.getElementById('cosmic-dust');
-            if(dustLayer) {
-                for(let i=0; i<40; i++) {
-                    let mote = document.createElement('div');
-                    mote.className = 'dust-mote';
-                    mote.style.width = (Math.random() * 4 + 2) + 'px';
-                    mote.style.height = mote.style.width;
-                    mote.style.left = (Math.random() * 100) + 'vw';
-                    mote.style.top = (Math.random() * 100) + 'vh';
-                    mote.style.animationDuration = (Math.random() * 10 + 10) + 's';
-                    mote.style.animationDelay = -(Math.random() * 20) + 's';
-                    dustLayer.appendChild(mote);
+            // 1. Generate Cosmic Clouds (Background)
+            const cloudLayer = document.getElementById('cosmic-clouds');
+            if(cloudLayer) {
+                for(let i=0; i<6; i++) { // Fewer, larger elements
+                    let cloud = document.createElement('div');
+                    cloud.className = 'nebula-cloud';
+                    cloud.style.width = (Math.random() * 40 + 40) + 'vw';
+                    cloud.style.height = cloud.style.width;
+                    cloud.style.left = (Math.random() * 100 - 20) + 'vw';
+                    cloud.style.top = (Math.random() * 100 - 20) + 'vh';
+                    cloud.style.animationDuration = (Math.random() * 30 + 40) + 's';
+                    cloud.style.animationDelay = -(Math.random() * 40) + 's';
+                    cloudLayer.appendChild(cloud);
                 }
             }
 

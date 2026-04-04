@@ -24,10 +24,10 @@
     </script>
 
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@100;400;700&family=Orbitron:wght@400;500;700;900&family=Cinzel:wght@400&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@100;400;700&family=Orbitron:wght@400;500;700;900&display=swap');
 
         /* ========================================================================= */
-        /* --- APERTURE BLUEPRINT OVERRIDES: PURE WHITE-ON-BLACK GATEWAY ---         */
+        /* --- APERTURE GATEWAY OVERRIDES: METALLIC BLUEPRINT ---                    */
         /* ========================================================================= */
 
         /* 1. HIDE ALL NAVIGATION AND SCRUBBER PANELS */
@@ -42,47 +42,49 @@
             pointer-events: none !important;
         }
 
-        /* 2. BLUEPRINT GRID BACKGROUND */
+        /* 2. PURE VOID BACKGROUND (Grid Removed) */
         body {
             background-color: #000000 !important;
-            background-image: 
-                linear-gradient(rgba(255, 255, 255, 0.08) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(255, 255, 255, 0.08) 1px, transparent 1px) !important;
-            background-size: 40px 40px !important;
+            background-image: none !important;
             margin: 0; height: 100dvh; width: 100vw; overflow: hidden;
             display: flex; justify-content: center; align-items: center;
         }
 
-        /* 3. WING OVERRIDES (Force Blueprint Aesthetic on Dynamic Injections) */
+        /* METALLIC CHROME GRADIENT DEFINITION */
+        :root {
+            --chrome-grad: linear-gradient(135deg, #ffffff 0%, #888888 20%, #222222 40%, #aaaaaa 60%, #444444 80%, #ffffff 100%);
+        }
+
+        /* 3. WING OVERRIDES (Metallic Borders applied to Dynamic Injections) */
         .wing-content {
-            background: #000000 !important;
-            border: 1px solid #ffffff !important;
+            background: linear-gradient(#000, #000) padding-box, var(--chrome-grad) border-box !important;
+            border: 3px solid transparent !important;
             box-shadow: none !important;
             border-radius: 0 !important;
             backdrop-filter: none !important;
             -webkit-backdrop-filter: none !important;
         }
-        .w-head, .v-head { border-bottom: 1px solid #ffffff !important; color: #ffffff !important; text-shadow: none !important; }
+        
+        .w-head, .v-head { border-bottom: 1px solid #555555 !important; color: #ffffff !important; text-shadow: none !important; }
         .val-lg, .q-val, .fmt-toggle, .val-sm, .t-row span, .w-lbl { color: #ffffff !important; text-shadow: none !important; }
         .fmt-toggle { border: 1px solid #ffffff !important; background: #000000 !important; }
 
-        /* 4. THE 4 GATEWAY CORNERS */
+        /* 4. THE 4 GATEWAY CORNERS (Metallic Borders) */
         .vector-anchor {
             position: absolute; 
             width: calc(320px + 50px); 
-            height: 120px; /* Reduced height, no data */
+            height: 120px;
             z-index: 100; cursor: pointer; pointer-events: auto; 
             display: flex; justify-content: center; align-items: center; text-align: center;
             box-sizing: border-box; transition: all 0.3s ease; 
-            background: #000000 !important;
-            border: 1px solid #ffffff !important;
+            background: linear-gradient(#000, #000) padding-box, var(--chrome-grad) border-box !important;
+            border: 3px solid transparent !important;
             box-shadow: none !important;
             border-radius: 0 !important;
             backface-visibility: hidden;
         }
         .vector-anchor:hover {
-            background: rgba(255, 255, 255, 0.1) !important;
-            box-shadow: 0 0 20px rgba(255, 255, 255, 0.4) !important;
+            box-shadow: 0 0 25px rgba(255, 255, 255, 0.3) !important;
         }
         
         .tl { top: 7vh; left: 2vw; }
@@ -98,7 +100,7 @@
             color: #ffffff;
         }
 
-        /* 5. CENTER DIAL & CONFINED DENSE STARFIELD */
+        /* 5. CENTER DIAL (Metallic Borders & Confined Starfield) */
         .aperture-dial {
             position: absolute; 
             width: 60vh; 
@@ -106,10 +108,10 @@
             border-radius: 50%; 
             display: flex; justify-content: center; align-items: center; 
             z-index: 30; 
-            background: #000000;
-            border: 2px solid #ffffff;
+            background: linear-gradient(#000, #000) padding-box, var(--chrome-grad) border-box;
+            border: 5px solid transparent; /* Thicker for iris blades later */
             box-shadow: 0 0 40px rgba(255, 255, 255, 0.1);
-            overflow: hidden; /* This clips the starfield to the circle */
+            overflow: hidden; 
         }
 
         #dense-star-layer {
@@ -123,13 +125,12 @@
             transform-style: preserve-3d;
         }
 
-        /* 6. ROTATING MERCURY "Q" */
+        /* 6. TIGHT, THICK, ROTATING CHROME "Q" */
         .mercury-q {
-            font-family: 'Cinzel', serif;
-            font-size: 35vh;
-            font-weight: 400;
-            margin-top: -2vh; /* Visual optical alignment for the Q tail */
-            background: linear-gradient(180deg, #ffffff 0%, #a0a0a0 30%, #303030 50%, #d0d0d0 70%, #ffffff 100%);
+            font-family: 'Orbitron', sans-serif;
+            font-size: 26vh; /* Tighter size */
+            font-weight: 900; /* Maximum thickness */
+            background: var(--chrome-grad);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             filter: drop-shadow(0 0 15px rgba(255,255,255,0.4));
@@ -183,21 +184,61 @@
     </div>
 
     <script>
+        // 1. Generate Confined Starfield
         document.addEventListener('DOMContentLoaded', () => {
             const container = document.getElementById('dense-star-layer');
             if(!container) return;
-            
-            // Generate 900 stars for a highly dense, confined void
             for(let i=0; i<900; i++) {
                 let star = document.createElement('div');
                 star.className = 'star-kinetic';
                 star.style.setProperty('--angle', Math.random() * 360 + 'deg');
-                // Confine radius generation to mostly within the dial
                 star.style.setProperty('--radius', (Math.random() * 350) + 'px');
                 star.style.setProperty('--opacity', Math.random() * 0.9 + 0.1);
-                star.style.animationDuration = (Math.random() * 4 + 3) + 's'; // Slightly faster
+                star.style.animationDuration = (Math.random() * 4 + 3) + 's';
                 star.style.animationDelay = -(Math.random() * 10) + 's';
                 container.appendChild(star);
+            }
+        });
+
+        // 2. Restored Telemetry Listener for the OS Wings
+        window.addEventListener('q-tick', (e) => {
+            const { t, qData, legacyDateStr, legacyTimeStr } = e.detail;
+
+            function formatDualColor(str) {
+                const letterStyle = "color:var(--starlight); font-family:'Orbitron'; font-size:0.8rem; margin-right:2px;";
+                const numStyle = "color:#ffffff; font-size:1.1rem; font-weight:bold;";
+                let out = "";
+                let tokens = str.match(/([0-9]+)|([^0-9]+)/g);
+                if (tokens) {
+                    tokens.forEach(tk => { out += `<span style="${/[0-9]/.test(tk) ? numStyle : letterStyle}">${tk}</span>`; });
+                }
+                return out;
+            }
+
+            const legDateEl = document.getElementById('leg-date');
+            if (legDateEl) legDateEl.innerHTML = `<span style="color:#ffffff; font-weight:bold; text-shadow:0 0 10px rgba(255,255,255,0.3);">${legacyDateStr.toUpperCase()}</span>`;
+
+            const legTimeEl = document.getElementById('leg-time');
+            if (legTimeEl) legTimeEl.innerHTML = formatDualColor(legacyTimeStr);
+
+            const meanDegEl = document.getElementById('mean-deg');
+            if (meanDegEl) { meanDegEl.innerText = qData.meanArc.toFixed(2) + "°"; meanDegEl.style.setProperty('color', '#ffffff', 'important'); }
+            
+            const trueDegEl = document.getElementById('true-deg');
+            if (trueDegEl) { trueDegEl.innerText = qData.trueArc.toFixed(2) + "°"; trueDegEl.style.setProperty('color', '#ffffff', 'important'); }
+
+            let activeBlock = window.getQBlockByTime ? window.getQBlockByTime(t) : null;
+            const qCoordWing = document.getElementById('q-coord-wing');
+            
+            if (qCoordWing) {
+                if (activeBlock && activeBlock.type === 'PYLON') {
+                    qCoordWing.innerHTML = `<span style="font-size:0.9rem; color:#ffffff; font-family:'Orbitron'; font-weight:bold;">${activeBlock.name}</span>`;
+                } else {
+                    qCoordWing.innerHTML = `<span style="color:var(--starlight); font-family:'Orbitron'; font-size:0.8rem;">QC</span><span style="color:#ffffff; font-size:1.1rem; font-weight:bold;">${activeBlock ? activeBlock.cycle : 0}</span> ` +
+                                           `<span style="color:var(--starlight); font-family:'Orbitron'; font-size:0.8rem; margin-left:6px;">Q</span><span style="color:#ffffff; font-size:1.1rem; font-weight:bold;">${qData.quad}</span> ` +
+                                           `<span style="color:var(--starlight); font-family:'Orbitron'; font-size:0.8rem; margin-left:6px;">S</span><span style="color:#ffffff; font-size:1.1rem; font-weight:bold;">${qData.sect}</span> ` +
+                                           `<span style="color:var(--starlight); font-family:'Orbitron'; font-size:0.8rem; margin-left:6px;">DAY</span><span style="color:#ffffff; font-size:1.1rem; font-weight:bold;">${qData.day}</span>`;
+                }
             }
         });
     </script>

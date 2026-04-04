@@ -44,7 +44,7 @@ export default function RootLayout() {
         <StatusBar barStyle="light-content" backgroundColor="#000" />
         <WebView
           ref={webViewRef}
-          source={{ uri: 'https://47092e3a-629f-443b-8bc4-cc527feeea11.netlify.app' }} 
+          source={{ uri: 'https://thequadrature.app/personal/index.html' }}
           style={styles.webview}
           onMessage={handleMessage}
           javaScriptEnabled={true}

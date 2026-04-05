@@ -4,307 +4,262 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
-    <meta http-equiv="Pragma" content="no-cache">
-    <meta http-equiv="Expires" content="0">
     <title>THE QUADRATURE // APERTURE GATEWAY</title>
     
-    <script src="../q-ui-global.js?v=16.4"></script>
-    <script src="../q-core.js?v=16.4"></script>
-    <script src="../q-ui-planner.js?v=16.4"></script>
-    <script src="../q-hub.js?v=16.4"></script>
+    <script src="../q-ui-global.js?v=17.1"></script>
+    <script src="../q-core.js?v=17.1"></script>
+    <script src="../q-hub.js?v=17.1"></script>
     
-    <script>
-        if (/Android|webOS|iPhone|iPad|iPod/i.test(navigator.userAgent) || window.innerWidth <= 768) {
-            document.documentElement.classList.add('is-mobile-device');
-        }
-        if(sessionStorage.getItem('Q_BOOT_COMPLETE') === 'true') {
-            document.write('<style>#boot-overlay { display: none !important; }</style>');
-            window.addEventListener('DOMContentLoaded', () => document.body.classList.remove('boot-active'));
-        }
-    </script>
-
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700;900&family=JetBrains+Mono:wght@400;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=JetBrains+Mono:wght@400;700&display=swap');
 
-        /* ========================================================================= */
-        /* --- APERTURE GATEWAY: THE MACHINED "INTERGALACTIC" AESTHETIC ---          */
-        /* ========================================================================= */
-
-        /* 1. HIDE ALL NAVIGATION AND SCRUBBER PANELS */
-        .q-nav-bar, .q-global-controls, #mobile-telemetry-ribbon, .q-control-strip, #q-mic-fab, #q-mic-fab-desktop {
-            display: none !important; opacity: 0 !important; pointer-events: none !important;
+        :root {
+            --q-blue-glow: rgba(0, 163, 255, 0.3);
+            --q-metal: #e2e8f0;
+            --nebula-deep: #050b14;
         }
 
-        /* 2. DEEP COSMIC NEBULA BACKGROUND */
-        body {
-            background-color: #050b14 !important;
-            background-image: 
-                radial-gradient(circle at 20% 30%, rgba(41, 74, 122, 0.4) 0%, transparent 50%),
-                radial-gradient(circle at 80% 70%, rgba(30, 50, 80, 0.3) 0%, transparent 50%) !important;
-            margin: 0; height: 100dvh; width: 100vw; overflow: hidden;
+        body, html {
+            margin: 0; padding: 0; width: 100vw; height: 100dvh;
+            background-color: var(--nebula-deep);
+            overflow: hidden;
+            font-family: 'Orbitron', sans-serif;
+            color: var(--q-metal);
             display: flex; justify-content: center; align-items: center;
         }
 
-        /* 3. METALLIC PALETTE */
-        :root {
-            --metal-bright: #e2e8f0;
-            --metal-mid: #94a3b8;
-            --metal-dark: #334155;
-            --metal-shadow: #0f172a;
-            --tech-grad: linear-gradient(135deg, var(--metal-bright) 0%, var(--metal-mid) 20%, var(--metal-dark) 50%, var(--metal-mid) 80%, var(--metal-bright) 100%);
-            --glass-bg: linear-gradient(135deg, rgba(30, 41, 59, 0.85) 0%, rgba(15, 23, 42, 0.95) 100%);
+        /* --- KINETIC NEBULA ENGINE --- */
+        #nebula-canvas {
+            position: fixed; inset: 0; z-index: 0;
+            background: radial-gradient(circle at 50% 50%, #0a1628 0%, #050b14 100%);
         }
 
-        /* 4. MACHINED ARMOR PANELS (Using Clip-Path for Chamfered Corners) */
-        .tech-panel-wrapper {
-            position: absolute;
-            width: 320px;
-            height: 100px;
-            background: var(--tech-grad);
-            padding: 3px; /* Thickness of the metallic border */
-            box-shadow: 0 20px 40px rgba(0,0,0,0.8);
-            z-index: 100; cursor: pointer; pointer-events: auto;
-            transition: transform 0.2s ease, filter 0.2s ease;
-        }
-        
-        .tech-panel-wrapper:hover {
-            transform: scale(1.02);
-            filter: drop-shadow(0 0 15px rgba(226, 232, 240, 0.4));
+        .nebula-cloud {
+            position: absolute; border-radius: 50%;
+            filter: blur(80px); opacity: 0.4;
+            mix-blend-mode: screen;
+            animation: drift linear infinite alternate;
         }
 
-        .tech-panel-inner {
-            width: 100%; height: 100%;
-            background: var(--glass-bg);
-            backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
-            display: flex; justify-content: center; align-items: center; text-align: center;
+        @keyframes drift {
+            0% { transform: translate(0, 0) scale(1); }
+            100% { transform: translate(100px, 50px) scale(1.3); }
         }
 
-        /* Corner Definitions: Unique Clip-Paths for each quadrant */
-        .tl { 
-            top: 7vh; left: 2vw; 
-            clip-path: polygon(20px 0, 100% 0, 100% calc(100% - 20px), calc(100% - 20px) 100%, 0 100%, 0 20px);
-        }
-        .tl .tech-panel-inner { clip-path: polygon(19px 0, 100% 0, 100% calc(100% - 19px), calc(100% - 19px) 100%, 0 100%, 0 19px); }
-
-        .tr { 
-            top: 7vh; right: 2vw; 
-            clip-path: polygon(0 0, calc(100% - 20px) 0, 100% 20px, 100% 100%, 20px 100%, 0 calc(100% - 20px));
-        }
-        .tr .tech-panel-inner { clip-path: polygon(0 0, calc(100% - 19px) 0, 100% 19px, 100% 100%, 19px 100%, 0 calc(100% - 19px)); }
-
-        .bl { 
-            bottom: 8vh; left: 2vw; 
-            clip-path: polygon(0 0, calc(100% - 20px) 0, 100% 20px, 100% 100%, 20px 100%, 0 calc(100% - 20px));
-        }
-        .bl .tech-panel-inner { clip-path: polygon(0 0, calc(100% - 19px) 0, 100% 19px, 100% 100%, 19px 100%, 0 calc(100% - 19px)); }
-
-        .br { 
-            bottom: 8vh; right: 2vw; 
-            clip-path: polygon(20px 0, 100% 0, 100% calc(100% - 20px), calc(100% - 20px) 100%, 0 100%, 0 20px);
-        }
-        .br .tech-panel-inner { clip-path: polygon(19px 0, 100% 0, 100% calc(100% - 19px), calc(100% - 19px) 100%, 0 100%, 0 19px); }
-
-        .gateway-title {
-            font-family: 'Orbitron', sans-serif; font-weight: 700; font-size: 1.0rem; letter-spacing: 4px; color: var(--metal-bright);
+        /* --- THE APERTURE CORE --- */
+        .aperture-container {
+            position: relative; width: 60vh; height: 60vh;
+            z-index: 10; display: flex; justify-content: center; align-items: center;
         }
 
-        /* 5. OVERRIDING THE DYNAMIC WINGS TO MATCH THE NEW ARMOR */
-        .wing { height: 260px !important; z-index: 90 !important; }
-        .wing-content {
-            background: var(--glass-bg) !important;
-            backdrop-filter: blur(10px) !important; -webkit-backdrop-filter: blur(10px) !important;
-            border: none !important; box-shadow: none !important; border-radius: 0 !important;
-        }
-        
-        .wing-left::before {
-            content: ''; position: absolute; inset: 0; background: var(--tech-grad); z-index: -1;
-            clip-path: polygon(0 20px, 20px 0, 100% 0, 100% 100%, 20px 100%, 0 calc(100% - 20px));
-        }
-        .wing-left .wing-content {
-            margin: 3px; height: calc(100% - 6px); width: calc(100% - 6px);
-            clip-path: polygon(0 19px, 19px 0, 100% 0, 100% 100%, 19px 100%, 0 calc(100% - 19px));
+        .iris-ring {
+            position: absolute; inset: 0;
+            background: url('../assets/aperture-ring.png') center/contain no-repeat;
+            z-index: 12; filter: drop-shadow(0 0 30px rgba(0,0,0,0.8));
         }
 
-        .wing-right::before {
-            content: ''; position: absolute; inset: 0; background: var(--tech-grad); z-index: -1;
-            clip-path: polygon(0 0, calc(100% - 20px) 0, 100% 20px, 100% calc(100% - 20px), calc(100% - 20px) 100%, 0 100%);
-        }
-        .wing-right .wing-content {
-            margin: 3px; height: calc(100% - 6px); width: calc(100% - 6px);
-            clip-path: polygon(0 0, calc(100% - 19px) 0, 100% 19px, 100% calc(100% - 19px), calc(100% - 19px) 100%, 0 100%);
+        .core-void {
+            position: absolute; width: 52%; height: 52%;
+            background: #000; border-radius: 50%;
+            z-index: 5; overflow: hidden;
+            box-shadow: inset 0 0 40px rgba(0,0,0,1);
         }
 
-        /* Wing text recolor to fit new metal theme */
-        .w-head, .v-head { border-bottom: 1px solid var(--metal-mid) !important; color: var(--metal-bright) !important; }
-        .val-lg, .q-val, .fmt-toggle, .val-sm, .t-row span, .w-lbl { color: var(--metal-bright) !important; }
-        .fmt-toggle { border: 1px solid var(--metal-mid) !important; background: transparent !important; }
-
-        /* 6. CENTER APERTURE DIAL (The Mechanical Iris) */
-        .aperture-dial {
-            position: absolute; width: 65vh; height: 65vh; border-radius: 50%; 
-            display: flex; justify-content: center; align-items: center; 
-            z-index: 30; background: var(--metal-shadow);
-            box-shadow: 0 0 50px rgba(0, 0, 0, 0.9), inset 0 0 30px rgba(0,0,0,1);
+        .star-field { position: absolute; inset: 0; }
+        .star {
+            position: absolute; background: #fff; border-radius: 50%;
+            animation: hyper-jump linear infinite;
         }
 
-        /* The Outer Machined Ring */
-        .aperture-ring {
-            position: absolute; inset: 0; border-radius: 50%;
-            background: var(--tech-grad);
-            -webkit-mask: radial-gradient(transparent 68%, black 69%);
-            mask: radial-gradient(transparent 68%, black 69%);
-            z-index: 35;
-        }
-        /* Inner Ring Etching */
-        .aperture-ring::after {
-            content: ''; position: absolute; inset: 2%; border-radius: 50%;
-            border: 2px solid rgba(15, 23, 42, 0.8);
+        @keyframes hyper-jump {
+            from { transform: translate(-50%, -50%) scale(0); opacity: 0; }
+            to { transform: translate(var(--tx), var(--ty)) scale(1); opacity: 1; }
         }
 
-        /* The Mechanical Iris Blades (SVG Background) */
-        .iris-blades {
-            position: absolute; width: 85%; height: 85%;
-            z-index: 32; opacity: 0.9;
+        .q-core-asset {
+            position: absolute; width: 40%; height: 40%;
+            background: url('../assets/core-q.png') center/contain no-repeat;
+            z-index: 15;
+            filter: drop-shadow(0 0 20px var(--q-blue-glow));
+            animation: subtle-pulse 4s ease-in-out infinite;
         }
 
-        /* The Deep Void Starfield */
-        .aperture-void {
-            position: absolute; width: 68%; height: 68%; border-radius: 50%;
-            background: #000; z-index: 31; overflow: hidden;
-            box-shadow: inset 0 0 40px rgba(0,0,0,1), 0 0 20px var(--metal-bright);
-            border: 2px solid var(--metal-mid);
+        @keyframes subtle-pulse {
+            0%, 100% { transform: scale(1); filter: brightness(1) drop-shadow(0 0 20px var(--q-blue-glow)); }
+            50% { transform: scale(1.05); filter: brightness(1.2) drop-shadow(0 0 35px var(--q-blue-glow)); }
         }
 
-        /* 7. THE INTERGALACTIC "Q" */
-        .q-container {
-            position: absolute; width: 45%; height: 45%; z-index: 40;
-            filter: drop-shadow(0 10px 20px rgba(0,0,0,0.8)) drop-shadow(0 0 15px rgba(226, 232, 240, 0.4));
+        /* --- CORNER ARMOR PANELS --- */
+        .corner-panel {
+            position: absolute; width: 280px; height: 90px;
+            z-index: 20; cursor: pointer;
+            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
 
-        /* Kinetic Stars */
-        .star-kinetic {
-            position: absolute; top: 50%; left: 50%; width: 1.5px; height: 1.5px; background: #fff; border-radius: 50%; animation: warp-travel linear infinite;
+        .panel-bg {
+            position: absolute; inset: 0;
+            background: url('../assets/panel-frame.png') center/100% 100% no-repeat;
+            z-index: -1;
         }
-        @keyframes warp-travel {
-            0% { transform: translate(-50%, -50%) rotate(var(--angle)) translateX(var(--radius)) translateZ(-300px); opacity: 0; }
-            20% { opacity: var(--opacity); }
-            80% { opacity: var(--opacity); }
-            100% { transform: translate(-50%, -50%) rotate(var(--angle)) translateX(var(--radius)) translateZ(300px); opacity: 0; }
+
+        .tl { top: 5vh; left: 3vw; }
+        .tr { top: 5vh; right: 3vw; }
+        .tr .panel-bg { transform: scaleX(-1); }
+        .bl { bottom: 5vh; left: 3vw; }
+        .bl .panel-bg { transform: scaleY(-1); }
+        .br { bottom: 5vh; right: 3vw; }
+        .br .panel-bg { transform: scale(-1, -1); }
+
+        .panel-label {
+            height: 100%; display: flex; align-items: center; justify-content: center;
+            font-size: 0.85rem; letter-spacing: 3px; font-weight: 700;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.5);
         }
+
+        /* --- LATERAL TELEMETRY WINGS --- */
+        .wing-panel {
+            position: absolute; width: 220px; height: 350px;
+            z-index: 15; display: flex; flex-direction: column;
+            padding: 40px 20px; box-sizing: border-box;
+        }
+
+        .wing-bg {
+            position: absolute; inset: 0;
+            background: url('../assets/wing-panel.png') center/100% 100% no-repeat;
+            z-index: -1;
+        }
+
+        .wing-l { left: 4vw; top: 50%; transform: translateY(-50%); }
+        .wing-r { right: 4vw; top: 50%; transform: translateY(-50%); }
+        .wing-r .wing-bg { transform: scaleX(-1); }
+
+        .telemetry-row {
+            margin-bottom: 25px; border-bottom: 1px solid rgba(255,255,255,0.1);
+            padding-bottom: 5px;
+        }
+
+        .tel-label { font-size: 0.6rem; color: rgba(226, 232, 240, 0.5); display: block; margin-bottom: 4px; }
+        .tel-value { font-family: 'JetBrains Mono', monospace; font-size: 1.1rem; color: #fff; }
 
     </style>
 </head>
-<body class="mode-q boot-active">
+<body>
 
-    <div class="tech-panel-wrapper tl" onclick="window.location.href='../personal/index.html'">
-        <div class="tech-panel-inner"><div class="gateway-title">PERSONAL QUAD</div></div>
+    <div id="nebula-canvas"></div>
+
+    <div class="corner-panel tl" onclick="location.href='../personal/'">
+        <div class="panel-bg"></div>
+        <div class="panel-label">PERSONAL QUAD</div>
     </div>
     
-    <div class="tech-panel-wrapper tr" onclick="window.location.href='../commercial/index.html'">
-        <div class="tech-panel-inner"><div class="gateway-title">COMMERCIAL QUAD</div></div>
+    <div class="corner-panel tr" onclick="location.href='../commercial/'">
+        <div class="panel-bg"></div>
+        <div class="panel-label">COMMERCIAL QUAD</div>
     </div>
 
-    <div class="tech-panel-wrapper bl" onclick="window.location.href='../physical/index.html'">
-        <div class="tech-panel-inner"><div class="gateway-title">PHYSICAL ASSETS</div></div>
+    <div class="corner-panel bl" onclick="location.href='../physical/'">
+        <div class="panel-bg"></div>
+        <div class="panel-label">PHYSICAL ASSETS</div>
     </div>
 
-    <div class="tech-panel-wrapper br" onclick="if(window.Q_IntegrationHub) window.Q_IntegrationHub.openHub()">
-        <div class="tech-panel-inner"><div class="gateway-title">DASHBOARD</div></div>
+    <div class="corner-panel br" onclick="if(window.Q_IntegrationHub) window.Q_IntegrationHub.openHub()">
+        <div class="panel-bg"></div>
+        <div class="panel-label">DASHBOARD</div>
     </div>
 
-    <div class="aperture-dial">
-        
-        <div class="aperture-ring"></div>
-        
-        <svg class="iris-blades" viewBox="0 0 100 100">
-            <defs>
-                <linearGradient id="bladeGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-                    <stop offset="0%" stop-color="#e2e8f0" />
-                    <stop offset="50%" stop-color="#64748b" />
-                    <stop offset="100%" stop-color="#1e293b" />
-                </linearGradient>
-                <filter id="bladeShadow"><feDropShadow dx="2" dy="2" stdDeviation="3" flood-color="#0f172a" flood-opacity="0.8"/></filter>
-            </defs>
-            <g filter="url(#bladeShadow)">
-                <path d="M 50 15 A 70 70 0 0 1 95 50 L 50 40 Z" fill="url(#bladeGrad)" stroke="#334155" stroke-width="0.5"/>
-                <path d="M 50 15 A 70 70 0 0 1 95 50 L 50 40 Z" fill="url(#bladeGrad)" stroke="#334155" stroke-width="0.5" transform="rotate(60 50 50)"/>
-                <path d="M 50 15 A 70 70 0 0 1 95 50 L 50 40 Z" fill="url(#bladeGrad)" stroke="#334155" stroke-width="0.5" transform="rotate(120 50 50)"/>
-                <path d="M 50 15 A 70 70 0 0 1 95 50 L 50 40 Z" fill="url(#bladeGrad)" stroke="#334155" stroke-width="0.5" transform="rotate(180 50 50)"/>
-                <path d="M 50 15 A 70 70 0 0 1 95 50 L 50 40 Z" fill="url(#bladeGrad)" stroke="#334155" stroke-width="0.5" transform="rotate(240 50 50)"/>
-                <path d="M 50 15 A 70 70 0 0 1 95 50 L 50 40 Z" fill="url(#bladeGrad)" stroke="#334155" stroke-width="0.5" transform="rotate(300 50 50)"/>
-            </g>
-        </svg>
-
-        <div class="aperture-void" id="dense-stars"></div>
-
-        <div class="q-container">
-            <svg viewBox="0 0 100 100" width="100%" height="100%">
-                <defs>
-                    <linearGradient id="qGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-                        <stop offset="0%" stop-color="#ffffff" />
-                        <stop offset="30%" stop-color="#94a3b8" />
-                        <stop offset="60%" stop-color="#1e293b" />
-                        <stop offset="80%" stop-color="#94a3b8" />
-                        <stop offset="100%" stop-color="#ffffff" />
-                    </linearGradient>
-                </defs>
-                <path d="M50,10 C27,10 15,28 15,50 C15,72 27,90 50,90 C58,90 65,87 70,82 L80,95 L90,88 L78,76 C83,69 85,60 85,50 C85,28 73,10 50,10 Z M50,22 C64,22 70,35 70,50 C70,56 68,62 64,68 L60,63 C65,58 68,52 68,45 C68,30 60,20 50,20 C40,20 32,30 32,45 C32,60 40,70 50,70 C55,70 60,67 63,62 L66,66 C62,72 56,75 50,75 C36,75 30,62 30,50 C30,35 36,22 50,22 Z" fill="url(#qGrad)" stroke="#e2e8f0" stroke-width="0.5"/>
-            </svg>
+    <div class="wing-panel wing-l">
+        <div class="wing-bg"></div>
+        <div class="telemetry-row">
+            <span class="tel-label">MEAN ARC</span>
+            <span class="tel-value" id="val-mean">---.---°</span>
         </div>
+        <div class="telemetry-row">
+            <span class="tel-label">TRUE ELLIPSE</span>
+            <span class="tel-value" id="val-true">---.---°</span>
+        </div>
+        <div class="telemetry-row">
+            <span class="tel-label">SYSTEM CLOCK</span>
+            <span class="tel-value" id="val-legacy">00:00:00</span>
+        </div>
+    </div>
 
+    <div class="aperture-container">
+        <div class="core-void">
+            <div class="star-field" id="star-field"></div>
+        </div>
+        <div class="iris-ring"></div>
+        <div class="q-core-asset"></div>
+    </div>
+
+    <div class="wing-panel wing-r">
+        <div class="wing-bg"></div>
+        <div class="telemetry-row">
+            <span class="tel-label">QUADRANT</span>
+            <span class="tel-value" id="val-quad">0.00</span>
+        </div>
+        <div class="telemetry-row">
+            <span class="tel-label">SOLAR DAY</span>
+            <span class="tel-value" id="val-day">000.000</span>
+        </div>
+        <div class="telemetry-row">
+            <span class="tel-label">Q-CYCLE</span>
+            <span class="tel-value" id="val-cycle">00</span>
+        </div>
     </div>
 
     <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const stars = document.getElementById('dense-stars');
-            if(stars) {
-                for(let i=0; i<300; i++) {
-                    let s = document.createElement('div');
-                    s.className = 'star-kinetic';
-                    s.style.setProperty('--angle', Math.random() * 360 + 'deg');
-                    s.style.setProperty('--radius', (Math.random() * 300) + 'px');
-                    s.style.setProperty('--opacity', Math.random());
-                    s.style.animationDuration = (Math.random() * 3 + 2) + 's';
-                    s.style.animationDelay = -(Math.random() * 10) + 's';
-                    stars.appendChild(s);
-                }
+        // --- COSMIC NEBULA GENERATOR ---
+        function initNebula() {
+            const container = document.getElementById('nebula-canvas');
+            const colors = ['rgba(41, 74, 122, 0.4)', 'rgba(30, 50, 80, 0.3)', 'rgba(10, 20, 40, 0.5)'];
+            for(let i=0; i<8; i++) {
+                const cloud = document.createElement('div');
+                cloud.className = 'nebula-cloud';
+                cloud.style.width = Math.random() * 60 + 40 + 'vw';
+                cloud.style.height = cloud.style.width;
+                cloud.style.background = colors[Math.floor(Math.random() * colors.length)];
+                cloud.style.left = Math.random() * 100 - 20 + 'vw';
+                cloud.style.top = Math.random() * 100 - 20 + 'vh';
+                cloud.style.animationDuration = Math.random() * 40 + 30 + 's';
+                cloud.style.animationDelay = -Math.random() * 40 + 's';
+                container.appendChild(cloud);
             }
-        });
+        }
 
-        // WING UPDATER
+        // --- CORE STAR-FIELD INJECTION ---
+        function initStars() {
+            const field = document.getElementById('star-field');
+            for(let i=0; i<150; i++) {
+                const star = document.createElement('div');
+                star.className = 'star';
+                const angle = Math.random() * Math.PI * 2;
+                const dist = Math.random() * 150 + 50;
+                star.style.setProperty('--tx', Math.cos(angle) * dist + 'px');
+                star.style.setProperty('--ty', Math.sin(angle) * dist + 'px');
+                star.style.width = Math.random() * 2 + 'px';
+                star.style.height = star.style.width;
+                star.style.left = '50%';
+                star.style.top = '50%';
+                star.style.animationDuration = Math.random() * 3 + 1 + 's';
+                star.style.animationDelay = -Math.random() * 5 + 's';
+                field.appendChild(star);
+            }
+        }
+
+        // --- TEMPORAL ENGINE SYNC ---
         window.addEventListener('q-tick', (e) => {
-            const { t, qData, legacyDateStr, legacyTimeStr } = e.detail;
-            const legDateEl = document.getElementById('leg-date');
-            if(legDateEl) legDateEl.innerText = legacyDateStr.toUpperCase();
+            const { qData, legacyTimeStr } = e.detail;
             
-            const legTimeEl = document.getElementById('leg-time');
-            if(legTimeEl) {
-                let out = "";
-                let tokens = legacyTimeStr.match(/([0-9]+)|([^0-9]+)/g);
-                if (tokens) {
-                    tokens.forEach(tk => { 
-                        if(/[0-9]/.test(tk)) out += `<span style="color:#fff; font-weight:bold; font-size:1.1rem;">${tk}</span>`;
-                        else out += `<span style="color:var(--metal-bright); font-size:0.8rem; margin-right:2px;">${tk}</span>`;
-                    });
-                }
-                legTimeEl.innerHTML = out;
-            }
-
-            const meanDegEl = document.getElementById('mean-deg');
-            if(meanDegEl) meanDegEl.innerText = qData.meanArc.toFixed(2) + "°";
-            const trueDegEl = document.getElementById('true-deg');
-            if(trueDegEl) trueDegEl.innerText = qData.trueArc.toFixed(2) + "°";
-            
-            let block = window.getQBlockByTime ? window.getQBlockByTime(t) : null;
-            const wing = document.getElementById('q-coord-wing');
-            if (wing) {
-                if (block && block.type === 'PYLON') {
-                    wing.innerHTML = block.name;
-                } else {
-                    wing.innerHTML = `QC${block ? block.cycle : 0} Q${qData.quad} S${qData.sect} D${qData.day}`;
-                }
-            }
+            document.getElementById('val-mean').innerText = qData.meanArc.toFixed(3) + '°';
+            document.getElementById('val-true').innerText = qData.trueArc.toFixed(3) + '°';
+            document.getElementById('val-legacy').innerText = legacyTimeStr;
+            document.getElementById('val-quad').innerText = qData.quad.toFixed(2);
+            document.getElementById('val-day').innerText = qData.day.toFixed(3);
+            document.getElementById('val-cycle').innerText = qData.cycle || '01';
         });
+
+        initNebula();
+        initStars();
     </script>
 </body>
 </html>

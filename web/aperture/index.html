@@ -138,7 +138,7 @@
             box-sizing: border-box;
         }
 
-        /* Asymmetrical Padding to repel text from the circular cutout */
+        /* Asymmetrical Padding */
         .tl .panel-label { padding-left: 55px; }
         .tr .panel-label { padding-right: 55px; }
         .bl .panel-label { padding-left: 55px; }
@@ -200,14 +200,14 @@
         <div style="display:flex; flex-direction:column; align-items:center; margin-bottom: 20px;">
             <span class="w-head">LEGACY OS</span>
             <div class="w-lbl">DATE</div>
-            <div class="val-lg" id="leg-date" style="color: var(--micColor); text-shadow: 0 0 10px var(--micGlow);">--</div>
+            <div class="val-lg" id="ap-leg-date" style="color: var(--micColor); text-shadow: 0 0 10px var(--micGlow);">--</div>
         </div>
         <div style="display:flex; flex-direction:column; align-items:center; margin-bottom: 20px;">
             <div style="display:flex; align-items:center; justify-content:center; gap: 5px;">
                 <div class="w-lbl" style="margin:0;">TIME</div>
                 <div class="fmt-toggle" onclick="window.toggleTimeFmt('fmt-btn')">UTC</div>
             </div>
-            <div class="val-lg" id="leg-time" style="color: var(--micColor); text-shadow: 0 0 10px var(--micGlow);">--</div>
+            <div class="val-lg" id="ap-leg-time" style="color: var(--micColor); text-shadow: 0 0 10px var(--micGlow);">--</div>
         </div>
         <div style="font-size:0.5rem; color:var(--starlight); margin-top:auto; border-top: 1px dashed var(--micGlow); padding-top: 8px; width: 85%; text-align:center; align-self: center;">STATUS: CONTINUITY ACTIVE</div>
     </div>
@@ -225,23 +225,22 @@
         <div style="display:flex; flex-direction:column; align-items:center; margin-bottom: 20px;">
             <span class="w-head">QUAD OS</span>
             <div class="w-lbl">Q COORDINATE</div>
-            <div class="val-lg" id="q-coord-wing" style="margin-top: 4px; color: var(--micColor); text-shadow: 0 0 10px var(--micGlow);">--</div>
+            <div class="val-lg" id="ap-q-coord" style="margin-top: 4px; color: var(--micColor); text-shadow: 0 0 10px var(--micGlow);">--</div>
         </div>
         <div style="display:flex; width: 100%; justify-content: space-around; margin-bottom: 20px;">
             <div style="display:flex; flex-direction:column; align-items:center;">
                 <div class="w-lbl">MEAN CIRCLE</div>
-                <div class="val-sm" id="mean-deg" style="color:var(--micColor) !important; text-shadow:0 0 10px var(--micGlow); margin-top: 4px;">--</div>
+                <div class="val-sm" id="ap-mean-deg" style="color:var(--micColor) !important; text-shadow:0 0 10px var(--micGlow); margin-top: 4px;">--</div>
             </div>
             <div style="display:flex; flex-direction:column; align-items:center;">
                 <div class="w-lbl">TRUE ELLIPSE</div>
-                <div class="val-sm" id="true-deg" style="color:var(--micColor) !important; text-shadow:0 0 10px var(--micGlow); margin-top: 4px;">--</div>
+                <div class="val-sm" id="ap-true-deg" style="color:var(--micColor) !important; text-shadow:0 0 10px var(--micGlow); margin-top: 4px;">--</div>
             </div>
         </div>
         <div style="font-size:0.5rem; color:var(--starlight); margin-top:auto; border-top: 1px dashed var(--micGlow); padding-top: 8px; width: 85%; text-align:center; align-self: center;">DUAL-STATE ENGINE</div>
     </div>
 
     <script>
-        // --- DEEP SPACE NEBULA GENERATOR ---
         function initNebula() {
             const container = document.getElementById('nebula-canvas');
             const colors = ['rgba(15, 30, 60, 0.3)', 'rgba(5, 15, 30, 0.4)', 'rgba(20, 40, 80, 0.2)'];
@@ -259,7 +258,6 @@
             }
         }
 
-        // --- CORE STAR-FIELD INJECTION ---
         function initStars() {
             const field = document.getElementById('star-field');
             for(let i=0; i<200; i++) {
@@ -279,11 +277,9 @@
             }
         }
 
-        // --- TEMPORAL ENGINE SYNC (CHRONO-FACE FORMATTING LOGIC) ---
         window.addEventListener('q-tick', (e) => {
             const { t, qData, legacyDateStr, legacyTimeStr } = e.detail;
 
-            // Dual Color Formatter for Letters vs Numbers
             function formatDualColor(str) {
                 const letterStyle = "color:var(--starlight); font-family:'Orbitron'; font-size:0.8rem; margin-right:2px;";
                 const numStyle = "color:var(--theme-main); font-size:1.1rem; font-weight:bold;";
@@ -295,22 +291,20 @@
                 return out;
             }
             
-            // Legacy OS Wing Sync
-            const legDateEl = document.getElementById('leg-date');
+            const legDateEl = document.getElementById('ap-leg-date');
             if (legDateEl) legDateEl.innerHTML = `<span style="color:var(--theme-main); font-weight:bold; text-shadow:0 0 10px var(--theme-dim);">${legacyDateStr.toUpperCase()}</span>`;
 
-            const legTimeEl = document.getElementById('leg-time');
+            const legTimeEl = document.getElementById('ap-leg-time');
             if (legTimeEl) legTimeEl.innerHTML = formatDualColor(legacyTimeStr);
             
-            // Quad OS Wing Sync
-            const meanDegEl = document.getElementById('mean-deg');
-            if (meanDegEl) meanDegEl.innerText = qData.meanArc.toFixed(2) + "°";
+            const meanDegEl = document.getElementById('ap-mean-deg');
+            if (meanDegEl) meanDegEl.innerText = qData.meanArc.toFixed(4) + "°";
             
-            const trueDegEl = document.getElementById('true-deg');
-            if (trueDegEl) trueDegEl.innerText = qData.trueArc.toFixed(2) + "°"; 
+            const trueDegEl = document.getElementById('ap-true-deg');
+            if (trueDegEl) trueDegEl.innerText = qData.trueArc.toFixed(4) + "°"; 
 
             let activeBlock = window.getQBlockByTime ? window.getQBlockByTime(t) : null;
-            const qCoordWing = document.getElementById('q-coord-wing');
+            const qCoordWing = document.getElementById('ap-q-coord');
             
             if (qCoordWing) {
                 if (activeBlock && activeBlock.type === 'PYLON') {
@@ -324,7 +318,6 @@
             }
         });
 
-        // External Format Toggle Hook
         window.toggleTimeFmt = function(btnId) {
             let fmt = localStorage.getItem('Q_TIME_FMT') || 'UTC_24';
             const cycle = { 'UTC_24': 'LOCAL_24', 'LOCAL_24': 'UTC_12', 'UTC_12': 'LOCAL_12', 'LOCAL_12': 'UTC_24' };

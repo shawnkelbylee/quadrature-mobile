@@ -6,6 +6,12 @@
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
     <title>THE QUADRATURE // APERTURE GATEWAY</title>
     
+    <script>
+        // GATEWAY DIRECT OVERRIDE: Neutralize all initialization overlays injected by global scripts
+        sessionStorage.setItem('Q_BOOT_COMPLETE', 'true');
+        document.write('<style>#boot-overlay, .q-boot-overlay, #q-initialization-screen { display: none !important; opacity: 0 !important; pointer-events: none !important; }</style>');
+    </script>
+
     <script src="../q-ui-global.js?v=17.3.1"></script>
     <script src="../q-core.js?v=17.3.1"></script>
     <script src="../q-hub.js?v=17.3.1"></script>
@@ -16,8 +22,6 @@
         :root {
             --q-blue-glow: rgba(0, 163, 255, 0.3);
             --q-metal: #e2e8f0;
-            --nebula-deep: #02050a;
-            --nebula-core: #081220;
             --center-gap-x: 31vh;
             --corner-gap-y: 24vh;
             --corner-gap-x: 23vh;
@@ -32,7 +36,7 @@
 
         body, html {
             margin: 0; padding: 0; width: 100vw; height: 100dvh;
-            background-color: var(--nebula-deep);
+            background-color: #010308;
             overflow: hidden;
             font-family: 'Orbitron', sans-serif;
             color: var(--q-metal);
@@ -46,22 +50,51 @@
             pointer-events: none !important;
         }
 
-        /* --- DEEP NEBULA ENGINE --- */
-        #nebula-canvas {
+        /* --- GLOBAL TYPOGRAPHY --- */
+        .global-header {
+            position: absolute; top: 4vh; width: 100%; text-align: center;
+            font-family: 'Orbitron'; font-weight: 900; font-size: 2.8rem; letter-spacing: 16px;
+            color: #fff; z-index: 50;
+            text-shadow: 0 0 25px rgba(0, 163, 255, 0.6), 0 0 10px rgba(255, 255, 255, 0.3);
+            pointer-events: none;
+        }
+
+        .global-footer {
+            position: absolute; bottom: 4vh; width: 100%; text-align: center;
+            font-family: 'JetBrains Mono'; font-weight: 400; font-size: 1.4rem; letter-spacing: 4px;
+            color: var(--starlight); z-index: 50; opacity: 0.8;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.9);
+            pointer-events: none;
+        }
+
+        /* --- IMMERSIVE COSMIC DUST ENGINE --- */
+        /* Layer 1: The Deep Space Gradients (Pure Blues/Whites) */
+        .space-bg {
             position: fixed; inset: 0; z-index: 0;
-            background: radial-gradient(circle at 50% 50%, var(--nebula-core) 0%, var(--nebula-deep) 100%);
+            background-image: 
+                radial-gradient(ellipse at 15% 25%, rgba(10, 80, 180, 0.15) 0%, transparent 45%),
+                radial-gradient(ellipse at 85% 75%, rgba(20, 60, 150, 0.18) 0%, transparent 50%),
+                radial-gradient(circle at 50% 50%, rgba(30, 100, 200, 0.08) 0%, transparent 65%),
+                radial-gradient(ellipse at 75% 20%, rgba(255, 255, 255, 0.06) 0%, transparent 30%),
+                radial-gradient(ellipse at 25% 80%, rgba(50, 120, 220, 0.05) 0%, transparent 35%);
         }
 
-        .nebula-cloud {
-            position: absolute; border-radius: 50%;
-            filter: blur(90px); opacity: 0.3;
-            mix-blend-mode: screen;
-            animation: drift linear infinite alternate;
+        /* Layer 2: Base Dust Texture (Large Clouds - Desaturated) */
+        .dust-layer-1 {
+            position: fixed; inset: 0; z-index: 1;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise1'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.004' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise1)'/%3E%3C/svg%3E");
+            opacity: 0.18;
+            mix-blend-mode: color-dodge;
+            pointer-events: none;
         }
 
-        @keyframes drift {
-            0% { transform: translate(0, 0) scale(1); }
-            100% { transform: translate(80px, 40px) scale(1.2); }
+        /* Layer 3: Fine Dust Texture (Dense Gas - Desaturated) */
+        .dust-layer-2 {
+            position: fixed; inset: 0; z-index: 2;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise2'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.009' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise2)'/%3E%3C/svg%3E");
+            opacity: 0.15;
+            mix-blend-mode: overlay;
+            pointer-events: none;
         }
 
         /* --- THE APERTURE CORE --- */
@@ -85,7 +118,7 @@
             box-shadow: inset 0 0 50px rgba(0,0,0,1);
         }
 
-        .star-field { position: absolute; inset: 0; }
+        .star-field { position: absolute; inset: 0; z-index: 3; pointer-events: none;}
         .star {
             position: absolute; background: #fff; border-radius: 50%;
             animation: hyper-jump linear infinite;
@@ -96,7 +129,6 @@
             to { transform: translate(var(--tx), var(--ty)) scale(1); opacity: 1; }
         }
 
-        /* OFFSET Q ASSET TO COMPENSATE FOR TAIL BOUNDING BOX */
         .q-core-asset {
             position: absolute; width: 45%; height: 45%;
             left: 53%; top: 52%; 
@@ -118,43 +150,73 @@
             z-index: 20; cursor: pointer;
             transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
+        
+        .corner-panel:hover {
+            transform: translate(var(--tx-hover), var(--ty-hover)) scale(1.03);
+        }
 
+        /* Z-INDEX -2: INNER WINDOW FROST LAYER (Locked Behind Metal Frame) */
+        .frost-zone {
+            position: absolute; inset: 6px 12px; 
+            background: rgba(15, 20, 35, 0.5);
+            backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+            border-radius: 6px; z-index: -2;
+            box-shadow: inset 0 0 20px rgba(0, 163, 255, 0.15);
+            transition: 0.3s ease;
+        }
+
+        .corner-panel:hover .frost-zone {
+            background: rgba(20, 25, 45, 0.65);
+            box-shadow: 0 0 20px rgba(0, 240, 255, 0.4), inset 0 0 25px rgba(255, 255, 255, 0.1);
+        }
+
+        /* Z-INDEX -1: THE METAL FRAME */
         .panel-bg {
             position: absolute; inset: 0;
             background: url('../assets/panel-frame.png') center/100% 100% no-repeat;
-            z-index: -1;
+            z-index: -1; filter: drop-shadow(0 5px 10px rgba(0,0,0,0.6));
         }
 
-        .tl { bottom: calc(50% + var(--corner-gap-y)); right: calc(50% + var(--corner-gap-x)); }
-        .tr { bottom: calc(50% + var(--corner-gap-y)); left: calc(50% + var(--corner-gap-x)); }
+        .tl { bottom: calc(50% + var(--corner-gap-y)); right: calc(50% + var(--corner-gap-x)); --tx-hover: -2px; --ty-hover: -2px;}
+        .tr { bottom: calc(50% + var(--corner-gap-y)); left: calc(50% + var(--corner-gap-x)); --tx-hover: 2px; --ty-hover: -2px;}
         .tr .panel-bg { transform: scaleX(-1); }
-        .bl { top: calc(50% + var(--corner-gap-y)); right: calc(50% + var(--corner-gap-x)); }
+        .bl { top: calc(50% + var(--corner-gap-y)); right: calc(50% + var(--corner-gap-x)); --tx-hover: -2px; --ty-hover: 2px;}
         .bl .panel-bg { transform: scaleY(-1); }
-        .br { top: calc(50% + var(--corner-gap-y)); left: calc(50% + var(--corner-gap-x)); }
+        .br { top: calc(50% + var(--corner-gap-y)); left: calc(50% + var(--corner-gap-x)); --tx-hover: 2px; --ty-hover: 2px;}
         .br .panel-bg { transform: scale(-1, -1); }
 
+        /* Z-INDEX 2: THE FOREGROUND DATA */
         .panel-label {
             height: 100%; display: flex; align-items: center; justify-content: center;
             font-size: 0.9rem; letter-spacing: 4px; font-weight: 700;
-            text-shadow: 0 2px 5px rgba(0,0,0,0.8);
+            text-shadow: 0 2px 5px rgba(0,0,0,0.8), 0 0 5px rgba(255,255,255,0.4);
             position: relative; z-index: 2;
             box-sizing: border-box;
         }
 
-        /* Asymmetrical Padding */
         .tl .panel-label { padding-left: 55px; }
         .tr .panel-label { padding-right: 55px; }
         .bl .panel-label { padding-left: 55px; }
         .br .panel-label { padding-right: 55px; }
 
-        /* --- REDUCED LATERAL WINGS --- */
+
+        /* --- OS WING PANELS --- */
         .wing-panel {
             position: absolute; width: 240px; height: 250px; 
-            z-index: 15; display: flex; flex-direction: column; justify-content: center;
-            padding: 20px; box-sizing: border-box; top: 50%;
+            z-index: 15; box-sizing: border-box; top: 50%;
             transform: translateY(-50%); text-align: center;
         }
 
+        /* Z-INDEX -2: INNER WING FROST LAYER (Locked Behind Frame) */
+        .wing-frost {
+            position: absolute; inset: 12px;
+            background: rgba(10, 15, 25, 0.55);
+            backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
+            border-radius: 8px; z-index: -2;
+            box-shadow: inset 0 0 30px rgba(0, 163, 255, 0.2);
+        }
+
+        /* Z-INDEX -1: THE METAL WING FRAME */
         .wing-bg {
             position: absolute; inset: 0;
             background: url('../assets/wing-panel.png') center/100% 100% no-repeat;
@@ -165,8 +227,22 @@
         .wing-r { left: calc(50% + var(--center-gap-x)); }
         .wing-r .wing-bg { transform: scaleX(-1); }
 
+        /* Z-INDEX 10: FOREGROUND DATA LAYOUT */
+        .wing-header {
+            position: absolute; top: 25px; left: 0; width: 100%; z-index: 10;
+        }
+        
+        .wing-data-center {
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
+            height: 100%; width: 100%; padding: 40px 0; box-sizing: border-box; position: relative; z-index: 10;
+        }
+
+        .wing-footer {
+            position: absolute; bottom: 20px; left: 0; width: 100%; z-index: 10;
+        }
+
         /* --- CHRONO-FACE SYNC CLASSES --- */
-        .w-head { font-family: 'Orbitron'; font-weight: 600; font-size: 0.75rem; letter-spacing: 3px; color: rgba(255,255,255,0.6); border-bottom: 1px solid var(--theme-dim); padding-bottom: 4px; margin-bottom: 8px; display: inline-block; z-index: 20;}
+        .w-head { font-family: 'Orbitron'; font-weight: 600; font-size: 0.75rem; letter-spacing: 3px; color: rgba(255,255,255,0.6); border-bottom: 1px solid var(--theme-dim); padding-bottom: 4px; display: inline-block; z-index: 20;}
         .w-lbl { font-family: 'JetBrains Mono'; font-size: 0.55rem; color: var(--starlight); letter-spacing: 1px; text-transform: uppercase; margin-bottom: 2px; z-index: 20;}
         .val-lg { font-family: 'Orbitron'; font-size: 1.2rem; font-weight: 700; letter-spacing: 1px; white-space: nowrap; color: #fff; text-shadow: 0 4px 10px rgba(0,0,0,0.5); z-index: 20;}
         .val-sm { font-family: 'Orbitron'; font-size: 0.85rem; font-weight: 700; z-index: 20;}
@@ -176,94 +252,108 @@
 </head>
 <body>
 
-    <div id="nebula-canvas"></div>
+    <div class="space-bg"></div>
+    <div class="dust-layer-1"></div>
+    <div class="dust-layer-2"></div>
+
+    <div class="global-header">THE QUADRATURE</div>
+    <div class="global-footer">BASED IN SCIENCE BATHED IN CULTURE AND BUILT FOR THE DIGITAL AGE</div>
 
     <div class="corner-panel tl" onclick="location.href='../personal/'">
+        <div class="frost-zone"></div>
         <div class="panel-bg"></div>
         <div class="panel-label">PERSONAL QUAD</div>
     </div>
     
     <div class="corner-panel tr" onclick="location.href='../commercial/'">
+        <div class="frost-zone"></div>
         <div class="panel-bg"></div>
         <div class="panel-label">COMMERCIAL QUAD</div>
     </div>
 
     <div class="corner-panel bl" onclick="location.href='../physical/'">
+        <div class="frost-zone"></div>
         <div class="panel-bg"></div>
         <div class="panel-label">PHYSICAL ASSETS</div>
     </div>
 
     <div class="corner-panel br" onclick="if(window.Q_IntegrationHub) window.Q_IntegrationHub.openHub()">
+        <div class="frost-zone"></div>
         <div class="panel-bg"></div>
         <div class="panel-label">DASHBOARD</div>
     </div>
 
     <div class="wing-panel wing-l">
+        <div class="wing-frost"></div>
         <div class="wing-bg"></div>
-        <div style="display:flex; flex-direction:column; align-items:center; margin-bottom: 12px;">
+        
+        <div class="wing-header">
             <span class="w-head">LEGACY OS</span>
-            <div class="w-lbl">DATE</div>
-            <div class="val-lg" id="ap-leg-date" style="color: var(--micColor); text-shadow: 0 0 10px var(--micGlow);">--</div>
         </div>
-        <div style="display:flex; flex-direction:column; align-items:center; margin-bottom: 12px;">
-            <div style="display:flex; align-items:center; justify-content:center; gap: 5px;">
-                <div class="w-lbl" style="margin:0;">TIME</div>
-                <div class="fmt-toggle" onclick="window.toggleTimeFmt('fmt-btn')">UTC</div>
+        
+        <div class="wing-data-center">
+            <div style="margin-bottom: 15px;">
+                <div class="w-lbl">DATE</div>
+                <div class="val-lg" id="ap-leg-date" style="color: var(--micColor); text-shadow: 0 0 10px var(--micGlow);">--</div>
             </div>
-            <div class="val-lg" id="ap-leg-time" style="color: var(--micColor); text-shadow: 0 0 10px var(--micGlow);">--</div>
+            <div>
+                <div style="display:flex; align-items:center; justify-content:center; gap: 5px;">
+                    <div class="w-lbl" style="margin:0;">TIME</div>
+                    <div class="fmt-toggle" onclick="window.toggleTimeFmt('fmt-btn')">UTC</div>
+                </div>
+                <div class="val-lg" id="ap-leg-time" style="color: var(--micColor); text-shadow: 0 0 10px var(--micGlow);">--</div>
+            </div>
         </div>
-        <div style="font-size:0.5rem; color:var(--starlight); margin-top:auto; border-top: 1px dashed var(--micGlow); padding-top: 8px; width: 85%; text-align:center; align-self: center;">STATUS: CONTINUITY ACTIVE</div>
+
+        <div class="wing-footer">
+            <div style="font-size:0.5rem; color:var(--starlight); border-top: 1px dashed var(--micGlow); padding-top: 8px; width: 85%; margin: 0 auto;">STATUS: CONTINUITY ACTIVE</div>
+        </div>
     </div>
 
     <div class="aperture-container">
         <div class="core-void">
-            <div class="star-field" id="star-field"></div>
+            <div class="star-field" id="core-star-field"></div>
         </div>
         <div class="iris-ring"></div>
         <div class="q-core-asset"></div>
     </div>
 
     <div class="wing-panel wing-r">
+        <div class="wing-frost"></div>
         <div class="wing-bg"></div>
-        <div style="display:flex; flex-direction:column; align-items:center; margin-bottom: 12px;">
+        
+        <div class="wing-header">
             <span class="w-head">QUAD OS</span>
-            <div class="w-lbl">Q COORDINATE</div>
-            <div class="val-lg" id="ap-q-coord" style="margin-top: 4px; color: var(--micColor); text-shadow: 0 0 10px var(--micGlow);">--</div>
         </div>
-        <div style="display:flex; width: 100%; justify-content: space-around; margin-bottom: 12px;">
-            <div style="display:flex; flex-direction:column; align-items:center;">
-                <div class="w-lbl">MEAN CIRCLE</div>
-                <div class="val-sm" id="ap-mean-deg" style="color:var(--micColor) !important; text-shadow:0 0 10px var(--micGlow); margin-top: 4px;">--</div>
+
+        <div class="wing-data-center">
+            <div style="margin-bottom: 15px;">
+                <div class="w-lbl">Q COORDINATE</div>
+                <div class="val-lg" id="ap-q-coord" style="margin-top: 4px; color: var(--micColor); text-shadow: 0 0 10px var(--micGlow);">--</div>
             </div>
-            <div style="display:flex; flex-direction:column; align-items:center;">
-                <div class="w-lbl">TRUE ELLIPSE</div>
-                <div class="val-sm" id="ap-true-deg" style="color:var(--micColor) !important; text-shadow:0 0 10px var(--micGlow); margin-top: 4px;">--</div>
+            <div style="display:flex; width: 100%; justify-content: space-around;">
+                <div style="display:flex; flex-direction:column; align-items:center;">
+                    <div class="w-lbl">MEAN CIRCLE</div>
+                    <div class="val-sm" id="ap-mean-deg" style="color:var(--micColor) !important; text-shadow:0 0 10px var(--micGlow); margin-top: 4px;">--</div>
+                </div>
+                <div style="display:flex; flex-direction:column; align-items:center;">
+                    <div class="w-lbl">TRUE ELLIPSE</div>
+                    <div class="val-sm" id="ap-true-deg" style="color:var(--micColor) !important; text-shadow:0 0 10px var(--micGlow); margin-top: 4px;">--</div>
+                </div>
             </div>
         </div>
-        <div style="font-size:0.5rem; color:var(--starlight); margin-top:auto; border-top: 1px dashed var(--micGlow); padding-top: 8px; width: 85%; text-align:center; align-self: center;">DUAL-STATE ENGINE</div>
+
+        <div class="wing-footer">
+            <div style="font-size:0.5rem; color:var(--starlight); border-top: 1px dashed var(--micGlow); padding-top: 8px; width: 85%; margin: 0 auto;">DUAL-STATE ENGINE</div>
+        </div>
     </div>
 
     <script>
-        function initNebula() {
-            const container = document.getElementById('nebula-canvas');
-            const colors = ['rgba(15, 30, 60, 0.3)', 'rgba(5, 15, 30, 0.4)', 'rgba(20, 40, 80, 0.2)'];
-            for(let i=0; i<10; i++) {
-                const cloud = document.createElement('div');
-                cloud.className = 'nebula-cloud';
-                cloud.style.width = Math.random() * 80 + 40 + 'vw';
-                cloud.style.height = cloud.style.width;
-                cloud.style.background = colors[Math.floor(Math.random() * colors.length)];
-                cloud.style.left = Math.random() * 100 - 20 + 'vw';
-                cloud.style.top = Math.random() * 100 - 20 + 'vh';
-                cloud.style.animationDuration = Math.random() * 50 + 40 + 's';
-                cloud.style.animationDelay = -Math.random() * 50 + 's';
-                container.appendChild(cloud);
-            }
-        }
-
         function initStars() {
-            const field = document.getElementById('star-field');
-            for(let i=0; i<200; i++) {
+            const coreField = document.getElementById('core-star-field');
+            
+            // Core Stars (Strictly inside Aperture Void)
+            for(let i=0; i<100; i++) {
                 const star = document.createElement('div');
                 star.className = 'star';
                 const angle = Math.random() * Math.PI * 2;
@@ -276,7 +366,7 @@
                 star.style.top = '50%';
                 star.style.animationDuration = Math.random() * 4 + 1.5 + 's';
                 star.style.animationDelay = -Math.random() * 5 + 's';
-                field.appendChild(star);
+                coreField.appendChild(star);
             }
         }
 
@@ -335,7 +425,6 @@
             if (window.Q_MobileBridge) window.Q_MobileBridge.pulse('LIGHT');
         };
 
-        initNebula();
         initStars();
     </script>
 </body>

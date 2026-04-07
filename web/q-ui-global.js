@@ -305,23 +305,23 @@ window.injectUniversalUI = function() {
                 display: flex !important; 
                 align-items: center !important; 
                 justify-content: space-between !important;
-                width: 92vw !important; 
+                width: 95vw !important; 
                 min-width: unset !important; 
                 box-sizing: border-box !important; 
                 padding: 6px 8px !important; 
-                gap: 8px !important;
+                gap: 4px !important;
                 ${isAperture ? 'display: none !important;' : 'bottom: calc(2.5vh + 65px) !important;'}
             } 
             
             #q-mic-fab { 
-                position: static !important; /* Release from floating */
+                position: static !important; 
                 transform: none !important;
-                width: 38px !important; 
-                height: 38px !important; 
-                border-radius: 6px !important; /* Match the LIVE button aesthetics */
-                font-size: 1.1rem !important; 
+                width: 32px !important; 
+                height: 32px !important; 
+                border-radius: 6px !important; 
+                font-size: 1rem !important; 
                 box-shadow: none !important;
-                order: 1 !important; /* Force to Far Left */
+                order: 1 !important; 
                 flex-shrink: 0 !important;
                 background: rgba(5, 8, 15, 0.9);
                 border: 1px solid ${micColor};
@@ -331,25 +331,30 @@ window.injectUniversalUI = function() {
             }
             #q-mic-fab.listening { animation: pulse-mic 1.5s infinite; background: ${micColor}; color: #000; box-shadow: 0 0 25px ${micColor} !important; }
             
+            /* The < button */
+            .q-global-controls > .q-ctrl-btn:nth-child(1) { order: 2 !important; padding: 0 8px !important; height: 32px !important; min-width: 24px !important; flex-shrink: 0; }
+            
             .q-scrubber { 
-                order: 2 !important; /* Force to Middle */
+                order: 3 !important; 
                 min-width: 0 !important; 
                 width: 100% !important; 
                 margin: 0 !important; 
                 flex-grow: 1 !important;
             }
             
+            /* The > button */
+            .q-global-controls > .q-ctrl-btn:nth-child(3) { order: 4 !important; padding: 0 8px !important; height: 32px !important; min-width: 24px !important; flex-shrink: 0; }
+
             #q-live-toggle {
-                order: 3 !important; /* Force to Far Right */
+                order: 5 !important; 
                 width: auto !important;
-                min-width: 38px !important;
-                height: 38px !important;
-                padding: 0 8px !important;
-                font-size: 0.65rem !important; /* Shrink text to fit */
+                min-width: 32px !important;
+                height: 32px !important;
+                padding: 0 6px !important;
+                font-size: 0.55rem !important; 
                 flex-shrink: 0 !important;
                 margin: 0 !important;
             }
-            .q-ctrl-btn { order: 4 !important; display: none !important; } /* hide step buttons to save space */
         }
     `;
     document.head.appendChild(style);

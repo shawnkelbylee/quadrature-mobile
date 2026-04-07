@@ -303,10 +303,14 @@ window.injectUniversalUI = function() {
             
             body.telemetry-open .q-center-dial { display: none !important; }
             
-            /* --- SCRUBBER OVERRIDES --- */
+           /* --- SCRUBBER OVERRIDES --- */
             .q-global-controls { width: 92vw !important; min-width: unset !important; box-sizing: border-box !important; padding: 8px 15px !important; gap: 5px; ${isAperture ? 'display: none !important;' : 'bottom: calc(2.5vh + 60px);'} } 
             .q-scrubber { min-width: 0 !important; width: 100% !important; margin: 0 8px !important; }
         }
+    `; /* 
+    
+    document.head.appendChild(style);
+} /* Ensure the injectCSS function is closed properly if it wasn't already */
     document.head.appendChild(style);
 
     const uiContainer = document.createElement('div');

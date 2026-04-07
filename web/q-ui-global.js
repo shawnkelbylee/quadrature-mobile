@@ -25,7 +25,10 @@ window.injectUniversalUI = function() {
     const eActive = path.includes("ENV");
     const mActive = path.includes("MEC");
     const cActive = path.includes("COM");
-    const faceActive = path.includes("PERSONAL") || (!isAperture && !bActive && !eActive && !mActive && !cActive);
+    
+    // Fix: Chrono-Face should only be active if NO other specific vector is active. 
+    // Removed the "PERSONAL" folder check to prevent persistent highlighting across HUDs.
+    const faceActive = (!isAperture && !bActive && !eActive && !mActive && !cActive);
     
     if (faceActive) document.body.classList.add('q-chrono-face');
     else document.body.classList.add('q-vector-hud');
@@ -428,10 +431,13 @@ window.injectUniversalUI = function() {
         <div class="q-nav-bar">
             <div style="display:flex; width: 100%; justify-content: center; align-items: center;">
                 <div class="q-nav-menu" id="q-nav-menu">
-                    <button id="q-global-sim-badge" class="q-nav-btn sim-badge" style="display: none;" onclick="if(window.Q_Auth) window.Q_Auth.triggerOAuth();" ontouchstart="if(window.Q_Auth) window.Q_Auth.triggerOAuth(); event.preventDefault();">[ IN THE QUAD ]</button>
-                    <a href="${navPrefix}index.html?v=20.0" class="q-nav-btn face-btn vector-link ${faceActive && !isAperture ? 'active' : ''}" ontouchstart="window.location.href=this.href; event.preventDefault();">CHRONO-FACE</a>
+                    <a href="${isAperture ? '#' : '../index.html'}" class="q-nav-btn desktop-only" style="border-color: rgba(255,255,255,0.3); color: #fff;" ontouchstart="window.location.href=this.href; event.preventDefault();">[ RETURN TO APERTURE ]</a>
+                    <button id="q-global-sim-badge" class="q-nav-btn sim-badge" style="display: inline-block;" onclick="if(window.Q_Auth) window.Q_Auth.triggerOAuth();" ontouchstart="if(window.Q_Auth) window.Q_Auth.triggerOAuth(); event.preventDefault();">[ IN THE QUAD ]</button>
+                    <a href="${navPrefix}index.html?v=20.0" class="q-nav-btn face-btn vector-link ${faceActive ? 'active' : ''}" ontouchstart="window.location.href=this.href; event.preventDefault();">CHRONO-FACE</a>
                     <a href="${navPrefix}BIOVECHUD.html?v=20.0" class="q-nav-btn bio-btn vector-link ${bActive ? 'active' : ''}" ontouchstart="window.location.href=this.href; event.preventDefault();">BIOLOGICAL</a>
+                    
                     <a href="${navPrefix}COMVECHUD.html?v=20.0" class="q-nav-btn com-btn vector-link ${cActive ? 'active' : ''}" ontouchstart="window.location.href=this.href; event.preventDefault();">COMMUNAL</a>
+                    
                     <a href="${navPrefix}ENVVECHUD.html?v=20.0" class="q-nav-btn env-btn vector-link ${eActive ? 'active' : ''}" ontouchstart="window.location.href=this.href; event.preventDefault();">ENVIRONMENTAL</a>
                     <a href="${navPrefix}MECVECHUD.html?v=20.0" class="q-nav-btn mec-btn vector-link ${mActive ? 'active' : ''}" ontouchstart="window.location.href=this.href; event.preventDefault();">MECHANICAL</a>
                     <button class="q-nav-btn omni desktop-only" style="border-color: var(--chrono-amber); color: var(--chrono-amber); display: inline-block;" onclick="if(typeof window.Q_OmniPlanner !== 'undefined') window.Q_OmniPlanner.openPlanner()" ontouchstart="if(typeof window.Q_OmniPlanner !== 'undefined') window.Q_OmniPlanner.openPlanner(); event.preventDefault();">[ OMNI-PLANNER ]</button>
@@ -462,7 +468,7 @@ window.injectUniversalUI = function() {
                 <svg viewBox="0 0 24 24" width="22" height="22" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"><circle cx="12" cy="5" r="3"/><line x1="12" y1="8" x2="12" y2="16"/><circle cx="6" cy="20" r="3"/><circle cx="18" cy="20" r="3"/><line x1="12" y1="16" x2="6" y2="17"/><line x1="12" y1="16" x2="18" y2="17"/></svg>
                 <span class="strip-lbl">COM</span>
             </a>
-            <a href="${navPrefix}index.html?v=20.0" class="strip-btn face-strip ${faceActive && !isAperture ? 'active' : ''}" ontouchstart="window.location.href=this.href; event.preventDefault();">
+            <a href="${navPrefix}index.html?v=20.0" class="strip-btn face-strip ${faceActive ? 'active' : ''}" ontouchstart="window.location.href=this.href; event.preventDefault();">
                 <svg viewBox="0 0 24 24" width="22" height="22" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>
                 <span class="strip-lbl">CHRONO</span>
             </a>
@@ -576,7 +582,8 @@ window.injectUniversalUI = function() {
     window.addEventListener('q-tick', (e) => {
         const badge = document.getElementById('q-global-sim-badge');
         if (badge) {
-            badge.style.display = e.detail.isLive ? 'inline-block' : 'none';
+            // Keep the sim badge display block constant to prevent the navbar from becoming unbalanced during Time Scrubbing
+            badge.style.display = 'inline-block';
             badge.innerText = e.detail.isLive ? "[ IN THE QUAD ]" : "[ TEMPORAL PROJECTION ]";
             if (!e.detail.isLive) {
                 badge.style.background = "#ff003c";

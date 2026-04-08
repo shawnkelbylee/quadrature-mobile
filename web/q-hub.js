@@ -1,10 +1,10 @@
 // THE QUADRATURE: GLOBAL DASHBOARD & SOVEREIGN MATRIX
 // Architect: Kelby | Engineer: Kairos
-// PROTOCOL: Account Settings, Calibration Module, & Tiered Access Gate
+// PROTOCOL: Account Settings, Calibration Module, Tiered Access Gate & Consumer Guide
 
 window.Q_IntegrationHub = {
     viewState: 'closed',
-    activeTab: 'identity',
+    activeTab: 'guide', // Defaulted to guide for first-time B2C onboarding
 
     init: function() { 
         if(window.self !== window.top) return;
@@ -28,8 +28,8 @@ window.Q_IntegrationHub = {
 
             .hub-header { font-family:'Orbitron'; text-align:center; padding-bottom:15px; font-size: 1.1rem; color: var(--theme-main, #ff003c); font-weight: 900; letter-spacing: 2px; text-shadow: 0 0 10px rgba(255,0,60,0.2); border-bottom: 1px dashed rgba(255,255,255,0.2); }
             
-            .hub-tabs { display: flex; border-bottom: 1px solid rgba(255,255,255,0.1); margin-bottom: 15px; gap: 5px; }
-            .hub-tab-btn { flex: 1; background: transparent; border: none; color: rgba(255,255,255,0.6); font-family: 'Orbitron'; font-size: 0.65rem; font-weight: 700; padding: 10px 5px; cursor: pointer; transition: 0.3s; letter-spacing: 1px; border-bottom: 2px solid transparent; }
+            .hub-tabs { display: flex; border-bottom: 1px solid rgba(255,255,255,0.1); margin-bottom: 15px; gap: 5px; flex-wrap: wrap; }
+            .hub-tab-btn { flex: 1; background: transparent; border: none; color: rgba(255,255,255,0.6); font-family: 'Orbitron'; font-size: 0.65rem; font-weight: 700; padding: 10px 5px; cursor: pointer; transition: 0.3s; letter-spacing: 1px; border-bottom: 2px solid transparent; min-width: 80px; }
             .hub-tab-btn:hover { color: #fff; background: rgba(255,255,255,0.05); }
             .hub-tab-btn.active { color: var(--theme-main, #ff003c); border-bottom-color: var(--theme-main, #ff003c); background: rgba(255,0,60,0.05); }
 
@@ -179,9 +179,41 @@ window.Q_IntegrationHub = {
                 <div class="hub-header">SOVEREIGN MATRIX // ACCOUNT</div>
                 
                 <div class="hub-tabs">
+                    <button class="hub-tab-btn ${this.activeTab === 'guide' ? 'active' : ''}" id="tab-btn-guide" onclick="window.Q_IntegrationHub.switchTab('guide')">GUIDE</button>
                     <button class="hub-tab-btn ${this.activeTab === 'identity' ? 'active' : ''}" id="tab-btn-identity" onclick="window.Q_IntegrationHub.switchTab('identity')">IDENTITY</button>
-                    <button class="hub-tab-btn ${this.activeTab === 'tiers' ? 'active' : ''}" id="tab-btn-tiers" onclick="window.Q_IntegrationHub.switchTab('tiers')">TIER STATUS</button>
-                    <button class="hub-tab-btn ${this.activeTab === 'prefs' ? 'active' : ''}" id="tab-btn-prefs" onclick="window.Q_IntegrationHub.switchTab('prefs')">PREFERENCES</button>
+                    <button class="hub-tab-btn ${this.activeTab === 'tiers' ? 'active' : ''}" id="tab-btn-tiers" onclick="window.Q_IntegrationHub.switchTab('tiers')">TIERS</button>
+                    <button class="hub-tab-btn ${this.activeTab === 'prefs' ? 'active' : ''}" id="tab-btn-prefs" onclick="window.Q_IntegrationHub.switchTab('prefs')">PREFS</button>
+                </div>
+
+                <div class="hub-tab-content ${this.activeTab === 'guide' ? 'active' : ''}" id="tab-content-guide">
+                    <div style="font-family:'Orbitron'; font-size:0.85rem; color:var(--theme-main, #ff003c); font-weight:bold; letter-spacing:1px; margin-bottom:5px; text-shadow:0 0 8px rgba(255,0,60,0.3); text-align:center;">WELCOME TO THE QUADRATURE</div>
+                    <div style="font-size:0.65rem; color:#aaa; line-height: 1.5; margin-bottom: 15px;">
+                        For your entire life, your schedule has been dictated by a rigid calendar and a ticking clock. But your body isn't a machine—it's a living system. When you force your natural energy into an artificial 9-to-5 grid, the result is chronic exhaustion and burnout. We call this <span style="color:var(--theme-main, #ff003c); font-weight:bold;">Schedule Friction</span>.
+                        <br><br>
+                        The Quadrature is the cure. Instead of fighting the clock, we use real-time planetary tracking to sync your daily tasks with your body's natural peaks and valleys. You are no longer managing time; you are optimizing your energy.
+                    </div>
+
+                    <div style="font-family:'Orbitron'; font-size:0.75rem; color:#fff; font-weight:bold; margin-bottom:8px; border-bottom:1px dashed rgba(255,255,255,0.2); padding-bottom:4px;">YOUR 4 SYSTEM DASHBOARDS</div>
+                    <div style="font-size:0.6rem; color:#aaa; line-height: 1.5; margin-bottom: 15px; display:flex; flex-direction:column; gap:8px;">
+                        <div><span style="color:#b829ff; font-weight:bold; font-family:'Orbitron';">BIOLOGICAL:</span> Tracks your rest and focus. We monitor your heart rate variability (HRV) and sleep to tell you exactly when you are primed for deep work and when you need to recover.</div>
+                        <div><span style="color:#a7ff83; font-weight:bold; font-family:'Orbitron';">ENVIRONMENTAL:</span> Replaces standard weather apps. It calculates how temperature, sunlight, and atmospheric pressure physically impact your energy levels today.</div>
+                        <div><span style="color:#F4D068; font-weight:bold; font-family:'Orbitron';">COMMUNAL:</span> The hub for your financial checkpoints, cultural holidays, and optimal collaboration windows.</div>
+                        <div><span style="color:#00f0ff; font-weight:bold; font-family:'Orbitron';">MECHANICAL:</span> The core engine. Shows the exact variance between "clock time" and true "solar time," letting you ride the momentum of the planet.</div>
+                    </div>
+
+                    <div style="font-family:'Orbitron'; font-size:0.75rem; color:#fff; font-weight:bold; margin-bottom:8px; border-bottom:1px dashed rgba(255,255,255,0.2); padding-bottom:4px;">MASTERING THE OMNI-PLANNER</div>
+                    <div style="font-size:0.6rem; color:#aaa; line-height: 1.5; margin-bottom: 15px;">
+                        <span style="color:#fff; font-weight:bold;">Import Your Life:</span> Connect legacy calendars. We treat these standard meetings as "Fixed Constraints".<br><br>
+                        <span style="color:#fff; font-weight:bold;">Tension Scoring:</span> The system analyzes your schedule. If you've crammed too many meetings into a period where your body needs rest, we'll warn you before you burn out.<br><br>
+                        <span style="color:#fff; font-weight:bold;">Color-Coded Energy:</span><br>
+                        <span style="color:#a7ff83;">&#x25A0; Green (Deep Flow):</span> Prime window for high-stakes, focused work.<br>
+                        <span style="color:#00f0ff;">&#x25A0; Blue (Vent/Recovery):</span> Mandatory window to step back, rest, and recharge.
+                    </div>
+
+                    <div style="font-family:'Orbitron'; font-size:0.75rem; color:#fff; font-weight:bold; margin-bottom:8px; border-bottom:1px dashed rgba(255,255,255,0.2); padding-bottom:4px;">ADVANCED: AI DIPLOMATIC NEGOTIATOR</div>
+                    <div style="font-size:0.6rem; color:#aaa; line-height: 1.5; margin-bottom: 10px;">
+                        As you upgrade your system, you unlock your own AI temporal firewall. If a colleague sends a calendar invite that crashes into your biological "Vent/Recovery" window, the Negotiator intercepts it before you even see it, proposing a new time that aligns perfectly with your peak energy.
+                    </div>
                 </div>
 
                 <div class="hub-tab-content ${this.activeTab === 'identity' ? 'active' : ''}" id="tab-content-identity">

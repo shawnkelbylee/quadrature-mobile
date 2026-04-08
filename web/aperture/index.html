@@ -12,10 +12,7 @@
     </script>
 
     <style>
-        /* --- GATEWAY PURGE PROTOCOL --- 
-           Aggressively hide the globally injected nav/scrubber/mic components 
-           specifically for the Aperture Gateway. 
-        */
+        /* --- GATEWAY PURGE PROTOCOL --- */
         .q-nav-bar, 
         .q-control-strip, 
         #mobile-telemetry-ribbon, 
@@ -28,10 +25,7 @@
             visibility: hidden !important;
         }
 
-        /* --- NEBULA EXPANSION OVERRIDE --- 
-           Pulls the background nebulas further inward to bridge the gap
-           between the central Iris and the peripheral OS panels.
-        */
+        /* --- NEBULA EXPANSION OVERRIDE --- */
         .nebula-left {
             width: 65vw !important;
             -webkit-mask-image: radial-gradient(ellipse 100% 100% at 0% 50%, rgba(0,0,0,1) 40%, rgba(0,0,0,0) 100%) !important;
@@ -44,19 +38,39 @@
         }
     </style>
 
-    <script src="../q-ui-global.js?v=17.6.4"></script>
-    <script src="../q-core.js?v=17.6.4"></script>
-    <script src="../q-hub.js?v=17.6.4"></script>
+    <script src="../q-ui-global.js"></script>
+    <script src="../q-core.js"></script>
+    <script src="../q-hub.js"></script>
     
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700;900&family=JetBrains+Mono:wght@400;700&display=swap');
 
         :root {
-            /* Override global UI spacing to prevent panel collisions with the Iris */
             --corner-gap-x: 28vh !important;
             --corner-gap-y: 26vh !important;
             --center-gap-x: 36vh !important;
             --q-blue-glow: rgba(0, 163, 255, 0.5);
+            --white-flash: #ffffff;
+        }
+
+        /* --- PORTAL PRE-LOAD FRAME --- */
+        #portal-frame {
+            position: fixed; inset: 0;
+            width: 100vw; height: 100vh;
+            border: none; z-index: 1;
+            opacity: 0;
+            pointer-events: none;
+        }
+        body.sequencing #portal-frame {
+            opacity: 1;
+            transition: opacity 0.4s ease-in 0.1s;
+        }
+
+        /* --- UNIVERSAL SEQUENCING FADE --- */
+        body.sequencing > *:not(.aperture-container):not(#portal-frame) {
+            opacity: 0 !important;
+            transition: opacity 0.3s ease-out;
+            pointer-events: none;
         }
 
         /* --- THE APERTURE CORE --- */
@@ -67,44 +81,35 @@
             z-index: 10; display: flex; justify-content: center; align-items: center;
         }
 
-        .iris-ring {
+        .iris-ring, .core-void {
             position: absolute; inset: 0;
-            z-index: 10; /* Dropped behind the Q-Core */
-            filter: drop-shadow(0 0 35px rgba(0,0,0,0.95));
             display: flex; justify-content: center; align-items: center;
             pointer-events: none;
         }
+        
+        .iris-ring {
+            z-index: 10;
+            filter: drop-shadow(0 0 35px rgba(0,0,0,0.95));
+            /* Compressed to 1.25s for the Kinematic Hold */
+            transition: transform 1.25s cubic-bezier(0.5, 0, 1, 1);
+        }
 
         .core-void {
-            position: absolute; width: 68%; height: 68%;
+            width: 68%; height: 68%;
             background: #000; border-radius: 50%;
             z-index: 5; overflow: hidden;
             box-shadow: inset 0 0 50px rgba(0,0,0,1);
+            margin: auto;
+            opacity: 1;
+            /* Compressed to 1.25s */
+            transition: transform 1.25s cubic-bezier(0.5, 0, 1, 1), opacity 0.8s ease-in 0.2s;
         }
 
         .star-field { position: absolute; inset: 0; z-index: 3; pointer-events: none;}
-        .star {
-            position: absolute; background: #fff; border-radius: 50%;
-        }
-
-        /* Velocity curve handled by cubic-bezier in JS */
-        @keyframes hyper-jump {
-            0% { transform: translate(-50%, -50%) scale(0.1); opacity: 0; }
-            5% { opacity: var(--max-op, 1); }
-            95% { opacity: var(--max-op, 1); }
-            100% { transform: translate(calc(-50% + var(--tx)), calc(-50% + var(--ty))) scale(1.2); opacity: 0; }
-        }
-
-        /* Decoupled Twinkle Engine */
-        @keyframes twinkle {
-            0% { filter: brightness(1) drop-shadow(0 0 2px rgba(255,255,255,0.8)); }
-            100% { filter: brightness(0.15) drop-shadow(0 0 0px transparent); }
-        }
+        .star { position: absolute; background: #fff; border-radius: 50%; }
 
         .q-core-asset {
-            /* Elevated to z-index: 15 to stand proud in front of the converging Iris blades */
             position: absolute; width: 50%; height: 50%;
-            /* Microscopic offset (51.2%) to counter the asymmetrical weight of the Q's tail */
             left: 51.2%; top: 50%; 
             transform: translate(-50%, -50%);
             background: url('../assets/core-q.png') center/contain no-repeat;
@@ -113,20 +118,46 @@
             animation: subtle-pulse 4s ease-in-out infinite;
         }
 
+        /* --- KINETIC ACTUATION STATES --- */
+        
+        body.sequencing .iris-ring {
+            transform: scale(15) rotate(270deg);
+        }
+
+        /* Fade the void to reveal the preloaded portal frame behind it */
+        body.sequencing .core-void {
+            transform: scale(15);
+            opacity: 0;
+        }
+
+        /* Massive scale to turn the Q's transparent center into a viewing window */
+        /* Compressed to 1.25s */
+        body.sequencing .q-core-asset {
+            animation: q-core-portal 1.25s forwards cubic-bezier(0.7, 0, 1, 1);
+        }
+
+        @keyframes q-core-portal {
+            0% { transform: translate(-50%, -50%) scale(1); filter: brightness(1) drop-shadow(0 0 25px var(--q-blue-glow)); }
+            50% { transform: translate(-50%, -50%) scale(1.5); filter: brightness(3) drop-shadow(0 0 60px var(--white-flash)); }
+            80% { transform: translate(-50%, -50%) scale(10); filter: brightness(5) drop-shadow(0 0 100px var(--white-flash)); }
+            100% { transform: translate(-50%, -50%) scale(80); filter: brightness(8) drop-shadow(0 0 0px var(--white-flash)); }
+        }
+
         @keyframes subtle-pulse {
             0%, 100% { transform: translate(-50%, -50%) scale(1); filter: brightness(1) drop-shadow(0 0 25px var(--q-blue-glow)); }
             50% { transform: translate(-50%, -50%) scale(1.05); filter: brightness(1.2) drop-shadow(0 0 40px var(--q-blue-glow)); }
         }
-        
-        @media (max-width: 950px) {
-            .aperture-container {
-                width: min(48vh, 85vw);
-                height: min(48vh, 85vw);
-            }
+
+        @keyframes hyper-jump {
+            0% { transform: translate(-50%, -50%) scale(0.1); opacity: 0; }
+            5% { opacity: var(--max-op, 1); }
+            100% { transform: translate(calc(-50% + var(--tx)), calc(-50% + var(--ty))) scale(1.2); opacity: 0; }
         }
     </style>
 </head>
-<body>
+<body class="mode-q">
+
+    <iframe id="portal-frame" src="about:blank"></iframe>
 
     <div class="aperture-container q-center-dial">
         <div class="core-void">
@@ -174,27 +205,22 @@
             `;
             svg.appendChild(defs);
             
-            // Base Metallic Casing (Main outer housing)
             let baseRing = document.createElementNS("http://www.w3.org/2000/svg", "circle");
             baseRing.setAttribute("cx", "50"); baseRing.setAttribute("cy", "50"); baseRing.setAttribute("r", "48");
             baseRing.setAttribute("fill", "none"); baseRing.setAttribute("stroke", "url(#metal-grad)"); baseRing.setAttribute("stroke-width", "1.5");
             svg.appendChild(baseRing);
 
-            // Shiny Bevel Casing (Inner depth rim)
             let shinyRim = document.createElementNS("http://www.w3.org/2000/svg", "circle");
             shinyRim.setAttribute("cx", "50"); shinyRim.setAttribute("cy", "50"); shinyRim.setAttribute("r", "47.1");
             shinyRim.setAttribute("fill", "none"); shinyRim.setAttribute("stroke", "url(#shiny-rim-grad)"); shinyRim.setAttribute("stroke-width", "0.5");
             svg.appendChild(shinyRim);
 
-            // Symmetrical Sweeping Iris Blades closing behind the Q-Core
             let cutsGroup = document.createElementNS("http://www.w3.org/2000/svg", "g");
             cutsGroup.setAttribute("id", "iris-blade-group");
             
             for(let i=0; i<8; i++) {
                 let angle = i * 45;
-                
                 let path = document.createElementNS("http://www.w3.org/2000/svg", "path");
-                // Math calibrated to pierce deeply to the center, sealing the void behind the Q
                 path.setAttribute("d", "M 47,2 A 48,48 0 0,1 84,16 L 38,38 L 22,42 Z");
                 path.setAttribute("fill", "url(#blade-grad)");
                 path.setAttribute("stroke", "#0f172a");
@@ -211,10 +237,8 @@
                 highlight.setAttribute("transform", `rotate(${angle} 50 50)`);
                 cutsGroup.appendChild(highlight);
             }
-            
             svg.appendChild(cutsGroup);
 
-            // Glass Lens Bevel (Optical Perimeter) - Solid gradient, thick defined border, layered ON TOP
             let glassBevel = document.createElementNS("http://www.w3.org/2000/svg", "circle");
             glassBevel.setAttribute("cx", "50"); glassBevel.setAttribute("cy", "50"); glassBevel.setAttribute("r", "46");
             glassBevel.setAttribute("fill", "none"); glassBevel.setAttribute("stroke", "url(#glass-bevel)"); glassBevel.setAttribute("stroke-width", "2.5");
@@ -226,37 +250,68 @@
 
         function initStars() {
             const coreField = document.getElementById('core-star-field');
-            
             for(let i=0; i<450; i++) {
                 const star = document.createElement('div');
-                star.className = 'star';
-                const angle = Math.random() * Math.PI * 2;
-                
-                const dist = Math.random() * 4 + 21; 
-                star.style.setProperty('--tx', Math.cos(angle) * dist + 'vh');
-                star.style.setProperty('--ty', Math.sin(angle) * dist + 'vh');
-                
+                star.className = 'star'; const angle = Math.random() * Math.PI * 2; const dist = Math.random() * 4 + 21; 
+                star.style.setProperty('--tx', Math.cos(angle) * dist + 'vh'); star.style.setProperty('--ty', Math.sin(angle) * dist + 'vh');
                 let size = (Math.random() > 0.85) ? (Math.random() * 2.5 + 1.0) : (Math.random() * 1.2 + 0.3);
-                star.style.width = size + 'px';
-                star.style.height = size + 'px';
-                
-                star.style.left = '50%';
-                star.style.top = '50%';
-                
-                let speedBase = (size > 1.5) ? 8 : 12; 
-                let driftDur = Math.random() * 8 + speedBase;
-                let driftDel = -Math.random() * 20;
-                
-                let twinkDur = Math.random() * 1.5 + 0.5;
-                let twinkDel = -Math.random() * 2;
-                
+                star.style.width = size + 'px'; star.style.height = size + 'px'; star.style.left = '50%'; star.style.top = '50%';
+                let driftDur = Math.random() * 8 + (size > 1.5 ? 8 : 12);
                 star.style.setProperty('--max-op', (size > 1.5) ? (Math.random() * 0.3 + 0.7) : (Math.random() * 0.5 + 0.2));
-                
-                star.style.animation = `hyper-jump ${driftDur}s ${driftDel}s cubic-bezier(0.5, 0.0, 1, 1) infinite, twinkle ${twinkDur}s ${twinkDel}s ease-in-out infinite alternate`;
-                
+                star.style.animation = `hyper-jump ${driftDur}s -${Math.random()*20}s cubic-bezier(0.5, 0.0, 1, 1) infinite`;
                 coreField.appendChild(star);
             }
         }
+
+        window.executeApertureSequence = function(targetUrl) {
+            if (document.body.classList.contains('sequencing')) return;
+            
+            // 1. Prime the portal frame immediately with the target vector
+            const portal = document.getElementById('portal-frame');
+            if(portal) portal.src = targetUrl;
+            
+            // 2. Lock the state and trigger CSS transitions
+            document.body.classList.add('sequencing');
+            
+            // 3. KINEMATIC HOLD: Wait for the 1.25s animation to finish, 
+            // hold static for 150ms to clear the main thread, then hard route.
+            setTimeout(() => {
+                window.location.href = targetUrl;
+            }, 1400); 
+        };
+
+        // --- AGGRESSIVE CAPTURE-PHASE INTERCEPTOR ---
+        window.addEventListener('click', (e) => {
+            let el = e.target;
+            let targetUrl = null;
+            let depth = 0;
+
+            while (el && depth < 5 && el !== document.body) {
+                const text = (el.textContent || '').trim().toLowerCase();
+                const onClickStr = (el.getAttribute('onclick') || '').toLowerCase();
+                const hrefStr = (el.getAttribute('href') || '').toLowerCase();
+
+                if (hrefStr.includes('/personal') || onClickStr.includes('personal') || text === 'personal quad') {
+                    targetUrl = '../personal/index.html';
+                } else if (hrefStr.includes('/commercial') || onClickStr.includes('commercial') || text === 'commercial quad') {
+                    targetUrl = '../commercial/index.html';
+                } else if (hrefStr.includes('/physical') || onClickStr.includes('physical') || text === 'physical assets') {
+                    targetUrl = '../physical/index.html';
+                } else if (hrefStr.includes('/dashboard') || onClickStr.includes('dashboard') || text === 'dashboard') {
+                    targetUrl = '../dashboard/index.html';
+                }
+
+                if (targetUrl) break;
+                el = el.parentElement;
+                depth++;
+            }
+
+            if (targetUrl) {
+                e.preventDefault();
+                e.stopPropagation(); 
+                window.executeApertureSequence(targetUrl);
+            }
+        }, true);
 
         document.addEventListener('DOMContentLoaded', () => {
             injectPerfectIris();

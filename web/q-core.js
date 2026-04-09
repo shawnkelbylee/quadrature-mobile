@@ -1,6 +1,6 @@
 // THE QUADRATURE: MASTER CORE LOGIC (ZERO-REDUNDANCY ENGINE)
 // Architect: Kelby | Engineer: Kairos
-// STATUS: Active. Sovereign Handshake, State Hydration & Biometric Overrides Integrated.
+// STATUS: Active. Sovereign Handshake, Safe-Harbor Auth Routing & Session Memory Rerouting Integrated.
 
 window.MS_DAY = 86400000;
 
@@ -152,6 +152,7 @@ window.initCloudBridge = async function() {
     return new Promise((resolve) => {
         if (window.supabase) {
             window.supabaseClient = window.supabase.createClient(window.Q_SUPABASE_URL, window.Q_SUPABASE_KEY);
+            window.bindAuthListener();
             resolve();
             return;
         }
@@ -159,10 +160,23 @@ window.initCloudBridge = async function() {
         script.src = "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2";
         script.onload = () => {
             window.supabaseClient = window.supabase.createClient(window.Q_SUPABASE_URL, window.Q_SUPABASE_KEY);
+            window.bindAuthListener();
             window.Q_LOG('INFO', 'CORE', 'SUPABASE_CLIENT_INITIALIZED');
             resolve();
         };
         document.head.appendChild(script);
+    });
+};
+
+window.bindAuthListener = function() {
+    if(!window.supabaseClient) return;
+    window.supabaseClient.auth.onAuthStateChange((event, session) => {
+        if (event === 'SIGNED_IN' || (event === 'INITIAL_SESSION' && session)) {
+            localStorage.setItem('Q_SOVEREIGN_AUTH', 'true');
+        } else if (event === 'SIGNED_OUT') {
+            localStorage.setItem('Q_SOVEREIGN_AUTH', 'false');
+            window.Q_STATE.persistence.auth_status = 'STANDBY';
+        }
     });
 };
 
@@ -231,7 +245,11 @@ window.fetchCloudState = async function() {
 
 // CENTRALIZED STATE MANAGEMENT
 window.Q_STATE = {
-    persistence: { db_migration: 'ACTIVE', auth_status: 'STANDBY', sync_active: false },
+    persistence: { 
+        db_migration: 'ACTIVE', 
+        auth_status: localStorage.getItem('Q_SOVEREIGN_AUTH') === 'true' ? 'SOVEREIGN_AUTHENTICATED' : 'STANDBY', 
+        sync_active: false 
+    },
     logic_layer: { 
         predictive_friction: true, 
         civil_exporter: 'ACTIVE',
@@ -667,16 +685,25 @@ window.Q_Onboarding = {
 
 // --- SOVEREIGN AUTHENTICATION (MAGIC LINK & OAUTH) ---
 window.Q_Auth = {
+    getRedirectVector: function() {
+        // ALWAYS fallback to the explicit safe harbor to pass the firewall
+        const origin = window.location.origin;
+        return `${origin}/personal/index.html`;
+    },
     triggerOAuthProvider: async function(provider) {
         if (!window.supabaseClient) {
             alert("CLOUD BRIDGE DISCONNECTED. AWAITING SUPABASE INIT.");
             return;
         }
+        
+        // Cache the user's active screen so we can route them back after Supabase drops them off
+        sessionStorage.setItem('Q_AUTH_RETURN_VECTOR', window.location.pathname);
+        
         try {
             const { error } = await window.supabaseClient.auth.signInWithOAuth({
                 provider: provider,
                 options: {
-                    redirectTo: window.location.href 
+                    redirectTo: this.getRedirectVector() 
                 }
             });
             if (error) throw error;
@@ -740,12 +767,14 @@ window.Q_Auth = {
         btn.innerText = "TRANSMITTING...";
         btn.style.opacity = "0.5";
         btn.style.pointerEvents = "none";
+        
+        sessionStorage.setItem('Q_AUTH_RETURN_VECTOR', window.location.pathname);
 
         try {
             const { error } = await window.supabaseClient.auth.signInWithOtp({
                 email: email,
                 options: {
-                    emailRedirectTo: window.location.href 
+                    emailRedirectTo: this.getRedirectVector() 
                 }
             });
 
@@ -773,6 +802,7 @@ window.Q_Auth = {
         const { data: session } = await window.supabaseClient.auth.getSession();
         if (session?.session?.user) {
             window.Q_STATE.persistence.auth_status = 'SOVEREIGN_AUTHENTICATED';
+            localStorage.setItem('Q_SOVEREIGN_AUTH', 'true');
             window.Q_LOG('STATE', 'CORE', 'SOVEREIGN_IDENTITY_VERIFIED', { user: session.session.user.email });
             
             if (window.ReactNativeWebView) {
@@ -783,7 +813,21 @@ window.Q_Auth = {
             if (badge) {
                 badge.style.border = "1px solid #39ff14";
                 badge.style.boxShadow = "0 0 10px rgba(57, 255, 20, 0.4)";
+                badge.innerText = "[ IN THE QUAD ]";
+                badge.style.color = "#000";
+                badge.style.background = "#39ff14";
             }
+            
+            // Contextual UX Return Logic
+            const returnVector = sessionStorage.getItem('Q_AUTH_RETURN_VECTOR');
+            if (returnVector && returnVector !== '/personal/index.html' && returnVector !== '/' && returnVector !== '') {
+                sessionStorage.removeItem('Q_AUTH_RETURN_VECTOR');
+                window.location.replace(window.location.origin + returnVector);
+            }
+            
+        } else {
+            localStorage.setItem('Q_SOVEREIGN_AUTH', 'false');
+            window.Q_STATE.persistence.auth_status = 'STANDBY';
         }
     }
 };

@@ -70,7 +70,8 @@ window.injectUniversalUI = function() {
         `;
     }
 
-    const authState = window.Q_STATE?.persistence?.auth_status === 'SOVEREIGN_AUTHENTICATED' ? 'ACTIVE' : 'STANDBY';
+    // STRICT PERSISTENCE LOGIC: Bypasses state-load race condition by directly querying localStorage
+    const authState = localStorage.getItem('Q_SOVEREIGN_AUTH') === 'true' ? 'ACTIVE' : 'STANDBY';
     const authBg = authState === 'ACTIVE' ? '#39ff14' : 'transparent';
     const authColor = authState === 'ACTIVE' ? '#000' : '#ff003c';
     const authBorder = authState === 'ACTIVE' ? '#39ff14' : '#ff003c';
@@ -426,7 +427,7 @@ window.injectUniversalUI = function() {
             <div style="display:flex; width: 100%; justify-content: center; align-items: center;">
                 <div class="q-nav-menu" id="q-nav-menu">
                     <a href="${isAperture ? '#' : '../aperture/index.html'}" class="q-nav-btn desktop-only" style="border-color: var(--chrono-amber); color: var(--chrono-amber);" ontouchstart="window.location.href=this.href; event.preventDefault();">APERTURE</a>
-                    <button id="q-global-sim-badge" class="q-nav-btn sim-badge" style="display: inline-block;" onclick="if(window.Q_Auth) window.Q_Auth.triggerOAuth();" ontouchstart="if(window.Q_Auth) window.Q_Auth.triggerOAuth(); event.preventDefault();">${authText}</button>
+                    <button id="q-global-sim-badge" class="q-nav-btn sim-badge" style="display: inline-block; border-color:${authBorder} !important; color:${authColor} !important; background:${authBg} !important;" onclick="if(window.Q_Auth) window.Q_Auth.triggerOAuth();" ontouchstart="if(window.Q_Auth) window.Q_Auth.triggerOAuth(); event.preventDefault();">${authText}</button>
                     <a href="${navPrefix}index.html?v=20.0" class="q-nav-btn face-btn vector-link ${faceActive ? 'active' : ''}" ontouchstart="window.location.href=this.href; event.preventDefault();">CHRONO-FACE</a>
                     <a href="${navPrefix}BIOVECHUD.html?v=20.0" class="q-nav-btn bio-btn vector-link ${bActive ? 'active' : ''}" ontouchstart="window.location.href=this.href; event.preventDefault();">BIOLOGICAL</a>
                     

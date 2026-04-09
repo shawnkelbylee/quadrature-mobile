@@ -378,4 +378,140 @@ window.Q_IntegrationHub = {
     }
 };
 
+window.Q_Auth = {
+    getRedirectVector: function() {
+        // Relies exclusively on the Supabase wildcard (**) allowing dynamic paths
+        return window.location.origin + window.location.pathname;
+    },
+    triggerOAuthProvider: async function(provider) {
+        if (!window.supabaseClient) {
+            alert("CLOUD BRIDGE DISCONNECTED. AWAITING SUPABASE INIT.");
+            return;
+        }
+        try {
+            const { error } = await window.supabaseClient.auth.signInWithOAuth({
+                provider: provider,
+                options: {
+                    redirectTo: this.getRedirectVector() 
+                }
+            });
+            if (error) throw error;
+        } catch (err) {
+            window.Q_LOG('ERROR', 'CORE', `OAUTH_${provider.toUpperCase()}_FAILED`, { error: err.message });
+            alert(`[ FAULT: ${err.message} ]`);
+        }
+    },
+    triggerOAuth: function() {
+        window.Q_LOG('INFO', 'CORE', 'SOVEREIGN_IDENTITY_AUTH_TRIGGERED');
+        if (window.ReactNativeWebView) {
+            window.ReactNativeWebView.postMessage(JSON.stringify({ action: 'OAUTH_LOGIN' }));
+        } else {
+            this.renderLoginModal();
+        }
+    },
+    renderLoginModal: function() {
+        if (document.getElementById('q-auth-overlay')) return;
+
+        const overlay = document.createElement('div');
+        overlay.id = 'q-auth-overlay';
+        overlay.style.cssText = 'position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.95); z-index:999999; display:flex; justify-content:center; align-items:center; flex-direction:column; color:#00f0ff; font-family:"Orbitron"; backdrop-filter:blur(15px);';
+        
+        overlay.innerHTML = `
+            <div style="width: 90%; max-width: 400px; border: 1px solid #00f0ff; padding: 25px; background: rgba(0, 240, 255, 0.05); box-shadow: 0 0 30px rgba(0, 240, 255, 0.2); border-radius: 8px; position:relative;">
+                <button onclick="document.getElementById('q-auth-overlay').remove()" style="position:absolute; top:10px; right:10px; background:transparent; border:none; color:#ff003c; font-size:1.2rem; cursor:pointer;">✖</button>
+                <h3 style="text-align:center; letter-spacing:3px; text-shadow:0 0 10px #00f0ff; margin-top:0;">SOVEREIGN LOGIN</h3>
+                <div style="font-family:'JetBrains Mono'; font-size:0.7rem; color:#aaa; margin-bottom: 20px; text-align:center; line-height: 1.5;">Authenticate to sync your temporal state across the Quadrature Matrix.</div>
+                
+                <div style="display:flex; gap:10px; margin-bottom:15px; justify-content:center;">
+                    <button onclick="window.Q_Auth.triggerOAuthProvider('google')" style="flex:1; background:rgba(0,0,0,0.8); border:1px solid #00f0ff; color:#00f0ff; padding:10px; font-family:'Orbitron'; cursor:pointer; font-weight:bold; transition:0.3s;" onmouseover="this.style.background='#00f0ff'; this.style.color='#000';" onmouseout="this.style.background='rgba(0,0,0,0.8)'; this.style.color='#00f0ff';">GOOGLE</button>
+                    <button onclick="window.Q_Auth.triggerOAuthProvider('apple')" style="flex:1; background:rgba(0,0,0,0.8); border:1px solid #00f0ff; color:#00f0ff; padding:10px; font-family:'Orbitron'; cursor:pointer; font-weight:bold; transition:0.3s;" onmouseover="this.style.background='#00f0ff'; this.style.color='#000';" onmouseout="this.style.background='rgba(0,0,0,0.8)'; this.style.color='#00f0ff';">APPLE</button>
+                    <button onclick="window.Q_Auth.triggerOAuthProvider('azure')" style="flex:1; background:rgba(0,0,0,0.8); border:1px solid #00f0ff; color:#00f0ff; padding:10px; font-family:'Orbitron'; cursor:pointer; font-weight:bold; transition:0.3s;" onmouseover="this.style.background='#00f0ff'; this.style.color='#000';" onmouseout="this.style.background='rgba(0,0,0,0.8)'; this.style.color='#00f0ff';">AZURE</button>
+                </div>
+                
+                <div style="text-align:center; font-size:0.6rem; color:#aaa; margin-bottom:15px; font-family:'JetBrains Mono';">OR VIA SECURE MAGIC LINK</div>
+                
+                <input type="email" id="auth-email" placeholder="architect@thequadrature.com" style="width:100%; background:rgba(0,0,0,0.8); border:1px solid #00f0ff; color:#00f0ff; padding:10px; margin-top:4px; margin-bottom:15px; font-family:'JetBrains Mono'; box-sizing:border-box; outline:none;">
+                <button onclick="window.Q_Auth.sendMagicLink()" id="auth-submit-btn" style="width:100%; background:#00f0ff; color:#000; border:none; padding:12px; font-family:'Orbitron'; font-weight:900; cursor:pointer; letter-spacing:3px; box-shadow:0 0 20px #00f0ff; transition: 0.3s;">SEND MAGIC LINK</button>
+                
+                <div id="auth-status" style="margin-top:15px; font-family:'JetBrains Mono'; font-size:0.65rem; color:#39ff14; text-align:center; display:none;"></div>
+            </div>
+        `;
+        document.body.appendChild(overlay);
+    },
+    sendMagicLink: async function() {
+        const email = document.getElementById('auth-email').value;
+        const statusEl = document.getElementById('auth-status');
+        const btn = document.getElementById('auth-submit-btn');
+        
+        if (!email || !email.includes('@')) {
+            alert("INVALID EMAIL PROTOCOL.");
+            return;
+        }
+
+        if (!window.supabaseClient) {
+            alert("CLOUD BRIDGE DISCONNECTED. AWAITING SUPABASE INIT.");
+            return;
+        }
+
+        btn.innerText = "TRANSMITTING...";
+        btn.style.opacity = "0.5";
+        btn.style.pointerEvents = "none";
+        
+        try {
+            const { error } = await window.supabaseClient.auth.signInWithOtp({
+                email: email,
+                options: {
+                    emailRedirectTo: this.getRedirectVector() 
+                }
+            });
+
+            if (error) throw error;
+
+            statusEl.innerText = "[ LINK TRANSMITTED. CHECK SECURE COMMS. ]";
+            statusEl.style.color = "#39ff14";
+            statusEl.style.display = "block";
+            btn.innerText = "LINK SENT";
+            window.Q_LOG('STATE', 'CORE', 'MAGIC_LINK_DISPATCHED', { email });
+
+        } catch (err) {
+            statusEl.innerText = `[ FAULT: ${err.message} ]`;
+            statusEl.style.color = "#ff003c";
+            statusEl.style.display = "block";
+            btn.innerText = "SEND MAGIC LINK";
+            btn.style.opacity = "1";
+            btn.style.pointerEvents = "auto";
+            window.Q_LOG('ERROR', 'CORE', 'MAGIC_LINK_FAILED', { error: err.message });
+        }
+    },
+    handleAuthRedirect: async function() {
+        if (!window.supabaseClient) return;
+        
+        const { data: session } = await window.supabaseClient.auth.getSession();
+        if (session?.session?.user) {
+            window.Q_STATE.persistence.auth_status = 'SOVEREIGN_AUTHENTICATED';
+            localStorage.setItem('Q_SOVEREIGN_AUTH', 'true');
+            window.Q_LOG('STATE', 'CORE', 'SOVEREIGN_IDENTITY_VERIFIED', { user: session.session.user.email });
+            
+            if (window.ReactNativeWebView) {
+                window.ReactNativeWebView.postMessage(JSON.stringify({ action: 'SECURE_AUTH_SUCCESS', token: session.session.access_token }));
+            }
+            
+            const badge = document.getElementById('q-global-sim-badge');
+            if (badge) {
+                badge.style.border = "1px solid #39ff14";
+                badge.style.boxShadow = "0 0 10px rgba(57, 255, 20, 0.4)";
+                badge.innerText = "[ IN THE QUAD ]";
+                badge.style.color = "#000";
+                badge.style.background = "#39ff14";
+            }
+            
+            // Reverted manual window.location.replace to allow native Supabase return routing
+            
+        } else {
+            localStorage.setItem('Q_SOVEREIGN_AUTH', 'false');
+            window.Q_STATE.persistence.auth_status = 'STANDBY';
+        }
+    }
+};
+
 window.addEventListener('DOMContentLoaded', () => window.Q_IntegrationHub.init());

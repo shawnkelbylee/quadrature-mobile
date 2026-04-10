@@ -1009,7 +1009,7 @@ window.Q_OmniPlanner = {
         let anchorMins = (savedAnchor === null || savedAnchor === "") ? 0 : parseInt(savedAnchor); 
         let cycleDuration = parseInt(localStorage.getItem('q_bio_duration')) || 90; 
         let sleepDuration = parseInt(localStorage.getItem('q_sleep_cycle_duration')) || 450;
-        let wakingDurationMs = (1440 - sleepDuration) * 60000;
+        let wakingDurationMins = 1440 - sleepDuration;
         
         const selectedDateObj = new Date(this.selectedDate);
         
@@ -1018,13 +1018,15 @@ window.Q_OmniPlanner = {
             const key = window.getDataKey(selectedDateObj, h, 0);
             const data = window.qData[key] || { text: "" };
             
-            let activeMs = ((blockMs % 86400000) - (anchorMins * 60000) + 86400000) % 86400000;
-            let currentBioState;
+            let d = new Date(blockMs);
+            let currentMinsFromMidnight = (d.getHours() * 60) + d.getMinutes();
+            let minsSinceWake = (currentMinsFromMidnight - anchorMins + 1440) % 1440;
             
-            if (activeMs >= wakingDurationMs) {
+            let currentBioState;
+            if (minsSinceWake >= wakingDurationMins) {
                 currentBioState = "SLEEP / RECOVERY";
             } else {
-                let cyclePosFloat = (activeMs % (cycleDuration * 60000)) / (cycleDuration * 60000);
+                let cyclePosFloat = (minsSinceWake % cycleDuration) / cycleDuration;
                 currentBioState = (cyclePosFloat >= 0.22 && cyclePosFloat < 0.77) ? "DEEP FLOW" : "VENT/RECOVERY";
             }
             
@@ -1152,7 +1154,7 @@ window.Q_OmniPlanner = {
         let anchorMins = (savedAnchor === null || savedAnchor === "") ? 0 : parseInt(savedAnchor); 
         let cycleDuration = parseInt(localStorage.getItem('q_bio_duration')) || 90; 
         let sleepDuration = parseInt(localStorage.getItem('q_sleep_cycle_duration')) || 450;
-        let wakingDurationMs = (1440 - sleepDuration) * 60000;
+        let wakingDurationMins = 1440 - sleepDuration;
         
         for(let m=0; m<totalMins; m+=5) {
             let targetMs = baseMs + (this.selectedHour * 3600000) + (m * 60000);
@@ -1161,13 +1163,15 @@ window.Q_OmniPlanner = {
             const diff = (targetMs - window.PYLON_ALPHA_DYNAMIC) / window.MS_DAY; 
             const orbital = window.getOrbitalData(diff);
             
-            let activeMs = ((targetMs % 86400000) - (anchorMins * 60000) + 86400000) % 86400000;
-            let currentBioState;
+            let d = new Date(targetMs);
+            let currentMinsFromMidnight = (d.getHours() * 60) + d.getMinutes();
+            let minsSinceWake = (currentMinsFromMidnight - anchorMins + 1440) % 1440;
             
-            if (activeMs >= wakingDurationMs) {
+            let currentBioState;
+            if (minsSinceWake >= wakingDurationMins) {
                 currentBioState = "SLEEP / RECOVERY";
             } else {
-                let cyclePosFloat = (activeMs % (cycleDuration * 60000)) / (cycleDuration * 60000);
+                let cyclePosFloat = (minsSinceWake % cycleDuration) / cycleDuration;
                 currentBioState = (cyclePosFloat >= 0.22 && cyclePosFloat < 0.77) ? "DEEP FLOW" : "VENT/RECOVERY";
             }
             

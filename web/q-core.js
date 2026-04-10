@@ -475,7 +475,8 @@ window.Q_UniversalSync = {
     ingestGoogleCalendar: async function(token) {
         window.Q_LOG('INFO', 'CORE', 'GOOGLE_CALENDAR_SYNC_INITIATED');
         try {
-            const timeMin = new Date().toISOString();
+            // Expanded boundaries to capture current multi-day events natively
+            const timeMin = new Date(Date.now() - 7 * window.MS_DAY).toISOString(); 
             const timeMax = new Date(Date.now() + 90 * window.MS_DAY).toISOString(); 
             const res = await fetch(`https://www.googleapis.com/calendar/v3/calendars/primary/events?timeMin=${timeMin}&timeMax=${timeMax}&singleEvents=true&orderBy=startTime`, {
                 headers: { Authorization: `Bearer ${token}` }
@@ -490,7 +491,6 @@ window.Q_UniversalSync = {
                     if (ev.start?.dateTime) {
                         startMs = new Date(ev.start.dateTime);
                     } else if (ev.start?.date) {
-                        // Normalize all-day events to local High Noon to prevent timezone drift
                         const parts = ev.start.date.split('-');
                         startMs = new Date(parts[0], parts[1] - 1, parts[2], 12, 0, 0);
                     }
@@ -502,7 +502,6 @@ window.Q_UniversalSync = {
                 });
                 window.savePlannerData();
                 
-                // Force an Omni-Planner repaint if it is currently open
                 if (window.Q_OmniPlanner && window.Q_OmniPlanner.viewState !== 'closed') {
                     window.Q_OmniPlanner.refreshView();
                 }
@@ -521,7 +520,6 @@ window.Q_UniversalSync = {
         
         const prefix = "[FIXED]";
         
-        // 1. Snap to the nearest 5-minute grid to prevent orphaned data in the UI Matrix
         let mRounded = Math.floor(ev.start.getMinutes() / 5) * 5;
         const key = window.getDataKey(ev.start, ev.start.getHours(), mRounded);
         
@@ -531,8 +529,6 @@ window.Q_UniversalSync = {
             window.qData[key].text = existing ? `${existing}\n${prefix} ${ev.summary}` : `${prefix} ${ev.summary}`;
         }
         
-        // 2. Duplication Safety Net: Force the text into the top of the hour block (00) 
-        // to guarantee it always renders seamlessly in the Macro Day View aggregation
         if (mRounded !== 0) {
             const macroKey = window.getDataKey(ev.start, ev.start.getHours(), 0);
             if (!window.qData[macroKey]) window.qData[macroKey] = { text: "", link: "" };
@@ -1039,6 +1035,13 @@ window.Q_Auth = {
         }
     },
     handleAuthRedirect: async function() {
+        // 1. URL Hash Interception (Bypassing Supabase Storage Strip)
+        let rawProviderToken = null;
+        if (window.location.hash) {
+            const hashParams = new URLSearchParams(window.location.hash.substring(1));
+            rawProviderToken = hashParams.get('provider_token');
+        }
+
         if (!window.supabaseClient) return;
         
         const { data: session } = await window.supabaseClient.auth.getSession();
@@ -1049,11 +1052,11 @@ window.Q_Auth = {
             localStorage.setItem('Q_SOVEREIGN_AUTH', 'true');
             window.Q_LOG('STATE', 'CORE', 'SOVEREIGN_IDENTITY_VERIFIED', { user: session.session.user.email });
             
-            // --- CRITICAL FIX: AWAIT THE SYNC BEFORE REDIRECTING ---
-            if (session.session.provider_token && session.session.user.app_metadata.provider === 'google') {
+            // 2. INJECT RAW TOKEN (Holds redirect until payload is secure)
+            if (rawProviderToken && session.session.user.app_metadata.provider === 'google') {
                 if (window.Q_UniversalSync && window.Q_UniversalSync.ingestGoogleCalendar) {
                     window.Q_LOG('INFO', 'CORE', 'HOLDING_REDIRECT_FOR_CALENDAR_SYNC');
-                    await window.Q_UniversalSync.ingestGoogleCalendar(session.session.provider_token);
+                    await window.Q_UniversalSync.ingestGoogleCalendar(rawProviderToken);
                 }
             }
             

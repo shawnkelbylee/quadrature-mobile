@@ -1011,6 +1011,9 @@ window.Q_OmniPlanner = {
         let sleepDuration = parseInt(localStorage.getItem('q_sleep_cycle_duration')) || 450;
         let wakingDurationMins = 1440 - sleepDuration;
         
+        let inertiaMins = 45;
+        let dlmoMins = 90;
+
         const selectedDateObj = new Date(this.selectedDate);
         
         for(let h=0; h<24; h++) {
@@ -1023,11 +1026,17 @@ window.Q_OmniPlanner = {
             let minsSinceWake = (currentMinsFromMidnight - anchorMins + 1440) % 1440;
             
             let currentBioState;
+
             if (minsSinceWake >= wakingDurationMins) {
                 currentBioState = "SLEEP / RECOVERY";
+            } else if (minsSinceWake < inertiaMins) {
+                currentBioState = "VENT/RECOVERY";
+            } else if (minsSinceWake >= wakingDurationMins - dlmoMins) {
+                currentBioState = "VENT/RECOVERY";
             } else {
-                let cyclePosFloat = (minsSinceWake % cycleDuration) / cycleDuration;
-                currentBioState = (cyclePosFloat >= 0.22 && cyclePosFloat < 0.77) ? "DEEP FLOW" : "VENT/RECOVERY";
+                let coreMins = minsSinceWake - inertiaMins;
+                let cyclePosFloat = (coreMins % cycleDuration) / cycleDuration;
+                currentBioState = (cyclePosFloat < 0.77) ? "DEEP FLOW" : "VENT/RECOVERY";
             }
             
             dailyBlocksData.push({ hour: h, text: data.text, bioState: currentBioState, key: key, ms: blockMs });
@@ -1155,6 +1164,9 @@ window.Q_OmniPlanner = {
         let cycleDuration = parseInt(localStorage.getItem('q_bio_duration')) || 90; 
         let sleepDuration = parseInt(localStorage.getItem('q_sleep_cycle_duration')) || 450;
         let wakingDurationMins = 1440 - sleepDuration;
+
+        let inertiaMins = 45;
+        let dlmoMins = 90;
         
         for(let m=0; m<totalMins; m+=5) {
             let targetMs = baseMs + (this.selectedHour * 3600000) + (m * 60000);
@@ -1168,11 +1180,17 @@ window.Q_OmniPlanner = {
             let minsSinceWake = (currentMinsFromMidnight - anchorMins + 1440) % 1440;
             
             let currentBioState;
+
             if (minsSinceWake >= wakingDurationMins) {
                 currentBioState = "SLEEP / RECOVERY";
+            } else if (minsSinceWake < inertiaMins) {
+                currentBioState = "VENT/RECOVERY";
+            } else if (minsSinceWake >= wakingDurationMins - dlmoMins) {
+                currentBioState = "VENT/RECOVERY";
             } else {
-                let cyclePosFloat = (minsSinceWake % cycleDuration) / cycleDuration;
-                currentBioState = (cyclePosFloat >= 0.22 && cyclePosFloat < 0.77) ? "DEEP FLOW" : "VENT/RECOVERY";
+                let coreMins = minsSinceWake - inertiaMins;
+                let cyclePosFloat = (coreMins % cycleDuration) / cycleDuration;
+                currentBioState = (cyclePosFloat < 0.77) ? "DEEP FLOW" : "VENT/RECOVERY";
             }
             
             const isCivilConstraint = data.text.includes('[FIXED]') || data.text.includes('[CIVIL]');

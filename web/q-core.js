@@ -421,7 +421,6 @@ window.getBiologicalState = function(t) {
 // --- UNIVERSAL PAYLOAD SYNC & GOOGLE CALENDAR INGESTION (TASK 12) ---
 window.Q_UniversalSync = {
     ingestICS: function(icsData) {
-        // Fallback protocol for manual legacy uploads
         window.Q_LOG('INFO', 'CORE', 'ICS_PAYLOAD_INGESTION_STARTED');
         const lines = icsData.split(/\r\n|\n|\r/);
         let inEvent = false;
@@ -477,7 +476,7 @@ window.Q_UniversalSync = {
         window.Q_LOG('INFO', 'CORE', 'GOOGLE_CALENDAR_SYNC_INITIATED');
         try {
             const timeMin = new Date().toISOString();
-            const timeMax = new Date(Date.now() + 90 * window.MS_DAY).toISOString(); // Predict 90 days out
+            const timeMax = new Date(Date.now() + 90 * window.MS_DAY).toISOString(); 
             const res = await fetch(`https://www.googleapis.com/calendar/v3/calendars/primary/events?timeMin=${timeMin}&timeMax=${timeMax}&singleEvents=true&orderBy=startTime`, {
                 headers: { Authorization: `Bearer ${token}` }
             });
@@ -487,14 +486,21 @@ window.Q_UniversalSync = {
             let count = 0;
             if (data.items) {
                 data.items.forEach(ev => {
-                    if (ev.start && ev.start.dateTime && ev.summary) {
-                        const startMs = new Date(ev.start.dateTime);
+                    // Detect both timed (dateTime) and full-day (date) legacy events
+                    let startStr = ev.start?.dateTime || ev.start?.date;
+                    if (startStr && ev.summary) {
+                        const startMs = new Date(startStr);
                         this.mapEventToPlanner({ start: startMs, summary: ev.summary });
                         count++;
                     }
                 });
                 window.savePlannerData();
-                window.dispatchEvent(new Event('storage'));
+                
+                // Force an Omni-Planner repaint if it is currently open
+                if (window.Q_OmniPlanner && window.Q_OmniPlanner.viewState !== 'closed') {
+                    window.Q_OmniPlanner.refreshView();
+                }
+                
                 window.Q_LOG('STATE', 'CORE', 'GOOGLE_CALENDAR_SYNCED', { events_processed: count });
                 return count;
             }
@@ -507,13 +513,27 @@ window.Q_UniversalSync = {
         if (!window.qData) window.qData = {};
         if (!window.getDataKey) return;
         
-        const key = window.getDataKey(ev.start, ev.start.getHours(), ev.start.getMinutes());
-        if (!window.qData[key]) window.qData[key] = { text: "", link: "" };
-        
         const prefix = "[FIXED]";
+        
+        // 1. Snap to the nearest 5-minute grid to prevent orphaned data in the UI Matrix
+        let mRounded = Math.floor(ev.start.getMinutes() / 5) * 5;
+        const key = window.getDataKey(ev.start, ev.start.getHours(), mRounded);
+        
+        if (!window.qData[key]) window.qData[key] = { text: "", link: "" };
         if (!window.qData[key].text.includes(ev.summary)) {
             let existing = window.qData[key].text;
             window.qData[key].text = existing ? `${existing}\n${prefix} ${ev.summary}` : `${prefix} ${ev.summary}`;
+        }
+        
+        // 2. Duplication Safety Net: Force the text into the top of the hour block (00) 
+        // to guarantee it always renders seamlessly in the Macro Day View aggregation
+        if (mRounded !== 0) {
+            const macroKey = window.getDataKey(ev.start, ev.start.getHours(), 0);
+            if (!window.qData[macroKey]) window.qData[macroKey] = { text: "", link: "" };
+            if (!window.qData[macroKey].text.includes(ev.summary)) {
+                let macroExisting = window.qData[macroKey].text;
+                window.qData[macroKey].text = macroExisting ? `${macroExisting}\n${prefix} ${ev.summary}` : `${prefix} ${ev.summary}`;
+            }
         }
     },
     routeBiometricAuth: function(provider) {

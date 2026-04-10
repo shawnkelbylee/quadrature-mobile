@@ -248,6 +248,8 @@ window.Q_OmniPlanner = {
                 constraintsCount++;
                 if (b.bioState === 'SLEEP / RECOVERY') {
                     tensionScore += 50; 
+                } else if (b.bioState === 'SLEEP INERTIA' || b.bioState === 'DLMO WIND-DOWN') {
+                    tensionScore += 40;
                 } else if (b.bioState === 'VENT/RECOVERY') {
                     tensionScore += 25; 
                 } else {
@@ -258,7 +260,7 @@ window.Q_OmniPlanner = {
         
         let advice = "SCHEDULE ALIGNED. True Ellipse resonance maintained.";
         if (tensionScore >= 75) {
-            advice = "SEVERE JAGGEDNESS DETECTED. You have forced Fixed Civil Constraints into Sleep/Recovery windows. Burnout probability: CRITICAL. Resonance Re-alignment strongly advised.";
+            advice = "SEVERE JAGGEDNESS DETECTED. You have forced Fixed Civil Constraints into Sleep or Transition windows. Burnout probability: CRITICAL. Resonance Re-alignment strongly advised.";
         } else if (tensionScore > 30) {
             advice = "MODERATE FRICTION. Civil logic is overriding biological flow. Consider shifting non-essential legacy meetings to Bio-Green sectors.";
         }
@@ -354,6 +356,8 @@ window.Q_OmniPlanner = {
             .time-block.flow-state { border-left: 4px solid var(--env-green, #a7ff83); background: rgba(167, 255, 131, 0.05); }
             .time-block.vent-state { border-left: 4px solid var(--sys-cyan, #00f0ff); background: rgba(0, 240, 255, 0.05); }
             .time-block.sleep-state { border-left: 4px solid var(--bio-purple, #b829ff); background: rgba(184, 41, 255, 0.05); }
+            .time-block.inertia-state { border-left: 4px solid var(--chrono-amber, #B97A35); background: rgba(185, 122, 53, 0.05); }
+            .time-block.dlmo-state { border-left: 4px solid var(--bio-cobalt, #0055ff); background: rgba(0, 85, 255, 0.05); }
             
             .tension-dashboard { background: rgba(0,0,0,0.6); border: 1px dashed var(--magenta-glow, #ff003c); border-radius: 6px; padding: 15px; margin: 15px 20px 0 20px; display: flex; justify-content: space-between; align-items: center; }
             .tension-score { font-family: 'Orbitron'; font-size: 1.5rem; font-weight: 900; color: var(--magenta-glow, #ff003c); text-shadow: 0 0 15px var(--magenta-dim, rgba(255,0,60,0.3)); }
@@ -1030,9 +1034,9 @@ window.Q_OmniPlanner = {
             if (minsSinceWake >= wakingDurationMins) {
                 currentBioState = "SLEEP / RECOVERY";
             } else if (minsSinceWake < inertiaMins) {
-                currentBioState = "VENT/RECOVERY";
+                currentBioState = "SLEEP INERTIA";
             } else if (minsSinceWake >= wakingDurationMins - dlmoMins) {
-                currentBioState = "VENT/RECOVERY";
+                currentBioState = "DLMO WIND-DOWN";
             } else {
                 let coreMins = minsSinceWake - inertiaMins;
                 let cyclePosFloat = (coreMins % cycleDuration) / cycleDuration;
@@ -1061,6 +1065,8 @@ window.Q_OmniPlanner = {
             let blockClass = '';
             if (b.bioState === 'DEEP FLOW') blockClass = 'flow-state';
             else if (b.bioState === 'SLEEP / RECOVERY') blockClass = 'sleep-state';
+            else if (b.bioState === 'SLEEP INERTIA') blockClass = 'inertia-state';
+            else if (b.bioState === 'DLMO WIND-DOWN') blockClass = 'dlmo-state';
             else blockClass = 'vent-state';
             
             if (isCivilConstraint) blockClass += ' fixed-civil-constraint';
@@ -1082,6 +1088,10 @@ window.Q_OmniPlanner = {
                 badgeHtml = `<span style="color:var(--env-green, #a7ff83); font-size:0.5rem; font-weight:bold; font-family:'Orbitron';">DEEP FLOW</span>`;
             } else if (b.bioState === 'SLEEP / RECOVERY') {
                 badgeHtml = `<span style="color:var(--bio-purple, #b829ff); font-size:0.5rem; font-weight:bold; font-family:'Orbitron';">SLEEP / RECOVERY</span>`;
+            } else if (b.bioState === 'SLEEP INERTIA') {
+                badgeHtml = `<span style="color:var(--chrono-amber, #B97A35); font-size:0.5rem; font-weight:bold; font-family:'Orbitron';">SLEEP INERTIA (CAR RAMP)</span>`;
+            } else if (b.bioState === 'DLMO WIND-DOWN') {
+                badgeHtml = `<span style="color:var(--bio-cobalt, #0055ff); font-size:0.5rem; font-weight:bold; font-family:'Orbitron';">DLMO WIND-DOWN</span>`;
             } else {
                 badgeHtml = `<span style="color:var(--sys-cyan, #00f0ff); font-size:0.5rem; font-weight:bold; font-family:'Orbitron';">VENT / RECOVERY</span>`;
             }
@@ -1184,9 +1194,9 @@ window.Q_OmniPlanner = {
             if (minsSinceWake >= wakingDurationMins) {
                 currentBioState = "SLEEP / RECOVERY";
             } else if (minsSinceWake < inertiaMins) {
-                currentBioState = "VENT/RECOVERY";
+                currentBioState = "SLEEP INERTIA";
             } else if (minsSinceWake >= wakingDurationMins - dlmoMins) {
-                currentBioState = "VENT/RECOVERY";
+                currentBioState = "DLMO WIND-DOWN";
             } else {
                 let coreMins = minsSinceWake - inertiaMins;
                 let cyclePosFloat = (coreMins % cycleDuration) / cycleDuration;
@@ -1197,6 +1207,8 @@ window.Q_OmniPlanner = {
             let blockClass = '';
             if (currentBioState === 'DEEP FLOW') blockClass = 'flow-state';
             else if (currentBioState === 'SLEEP / RECOVERY') blockClass = 'sleep-state';
+            else if (currentBioState === 'SLEEP INERTIA') blockClass = 'inertia-state';
+            else if (currentBioState === 'DLMO WIND-DOWN') blockClass = 'dlmo-state';
             else blockClass = 'vent-state';
             
             if (isCivilConstraint) blockClass += ' fixed-civil-constraint';

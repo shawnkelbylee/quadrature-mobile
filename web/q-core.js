@@ -173,6 +173,10 @@ window.bindAuthListener = function() {
     window.supabaseClient.auth.onAuthStateChange((event, session) => {
         if (event === 'SIGNED_IN' || (event === 'INITIAL_SESSION' && session)) {
             localStorage.setItem('Q_SOVEREIGN_AUTH', 'true');
+            // DEAD SIMPLE INTERCEPT: Grab token before it vanishes
+            if (session.provider_token) {
+                sessionStorage.setItem('Q_GOOGLE_TOKEN', session.provider_token);
+            }
         } else if (event === 'SIGNED_OUT') {
             localStorage.setItem('Q_SOVEREIGN_AUTH', 'false');
             window.Q_STATE.persistence.auth_status = 'STANDBY';
@@ -475,7 +479,6 @@ window.Q_UniversalSync = {
     ingestGoogleCalendar: async function(token) {
         window.Q_LOG('INFO', 'CORE', 'GOOGLE_CALENDAR_SYNC_INITIATED');
         try {
-            // Expanded boundaries to capture current multi-day events natively
             const timeMin = new Date(Date.now() - 7 * window.MS_DAY).toISOString(); 
             const timeMax = new Date(Date.now() + 90 * window.MS_DAY).toISOString(); 
             const res = await fetch(`https://www.googleapis.com/calendar/v3/calendars/primary/events?timeMin=${timeMin}&timeMax=${timeMax}&singleEvents=true&orderBy=startTime`, {
@@ -1035,16 +1038,13 @@ window.Q_Auth = {
         }
     },
     handleAuthRedirect: async function() {
-        // 1. URL Hash Interception (Bypassing Supabase Storage Strip)
-        let rawProviderToken = null;
-        if (window.location.hash) {
-            const hashParams = new URLSearchParams(window.location.hash.substring(1));
-            rawProviderToken = hashParams.get('provider_token');
-        }
-
         if (!window.supabaseClient) return;
         
         const { data: session } = await window.supabaseClient.auth.getSession();
+        
+        // CHECK NATIVE STORAGE VAULT FOR THE GOOGLE CALENDAR TOKEN
+        const stashedGoogleToken = sessionStorage.getItem('Q_GOOGLE_TOKEN');
+        
         if (session?.session?.user) {
             if (window.Q_STATE && window.Q_STATE.persistence) {
                 window.Q_STATE.persistence.auth_status = 'SOVEREIGN_AUTHENTICATED';
@@ -1052,11 +1052,16 @@ window.Q_Auth = {
             localStorage.setItem('Q_SOVEREIGN_AUTH', 'true');
             window.Q_LOG('STATE', 'CORE', 'SOVEREIGN_IDENTITY_VERIFIED', { user: session.session.user.email });
             
-            // 2. INJECT RAW TOKEN (Holds redirect until payload is secure)
-            if (rawProviderToken && session.session.user.app_metadata.provider === 'google') {
+            // FIRE THE CALENDAR SYNC IF THE STASHED TOKEN EXISTS
+            if (stashedGoogleToken) {
                 if (window.Q_UniversalSync && window.Q_UniversalSync.ingestGoogleCalendar) {
-                    window.Q_LOG('INFO', 'CORE', 'HOLDING_REDIRECT_FOR_CALENDAR_SYNC');
-                    await window.Q_UniversalSync.ingestGoogleCalendar(rawProviderToken);
+                    window.Q_LOG('INFO', 'CORE', 'EXECUTING_HARD_CALENDAR_SYNC');
+                    const importedCount = await window.Q_UniversalSync.ingestGoogleCalendar(stashedGoogleToken);
+                    
+                    // EXPLICIT HARD ALERT TO THE USER
+                    alert(`[ THE QUADRATURE: UNIVERSAL PAYLOAD SYNC ]\n\nSuccessfully mapped ${importedCount} Civil Constraints into the Matrix.`);
+                    
+                    sessionStorage.removeItem('Q_GOOGLE_TOKEN');
                 }
             }
             
@@ -1076,7 +1081,6 @@ window.Q_Auth = {
                 badge.ontouchstart = (e) => { window.Q_Auth.signOut(); e.preventDefault(); };
             }
             
-            // Contextual UX Return Logic
             const returnVector = sessionStorage.getItem('Q_AUTH_RETURN_VECTOR');
             if (returnVector && returnVector !== '/personal/index.html' && returnVector !== '/' && returnVector !== '') {
                 sessionStorage.removeItem('Q_AUTH_RETURN_VECTOR');

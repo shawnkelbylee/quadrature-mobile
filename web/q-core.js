@@ -233,6 +233,8 @@ window.fetchCloudState = async function() {
             if (idData.lon) window.Q_UpdateStateLocal('location', 'lon', idData.lon, 'q_current_lon');
             if (idData.wake_anchor_mins !== null) window.Q_UpdateStateLocal('metaphysical_layer', 'wake_anchor_mins', idData.wake_anchor_mins, 'q_bio_anchor');
             if (idData.sleep_cycle_duration !== null) window.Q_UpdateStateLocal('metaphysical_layer', 'sleep_cycle_duration', idData.sleep_cycle_duration, 'q_sleep_cycle_duration');
+            if (idData.sleep_inertia_mins !== null) window.Q_UpdateStateLocal('metaphysical_layer', 'sleep_inertia_mins', idData.sleep_inertia_mins, 'q_sleep_inertia_mins');
+            if (idData.dlmo_offset_mins !== null) window.Q_UpdateStateLocal('metaphysical_layer', 'dlmo_offset_mins', idData.dlmo_offset_mins, 'q_dlmo_offset_mins');
             if (idData.natal_anchor) window.Q_UpdateStateLocal('metaphysical_layer', 'natal_anchor', idData.natal_anchor, 'q_natal_anchor');
             if (idData.fiat_routing_id) window.Q_UpdateStateLocal('capital_ledger', 'fiat_routing_id', idData.fiat_routing_id, 'q_fiat_routing_id');
         }
@@ -271,6 +273,8 @@ window.Q_STATE = {
         tob_unknown: localStorage.getItem('q_tob_unknown') === 'true',
         wake_anchor_mins: parseInt(localStorage.getItem('q_bio_anchor')) || null,
         sleep_cycle_duration: parseInt(localStorage.getItem('q_sleep_cycle_duration')) || null,
+        sleep_inertia_mins: parseInt(localStorage.getItem('q_sleep_inertia_mins')) || null,
+        dlmo_offset_mins: parseInt(localStorage.getItem('q_dlmo_offset_mins')) || null,
         active_faiths: localStorage.getItem('q_active_faiths') ? JSON.parse(localStorage.getItem('q_active_faiths')) : [],
         zodiac_visible: localStorage.getItem('q_zodiac_visible') !== 'false'
     },
@@ -295,6 +299,7 @@ window.Q_UpdateState = async function(category, key, value) {
         'lat': 'q_current_lat', 'lon': 'q_current_lon', 'name': 'q_current_loc_name',
         'natal_anchor': 'q_natal_anchor', 'dob': 'q_dob', 'tob': 'q_tob', 'tob_unknown': 'q_tob_unknown',
         'wake_anchor_mins': 'q_bio_anchor', 'sleep_cycle_duration': 'q_sleep_cycle_duration',
+        'sleep_inertia_mins': 'q_sleep_inertia_mins', 'dlmo_offset_mins': 'q_dlmo_offset_mins',
         'fiat_routing_id': 'q_fiat_routing_id', 'q_time_fmt': 'Q_TIME_FMT', 'preferred_ai_diplomat': 'q_ai_diplomat',
         'asset_track_mode': 'q_asset_mode', 'active_faiths': 'q_active_faiths', 'zodiac_visible': 'q_zodiac_visible'
     };
@@ -312,7 +317,7 @@ window.Q_UpdateState = async function(category, key, value) {
         const { data: session } = await window.supabaseClient.auth.getSession();
         if (session?.session?.user) {
             try {
-                const identityKeys = ['dob', 'tob', 'tob_unknown', 'location_name', 'lat', 'lon', 'wake_anchor_mins', 'sleep_cycle_duration', 'natal_anchor', 'fiat_routing_id'];
+                const identityKeys = ['dob', 'tob', 'tob_unknown', 'location_name', 'lat', 'lon', 'wake_anchor_mins', 'sleep_cycle_duration', 'sleep_inertia_mins', 'dlmo_offset_mins', 'natal_anchor', 'fiat_routing_id'];
                 const stateKeys = ['q_time_fmt', 'preferred_ai_diplomat', 'asset_track_mode', 'active_faiths', 'zodiac_visible'];
                 
                 let targetTable = null;
@@ -357,6 +362,8 @@ window.getSimState = function() {
 // --- NATIVE BIOMETRIC OVERRIDE HIERARCHY ---
 window.Q_LATEST_NATIVE_BIO_DURATION = null;
 window.Q_LATEST_NATIVE_WAKE_ANCHOR = null;
+window.Q_LATEST_NATIVE_INERTIA = null;
+window.Q_LATEST_NATIVE_DLMO = null;
 
 window.getActiveCycleDuration = function() {
     if (window.Q_STATE.hardware_hooks.biometric_api === 'ACTIVE' && window.Q_LATEST_NATIVE_BIO_DURATION) {
@@ -370,6 +377,22 @@ window.getActiveWakeAnchor = function() {
         return window.Q_LATEST_NATIVE_WAKE_ANCHOR;
     }
     return window.Q_STATE.metaphysical_layer.wake_anchor_mins !== null ? window.Q_STATE.metaphysical_layer.wake_anchor_mins : (parseInt(localStorage.getItem('q_bio_anchor')) || 0);
+};
+
+window.getActiveSleepInertia = function() {
+    if (window.Q_STATE.hardware_hooks.biometric_api === 'ACTIVE' && window.Q_LATEST_NATIVE_INERTIA !== null) {
+        return window.Q_LATEST_NATIVE_INERTIA;
+    }
+    let val = window.Q_STATE.metaphysical_layer.sleep_inertia_mins;
+    return val !== null && !isNaN(val) ? val : (parseInt(localStorage.getItem('q_sleep_inertia_mins')) || 45);
+};
+
+window.getActiveDLMO = function() {
+    if (window.Q_STATE.hardware_hooks.biometric_api === 'ACTIVE' && window.Q_LATEST_NATIVE_DLMO !== null) {
+        return window.Q_LATEST_NATIVE_DLMO;
+    }
+    let val = window.Q_STATE.metaphysical_layer.dlmo_offset_mins;
+    return val !== null && !isNaN(val) ? val : (parseInt(localStorage.getItem('q_dlmo_offset_mins')) || 90);
 };
 
 // --- ABSOLUTE PIXEL HEIGHT BINDING FOR MOBILE VIEWPORT SUPREMACY ---
@@ -640,7 +663,7 @@ window.Q_Onboarding = {
                 <label style="font-size:0.65rem; color:#fff; font-weight:bold;">GEOLOCATION (CITY, STATE)</label>
                 <input type="text" id="init-loc" placeholder="ACQUIRING DEVICE LOCATION..." style="width:100%; background:rgba(0,0,0,0.8); border:1px solid #00f0ff; color:#00f0ff; padding:10px; margin-top:4px; margin-bottom:15px; font-family:'JetBrains Mono'; box-sizing:border-box; outline:none;">
                 
-                <label style="font-size:0.65rem; color:#fff; font-weight:bold;">WAKE ANCHOR (UTC WAKE TIME)</label>
+                <label style="font-size:0.65rem; color:#fff; font-weight:bold;">WAKE ANCHOR (LOCAL WAKE TIME)</label>
                 <input type="time" id="init-anchor" style="width:100%; background:rgba(0,0,0,0.8); border:1px solid #00f0ff; color:#00f0ff; padding:10px; margin-top:4px; margin-bottom:25px; font-family:'JetBrains Mono'; box-sizing:border-box; outline:none;">
                 
                 <button onclick="window.Q_Onboarding.save()" style="width:100%; background:#00f0ff; color:#000; border:none; padding:12px; font-family:'Orbitron'; font-weight:900; cursor:pointer; letter-spacing:3px; box-shadow:0 0 20px #00f0ff; transition: 0.3s;">INITIALIZE</button>

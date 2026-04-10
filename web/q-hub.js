@@ -108,6 +108,8 @@ window.Q_IntegrationHub = {
         const anchor = document.getElementById('cal-anchor').value;
         const sleepHrs = document.getElementById('cal-sleep').value;
         const natal = document.getElementById('cal-natal').value;
+        const inertia = parseInt(document.getElementById('cal-inertia').value) || 45;
+        const dlmo = parseInt(document.getElementById('cal-dlmo').value) || 90;
 
         if (!dob || !loc || !anchor || !sleepHrs) {
             alert("DOB, GEOLOCATION, WAKE ANCHOR, AND TARGET SLEEP ARE REQUIRED.");
@@ -127,6 +129,8 @@ window.Q_IntegrationHub = {
             
             const sleepMins = Math.floor(parseFloat(sleepHrs) * 60);
             window.Q_UpdateState('metaphysical_layer', 'sleep_cycle_duration', sleepMins);
+            window.Q_UpdateState('metaphysical_layer', 'sleep_inertia_mins', inertia);
+            window.Q_UpdateState('metaphysical_layer', 'dlmo_offset_mins', dlmo);
         }
 
         if(window.Q_LOG) window.Q_LOG('STATE', 'CORE', 'IDENTITY_PARAMETERS_UPDATED');
@@ -155,12 +159,12 @@ window.Q_IntegrationHub = {
         const renderBadge = (statusColor, textColor, text) => `<span style="font-size:0.55rem; background:${statusColor}; color:${textColor}; padding:4px 8px; border-radius:4px; font-weight:900; letter-spacing: 1px;">${text}</span>`;
         const renderUpgradeBtn = (feature, tier, category, color) => `<button onclick="window.Q_IntegrationHub.requestStateGate('${feature}', '${tier}', '${category}')" style="font-size:0.55rem; background:transparent; border:1px solid ${color}; color:${color}; padding:4px 8px; border-radius:4px; font-weight:900; letter-spacing: 1px; cursor:pointer; transition:0.3s; pointer-events:auto;" onmouseover="this.style.background='${color}'; this.style.color='#000';" onmouseout="this.style.background='transparent'; this.style.color='${color}';">UPGRADE</button>`;
 
-        const authState = localStorage.getItem('Q_SOVEREIGN_AUTH') === 'true' ? 'ACTIVE' : 'STANDBY';
+        // TIER OVERRIDE: Automatically unlock all access gates if identity is authenticated
+        const authState = window.Q_STATE?.persistence?.auth_status === 'SOVEREIGN_AUTHENTICATED' ? 'ACTIVE' : 'STANDBY';
         const authColor = authState === 'ACTIVE' ? '#39ff14' : '#ff003c';
         const authText = authState === 'ACTIVE' ? '[ DISCONNECT MATRIX ]' : '[ AUTHENTICATE ] - LOCAL CACHE ONLY';
         const authAction = authState === 'ACTIVE' ? 'window.Q_Auth.signOut()' : 'window.Q_Auth.triggerOAuth()';
 
-        // TIER OVERRIDE: Automatically unlock all access gates if identity is authenticated
         const isBioActive = authState === 'ACTIVE' || window.Q_STATE?.hardware_hooks?.biometric_api === 'ACTIVE';
         const bioStatus = isBioActive ? renderBadge('#39ff14', '#000', 'ACTIVE') : renderUpgradeBtn('biometric_api', 'STANDARD TIER', 'hardware_hooks', '#39ff14');
 
@@ -184,6 +188,9 @@ window.Q_IntegrationHub = {
         
         const sSleep = window.Q_STATE?.metaphysical_layer?.sleep_cycle_duration || 450;
         const sSleepHrs = (sSleep / 60).toFixed(1);
+
+        const sInertia = window.Q_STATE?.metaphysical_layer?.sleep_inertia_mins !== null ? window.Q_STATE?.metaphysical_layer?.sleep_inertia_mins : (parseInt(localStorage.getItem('q_sleep_inertia_mins')) || 45);
+        const sDlmo = window.Q_STATE?.metaphysical_layer?.dlmo_offset_mins !== null ? window.Q_STATE?.metaphysical_layer?.dlmo_offset_mins : (parseInt(localStorage.getItem('q_dlmo_offset_mins')) || 90);
         
         const sAi = window.Q_STATE?.logic_layer?.preferred_ai_diplomat || 'DEFAULT';
 
@@ -270,12 +277,23 @@ window.Q_IntegrationHub = {
 
                     <div style="display:flex; gap:10px;">
                         <div class="hub-input-group" style="flex:1;">
-                            <label class="hub-input-lbl">WAKE ANCHOR (UTC)</label>
+                            <label class="hub-input-lbl">WAKE ANCHOR (LOCAL TIME)</label>
                             <input type="time" id="cal-anchor" class="hub-input" value="${sAnchorStr}">
                         </div>
                         <div class="hub-input-group" style="flex:1;">
                             <label class="hub-input-lbl">TARGET SLEEP (HRS)</label>
                             <input type="number" id="cal-sleep" class="hub-input" value="${sSleepHrs}" step="0.5" min="4" max="12">
+                        </div>
+                    </div>
+
+                    <div style="display:flex; gap:10px;">
+                        <div class="hub-input-group" style="flex:1;">
+                            <label class="hub-input-lbl">SLEEP INERTIA (MINS)</label>
+                            <input type="number" id="cal-inertia" class="hub-input" value="${sInertia}" min="0" max="180">
+                        </div>
+                        <div class="hub-input-group" style="flex:1;">
+                            <label class="hub-input-lbl">DLMO WIND-DOWN (MINS)</label>
+                            <input type="number" id="cal-dlmo" class="hub-input" value="${sDlmo}" min="0" max="180">
                         </div>
                     </div>
 
@@ -383,29 +401,25 @@ window.Q_IntegrationHub = {
 };
 
 window.Q_Auth = {
-    signOut: async function() {
-        if (window.supabaseClient) {
-            await window.supabaseClient.auth.signOut();
-        }
-        localStorage.setItem('Q_SOVEREIGN_AUTH', 'false');
-        if (window.Q_STATE) window.Q_STATE.persistence.auth_status = 'STANDBY';
-        window.location.reload(); 
+    getRedirectVector: function() {
+        const origin = window.location.origin;
+        return `${origin}/personal/index.html`;
     },
-
     triggerOAuthProvider: async function(provider) {
         if (!window.supabaseClient) {
             alert("CLOUD BRIDGE DISCONNECTED. AWAITING SUPABASE INIT.");
             return;
         }
+        
+        sessionStorage.setItem('Q_AUTH_RETURN_VECTOR', window.location.pathname);
+        
         try {
-            // DYNAMIC ROUTING: Captures the EXACT URL you are currently viewing (e.g. /aperture/index.html)
-            // This ensures Supabase drops you right back to the exact page you started from, bypassing the root 404.
             const exactCurrentPage = window.location.href.split('#')[0].split('?')[0];
             
             const { error } = await window.supabaseClient.auth.signInWithOAuth({
                 provider: provider,
                 options: {
-                    redirectTo: exactCurrentPage
+                    redirectTo: exactCurrentPage 
                 }
             });
             if (error) throw error;
@@ -414,7 +428,6 @@ window.Q_Auth = {
             alert(`[ FAULT: ${err.message} ]`);
         }
     },
-    
     triggerOAuth: function() {
         window.Q_LOG('INFO', 'CORE', 'SOVEREIGN_IDENTITY_AUTH_TRIGGERED');
         if (window.ReactNativeWebView) {
@@ -423,7 +436,6 @@ window.Q_Auth = {
             this.renderLoginModal();
         }
     },
-    
     renderLoginModal: function() {
         if (document.getElementById('q-auth-overlay')) return;
 
@@ -453,7 +465,6 @@ window.Q_Auth = {
         `;
         document.body.appendChild(overlay);
     },
-    
     sendMagicLink: async function() {
         const email = document.getElementById('auth-email').value;
         const statusEl = document.getElementById('auth-status');
@@ -473,11 +484,15 @@ window.Q_Auth = {
         btn.style.opacity = "0.5";
         btn.style.pointerEvents = "none";
         
+        sessionStorage.setItem('Q_AUTH_RETURN_VECTOR', window.location.pathname);
+
         try {
             const exactCurrentPage = window.location.href.split('#')[0].split('?')[0];
             const { error } = await window.supabaseClient.auth.signInWithOtp({
                 email: email,
-                options: { emailRedirectTo: exactCurrentPage }
+                options: {
+                    emailRedirectTo: exactCurrentPage 
+                }
             });
 
             if (error) throw error;
@@ -498,15 +513,14 @@ window.Q_Auth = {
             window.Q_LOG('ERROR', 'CORE', 'MAGIC_LINK_FAILED', { error: err.message });
         }
     },
-    
     handleAuthRedirect: async function() {
         if (!window.supabaseClient) return;
         
         const { data: session } = await window.supabaseClient.auth.getSession();
         if (session?.session?.user) {
+            window.Q_STATE.persistence.auth_status = 'SOVEREIGN_AUTHENTICATED';
             localStorage.setItem('Q_SOVEREIGN_AUTH', 'true');
-            if (window.Q_STATE) window.Q_STATE.persistence.auth_status = 'SOVEREIGN_AUTHENTICATED';
-            window.Q_LOG('STATE', 'CORE', 'SOVEREIGN_IDENTITY_VERIFIED');
+            window.Q_LOG('STATE', 'CORE', 'SOVEREIGN_IDENTITY_VERIFIED', { user: session.session.user.email });
             
             if (window.ReactNativeWebView) {
                 window.ReactNativeWebView.postMessage(JSON.stringify({ action: 'SECURE_AUTH_SUCCESS', token: session.session.access_token }));
@@ -521,9 +535,16 @@ window.Q_Auth = {
                 badge.style.background = "#39ff14";
             }
             
+            // Contextual UX Return Logic
+            const returnVector = sessionStorage.getItem('Q_AUTH_RETURN_VECTOR');
+            if (returnVector && returnVector !== '/personal/index.html' && returnVector !== '/' && returnVector !== '') {
+                sessionStorage.removeItem('Q_AUTH_RETURN_VECTOR');
+                window.location.replace(window.location.origin + returnVector);
+            }
+            
         } else {
             localStorage.setItem('Q_SOVEREIGN_AUTH', 'false');
-            if (window.Q_STATE) window.Q_STATE.persistence.auth_status = 'STANDBY';
+            window.Q_STATE.persistence.auth_status = 'STANDBY';
         }
     }
 };

@@ -71,7 +71,7 @@ window.Q_IntegrationHub = {
             window.ReactNativeWebView.postMessage(JSON.stringify({ action: 'TRIGGER_PAYWALL', tier: tierLevel, feature: featureKey }));
         } else {
             alert(`[ THE QUADRATURE: SOVEREIGN MATRIX ]\nAccess to ${featureKey.toUpperCase()} requires ${tierLevel} verification.\n\nProceeding to gateway simulation...`);
-            if(categoryKey && window.Q_STATE[categoryKey]) {
+            if(categoryKey && window.Q_STATE && window.Q_STATE[categoryKey]) {
                 window.Q_UpdateState(categoryKey, featureKey, 'ACTIVE');
             }
             this.injectDOM(); 
@@ -114,18 +114,20 @@ window.Q_IntegrationHub = {
             return;
         }
 
-        window.Q_UpdateState('metaphysical_layer', 'dob', dob);
-        window.Q_UpdateState('metaphysical_layer', 'tob', isUnknown ? '12:00' : tob);
-        window.Q_UpdateState('metaphysical_layer', 'tob_unknown', isUnknown);
-        window.Q_UpdateState('location', 'name', loc.toUpperCase());
-        window.Q_UpdateState('metaphysical_layer', 'natal_anchor', natal);
+        if (window.Q_UpdateState) {
+            window.Q_UpdateState('metaphysical_layer', 'dob', dob);
+            window.Q_UpdateState('metaphysical_layer', 'tob', isUnknown ? '12:00' : tob);
+            window.Q_UpdateState('metaphysical_layer', 'tob_unknown', isUnknown);
+            window.Q_UpdateState('location', 'name', loc.toUpperCase());
+            window.Q_UpdateState('metaphysical_layer', 'natal_anchor', natal);
 
-        const parts = anchor.split(':');
-        const mins = (parseInt(parts[0]) * 60) + parseInt(parts[1]);
-        window.Q_UpdateState('metaphysical_layer', 'wake_anchor_mins', mins);
-        
-        const sleepMins = Math.floor(parseFloat(sleepHrs) * 60);
-        window.Q_UpdateState('metaphysical_layer', 'sleep_cycle_duration', sleepMins);
+            const parts = anchor.split(':');
+            const mins = (parseInt(parts[0]) * 60) + parseInt(parts[1]);
+            window.Q_UpdateState('metaphysical_layer', 'wake_anchor_mins', mins);
+            
+            const sleepMins = Math.floor(parseFloat(sleepHrs) * 60);
+            window.Q_UpdateState('metaphysical_layer', 'sleep_cycle_duration', sleepMins);
+        }
 
         if(window.Q_LOG) window.Q_LOG('STATE', 'CORE', 'IDENTITY_PARAMETERS_UPDATED');
         
@@ -153,9 +155,10 @@ window.Q_IntegrationHub = {
         const renderBadge = (statusColor, textColor, text) => `<span style="font-size:0.55rem; background:${statusColor}; color:${textColor}; padding:4px 8px; border-radius:4px; font-weight:900; letter-spacing: 1px;">${text}</span>`;
         const renderUpgradeBtn = (feature, tier, category, color) => `<button onclick="window.Q_IntegrationHub.requestStateGate('${feature}', '${tier}', '${category}')" style="font-size:0.55rem; background:transparent; border:1px solid ${color}; color:${color}; padding:4px 8px; border-radius:4px; font-weight:900; letter-spacing: 1px; cursor:pointer; transition:0.3s; pointer-events:auto;" onmouseover="this.style.background='${color}'; this.style.color='#000';" onmouseout="this.style.background='transparent'; this.style.color='${color}';">UPGRADE</button>`;
 
-        const authState = window.Q_STATE?.persistence?.auth_status === 'SOVEREIGN_AUTHENTICATED' ? 'ACTIVE' : 'STANDBY';
+        const authState = localStorage.getItem('Q_SOVEREIGN_AUTH') === 'true' ? 'ACTIVE' : 'STANDBY';
         const authColor = authState === 'ACTIVE' ? '#39ff14' : '#ff003c';
-        const authText = authState === 'ACTIVE' ? '[ IN THE QUAD ] - IDENTITY SYNCED' : '[ AUTHENTICATE ] - LOCAL CACHE ONLY';
+        const authText = authState === 'ACTIVE' ? '[ DISCONNECT MATRIX ]' : '[ AUTHENTICATE ] - LOCAL CACHE ONLY';
+        const authAction = authState === 'ACTIVE' ? 'window.Q_Auth.signOut()' : 'window.Q_Auth.triggerOAuth()';
 
         const isBioActive = window.Q_STATE?.hardware_hooks?.biometric_api === 'ACTIVE';
         const bioStatus = isBioActive ? renderBadge('#39ff14', '#000', 'ACTIVE') : renderUpgradeBtn('biometric_api', 'STANDARD TIER', 'hardware_hooks', '#39ff14');
@@ -175,7 +178,7 @@ window.Q_IntegrationHub = {
         const sTobUnknown = window.Q_STATE?.metaphysical_layer?.tob_unknown === true;
         const sLoc = window.Q_STATE?.location?.name || "";
         const sNatal = window.Q_STATE?.metaphysical_layer?.natal_anchor || "NONE";
-        const savedAnchorMins = window.Q_STATE?.metaphysical_layer?.wake_anchor_mins !== null ? window.Q_STATE.metaphysical_layer.wake_anchor_mins : (parseInt(localStorage.getItem('q_bio_anchor')) || 0);
+        const savedAnchorMins = window.Q_STATE?.metaphysical_layer?.wake_anchor_mins !== null ? window.Q_STATE?.metaphysical_layer?.wake_anchor_mins : (parseInt(localStorage.getItem('q_bio_anchor')) || 0);
         const sAnchorStr = `${Math.floor(savedAnchorMins / 60).toString().padStart(2, '0')}:${(savedAnchorMins % 60).toString().padStart(2, '0')}`;
         
         const sSleep = window.Q_STATE?.metaphysical_layer?.sleep_cycle_duration || 450;
@@ -191,7 +194,7 @@ window.Q_IntegrationHub = {
             <div class="q-hub-box" onclick="event.stopPropagation()">
                 <div class="hub-header">SOVEREIGN MATRIX // ACCOUNT</div>
                 
-                <button onclick="if(window.Q_Auth) window.Q_Auth.triggerOAuth()" style="background:rgba(0,0,0,0.6); border:1px solid ${authColor}; color:${authColor}; padding: 8px 12px; font-family:'Orbitron'; font-size:0.65rem; font-weight:bold; letter-spacing:1px; cursor:pointer; border-radius:4px; margin-bottom:15px; width:100%; transition:0.3s; box-shadow: inset 0 0 10px rgba(${authState === 'ACTIVE' ? '57,255,20' : '255,0,60'}, 0.1);" onmouseover="this.style.background='${authColor}'; this.style.color='#000';" onmouseout="this.style.background='rgba(0,0,0,0.6)'; this.style.color='${authColor}';">${authText}</button>
+                <button onclick="if(window.Q_Auth) { ${authAction} }" style="background:rgba(0,0,0,0.6); border:1px solid ${authColor}; color:${authColor}; padding: 8px 12px; font-family:'Orbitron'; font-size:0.65rem; font-weight:bold; letter-spacing:1px; cursor:pointer; border-radius:4px; margin-bottom:15px; width:100%; transition:0.3s; box-shadow: inset 0 0 10px rgba(${authState === 'ACTIVE' ? '57,255,20' : '255,0,60'}, 0.1);" onmouseover="this.style.background='${authColor}'; this.style.color='#000';" onmouseout="this.style.background='rgba(0,0,0,0.6)'; this.style.color='${authColor}';">${authText}</button>
 
                 <div class="hub-tabs">
                     <button class="hub-tab-btn ${this.activeTab === 'guide' ? 'active' : ''}" id="tab-btn-guide" onclick="window.Q_IntegrationHub.switchTab('guide')">GUIDE</button>
@@ -379,20 +382,29 @@ window.Q_IntegrationHub = {
 };
 
 window.Q_Auth = {
-    getRedirectVector: function() {
-        // Relies exclusively on the Supabase wildcard (**) allowing dynamic paths
-        return window.location.origin + window.location.pathname;
+    signOut: async function() {
+        if (window.supabaseClient) {
+            await window.supabaseClient.auth.signOut();
+        }
+        localStorage.setItem('Q_SOVEREIGN_AUTH', 'false');
+        if (window.Q_STATE) window.Q_STATE.persistence.auth_status = 'STANDBY';
+        window.location.reload(); 
     },
+
     triggerOAuthProvider: async function(provider) {
         if (!window.supabaseClient) {
             alert("CLOUD BRIDGE DISCONNECTED. AWAITING SUPABASE INIT.");
             return;
         }
         try {
+            // EXACT PATH ROUTING: We capture the absolute, clean URL you are standing on.
+            // Example: "https://quadrature-mobile...vercel.app/aperture/index.html"
+            const currentPath = window.location.origin + window.location.pathname;
+            
             const { error } = await window.supabaseClient.auth.signInWithOAuth({
                 provider: provider,
                 options: {
-                    redirectTo: this.getRedirectVector() 
+                    redirectTo: currentPath
                 }
             });
             if (error) throw error;
@@ -401,6 +413,7 @@ window.Q_Auth = {
             alert(`[ FAULT: ${err.message} ]`);
         }
     },
+    
     triggerOAuth: function() {
         window.Q_LOG('INFO', 'CORE', 'SOVEREIGN_IDENTITY_AUTH_TRIGGERED');
         if (window.ReactNativeWebView) {
@@ -409,6 +422,7 @@ window.Q_Auth = {
             this.renderLoginModal();
         }
     },
+    
     renderLoginModal: function() {
         if (document.getElementById('q-auth-overlay')) return;
 
@@ -438,6 +452,7 @@ window.Q_Auth = {
         `;
         document.body.appendChild(overlay);
     },
+    
     sendMagicLink: async function() {
         const email = document.getElementById('auth-email').value;
         const statusEl = document.getElementById('auth-status');
@@ -458,11 +473,10 @@ window.Q_Auth = {
         btn.style.pointerEvents = "none";
         
         try {
+            const currentPath = window.location.origin + window.location.pathname;
             const { error } = await window.supabaseClient.auth.signInWithOtp({
                 email: email,
-                options: {
-                    emailRedirectTo: this.getRedirectVector() 
-                }
+                options: { emailRedirectTo: currentPath }
             });
 
             if (error) throw error;
@@ -483,14 +497,15 @@ window.Q_Auth = {
             window.Q_LOG('ERROR', 'CORE', 'MAGIC_LINK_FAILED', { error: err.message });
         }
     },
+    
     handleAuthRedirect: async function() {
         if (!window.supabaseClient) return;
         
         const { data: session } = await window.supabaseClient.auth.getSession();
         if (session?.session?.user) {
-            window.Q_STATE.persistence.auth_status = 'SOVEREIGN_AUTHENTICATED';
             localStorage.setItem('Q_SOVEREIGN_AUTH', 'true');
-            window.Q_LOG('STATE', 'CORE', 'SOVEREIGN_IDENTITY_VERIFIED', { user: session.session.user.email });
+            if (window.Q_STATE) window.Q_STATE.persistence.auth_status = 'SOVEREIGN_AUTHENTICATED';
+            window.Q_LOG('STATE', 'CORE', 'SOVEREIGN_IDENTITY_VERIFIED');
             
             if (window.ReactNativeWebView) {
                 window.ReactNativeWebView.postMessage(JSON.stringify({ action: 'SECURE_AUTH_SUCCESS', token: session.session.access_token }));
@@ -505,11 +520,9 @@ window.Q_Auth = {
                 badge.style.background = "#39ff14";
             }
             
-            // Reverted manual window.location.replace to allow native Supabase return routing
-            
         } else {
             localStorage.setItem('Q_SOVEREIGN_AUTH', 'false');
-            window.Q_STATE.persistence.auth_status = 'STANDBY';
+            if (window.Q_STATE) window.Q_STATE.persistence.auth_status = 'STANDBY';
         }
     }
 };

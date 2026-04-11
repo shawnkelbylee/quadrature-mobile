@@ -309,6 +309,7 @@
                     return; // Halt interceptor loop
                 }
 
+                // ROUTING CALIBRATED TO JUMP UP FROM /aperture/ AND INTO TARGET DIRECTORIES
                 if (hrefStr.includes('/personal') || onClickStr.includes('personal') || text.includes('personal quad')) {
                     targetUrl = '../personal/index.html';
                 } else if (hrefStr.includes('/commercial') || onClickStr.includes('commercial') || text.includes('commercial quad')) {

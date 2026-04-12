@@ -1,11 +1,12 @@
 // THE QUADRATURE: APERTURE GATEWAY UI CONTROLLER
 // Architect: Kelby | Engineer: Kairos
-// STATUS: Version 23.6 - Interceptor rewritten. Regex target extraction + Animation bypass for Vector HUDs.
+// STATUS: Version 23.7 - Interceptor restored to verified v23.3 matchers. Specific Vector HUD bypass logic safely nested.
 
 window.injectUniversalUI = function() {
     if (window.self !== window.top) return;
     if (document.getElementById('q-ui-injected-flag')) return;
 
+    // 1. IRONCLAD METADATA ENFORCEMENT
     let oldMeta = document.querySelector('meta[name="viewport"]');
     if (oldMeta) oldMeta.remove();
     let meta = document.createElement('meta');
@@ -17,11 +18,13 @@ window.injectUniversalUI = function() {
     let noCache2 = document.createElement('meta'); noCache2.httpEquiv = "Pragma"; noCache2.content = "no-cache"; document.head.appendChild(noCache2);
     let noCache3 = document.createElement('meta'); noCache3.httpEquiv = "Expires"; noCache3.content = "0"; document.head.appendChild(noCache3);
 
+    // Flag injection to prevent duplicate runs
     const flag = document.createElement('div');
     flag.id = 'q-ui-injected-flag';
     flag.style.display = 'none';
     document.body.appendChild(flag);
 
+    // 2. LOCAL TIME FORMAT TOGGLE LOGIC
     window.toggleTimeFmt = function(btnId) {
         let fmt = localStorage.getItem('Q_TIME_FMT') || 'UTC_24';
         const cycle = { 'UTC_24': 'LOCAL_24', 'LOCAL_24': 'UTC_12', 'UTC_12': 'LOCAL_12', 'LOCAL_12': 'UTC_24' };
@@ -80,12 +83,13 @@ window.triggerDomainShift = function(e) {
         if(window.Q_ModalEngine) window.Q_ModalEngine.render('DOMAIN SHIFT PROTOCOL', html);
         else alert("Routing Module Unavailable.");
     } else {
-        if(window.Q_Auth) window.Q_Auth.triggerOAuth(); 
+        if(window.Q_Auth) window.Q_Auth.triggerOAuth(); // Resync or show status if single tier
     }
 };
 
-// 3. HYPER-RESILIENT ROUTING INTERCEPTOR
+// 3. AGGRESSIVE CAPTURE-PHASE ROUTING INTERCEPTOR (RESTORED MATCHERS)
 window.addEventListener('click', (e) => {
+    // Bypass interceptor entirely if clicking inside the dashboard, planner, or modals
     if (e.target.closest('.q-hub-overlay') || e.target.closest('.modal-overlay') || e.target.closest('.q-planner-overlay')) {
         return; 
     }
@@ -101,40 +105,54 @@ window.addEventListener('click', (e) => {
         const hrefStr = (el.getAttribute('href') || '').toLowerCase();
         const dataTarget = (el.getAttribute('data-target') || '').toLowerCase();
 
-        // 1. Dashboard Intercept
+        // Explicitly intercept Dashboard intents
         if (dataTarget === 'dashboard' || hrefStr.includes('/dashboard') || onClickStr.includes('dashboard') || text.includes('dashboard')) {
-            e.preventDefault(); e.stopPropagation();
+            e.preventDefault();
+            e.stopPropagation();
             if (window.Q_IntegrationHub) window.Q_IntegrationHub.openHub();
-            return; 
+            return; // Halt interceptor loop
         }
 
-        // 2. Planner Intercept
-        if (dataTarget === 'planner' || hrefStr.includes('/physical') || onClickStr.includes('physical') || text.includes('omni-planner') || text.includes('omni planner')) {
-            e.preventDefault(); e.stopPropagation();
+        // Explicitly route Omni-Planner intents
+        if (dataTarget === 'planner' || hrefStr.includes('/physical') || onClickStr.includes('physical') || text.includes('physical assets') || text.includes('omni-planner') || text.includes('omni planner')) {
+            e.preventDefault();
+            e.stopPropagation();
             if (window.Q_OmniPlanner) window.Q_OmniPlanner.openPlanner();
-            return; 
+            return; // Halt interceptor loop
         }
 
-        // 3. EXPLICIT FILE EXTRACTION (Regex match for .html targets)
-        const onClickMatch = onClickStr.match(/['"]([^'"]+\.html)['"]/);
-        
-        if (hrefStr.includes('.html')) {
-            targetUrl = hrefStr;
-            bypassSequence = !targetUrl.includes('index.html');
+        // GATEWAY ROUTING RESOLUTION
+        if (dataTarget.includes('personal') || hrefStr.includes('/personal') || onClickStr.includes('personal') || text.includes('personal quad') || text.includes('personal matrix')) {
+            const actualHref = el.getAttribute('href');
+            const actualOnClick = el.getAttribute('onclick');
+            
+            if (actualHref && actualHref.toLowerCase().includes('.html') && !actualHref.toLowerCase().includes('index.html')) {
+                targetUrl = actualHref;
+                bypassSequence = true;
+            } else if (actualOnClick && actualOnClick.toLowerCase().includes('.html') && !actualOnClick.toLowerCase().includes('index.html')) {
+                const match = actualOnClick.match(/['"]([^'"]+\.html)['"]/);
+                targetUrl = match ? match[1] : '../personal/index.html';
+                bypassSequence = !!match;
+            } else {
+                targetUrl = '../personal/index.html';
+            }
             break;
-        } else if (onClickMatch) {
-            targetUrl = onClickMatch[1];
-            bypassSequence = !targetUrl.includes('index.html');
+        } else if (dataTarget.includes('commercial') || hrefStr.includes('/commercial') || onClickStr.includes('commercial') || text.includes('commercial quad') || text.includes('enterprise ledger')) {
+            const actualHref = el.getAttribute('href');
+            const actualOnClick = el.getAttribute('onclick');
+            
+            if (actualHref && actualHref.toLowerCase().includes('.html') && !actualHref.toLowerCase().includes('index.html')) {
+                targetUrl = actualHref;
+                bypassSequence = true;
+            } else if (actualOnClick && actualOnClick.toLowerCase().includes('.html') && !actualOnClick.toLowerCase().includes('index.html')) {
+                const match = actualOnClick.match(/['"]([^'"]+\.html)['"]/);
+                targetUrl = match ? match[1] : '../commercial/index.html';
+                bypassSequence = !!match;
+            } else {
+                targetUrl = '../commercial/index.html';
+            }
             break;
         } 
-        // 4. MACRO GATEWAY FALLBACKS
-        else if (dataTarget.includes('personal') || text === 'personal quad' || text === 'personal matrix') {
-            targetUrl = '../personal/index.html';
-            break;
-        } else if (dataTarget.includes('commercial') || text === 'commercial quad' || text === 'enterprise ledger') {
-            targetUrl = '../commercial/index.html';
-            break;
-        }
 
         el = el.parentElement;
         depth++;
@@ -144,10 +162,10 @@ window.addEventListener('click', (e) => {
         e.preventDefault();
         e.stopPropagation(); 
         
+        // Target specifically index.html for animation, bypass all other .html views
         if (window.executeApertureSequence && !bypassSequence) {
             window.executeApertureSequence(targetUrl);
         } else {
-            // Hard route for specific Vector HUDs to prevent animation sequence failure
             window.location.href = targetUrl;
         }
     }
@@ -157,6 +175,7 @@ window.addEventListener('click', (e) => {
 window.addEventListener('DOMContentLoaded', () => {
     window.injectUniversalUI();
     
+    // UI TEXT OVERRIDE: Failsafe to ensure Omni-Planner nomenclature is enforced globally
     const renamePanel = () => {
         const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT, null, false);
         let node;

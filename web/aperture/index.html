@@ -288,15 +288,14 @@
 
         .m-frost { position: absolute; inset: 0; background: rgba(15, 20, 35, 0.7); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); z-index: 1; }
         .m-bg { position: absolute; inset: 0; background: url('../assets/panel-frame.png') center/150% 150% no-repeat; z-index: 2; opacity: 0.5; filter: drop-shadow(0 5px 10px rgba(0,0,0,0.6)); }
-        .m-label { position: relative; z-index: 3; font-family: 'Orbitron'; font-size: 0.9rem; font-weight: 700; color: var(--q-metal); letter-spacing: 4px; text-shadow: 0 2px 5px rgba(0,0,0,0.9), 0 0 8px rgba(255,255,255,0.3); }
-        
-        /* Commercial Specific Theming */
-        #m-panel-com .m-label { color: #fff; text-shadow: 0 2px 5px rgba(0,0,0,0.9), 0 0 10px rgba(255, 255, 255, 0.5); }
-        #m-panel-com { border-color: rgba(255,255,255,0.3); }
+        .m-label { position: relative; z-index: 3; font-family: 'Orbitron'; font-size: 0.9rem; font-weight: 700; color: var(--q-metal); letter-spacing: 4px; text-shadow: 0 2px 5px rgba(0,0,0,0.9), 0 0 8px rgba(255,255,255,0.3); display: flex; align-items: center; gap: 8px; }
+
+        /* Commercial Specific Theming - Highlights Removed to match Personal base */
+        #m-panel-com .m-label { color: var(--q-metal); }
 
         /* Cryo-State Entitlement Gating */
         .m-panel.cryo-state { filter: grayscale(100%); opacity: 0.45; border-color: transparent; }
-        .m-panel.cryo-state .m-label { color: #666; text-shadow: 0 2px 5px rgba(0,0,0,0.9); display: flex; align-items: center; gap: 8px; }
+        .m-panel.cryo-state .m-label { color: #666; text-shadow: 0 2px 5px rgba(0,0,0,0.9); }
 
         /* Mobile Reveal Triggers (The Staggered Cascade) */
         body.mobile-revealed .mobile-routing-grid { pointer-events: auto; }
@@ -355,7 +354,7 @@
             <div class="m-frost"></div><div class="m-bg"></div>
             <div class="m-label">PERSONAL QUAD</div>
         </div>
-        <div class="m-panel m-commercial" id="m-panel-com" data-target="../commercial/index.html">
+        <div class="m-panel" id="m-panel-com" data-target="../commercial/index.html">
             <div class="m-frost"></div><div class="m-bg" style="transform: scaleX(-1);"></div>
             <div class="m-label">COMMERCIAL QUAD <span class="m-lock-icon" id="m-com-lock" style="display:none;">🔒</span></div>
         </div>
@@ -590,7 +589,7 @@
             }, 1500); 
         };
 
-        // 5. MOBILE PROTOCOL: Entitlement Checking & Global Reveal
+        // 5. MOBILE PROTOCOL: True Entitlement Override & Rendering
         let isMobileRevealed = false;
 
         function checkMobileEntitlements() {
@@ -598,19 +597,21 @@
             let entitlements = [];
             try { entitlements = JSON.parse(rawEnt) || []; } catch(err) {}
             
-            // --- STRICT MASTER ACCESS OVERRIDE ---
+            // --- TRUE ENTITLEMENT OVERRIDE (THE ARCHITECT) ---
             let authUser = localStorage.getItem('Q_SOVEREIGN_USER') || 'GUEST';
             let isLocalEnv = (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' || window.location.protocol === 'file:');
             
             if (isLocalEnv || authUser.toUpperCase().includes('KELBY') || authUser.toUpperCase().includes('MASTER') || localStorage.getItem('Q_ARCHITECT_MODE') === 'TRUE') {
                 if (!entitlements.includes("COMMERCIAL")) entitlements.push("COMMERCIAL");
                 if (!entitlements.includes("ENTERPRISE")) entitlements.push("ENTERPRISE");
+                localStorage.setItem('Q_ENTITLEMENTS', JSON.stringify(entitlements));
             }
-            // -------------------------------------
+            // -------------------------------------------------
 
             const comPanel = document.getElementById('m-panel-com');
             const lockIcon = document.getElementById('m-com-lock');
             
+            // Render state strictly based on the finalized entitlements payload
             if(!entitlements.includes("COMMERCIAL") && !entitlements.includes("ENTERPRISE")) {
                 comPanel.classList.add('cryo-state');
                 lockIcon.style.display = 'inline-block';

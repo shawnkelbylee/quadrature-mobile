@@ -314,7 +314,7 @@ window.injectUniversalUI = function() {
         <div class="q-nav-bar">
             <div style="display:flex; width: 100%; justify-content: center; align-items: center;">
                 <div class="q-nav-menu" id="q-nav-menu">
-                    <a href="../aperture/index.html" class="q-nav-btn desktop-only" ontouchstart="window.location.href=this.href; event.preventDefault();">APERTURE</a>
+                    <a href="../aperture/index.html" class="q-nav-btn aperture-btn" style="border-color: #ffffff; color: #ffffff;" onclick="window.location.href=this.href; return false;">APERTURE</a>
                     <button id="q-global-sim-badge" class="q-nav-btn sim-badge" style="border-color:${authBorder} !important; color:${authColor} !important; background:${authBg} !important;" onclick="window.triggerDomainShift(event)">${authText}</button>
                     <a href="./index.html" class="q-nav-btn face-btn vector-link ${faceActive ? 'active' : ''}" ontouchstart="window.location.href=this.href; event.preventDefault();">CHRONO-FACE</a>
                     <a href="./COMBIOVECHUD.html" class="q-nav-btn bio-btn vector-link ${bActive ? 'active' : ''}" ontouchstart="window.location.href=this.href; event.preventDefault();">WORKFORCE</a>

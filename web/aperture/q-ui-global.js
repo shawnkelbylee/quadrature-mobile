@@ -1,12 +1,11 @@
 // THE QUADRATURE: APERTURE GATEWAY UI CONTROLLER
 // Architect: Kelby | Engineer: Kairos
-// STATUS: Version 24.2 - Gateway Controller Optimized. Architect Master Override integrated and Mobile UI cross-talk neutralized.
+// STATUS: Version 24.1 - Gateway Controller Optimized. Architect Master Override integrated with Supabase Extractor.
 
 window.injectUniversalUI = function() {
     if (window.self !== window.top) return;
     if (document.getElementById('q-ui-injected-flag')) return;
 
-    // 1. IRONCLAD METADATA ENFORCEMENT
     let oldMeta = document.querySelector('meta[name="viewport"]');
     if (oldMeta) oldMeta.remove();
     let meta = document.createElement('meta');
@@ -18,13 +17,11 @@ window.injectUniversalUI = function() {
     let noCache2 = document.createElement('meta'); noCache2.httpEquiv = "Pragma"; noCache2.content = "no-cache"; document.head.appendChild(noCache2);
     let noCache3 = document.createElement('meta'); noCache3.httpEquiv = "Expires"; noCache3.content = "0"; document.head.appendChild(noCache3);
 
-    // Flag injection to prevent duplicate runs
     const flag = document.createElement('div');
     flag.id = 'q-ui-injected-flag';
     flag.style.display = 'none';
     document.body.appendChild(flag);
 
-    // 2. LOCAL TIME FORMAT TOGGLE LOGIC
     window.toggleTimeFmt = function(btnId) {
         let fmt = localStorage.getItem('Q_TIME_FMT') || 'UTC_24';
         const cycle = { 'UTC_24': 'LOCAL_24', 'LOCAL_24': 'UTC_12', 'UTC_12': 'LOCAL_12', 'LOCAL_12': 'UTC_24' };
@@ -40,8 +37,6 @@ window.injectUniversalUI = function() {
         if (window.Q_MobileBridge) window.Q_MobileBridge.pulse('LIGHT');
     };
 
-    // 3. APERTURE RETURN TAB INJECTION
-    // Injects a global return button into the top navigation bar to return to the gateway.
     setTimeout(() => {
         const navBar = document.querySelector('.q-nav-bar') || document.querySelector('header');
         if (navBar && !document.getElementById('btn-return-aperture')) {
@@ -64,11 +59,9 @@ window.injectUniversalUI = function() {
             returnBtn.onclick = (e) => {
                 e.preventDefault();
                 e.stopPropagation();
-                // Route back to the root gateway
                 window.location.href = '/'; 
             };
             
-            // Ensure the navbar can hold absolute children without breaking layout
             if (window.getComputedStyle(navBar).position === 'static') {
                 navBar.style.position = 'relative';
             }
@@ -77,11 +70,26 @@ window.injectUniversalUI = function() {
     }, 500); 
 };
 
-// --- DOMAIN SHIFT & AUTH LOGIC (APERTURE LEVEL) ---
 window.triggerDomainShift = function(e) {
     if(e) e.preventDefault();
-    let authState = localStorage.getItem('Q_SOVEREIGN_AUTH') === 'true' ? 'ACTIVE' : 'STANDBY';
     
+    let authState = localStorage.getItem('Q_SOVEREIGN_AUTH') === 'true' ? 'ACTIVE' : 'STANDBY';
+    let authEmail = "";
+    let authUser = (localStorage.getItem('Q_SOVEREIGN_USER') || '').toUpperCase();
+
+    for (let i = 0; i < localStorage.length; i++) {
+        let key = localStorage.key(i);
+        if (key && key.startsWith('sb-') && key.includes('auth-token')) {
+            try {
+                let sessionData = JSON.parse(localStorage.getItem(key));
+                if (sessionData && sessionData.user && sessionData.user.email) {
+                    authEmail = sessionData.user.email.toUpperCase();
+                    authState = 'ACTIVE';
+                }
+            } catch(err) {}
+        }
+    }
+
     if(authState !== 'ACTIVE') {
         if(window.Q_Auth && typeof window.Q_Auth.triggerOAuth === 'function') window.Q_Auth.triggerOAuth();
         else alert("OAuth Service Unavailable. Please reload the Gateway.");
@@ -92,16 +100,14 @@ window.triggerDomainShift = function(e) {
     let entitlements = [];
     try { entitlements = JSON.parse(rawEnt) || []; } catch(err) {}
 
-    // --- MASTER ACCESS OVERRIDE (THE ARCHITECT) ---
-    let authUser = localStorage.getItem('Q_SOVEREIGN_USER') || 'GUEST';
     let isLocalEnv = (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' || window.location.protocol === 'file:');
     
-    if (isLocalEnv || authUser.toUpperCase().includes('KELBY') || authUser.toUpperCase().includes('MASTER') || localStorage.getItem('Q_ARCHITECT_MODE') === 'TRUE') {
+    if (isLocalEnv || authUser.includes('KELBY') || authUser.includes('SHAWN') || authEmail.includes('SHAWNKELBYLEE@GMAIL.COM') || authEmail.includes('KELBY') || localStorage.getItem('Q_ARCHITECT_MODE') === 'TRUE') {
         if (!entitlements.includes("PERSONAL")) entitlements.push("PERSONAL");
         if (!entitlements.includes("COMMERCIAL")) entitlements.push("COMMERCIAL");
+        if (!entitlements.includes("ENTERPRISE")) entitlements.push("ENTERPRISE");
         localStorage.setItem('Q_ENTITLEMENTS', JSON.stringify(entitlements));
     }
-    // ----------------------------------------------
 
     if(entitlements.includes("PERSONAL") && entitlements.includes("COMMERCIAL")) {
         const html = `
@@ -127,7 +133,6 @@ window.triggerDomainShift = function(e) {
     }
 };
 
-// 3. BULLETPROOF ROUTING INTERCEPTOR
 window.addEventListener('click', (e) => {
     try {
         let el = e.target;
@@ -138,8 +143,7 @@ window.addEventListener('click', (e) => {
         
         if (!el || typeof el.closest !== 'function') return;
 
-        // EXCLUSION PROTOCOL: Exempt mobile panels from the global interceptor to allow native routing
-        if (el.closest('.q-hub-overlay') || el.closest('.modal-overlay') || el.closest('.q-planner-overlay') || el.id === 'btn-return-aperture' || el.closest('.m-panel') || el.closest('.mobile-routing-grid')) {
+        if (el.closest('.q-hub-overlay') || el.closest('.modal-overlay') || el.closest('.q-planner-overlay') || el.id === 'btn-return-aperture') {
             return; 
         }
 
@@ -197,7 +201,6 @@ window.addEventListener('click', (e) => {
     }
 }, true);
 
-// INIT SEQUENCE
 window.addEventListener('DOMContentLoaded', () => {
     window.injectUniversalUI();
     

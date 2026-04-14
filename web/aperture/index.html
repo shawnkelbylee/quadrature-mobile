@@ -15,7 +15,7 @@
         window.Q_BOOT_COMPLETE = true;
         
         // Intercept and permanently disable common boot functions
-        window.runBootSequence = function() { console.log("[APERTURE GATEWAY] Boot sequence intercepted and nullified."); return; };
+        window.runBootSequence = function() { return; };
         window.initBoot = function() { return; };
         window.triggerBoot = function() { return; };
     </script>
@@ -42,7 +42,7 @@
             display: none !important; opacity: 0 !important; pointer-events: none !important; z-index: -9999 !important; visibility: hidden !important;
         }
         body.boot-active > *:not(.aperture-container):not(#portal-frame):not(script):not(style):not(.mobile-routing-grid) {
-            opacity: 1 !important; pointer-events: auto !important; /* Force override if body retains class */
+            opacity: 1 !important; pointer-events: auto !important; 
         }
 
         :root { 
@@ -305,9 +305,6 @@
         .m-bg { position: absolute; inset: 0; background: url('../assets/panel-frame.png') center/150% 150% no-repeat; z-index: 2; opacity: 0.5; filter: drop-shadow(0 5px 10px rgba(0,0,0,0.6)); }
         .m-label { position: relative; z-index: 3; font-family: 'Orbitron'; font-size: 0.9rem; font-weight: 700; color: var(--q-metal); letter-spacing: 4px; text-shadow: 0 2px 5px rgba(0,0,0,0.9), 0 0 8px rgba(255,255,255,0.3); display: flex; align-items: center; gap: 8px; }
 
-        /* Commercial Specific Theming - Highlights Removed to match Personal base */
-        #m-panel-com .m-label { color: var(--q-metal); }
-
         /* Cryo-State Entitlement Gating */
         .m-panel.cryo-state { filter: grayscale(100%); opacity: 0.45; border-color: transparent; }
         .m-panel.cryo-state .m-label { color: #666; text-shadow: 0 2px 5px rgba(0,0,0,0.9); }
@@ -365,19 +362,19 @@
     </div>
 
     <div class="mobile-routing-grid" id="mobile-routing-grid">
-        <div class="m-panel" data-target="../personal/index.html">
+        <div class="m-panel" data-route="../personal/index.html">
             <div class="m-frost"></div><div class="m-bg"></div>
             <div class="m-label">PERSONAL QUAD</div>
         </div>
-        <div class="m-panel" id="m-panel-com" data-target="../commercial/index.html">
+        <div class="m-panel" id="m-panel-com" data-route="../commercial/index.html">
             <div class="m-frost"></div><div class="m-bg" style="transform: scaleX(-1);"></div>
             <div class="m-label">COMMERCIAL QUAD <span class="m-lock-icon" id="m-com-lock" style="display:none;">🔒</span></div>
         </div>
-        <div class="m-panel" data-target="planner">
+        <div class="m-panel" data-route="planner">
             <div class="m-frost"></div><div class="m-bg" style="transform: scaleY(-1);"></div>
             <div class="m-label">OMNI-PLANNER</div>
         </div>
-        <div class="m-panel" data-target="dashboard">
+        <div class="m-panel" data-route="dashboard">
             <div class="m-frost"></div><div class="m-bg" style="transform: scale(-1, -1);"></div>
             <div class="m-label">MATRIX HUB</div>
         </div>
@@ -613,10 +610,12 @@
             try { entitlements = JSON.parse(rawEnt) || []; } catch(err) {}
             
             // --- TRUE ENTITLEMENT OVERRIDE (THE ARCHITECT) ---
-            let authUser = localStorage.getItem('Q_SOVEREIGN_USER') || 'GUEST';
+            let authUser = (localStorage.getItem('Q_SOVEREIGN_USER') || '').toUpperCase();
+            let authEmail = (localStorage.getItem('Q_USER_EMAIL') || '').toUpperCase();
             let isLocalEnv = (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' || window.location.protocol === 'file:');
             
-            if (isLocalEnv || authUser.toUpperCase().includes('KELBY') || authUser.toUpperCase().includes('MASTER') || localStorage.getItem('Q_ARCHITECT_MODE') === 'TRUE') {
+            // Expanded scanner to catch all permutations of mobile OAuth identity
+            if (isLocalEnv || authUser.includes('KELBY') || authUser.includes('SHAWN') || authUser.includes('MASTER') || authEmail.includes('KELBY') || localStorage.getItem('Q_ARCHITECT_MODE') === 'TRUE') {
                 if (!entitlements.includes("COMMERCIAL")) entitlements.push("COMMERCIAL");
                 if (!entitlements.includes("ENTERPRISE")) entitlements.push("ENTERPRISE");
                 localStorage.setItem('Q_ENTITLEMENTS', JSON.stringify(entitlements));
@@ -631,7 +630,7 @@
                 comPanel.classList.add('cryo-state');
                 lockIcon.style.display = 'inline-block';
                 comPanel.onclick = (e) => {
-                    e.stopPropagation();
+                    e.preventDefault(); e.stopPropagation();
                     alert("[ ACCESS DENIED ]\nThe Commercial Quad requires Enterprise clearance.\nRouting to Tier Upgrade Module...");
                     if(window.Q_IntegrationHub) window.Q_IntegrationHub.openHub();
                 };
@@ -639,8 +638,12 @@
                 comPanel.classList.remove('cryo-state');
                 lockIcon.style.display = 'none';
                 comPanel.onclick = (e) => {
-                    e.stopPropagation();
-                    window.executeApertureSequence('../commercial/index.html');
+                    e.preventDefault(); e.stopPropagation();
+                    if (typeof window.executeApertureSequence === 'function') {
+                        window.executeApertureSequence('../commercial/index.html');
+                    } else {
+                        window.location.href = '../commercial/index.html';
+                    }
                 };
             }
         }
@@ -658,14 +661,19 @@
             // Attach routing sequences to the other 3 panels
             document.querySelectorAll('.m-panel:not(#m-panel-com)').forEach(panel => {
                 panel.addEventListener('click', (e) => {
+                    e.preventDefault();
                     e.stopPropagation();
-                    let target = panel.getAttribute('data-target');
+                    let target = panel.getAttribute('data-route');
                     if(target === 'dashboard') {
                         if (window.Q_IntegrationHub) window.Q_IntegrationHub.openHub();
                     } else if(target === 'planner') {
                         if (window.Q_OmniPlanner) window.Q_OmniPlanner.openPlanner();
                     } else {
-                        window.executeApertureSequence(target);
+                        if (typeof window.executeApertureSequence === 'function') {
+                            window.executeApertureSequence(target);
+                        } else {
+                            window.location.href = target;
+                        }
                     }
                 });
             });

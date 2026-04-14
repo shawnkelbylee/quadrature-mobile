@@ -1,6 +1,6 @@
 // THE QUADRATURE: COMMERCIAL UI MATRIX & ENTERPRISE RENDERER
 // Architect: Kelby | Engineer: Kairos
-// STATUS: Phase V Enterprise Bifurcation. Simplified Analog Clock & Degree Formatting Applied. Master Access Override & Aperture Tab Injected.
+// STATUS: Phase V Enterprise Bifurcation. Simplified Analog Clock Applied. Master Access Override & Mobile HUD Injected.
 
 window.injectUniversalUI = function() {
     if (window.self !== window.top) return;
@@ -173,6 +173,7 @@ window.injectUniversalUI = function() {
         .desktop-only { display: flex !important; }
         .mobile-only-flex { display: none !important; }
 
+        /* --- MOBILE VIEWPORT & HUD OVERRIDES --- */
         @media (max-width: 950px) {
             :root { --dial-size: min(48vh, 85vw) !important; } 
             .desktop-only { display: none !important; }
@@ -327,6 +328,45 @@ window.injectUniversalUI = function() {
             <button class="mobile-only-flex" style="background:transparent; border:none; color:#fff; font-size:1.5rem; padding:0; margin:0; position:absolute; right:15px; cursor:pointer;" onclick="if(typeof window.Q_IntegrationHub !== 'undefined') window.Q_IntegrationHub.openHub()">☰</button>
         </div>
 
+        <div id="mobile-telemetry-ribbon" class="mobile-only-flex">
+            <span id="ribbon-leg-date" style="font-family:'JetBrains Mono'; font-size:0.65rem; color:var(--starlight); font-weight:bold; letter-spacing:1px; white-space:nowrap;">--</span>
+            <div style="display:flex; align-items:center; gap: 4px;">
+                <span class="val-gold" id="ribbon-leg" style="color:#ffffff; font-family:'JetBrains Mono'; font-size:0.65rem; font-weight:bold; margin-top:2px; white-space:nowrap;">--</span>
+                <div class="fmt-toggle" onclick="window.toggleTimeFmt('ribbon-fmt')" id="ribbon-fmt" style="border-color:#555; color:#ccc; padding:2px 6px; font-size:0.5rem; pointer-events:auto; position:relative; z-index:100000; white-space:nowrap;">UTC</div>
+            </div>
+        </div>
+
+        <div class="q-control-strip mobile-only-flex">
+            <button class="strip-btn" onclick="if(typeof window.toggleTelemetry === 'function') window.toggleTelemetry()">
+                <svg id="tele-icon" viewBox="0 0 24 24" width="22" height="22" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"><path d="M18 20V10M12 20V4M6 20v-6"/></svg>
+                <span class="strip-lbl">DATA</span>
+            </button>
+            <a href="./COMBIOVECHUD.html" class="strip-btn bio-strip ${bActive ? 'active' : ''}" onclick="window.location.href=this.href; return false;">
+                <svg viewBox="0 0 24 24" width="22" height="22" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+                <span class="strip-lbl">WORK</span>
+            </a>
+            <a href="./COMCOMVECHUD.html" class="strip-btn com-strip ${cActive ? 'active' : ''}" onclick="window.location.href=this.href; return false;">
+                <svg viewBox="0 0 24 24" width="22" height="22" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"><circle cx="12" cy="5" r="3"/><line x1="12" y1="8" x2="12" y2="16"/><circle cx="6" cy="20" r="3"/><circle cx="18" cy="20" r="3"/><line x1="12" y1="16" x2="6" y2="17"/><line x1="12" y1="16" x2="18" y2="17"/></svg>
+                <span class="strip-lbl">LDGR</span>
+            </a>
+            <a href="./index.html" class="strip-btn face-strip ${faceActive ? 'active' : ''}" onclick="window.location.href=this.href; return false;">
+                <svg viewBox="0 0 24 24" width="22" height="22" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>
+                <span class="strip-lbl">FACE</span>
+            </a>
+            <a href="./COMENVVECHUD.html" class="strip-btn env-strip ${eActive ? 'active' : ''}" onclick="window.location.href=this.href; return false;">
+                <svg viewBox="0 0 24 24" width="22" height="22" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"><path d="M2 22h20L12 2z"/></svg>
+                <span class="strip-lbl">INFR</span>
+            </a>
+            <a href="./COMMECVECHUD.html" class="strip-btn mec-strip ${mActive ? 'active' : ''}" onclick="window.location.href=this.href; return false;">
+                <svg viewBox="0 0 24 24" width="22" height="22" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+                <span class="strip-lbl">YLD</span>
+            </a>
+            <button class="strip-btn" onclick="if(typeof window.Q_OmniPlanner !== 'undefined') window.Q_OmniPlanner.openPlanner()">
+                <svg viewBox="0 0 24 24" width="22" height="22" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="9" y1="21" x2="9" y2="9"/></svg>
+                <span class="strip-lbl">PLAN</span>
+            </button>
+        </div>
+
         ${panelsHTML}
 
         <div class="wing-panel wing-l telemetry-node desktop-only" id="q-wing-left">
@@ -398,7 +438,9 @@ window.injectUniversalUI = function() {
         const ribbonFmt = document.getElementById('ribbon-fmt');
         
         if (ribbonLeg && ribbonLegDate) {
-            ribbonLeg.innerHTML = e.detail.legacyTimeStr;
+            // Strip Z and LCL for mobile visual balance
+            let cleanTimeStr = e.detail.legacyTimeStr.replace(/Z|LCL/gi, '').trim();
+            ribbonLeg.innerHTML = cleanTimeStr;
             if (ribbonFmt) ribbonFmt.innerText = localStorage.getItem('Q_TIME_FMT') || 'UTC_24';
             ribbonLegDate.innerHTML = e.detail.legacyDateStr.toUpperCase();
         }

@@ -265,16 +265,15 @@
             100% { transform: translate(-50%, -50%) scale(40); filter: brightness(8) drop-shadow(0 0 0px var(--white-flash)); opacity: 0; }
         }
 
-        /* --- THE MOBILE APERTURE PROTOCOL --- */
+        /* --- THE MOBILE APERTURE PROTOCOL (VERTICAL CASCADE) --- */
         .desktop-only { display: flex !important; }
 
         .mobile-routing-grid {
             display: none;
-            position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%) scale(0.85);
-            width: 85vw; max-width: 380px; height: 85vw; max-height: 380px;
-            grid-template-columns: 1fr 1fr; grid-template-rows: 1fr 1fr; gap: 15px;
-            z-index: 30; opacity: 0; pointer-events: none;
-            transition: all 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%);
+            width: 85vw; max-width: 400px; height: auto;
+            flex-direction: column; gap: 16px;
+            z-index: 30; pointer-events: none;
         }
 
         .m-panel {
@@ -282,11 +281,14 @@
             display: flex; justify-content: center; align-items: center; text-align: center;
             box-shadow: 0 10px 30px rgba(0,0,0,0.8); overflow: hidden;
             border: 1px solid rgba(255,255,255,0.1);
+            width: 100%; height: 75px;
+            opacity: 0; transform: translateY(30px);
+            transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
 
         .m-frost { position: absolute; inset: 0; background: rgba(15, 20, 35, 0.7); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); z-index: 1; }
         .m-bg { position: absolute; inset: 0; background: url('../assets/panel-frame.png') center/150% 150% no-repeat; z-index: 2; opacity: 0.5; filter: drop-shadow(0 5px 10px rgba(0,0,0,0.6)); }
-        .m-label { position: relative; z-index: 3; font-family: 'Orbitron'; font-size: 0.8rem; font-weight: 700; color: var(--q-metal); letter-spacing: 2px; text-shadow: 0 2px 5px rgba(0,0,0,0.9), 0 0 8px rgba(255,255,255,0.3); line-height: 1.5; }
+        .m-label { position: relative; z-index: 3; font-family: 'Orbitron'; font-size: 0.9rem; font-weight: 700; color: var(--q-metal); letter-spacing: 4px; text-shadow: 0 2px 5px rgba(0,0,0,0.9), 0 0 8px rgba(255,255,255,0.3); }
         
         /* Commercial Specific Theming */
         #m-panel-com .m-label { color: #fff; text-shadow: 0 2px 5px rgba(0,0,0,0.9), 0 0 10px rgba(255, 255, 255, 0.5); }
@@ -294,18 +296,23 @@
 
         /* Cryo-State Entitlement Gating */
         .m-panel.cryo-state { filter: grayscale(100%); opacity: 0.45; border-color: transparent; }
-        .m-panel.cryo-state .m-label { color: #666; text-shadow: 0 2px 5px rgba(0,0,0,0.9); }
-        .m-lock-icon { display: block; font-size: 1.2rem; margin-top: 5px; opacity: 0.6; }
+        .m-panel.cryo-state .m-label { color: #666; text-shadow: 0 2px 5px rgba(0,0,0,0.9); display: flex; align-items: center; gap: 8px; }
 
-        /* Mobile Reveal Triggers */
-        body.mobile-revealed .mobile-routing-grid { opacity: 1; pointer-events: auto; transform: translate(-50%, -50%) scale(1); }
+        /* Mobile Reveal Triggers (The Staggered Cascade) */
+        body.mobile-revealed .mobile-routing-grid { pointer-events: auto; }
         body.mobile-revealed .q-core-asset { opacity: 0.15; filter: blur(8px); }
         body.mobile-revealed .iris-ring { transform: rotate(45deg); filter: drop-shadow(0 0 15px rgba(0,0,0,0.95)); }
+        
+        body.mobile-revealed .m-panel { opacity: 1; transform: translateY(0); }
+        body.mobile-revealed .m-panel:nth-child(1) { transition-delay: 0.05s; }
+        body.mobile-revealed .m-panel:nth-child(2) { transition-delay: 0.10s; }
+        body.mobile-revealed .m-panel:nth-child(3) { transition-delay: 0.15s; }
+        body.mobile-revealed .m-panel:nth-child(4) { transition-delay: 0.20s; }
 
         @media (max-width: 950px) {
             .desktop-only { display: none !important; }
             .wing-panel { display: none !important; }
-            .mobile-routing-grid { display: grid; }
+            .mobile-routing-grid { display: flex; }
         }
     </style>
 </head>
@@ -346,19 +353,19 @@
     <div class="mobile-routing-grid" id="mobile-routing-grid">
         <div class="m-panel" data-target="../personal/index.html">
             <div class="m-frost"></div><div class="m-bg"></div>
-            <div class="m-label">PERSONAL<br>QUAD</div>
+            <div class="m-label">PERSONAL QUAD</div>
         </div>
         <div class="m-panel m-commercial" id="m-panel-com" data-target="../commercial/index.html">
             <div class="m-frost"></div><div class="m-bg" style="transform: scaleX(-1);"></div>
-            <div class="m-label">COMMERCIAL<br>QUAD <span class="m-lock-icon" id="m-com-lock" style="display:none;">🔒</span></div>
+            <div class="m-label">COMMERCIAL QUAD <span class="m-lock-icon" id="m-com-lock" style="display:none;">🔒</span></div>
         </div>
         <div class="m-panel" data-target="planner">
             <div class="m-frost"></div><div class="m-bg" style="transform: scaleY(-1);"></div>
-            <div class="m-label">OMNI<br>PLANNER</div>
+            <div class="m-label">OMNI-PLANNER</div>
         </div>
         <div class="m-panel" data-target="dashboard">
             <div class="m-frost"></div><div class="m-bg" style="transform: scale(-1, -1);"></div>
-            <div class="m-label">MATRIX<br>HUB</div>
+            <div class="m-label">MATRIX HUB</div>
         </div>
     </div>
 
@@ -591,7 +598,7 @@
             let entitlements = [];
             try { entitlements = JSON.parse(rawEnt) || []; } catch(err) {}
             
-            // --- MASTER ACCESS OVERRIDE (THE ARCHITECT) ---
+            // --- STRICT MASTER ACCESS OVERRIDE ---
             let authUser = localStorage.getItem('Q_SOVEREIGN_USER') || 'GUEST';
             let isLocalEnv = (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' || window.location.protocol === 'file:');
             
@@ -599,14 +606,14 @@
                 if (!entitlements.includes("COMMERCIAL")) entitlements.push("COMMERCIAL");
                 if (!entitlements.includes("ENTERPRISE")) entitlements.push("ENTERPRISE");
             }
-            // ----------------------------------------------
+            // -------------------------------------
 
             const comPanel = document.getElementById('m-panel-com');
             const lockIcon = document.getElementById('m-com-lock');
             
             if(!entitlements.includes("COMMERCIAL") && !entitlements.includes("ENTERPRISE")) {
                 comPanel.classList.add('cryo-state');
-                lockIcon.style.display = 'block';
+                lockIcon.style.display = 'inline-block';
                 comPanel.onclick = (e) => {
                     e.stopPropagation();
                     alert("[ ACCESS DENIED ]\nThe Commercial Quad requires Enterprise clearance.\nRouting to Tier Upgrade Module...");
@@ -623,9 +630,8 @@
         }
 
         function initMobileAperture() {
-            // Global listener to trigger the 2x2 reveal
+            // Global listener to trigger the vertical cascade reveal
             document.addEventListener('click', (e) => {
-                // If it's a mobile screen, hasn't been revealed yet, and the user didn't click an actual panel
                 if(window.innerWidth <= 950 && !isMobileRevealed && !e.target.closest('.m-panel')) {
                     document.body.classList.add('mobile-revealed');
                     isMobileRevealed = true;

@@ -59,8 +59,8 @@
         }
 
         /* --- THE QUARANTINE PROTOCOL --- */
-        /* Physically hide ANY unknown root element injected by q-core.js */
-        body > *:not(.aperture-container):not(#portal-frame):not(.space-bg):not(#warp-star-field):not(.nebula-left):not(.nebula-right):not(.dust-layer-global):not(.global-header):not(.global-footer):not(.corner-panel):not(.mobile-routing-grid):not(.wing-panel):not(script):not(style):not(iframe):not(meta):not(title):not(#q-ui-injected-flag) {
+        /* Physically hide ANY unknown root element injected by q-core.js, EXCEPT authorized UI overlays */
+        body > *:not(.aperture-container):not(#portal-frame):not(.space-bg):not(#warp-star-field):not(.nebula-left):not(.nebula-right):not(.dust-layer-global):not(.global-header):not(.global-footer):not(.corner-panel):not(.mobile-routing-grid):not(.wing-panel):not(script):not(style):not(iframe):not(meta):not(title):not(#q-ui-injected-flag):not(.q-hub-overlay):not(.q-planner-overlay):not(#q-library-reader-overlay) {
             display: none !important; 
             opacity: 0 !important; 
             pointer-events: none !important; 
@@ -329,7 +329,6 @@
         .m-bg { position: absolute; inset: 0; background: url('../assets/panel-frame.png') center/150% 150% no-repeat; z-index: 2; opacity: 0.5; filter: drop-shadow(0 5px 10px rgba(0,0,0,0.6)); }
         .m-label { position: relative; z-index: 3; font-family: 'Orbitron'; font-size: 0.9rem; font-weight: 700; color: var(--q-metal); letter-spacing: 4px; text-shadow: 0 2px 5px rgba(0,0,0,0.9), 0 0 8px rgba(255,255,255,0.3); display: flex; align-items: center; gap: 8px; }
 
-        /* Commercial Specific Theming - Highlights Removed to match Personal base */
         #m-panel-com .m-label { color: var(--q-metal); }
 
         /* Cryo-State Entitlement Gating */
@@ -467,7 +466,6 @@
     </div>
 
     <script>
-        // 1. DYNAMIC RENDER: The Perfect Iris
         function injectPerfectIris() {
             const container = document.querySelector('.iris-ring');
             if(!container || document.getElementById('perfect-iris-svg')) return;
@@ -556,7 +554,6 @@
             container.appendChild(svg);
         }
 
-        // 2. DYNAMIC RENDER: Core Void Hyper-Jump Stars
         function initStars() {
             const coreField = document.getElementById('core-star-field');
             for(let i=0; i<450; i++) {
@@ -572,7 +569,6 @@
             }
         }
 
-        // 3. DYNAMIC RENDER: Background Warp Engine
         function initWarpEngine() {
             const container = document.getElementById('warp-star-field');
             if(!container) return;
@@ -614,7 +610,6 @@
             requestAnimationFrame(tick);
         }
 
-        // 4. KINEMATIC ACTUATION: Aperture Sequence Controller
         window.executeApertureSequence = function(targetUrl) {
             if (document.body.classList.contains('sequencing')) return;
             document.body.classList.add('sequencing');
@@ -624,7 +619,6 @@
             }, 1300); 
         };
 
-        // 5. MOBILE PROTOCOL: Supabase Scanner & Master Verification
         let isMobileRevealed = false;
 
         function checkMobileEntitlements() {
@@ -707,7 +701,6 @@
             });
         }
 
-        // 6. TELEMETRY SYNC: Dual-State Wing Overrides
         window.addEventListener('q-tick', (e) => {
             function formatDualColorWing(str) {
                 const letterStyle = "color:var(--starlight); font-family:'Orbitron'; font-size:0.8rem; margin-right:2px;";
@@ -747,7 +740,6 @@
             }
         });
 
-        // INIT SEQUENCE
         document.addEventListener('DOMContentLoaded', () => {
             injectPerfectIris();
             initStars();

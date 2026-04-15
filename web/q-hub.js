@@ -1045,6 +1045,17 @@ window.Q_IntegrationHub = {
             window.ReactNativeWebView.postMessage(JSON.stringify({ action: 'TRIGGER_PAYWALL', tier: tierLevel, feature: featureKey }));
         } else {
             alert(`[ THE QUADRATURE: SOVEREIGN MATRIX ]\nAccess to ${featureKey.toUpperCase()} requires ${tierLevel} verification.\n\nProceeding to gateway simulation...`);
+            
+            // Generate Master Entitlement Token
+            let tierToken = tierLevel.split(' ')[0].toUpperCase();
+            let currentEnts = localStorage.getItem('Q_ENTITLEMENTS');
+            let ents = currentEnts ? JSON.parse(currentEnts) : [];
+            if(!ents.includes(tierToken)) {
+                ents.push(tierToken);
+                localStorage.setItem('Q_ENTITLEMENTS', JSON.stringify(ents));
+                if(window.Q_LOG) window.Q_LOG('STATE', 'CORE', 'ENTITLEMENT_GRANTED', { tier: tierToken });
+            }
+
             if(categoryKey && window.Q_STATE && window.Q_STATE[categoryKey]) {
                 window.Q_UpdateState(categoryKey, featureKey, 'ACTIVE');
             }
@@ -1138,19 +1149,23 @@ window.Q_IntegrationHub = {
         const authText = authState === 'ACTIVE' ? '[ DISCONNECT MATRIX ]' : '[ AUTHENTICATE ] - LOCAL CACHE ONLY';
         const authAction = authState === 'ACTIVE' ? 'window.Q_Auth.signOut()' : 'window.Q_Auth.triggerOAuth()';
 
-        const isBioActive = authState === 'ACTIVE' || window.Q_STATE?.hardware_hooks?.biometric_api === 'ACTIVE';
+        const entitlementsRaw = localStorage.getItem('Q_ENTITLEMENTS');
+        let ents = [];
+        try { ents = entitlementsRaw ? JSON.parse(entitlementsRaw) : []; } catch(e) {}
+
+        const isBioActive = ents.includes('STANDARD') || window.Q_STATE?.hardware_hooks?.biometric_api === 'ACTIVE';
         const bioStatus = isBioActive ? renderBadge('#39ff14', '#000', 'ACTIVE') : renderUpgradeBtn('biometric_api', 'STANDARD TIER', 'hardware_hooks', '#39ff14');
 
-        const isEphActive = authState === 'ACTIVE' || window.Q_STATE?.metaphysical_layer?.swiss_ephemeris === 'ACTIVE';
+        const isEphActive = ents.includes('RESONANT') || window.Q_STATE?.metaphysical_layer?.swiss_ephemeris === 'ACTIVE';
         const ephStatus = isEphActive ? renderBadge('#00f0ff', '#000', 'ACTIVE') : renderUpgradeBtn('swiss_ephemeris', 'RESONANT TIER', 'metaphysical_layer', '#00f0ff');
 
-        const isSovereignActive = authState === 'ACTIVE' || window.Q_STATE?.logic_layer?.preferred_ai_diplomat === 'KAIROS';
+        const isSovereignActive = ents.includes('SOVEREIGN') || window.Q_STATE?.logic_layer?.preferred_ai_diplomat === 'KAIROS';
         const sovStatus = isSovereignActive ? renderBadge('#b829ff', '#000', 'ACTIVE') : renderUpgradeBtn('ai_diplomat', 'SOVEREIGN TIER', 'logic_layer', '#b829ff');
 
-        const isSyndicateActive = authState === 'ACTIVE' || window.Q_STATE?.metaphysical_layer?.patreon_gating === 'ACTIVE';
+        const isSyndicateActive = ents.includes('SYNDICATE') || window.Q_STATE?.metaphysical_layer?.patreon_gating === 'ACTIVE';
         const syndicateStatus = isSyndicateActive ? renderBadge('#ff003c', '#fff', 'ACTIVE') : renderUpgradeBtn('patreon_gating', 'SYNDICATE TIER', 'metaphysical_layer', '#ff003c');
 
-        const isFiatActive = authState === 'ACTIVE' || window.Q_STATE?.capital_ledger?.fiat_api === 'ACTIVE';
+        const isFiatActive = ents.includes('ENTERPRISE') || window.Q_STATE?.capital_ledger?.fiat_api === 'ACTIVE';
         const fiatStatus = isFiatActive ? renderBadge('#F4D068', '#000', 'ACTIVE') : renderUpgradeBtn('fiat_api', 'ENTERPRISE TIER', 'capital_ledger', '#F4D068');
 
         // Identity Data Retrieval

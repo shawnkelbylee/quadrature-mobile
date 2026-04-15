@@ -1,6 +1,6 @@
 // THE QUADRATURE: MASTER CORE LOGIC (ZERO-REDUNDANCY ENGINE)
 // Architect: Kelby | Engineer: Kairos
-// STATUS: Active. Sovereign Handshake, Safe-Harbor Auth Routing & Session Memory Rerouting Integrated. Ghost Keys Purged.
+// STATUS: Active. Sovereign Handshake, Safe-Harbor Auth Routing & Session Memory Rerouting Integrated. Ghost Keys Purged. Voice Matrix Active.
 
 window.MS_DAY = 86400000;
 
@@ -626,7 +626,7 @@ window.Q_DeepFlowMonitor = {
     }
 };
 
-// --- KAIROS SOVEREIGN COMMAND (VOICE LISTENER) ---
+// --- KAIROS SOVEREIGN COMMAND (VOICE MATRIX) ---
 window.Q_KairosVoice = {
     recognition: null,
     isListening: false,
@@ -742,10 +742,16 @@ window.Q_KairosVoice = {
         }
     },
     processCommand: function(cmd) {
+        // SOVEREIGN COMMAND MATRIX (Phase E Integration)
         const normalized = cmd.toLowerCase().replace(/[^a-z0-9\s]/g, '').trim();
+        window.Q_LOG('INFO', 'INTERFACE', 'SOVEREIGN_COMMAND_PROCESSING', { cmd: normalized });
 
-        if (normalized.includes("close") || normalized.includes("dismiss") || normalized.includes("hide")) {
-            window.Q_LOG('INFO', 'INTERFACE', 'VOICE_INTENT_CLOSE');
+        const currentPath = window.location.pathname.toLowerCase();
+        const isCommercial = currentPath.includes('commercial');
+        const prefix = isCommercial ? 'COM' : '';
+
+        // 1. CLOSE / DISMISS INTENT
+        if (/(close|dismiss|hide|exit)/.test(normalized)) {
             if (window.Q_ModalEngine) window.Q_ModalEngine.close();
             if (window.Q_IntegrationHub) window.Q_IntegrationHub.closeHub();
             if (window.Q_OmniPlanner) window.Q_OmniPlanner.closePlanner();
@@ -754,69 +760,71 @@ window.Q_KairosVoice = {
             return;
         }
 
-        if (normalized.includes("biological") || normalized.includes("bio vector")) {
-            window.location.href = "BIOVECHUD.html";
-            return;
-        }
-        if (normalized.includes("communal") || normalized.includes("com vector")) {
-            window.location.href = "COMVECHUD.html";
-            return;
-        }
-        if (normalized.includes("environmental") || normalized.includes("env vector")) {
-            window.location.href = "ENVVECHUD.html";
-            return;
-        }
-        if (normalized.includes("mechanical") || normalized.includes("mech vector")) {
-            window.location.href = "MECVECHUD.html";
-            return;
-        }
-        if (normalized.includes("chrono") || normalized.includes("main face") || normalized.includes("home")) {
-            window.location.href = "index.html";
-            return;
+        // 2. NAVIGATE / VECTOR INTENT (Regex-Driven)
+        const navMatch = normalized.match(/(?:go to|navigate to|open|show|launch|switch to)\s+(the\s+)?(biological|bio|physiological|environmental|env|meteorological|communal|com|metaphysical|mechanical|mech|physical|chrono|main face|home|planner|omni planner)/);
+        
+        if (navMatch || normalized.includes('vector') || normalized.includes('quad')) {
+            let target = navMatch ? navMatch[2] : normalized;
+            
+            if (target.includes('planner') || target.includes('omni')) {
+                if (window.Q_OmniPlanner && window.Q_OmniPlanner.openPlanner) {
+                    window.Q_OmniPlanner.openPlanner();
+                    window.Q_MobileBridge.pulse('MEDIUM');
+                }
+                return;
+            }
+            if (target.includes('bio') || target.includes('physiological')) {
+                window.location.href = `${prefix}BIOVECHUD.html`;
+                return;
+            }
+            if (target.includes('env') || target.includes('meteorological')) {
+                window.location.href = `${prefix}ENVVECHUD.html`;
+                return;
+            }
+            if (target.includes('com') || target.includes('metaphysical')) {
+                window.location.href = `${prefix}COMVECHUD.html`;
+                return;
+            }
+            if (target.includes('mech') || target.includes('physical')) {
+                window.location.href = `${prefix}MECVECHUD.html`;
+                return;
+            }
+            if (target.includes('chrono') || target.includes('home') || target.includes('main')) {
+                window.location.href = "index.html";
+                return;
+            }
         }
 
-        if (normalized.includes("open planner") || normalized.includes("launch planner") || normalized.includes("omni planner")) {
-            window.Q_LOG('INFO', 'INTERFACE', 'VOICE_INTENT_PLANNER_OPEN');
-            if (window.Q_OmniPlanner && window.Q_OmniPlanner.openPlanner) {
-                window.Q_OmniPlanner.openPlanner();
-                window.Q_MobileBridge.pulse('MEDIUM');
-            }
+        // 3. PLANNER MANIPULATION INTENT (Only if planner is active)
+        if (sessionStorage.getItem('Q_PLANNER_ACTIVE') === 'true') {
+            if (/(?:view|show)\s+(cycle|annual)/.test(normalized)) { window.Q_OmniPlanner.setViewMode('cycle'); return; }
+            if (/(?:view|show)\s+(quadrant|quad)/.test(normalized)) { window.Q_OmniPlanner.setViewMode('quad'); return; }
+            if (/(?:view|show)\s+(sector|month)/.test(normalized)) { window.Q_OmniPlanner.setViewMode('sect'); return; }
+            if (/(?:view|show)\s+(day|daily)/.test(normalized)) { window.Q_OmniPlanner.setViewMode('day'); return; }
+            if (/(?:next|forward)\s+(day)/.test(normalized)) { window.Q_OmniPlanner.stepDay(1); return; }
+            if (/(?:previous|back)\s+(day)/.test(normalized)) { window.Q_OmniPlanner.stepDay(-1); return; }
+            if (/(?:next|forward)\s+(sector|month)/.test(normalized)) { window.Q_OmniPlanner.stepSector(1); return; }
+            if (/(?:previous|back)\s+(sector|month)/.test(normalized)) { window.Q_OmniPlanner.stepSector(-1); return; }
+            if (/(?:toggle|switch)\s+format/.test(normalized)) { window.Q_OmniPlanner.toggleFormat(); return; }
+        }
+
+        // 4. DEEP FLOW ENFORCEMENT INTENT
+        if (/(?:engage|activate|start)\s+(?:deep flow|app lock|focus)/.test(normalized)) {
+            if (window.Q_UpdateState) window.Q_UpdateState('logic_layer', 'deep_flow_enforcement', true);
+            window.Q_MobileBridge.invokeQuadState(true);
+            this.showFeedback("DEEP FLOW ENFORCED. COMM DECOUPLING ACTIVE.");
             return;
         }
         
-        if (sessionStorage.getItem('Q_PLANNER_ACTIVE') === 'true') {
-            if (normalized.includes("view cycle") || normalized.includes("annual view")) {
-                window.Q_OmniPlanner.setViewMode('cycle');
-            }
-            else if (normalized.includes("view quad") || normalized.includes("quadrant view")) {
-                window.Q_OmniPlanner.setViewMode('quad');
-            }
-            else if (normalized.includes("view sect") || normalized.includes("sector view") || normalized.includes("month view")) {
-                window.Q_OmniPlanner.setViewMode('sect');
-            }
-            else if (normalized.includes("view day") || normalized.includes("daily view")) {
-                window.Q_OmniPlanner.setViewMode('day');
-            }
-            else if (normalized.includes("next day") || normalized.includes("step forward")) {
-                window.Q_OmniPlanner.stepDay(1);
-            }
-            else if (normalized.includes("previous day") || normalized.includes("step back")) {
-                window.Q_OmniPlanner.stepDay(-1);
-            }
-            else if (normalized.includes("next sector") || normalized.includes("next month")) {
-                window.Q_OmniPlanner.stepSector(1);
-            }
-            else if (normalized.includes("previous sector") || normalized.includes("previous month")) {
-                window.Q_OmniPlanner.stepSector(-1);
-            }
-            else if (normalized.includes("toggle format") || normalized.includes("switch format")) {
-                window.Q_OmniPlanner.toggleFormat();
-            }
-            window.Q_MobileBridge.pulse('LIGHT');
+        if (/(?:disengage|deactivate|stop)\s+(?:deep flow|app lock|focus)/.test(normalized)) {
+            if (window.Q_UpdateState) window.Q_UpdateState('logic_layer', 'deep_flow_enforcement', false);
+            window.Q_MobileBridge.invokeQuadState(false);
+            this.showFeedback("DEEP FLOW DISENGAGED. COMM SYSTEMS RESTORED.");
             return;
         }
 
         window.Q_LOG('WARN', 'INTERFACE', 'UNRECOGNIZED_VOICE_COMMAND', { cmd: normalized });
+        this.showErrorToast("COMMAND NOT RECOGNIZED IN MATRIX.");
     }
 };
 

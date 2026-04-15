@@ -1,6 +1,6 @@
 // THE QUADRATURE: APERTURE GATEWAY UI CONTROLLER
 // Architect: Kelby | Engineer: Kairos
-// STATUS: Version 24.1 - Gateway Controller Optimized. Architect Master Override integrated with Supabase Extractor.
+// STATUS: Version 24.2 - Gateway Controller Optimized. Architect Master Override integrated with Supabase Extractor. Mobile String-Bleed Mitigated.
 
 window.injectUniversalUI = function() {
     if (window.self !== window.top) return;
@@ -156,8 +156,12 @@ window.addEventListener('click', (e) => {
             const onClickStr = (checkEl.getAttribute && checkEl.getAttribute('onclick') || '').toLowerCase();
             const hrefStr = (checkEl.getAttribute && checkEl.getAttribute('href') || '').toLowerCase();
             const dataTarget = (checkEl.getAttribute && checkEl.getAttribute('data-target') || '').toLowerCase();
+            const dataRoute = (checkEl.getAttribute && checkEl.getAttribute('data-route') || '').toLowerCase();
 
-            if (dataTarget === 'dashboard' || hrefStr.includes('/dashboard') || onClickStr.includes('dashboard') || text.includes('dashboard')) {
+            // Mobile String-Bleed Mitigation
+            let isShortText = text.length > 0 && text.length < 40;
+
+            if (dataTarget === 'dashboard' || dataRoute === 'dashboard' || hrefStr.includes('/dashboard') || onClickStr.includes('dashboard') || (isShortText && text.includes('dashboard'))) {
                 e.preventDefault();
                 e.stopPropagation();
                 if (window.Q_IntegrationHub && typeof window.Q_IntegrationHub.openHub === 'function') {
@@ -166,7 +170,7 @@ window.addEventListener('click', (e) => {
                 return; 
             }
 
-            if (dataTarget === 'planner' || hrefStr.includes('/physical') || onClickStr.includes('physical') || text.includes('physical assets') || text.includes('omni-planner') || text.includes('omni planner')) {
+            if (dataTarget === 'planner' || dataRoute === 'planner' || hrefStr.includes('/physical') || onClickStr.includes('physical') || (isShortText && text.includes('omni-planner')) || (isShortText && text.includes('omni planner')) || (isShortText && text.includes('physical assets'))) {
                 e.preventDefault();
                 e.stopPropagation();
                 if (window.Q_OmniPlanner && typeof window.Q_OmniPlanner.openPlanner === 'function') {
@@ -175,10 +179,10 @@ window.addEventListener('click', (e) => {
                 return; 
             }
 
-            if (dataTarget.includes('personal') || hrefStr.includes('/personal') || onClickStr.includes('personal') || text.includes('personal quad')) {
+            if (dataTarget.includes('personal') || dataRoute.includes('personal') || hrefStr.includes('/personal') || onClickStr.includes('personal') || (isShortText && text.includes('personal quad'))) {
                 targetUrl = '../personal/index.html';
                 break;
-            } else if (dataTarget.includes('commercial') || hrefStr.includes('/commercial') || onClickStr.includes('commercial') || text.includes('commercial quad')) {
+            } else if (dataTarget.includes('commercial') || dataRoute.includes('commercial') || hrefStr.includes('/commercial') || onClickStr.includes('commercial') || (isShortText && text.includes('commercial quad'))) {
                 targetUrl = '../commercial/index.html';
                 break;
             } 

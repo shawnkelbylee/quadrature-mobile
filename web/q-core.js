@@ -951,6 +951,7 @@ window.Q_Auth = {
         try {
             await window.supabaseClient.auth.signOut();
             localStorage.setItem('Q_SOVEREIGN_AUTH', 'false');
+            localStorage.removeItem('Q_ENTITLEMENTS');
             if (window.Q_STATE && window.Q_STATE.persistence) {
                 window.Q_STATE.persistence.auth_status = 'STANDBY';
             }

@@ -656,8 +656,10 @@ window.Q_MANUSCRIPTS = {
             <p>To wake within the Quadified Life is to open your eyes to the physical truth of the planet, entirely unburdened by the anxiety of the ticking clock. You do not 'spend' time; you inhabit a coordinate. Your labor aligns with your biological capacity, your environment dictates your output, and your wealth accumulates without the corrosive tax of civil lag. You have become the Architect of your own resonance.</p>
 
             <div style="background:rgba(255,255,255,0.05); padding:15px; border-left:3px solid var(--theme-main, #ff003c); margin:20px 0;">
-                <strong style="color:#fff;">Philosophical Postulate: The Quadified Life</strong><br>
-                To be Quadified is to exist without the friction of the machine. You are the Architect of your own resonance, navigating the universe with absolute physical truth.
+                <strong style="color:#fff;">Technical Data Block:</strong><br>
+                <span style="color:var(--theme-main, #ff003c);">Quadification:</span> The absolute harmonization of physical, environmental, physiological, and metaphysical data with the solar arc.<br>
+                <span style="color:var(--theme-main, #ff003c);">Total Vector Synchronization:</span> The unified operation of Level I Physics, Climatic Baseloads, Biometrics, and Metadata.<br>
+                <span style="color:var(--theme-main, #ff003c);">Zero-Friction Baseline:</span> The eradication of the Gregorian Smear from the user's daily operations.
             </div>
 
             <img src="./assets/w19tb.png" style="width:100%; border-radius:4px; margin: 20px 0; border: 1px solid rgba(255,255,255,0.2);" alt="Quadified Life">
@@ -728,7 +730,7 @@ window.Q_MANUSCRIPTS = {
             <h4 style="color:#fff; font-family:'Orbitron'; margin-top:15px;">VIII. INDIVIDUATED REVENUE & THE 6-TIER ACCESS ARCHITECTURE</h4>
             <p>Access is governed by a unified 6-Tier licensing model, scaling from personal observation to macro-ecological enterprise management.</p>
             <ul style="color:#aaa;">
-                <li style="margin-bottom:8px;"><strong style="color:#fff;">Basic Tier (Free):</strong> Read-access to the 4 Primary Vectors. Core Omni-Planner with manual constraint entry. Baseline Mean Circle/True Ellipse visualization.</li>
+                <li style="margin-bottom:8px;"><strong style="color:#fff;">Basic Tier (Free):</strong> Read-access to the 4 Primary Vectors. Core Omni-Planner margin manual constraint entry. Baseline Mean Circle/True Ellipse visualization.</li>
                 <li style="margin-bottom:8px;"><strong style="color:#fff;">Standard Tier ($14.99 / mo):</strong> The Biological Bridge. Unlocks active ingestion via Apple Health / Google Health Connect. Automates the Physiological Vector tracking HRV elasticity and Ultradian rhythms.</li>
                 <li style="margin-bottom:8px;"><strong style="color:#fff;">Resonant Tier ($29.99 / mo):</strong> The Metaphysical Hook. Integration of the Swiss Ephemeris API and offline JPL data packs. Unlocks total notification blackout controls.</li>
                 <li style="margin-bottom:8px;"><strong style="color:#fff;">Sovereign Tier ($49.99 / mo):</strong> The Diplomat. Unlocks the AI Firewall (The Diplomatic Negotiator) to autonomously intercept and reschedule civil constraints, actively defending your biological resonance.</li>
@@ -1147,11 +1149,16 @@ window.Q_IntegrationHub = {
         const authState = window.Q_STATE?.persistence?.auth_status === 'SOVEREIGN_AUTHENTICATED' ? 'ACTIVE' : 'STANDBY';
         const authColor = authState === 'ACTIVE' ? '#39ff14' : '#ff003c';
         const authText = authState === 'ACTIVE' ? '[ DISCONNECT MATRIX ]' : '[ AUTHENTICATE ] - LOCAL CACHE ONLY';
-        const authAction = authState === 'ACTIVE' ? 'window.Q_Auth.signOut()' : 'window.Q_Auth.triggerOAuth()';
+        
+        // Directly routing click handler instead of wrapping in inline execution blocks.
+        const authAction = authState === 'ACTIVE' ? "window.Q_Auth ? window.Q_Auth.signOut() : alert('Auth Bridge Not Ready')" : "window.Q_Auth ? window.Q_Auth.triggerOAuth() : alert('Auth Bridge Not Ready')";
 
-        const entitlementsRaw = localStorage.getItem('Q_ENTITLEMENTS');
+        // ENFORCED GHOST-KEY PURGE: Only read entitlements if the system is actually verified.
         let ents = [];
-        try { ents = entitlementsRaw ? JSON.parse(entitlementsRaw) : []; } catch(e) {}
+        if (authState === 'ACTIVE') {
+            const entitlementsRaw = localStorage.getItem('Q_ENTITLEMENTS');
+            try { ents = entitlementsRaw ? JSON.parse(entitlementsRaw) : []; } catch(e) {}
+        }
 
         const isBioActive = ents.includes('STANDARD') || window.Q_STATE?.hardware_hooks?.biometric_api === 'ACTIVE';
         const bioStatus = isBioActive ? renderBadge('#39ff14', '#000', 'ACTIVE') : renderUpgradeBtn('biometric_api', 'STANDARD TIER', 'hardware_hooks', '#39ff14');
@@ -1194,7 +1201,7 @@ window.Q_IntegrationHub = {
             <div class="q-hub-box" onclick="event.stopPropagation()">
                 <div class="hub-header">SOVEREIGN MATRIX // ACCOUNT</div>
                 
-                <button onclick="if(window.Q_Auth) { ${authAction} }" style="background:rgba(0,0,0,0.6); border:1px solid ${authColor}; color:${authColor}; padding: 8px 12px; font-family:'Orbitron'; font-size:0.65rem; font-weight:bold; letter-spacing:1px; cursor:pointer; border-radius:4px; margin-bottom:15px; width:100%; transition:0.3s; box-shadow: inset 0 0 10px rgba(${authState === 'ACTIVE' ? '57,255,20' : '255,0,60'}, 0.1);" onmouseover="this.style.background='${authColor}'; this.style.color='#000';" onmouseout="this.style.background='rgba(0,0,0,0.6)'; this.style.color='${authColor}';">${authText}</button>
+                <button onclick="${authAction}" style="background:rgba(0,0,0,0.6); border:1px solid ${authColor}; color:${authColor}; padding: 8px 12px; font-family:'Orbitron'; font-size:0.65rem; font-weight:bold; letter-spacing:1px; cursor:pointer; border-radius:4px; margin-bottom:15px; width:100%; transition:0.3s; box-shadow: inset 0 0 10px rgba(${authState === 'ACTIVE' ? '57,255,20' : '255,0,60'}, 0.1);" onmouseover="this.style.background='${authColor}'; this.style.color='#000';" onmouseout="this.style.background='rgba(0,0,0,0.6)'; this.style.color='${authColor}';">${authText}</button>
 
                 <div class="hub-tabs">
                     <button class="hub-tab-btn ${this.activeTab === 'guide' ? 'active' : ''}" id="tab-btn-guide" onclick="window.Q_IntegrationHub.switchTab('guide')">GUIDE</button>

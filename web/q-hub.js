@@ -38,7 +38,7 @@ window.Q_MANUSCRIPTS = {
                 <span style="color:var(--theme-main, #ff003c);">Dual-State Architecture:</span> The Quadrature utilizes a Mean Circle (360-day administrative baseline) as a diagnostic overlay against the True Ellipse (the actual, asymmetrical physical orbit).
             </div>
 
-            <img src="./assets/w1ta.png" style="width:100%; border-radius:4px; margin: 20px 0; border: 1px solid rgba(255,255,255,0.2);" alt="Sumerian Circle">
+            <img src="assets/w1ta.png" style="width:100%; border-radius:4px; margin: 20px 0; border: 1px solid rgba(255,255,255,0.2);" alt="Sumerian Circle">
 
             <h4 style="color:#fff; font-family:'Orbitron'; margin-top:30px;">THE GREGORIAN SMEAR & THE 365-DAY ILLUSION</h4>
             <p><strong style="color:#fff;">The Perfection of Administrative Abstraction</strong></p>
@@ -53,7 +53,7 @@ window.Q_MANUSCRIPTS = {
                 <span style="color:var(--theme-main, #ff003c);">Q-Delta Metrology:</span> The quantifiable mathematical variance between the static administrative expectations of the Mean Circle and the physical thermodynamic reality of the True Ellipse.
             </div>
 
-            <img src="./assets/w2ta.png" style="width:100%; border-radius:4px; margin: 20px 0; border: 1px solid rgba(255,255,255,0.2);" alt="Gregorian Smear">
+            <img src="assets/w2ta.png" style="width:100%; border-radius:4px; margin: 20px 0; border: 1px solid rgba(255,255,255,0.2);" alt="Gregorian Smear">
 
             <h4 style="color:#fff; font-family:'Orbitron'; margin-top:30px;">LUNISOLAR FRICTION & THE FRAGMENTED HEAVENS</h4>
             <p><strong style="color:#fff;">The Conflict of Asynchronous Oscillators</strong></p>
@@ -69,7 +69,7 @@ window.Q_MANUSCRIPTS = {
                 <span style="color:var(--theme-main, #ff003c);">Systemic Solution:</span> The Quadrature bypasses lunisolar friction by prioritizing the True Ellipse as the absolute physics engine, treating lunar data as metadata within the Communal Vector rather than a governing metrological constant.
             </div>
 
-            <img src="./assets/w3ta.png" style="width:100%; border-radius:4px; margin: 20px 0; border: 1px solid rgba(255,255,255,0.2);" alt="Lunisolar Friction">
+            <img src="assets/w3ta.png" style="width:100%; border-radius:4px; margin: 20px 0; border: 1px solid rgba(255,255,255,0.2);" alt="Lunisolar Friction">
 
             <h4 style="color:#fff; font-family:'Orbitron'; margin-top:30px;">THE HEXAGESIMAL PULSE</h4>
             <p><strong style="color:#fff;">High-Resolution Climatic Baseloading</strong></p>
@@ -85,7 +85,7 @@ window.Q_MANUSCRIPTS = {
                 <span style="color:var(--theme-main, #ff003c);">Thermodynamic Efficiency:</span> Utilizes IoT webhooks to calculate HVAC dispatch probabilities and flora/fauna exposure risks.
             </div>
 
-            <img src="./assets/w4ta.png" style="width:100%; border-radius:4px; margin: 20px 0; border: 1px solid rgba(255,255,255,0.2);" alt="Hexagesimal Pulse">
+            <img src="assets/w4ta.png" style="width:100%; border-radius:4px; margin: 20px 0; border: 1px solid rgba(255,255,255,0.2);" alt="Hexagesimal Pulse">
 
             <h3 style="color:var(--theme-main, #ff003c); font-family:'Orbitron'; margin-top:40px; letter-spacing:1px;">PHASE II: THE INVARIANT ARC</h3>
             <h4 style="color:#fff; font-family:'Orbitron'; margin-top:15px;">THE PRIMARY POSTULATE & DUAL-STATE ENGINE</h4>
@@ -103,7 +103,7 @@ window.Q_MANUSCRIPTS = {
                 <span style="color:var(--theme-main, #ff003c);">Zero-Redundancy Mapping:</span> Eliminating the need for sidereal background patching by locking the metrology engine exclusively to the solar mass.
             </div>
 
-            <img src="./assets/w5ta.png" style="width:100%; border-radius:4px; margin: 20px 0; border: 1px solid rgba(255,255,255,0.2);" alt="Dual State Engine">
+            <img src="assets/w5ta.png" style="width:100%; border-radius:4px; margin: 20px 0; border: 1px solid rgba(255,255,255,0.2);" alt="Dual State Engine">
 
             <h4 style="color:#fff; font-family:'Orbitron'; margin-top:30px;">THE KEPLERIAN SMEAR</h4>
             <p><strong style="color:#fff;">Dynamics of Variable Velocity</strong></p>
@@ -120,7 +120,7 @@ window.Q_MANUSCRIPTS = {
                 <span style="color:var(--theme-main, #ff003c);">Q-Delta Diamond:</span> The visual UI rendering of real-time orbital acceleration and deceleration, tracking the Smear with mathematical precision.
             </div>
 
-            <img src="./assets/w6ta.png" style="width:100%; border-radius:4px; margin: 20px 0; border: 1px solid rgba(255,255,255,0.2);" alt="Keplerian Smear">
+            <img src="assets/w6ta.png" style="width:100%; border-radius:4px; margin: 20px 0; border: 1px solid rgba(255,255,255,0.2);" alt="Keplerian Smear">
 
             <h4 style="color:#fff; font-family:'Orbitron'; margin-top:30px;">THE CARDINAL PYLONS (ALPHA TO DELTA)</h4>
             <p><strong style="color:#fff;">Geometric Settlement Nodes</strong></p>
@@ -138,7 +138,7 @@ window.Q_MANUSCRIPTS = {
                 <span style="color:var(--theme-main, #ff003c);">Delta Pylon (270.000°):</span> Peak Dilation / Deceleration Flux (28.4999h).
             </div>
 
-            <img src="./assets/w7ta.png" style="width:100%; border-radius:4px; margin: 20px 0; border: 1px solid rgba(255,255,255,0.2);" alt="Cardinal Pylons">
+            <img src="assets/w7ta.png" style="width:100%; border-radius:4px; margin: 20px 0; border: 1px solid rgba(255,255,255,0.2);" alt="Cardinal Pylons">
 
             <h4 style="color:#fff; font-family:'Orbitron'; margin-top:30px;">EPSILON TERMINAL & NODAL SETTLEMENT</h4>
             <p><strong style="color:#fff;">Closure and Terminal Drift</strong></p>
@@ -155,7 +155,7 @@ window.Q_MANUSCRIPTS = {
                 <span style="color:var(--theme-main, #ff003c);">Milankovitch Immunity:</span> The system's natural absorption of multi-millennial orbital drift via solar-mass anchoring.
             </div>
 
-            <img src="./assets/w8ta.png" style="width:100%; border-radius:4px; margin: 20px 0; border: 1px solid rgba(255,255,255,0.2);" alt="Epsilon Terminal">
+            <img src="assets/w8ta.png" style="width:100%; border-radius:4px; margin: 20px 0; border: 1px solid rgba(255,255,255,0.2);" alt="Epsilon Terminal">
 
             <h3 style="color:var(--theme-main, #ff003c); font-family:'Orbitron'; margin-top:40px; letter-spacing:1px;">PHASE III: VECTOR CODIFICATION</h3>
             <h4 style="color:#fff; font-family:'Orbitron'; margin-top:15px;">VECTOR 01—THE MECHANICAL ROOT (PHYSICAL)</h4>
@@ -173,7 +173,7 @@ window.Q_MANUSCRIPTS = {
                 <span style="color:var(--theme-main, #ff003c);">Respiration Algorithm:</span> The core logic responsible for the dynamic "burn down" of variance without human manual intervention, routing physics data to the Cardinal Pylons.
             </div>
 
-            <img src="./assets/w9ta.png" style="width:100%; border-radius:4px; margin: 20px 0; border: 1px solid rgba(255,255,255,0.2);" alt="Mechanical Root">
+            <img src="assets/w9ta.png" style="width:100%; border-radius:4px; margin: 20px 0; border: 1px solid rgba(255,255,255,0.2);" alt="Mechanical Root">
 
             <h4 style="color:#fff; font-family:'Orbitron'; margin-top:30px;">VECTOR 02—ENVIRONMENTAL ALMANAC (ENVIRONMENTAL)</h4>
             <p><strong style="color:#fff;">Climatic Baseload Modeling</strong></p>
@@ -188,7 +188,7 @@ window.Q_MANUSCRIPTS = {
                 <span style="color:var(--theme-main, #ff003c);">Biome Telemetry:</span> Calculating exact survival, tension, and growth thresholds for biological and agrarian assets.
             </div>
 
-            <img src="./assets/w10ta.png" style="width:100%; border-radius:4px; margin: 20px 0; border: 1px solid rgba(255,255,255,0.2);" alt="Environmental Vector">
+            <img src="assets/w10ta.png" style="width:100%; border-radius:4px; margin: 20px 0; border: 1px solid rgba(255,255,255,0.2);" alt="Environmental Vector">
 
             <h4 style="color:#fff; font-family:'Orbitron'; margin-top:30px;">VECTOR 03—BIOLOGICAL RESONANCE (PHYSIOLOGICAL)</h4>
             <p><strong style="color:#fff;">Synchronizing the 5-Phase Thermodynamic Model</strong></p>
@@ -204,7 +204,7 @@ window.Q_MANUSCRIPTS = {
                 <span style="color:var(--theme-main, #ff003c);">5-Phase Energy Management:</span> Transforming the OS from a passive calendar into an active biological synchronization system enforcing neurochemical boundaries.
             </div>
 
-            <img src="./assets/w11ta.png" style="width:100%; border-radius:4px; margin: 20px 0; border: 1px solid rgba(255,255,255,0.2);" alt="Biological Vector">
+            <img src="assets/w11ta.png" style="width:100%; border-radius:4px; margin: 20px 0; border: 1px solid rgba(255,255,255,0.2);" alt="Biological Vector">
 
             <h4 style="color:#fff; font-family:'Orbitron'; margin-top:30px;">VECTOR 04—COMMUNAL METADATA (METAPHYSICAL)</h4>
             <p><strong style="color:#fff;">Neutralizing Cultural Drift into Objective Coordinates</strong></p>
@@ -220,7 +220,7 @@ window.Q_MANUSCRIPTS = {
                 <span style="color:var(--theme-main, #ff003c);">Metadata Layering:</span> Neutralizing global cultural and religious events into objective, shared spatial coordinates.
             </div>
 
-            <img src="./assets/w12ta.png" style="width:100%; border-radius:4px; margin: 20px 0; border: 1px solid rgba(255,255,255,0.2);" alt="Communal Vector">
+            <img src="assets/w12ta.png" style="width:100%; border-radius:4px; margin: 20px 0; border: 1px solid rgba(255,255,255,0.2);" alt="Communal Vector">
 
             <h4 style="color:#fff; font-family:'Orbitron'; margin-top:30px;">THE COMMERCIAL QUAD—ENTERPRISE BIFURCATION</h4>
             <p><strong style="color:#fff;">The Mirrored Architecture</strong></p>
@@ -241,7 +241,7 @@ window.Q_MANUSCRIPTS = {
                 <span style="color:var(--theme-main, #ff003c);">Team Resonance Heatmaps:</span> Aggregating Ultradian rhythms to identify orbital degrees for peak collective output.
             </div>
 
-            <img src="./assets/w13ta.png" style="width:100%; border-radius:4px; margin: 20px 0; border: 1px solid rgba(255,255,255,0.2);" alt="Enterprise Bifurcation">
+            <img src="assets/w13ta.png" style="width:100%; border-radius:4px; margin: 20px 0; border: 1px solid rgba(255,255,255,0.2);" alt="Enterprise Bifurcation">
 
             <h4 style="color:#fff; font-family:'Orbitron'; margin-top:30px;">SOVEREIGN COMMAND</h4>
             <p><strong style="color:#fff;">The Kairos Voice Intent Parser</strong></p>
@@ -257,7 +257,7 @@ window.Q_MANUSCRIPTS = {
                 <span style="color:var(--theme-main, #ff003c);">Continuous Flow:</span> Enabling total telemetry access and planner logging without breaking the user's Deep Flow states within the Ultradian Core.
             </div>
 
-            <img src="./assets/w14ta.png" style="width:100%; border-radius:4px; margin: 20px 0; border: 1px solid rgba(255,255,255,0.2);" alt="Sovereign Command">
+            <img src="assets/w14ta.png" style="width:100%; border-radius:4px; margin: 20px 0; border: 1px solid rgba(255,255,255,0.2);" alt="Sovereign Command">
 
             <h3 style="color:var(--theme-main, #ff003c); font-family:'Orbitron'; margin-top:40px; letter-spacing:1px;">PHASE IV: THE QUADIFIED LIFE</h3>
             <h4 style="color:#fff; font-family:'Orbitron'; margin-top:15px;">THE OMNI-PLANNER VISUALIZATION</h4>
@@ -275,7 +275,7 @@ window.Q_MANUSCRIPTS = {
                 <span style="color:var(--theme-main, #ff003c);">Dual-State Mapping:</span> Cross-referencing civil logistics with astrophysical coordinates to actively manage and mitigate the Q-Delta.
             </div>
 
-            <img src="./assets/w15ta.png" style="width:100%; border-radius:4px; margin: 20px 0; border: 1px solid rgba(255,255,255,0.2);" alt="Omni Planner">
+            <img src="assets/w15ta.png" style="width:100%; border-radius:4px; margin: 20px 0; border: 1px solid rgba(255,255,255,0.2);" alt="Omni Planner">
 
             <h4 style="color:#fff; font-family:'Orbitron'; margin-top:30px;">THE 90+1 ACCOUNTING LEDGER</h4>
             <p><strong style="color:#fff;">Financial Interoperability</strong></p>
@@ -291,7 +291,7 @@ window.Q_MANUSCRIPTS = {
                 <span style="color:var(--theme-main, #ff003c);">Civil Exporter API:</span> Bridging True Ellipse financial velocity with legacy fiat tracking, ensuring full B2B compliance.
             </div>
 
-            <img src="./assets/w16ta.png" style="width:100%; border-radius:4px; margin: 20px 0; border: 1px solid rgba(255,255,255,0.2);" alt="90+1 Ledger">
+            <img src="assets/w16ta.png" style="width:100%; border-radius:4px; margin: 20px 0; border: 1px solid rgba(255,255,255,0.2);" alt="90+1 Ledger">
 
             <h4 style="color:#fff; font-family:'Orbitron'; margin-top:30px;">GEOMETRIC RESONANCE DISCOVERY</h4>
             <p><strong style="color:#fff;">The Sovereign Social Graph</strong></p>
@@ -307,7 +307,7 @@ window.Q_MANUSCRIPTS = {
                 <span style="color:var(--theme-main, #ff003c);">High-Resonance Sprints:</span> Executing collaborative tasks exclusively during overlapping Ultradian flow windows.
             </div>
 
-            <img src="./assets/w17ta.png" style="width:100%; border-radius:4px; margin: 20px 0; border: 1px solid rgba(255,255,255,0.2);" alt="Resonance Discovery">
+            <img src="assets/w17ta.png" style="width:100%; border-radius:4px; margin: 20px 0; border: 1px solid rgba(255,255,255,0.2);" alt="Resonance Discovery">
 
             <h4 style="color:#fff; font-family:'Orbitron'; margin-top:30px;">THE SOVEREIGN MOBILE NODE</h4>
             <p><strong style="color:#fff;">Hardware Agnosticism</strong></p>
@@ -322,7 +322,7 @@ window.Q_MANUSCRIPTS = {
                 <span style="color:var(--theme-main, #ff003c);">Asset Autonomy:</span> Manifesting the Dual-State Engine with absolute zero friction.
             </div>
 
-            <img src="./assets/w18ta.png" style="width:100%; border-radius:4px; margin: 20px 0; border: 1px solid rgba(255,255,255,0.2);" alt="Sovereign Mobile Node">
+            <img src="assets/w18ta.png" style="width:100%; border-radius:4px; margin: 20px 0; border: 1px solid rgba(255,255,255,0.2);" alt="Sovereign Mobile Node">
 
             <h4 style="color:#fff; font-family:'Orbitron'; margin-top:30px;">THE PRINCIPLE OF QUADIFICATION</h4>
             <p><strong style="color:#fff;">Total System Yield</strong></p>
@@ -339,7 +339,7 @@ window.Q_MANUSCRIPTS = {
                 <span style="color:var(--theme-main, #ff003c);">Friction Mitigation Baseline:</span> The mathematical suppression of the Gregorian Smear from the user's daily operations.
             </div>
 
-            <img src="./assets/w19ta.png" style="width:100%; border-radius:4px; margin: 20px 0; border: 1px solid rgba(255,255,255,0.2);" alt="Quadification">
+            <img src="assets/w19ta.png" style="width:100%; border-radius:4px; margin: 20px 0; border: 1px solid rgba(255,255,255,0.2);" alt="Quadification">
 
             <h4 style="color:#fff; font-family:'Orbitron'; margin-top:30px;">THE ETERNAL NOW</h4>
             <p><strong style="color:#fff;">Final Integration</strong></p>
@@ -354,8 +354,8 @@ window.Q_MANUSCRIPTS = {
                 <span style="color:var(--theme-main, #ff003c);">Systemic Autonomy:</span> Total independence from legacy civil infrastructure and metrology.
             </div>
 
-            <img src="./assets/w20ta.png" style="width:100%; border-radius:4px; margin: 20px 0; border: 1px solid rgba(255,255,255,0.2);" alt="Eternal Now">
-            <img src="./assets/w21ta.png" style="width:100%; border-radius:4px; margin: 20px 0; border: 1px solid rgba(255,255,255,0.2);" alt="Here and Now">
+            <img src="assets/w20ta.png" style="width:100%; border-radius:4px; margin: 20px 0; border: 1px solid rgba(255,255,255,0.2);" alt="Eternal Now">
+            <img src="assets/w21ta.png" style="width:100%; border-radius:4px; margin: 20px 0; border: 1px solid rgba(255,255,255,0.2);" alt="Here and Now">
 
             <p style="color:var(--theme-main, #ff003c); text-align:center; margin-top:40px; font-weight:bold; font-size:1.2rem;">HERE AND NOW ARE INFINITELY ONE.</p>
         `
@@ -392,7 +392,7 @@ window.Q_MANUSCRIPTS = {
                 Quadification is the conscious harmonization of your physical, environmental, physiological, and metaphysical telemetry with the invariant 360-degree solar arc. When we align our macro-planning with the true position of the Earth, we transition from enduring friction to absolute resonance.
             </div>
 
-            <img src="./assets/w1tb.png" style="width:100%; border-radius:4px; margin: 20px 0; border: 1px solid rgba(255,255,255,0.2);" alt="Breaking the Illusion">
+            <img src="assets/w1tb.png" style="width:100%; border-radius:4px; margin: 20px 0; border: 1px solid rgba(255,255,255,0.2);" alt="Breaking the Illusion">
 
             <h4 style="color:#fff; font-family:'Orbitron'; margin-top:30px;">THE GREGORIAN SMEAR & THE 365-DAY ILLUSION</h4>
             <p><strong style="color:#fff;">Living in the Gregorian Smear</strong></p>
@@ -407,7 +407,7 @@ window.Q_MANUSCRIPTS = {
                 True physical resonance requires us to accept that no two days are identical in their cosmic weight. While the geometry of our journey is a fixed 360 degrees, the duration of each degree is elastic. By anchoring your intent to the actual orbital coordinate, you move from the friction of civil lag into the grace of the Eternal Now.
             </div>
 
-            <img src="./assets/w2tb.png" style="width:100%; border-radius:4px; margin: 20px 0; border: 1px solid rgba(255,255,255,0.2);" alt="Gregorian Smear">
+            <img src="assets/w2tb.png" style="width:100%; border-radius:4px; margin: 20px 0; border: 1px solid rgba(255,255,255,0.2);" alt="Gregorian Smear">
 
             <h4 style="color:#fff; font-family:'Orbitron'; margin-top:30px;">LUNISOLAR FRICTION & THE FRAGMENTED HEAVENS</h4>
             <p><strong style="color:#fff;">The War Between the Sun and Moon</strong></p>
@@ -422,7 +422,7 @@ window.Q_MANUSCRIPTS = {
                 True spiritual and physical health requires us to stop fighting the drift. We must accept that physical balance often requires mathematical asymmetry. The Quadrature allows us to move beyond the friction of legacy calendars and align our internal biology with the invariant arc of the universe.
             </div>
 
-            <img src="./assets/w3tb.png" style="width:100%; border-radius:4px; margin: 20px 0; border: 1px solid rgba(255,255,255,0.2);" alt="War of Sun and Moon">
+            <img src="assets/w3tb.png" style="width:100%; border-radius:4px; margin: 20px 0; border: 1px solid rgba(255,255,255,0.2);" alt="War of Sun and Moon">
 
             <h4 style="color:#fff; font-family:'Orbitron'; margin-top:30px;">THE HEXAGESIMAL PULSE</h4>
             <p><strong style="color:#fff;">The Living Breath of the Earth</strong></p>
@@ -436,7 +436,7 @@ window.Q_MANUSCRIPTS = {
                 Within the Introspection mode of the Communal Vector, the user records their growth arc against the solar terms. This is the process of Quadification—the conscious harmonization of your environmental and metaphysical state with the invariant solar arc. When you align your micro-actions with these coordinates, you transcend the mechanical illusion and arrive at the true center of your life.
             </div>
 
-            <img src="./assets/w4tb.png" style="width:100%; border-radius:4px; margin: 20px 0; border: 1px solid rgba(255,255,255,0.2);" alt="The Living Breath">
+            <img src="assets/w4tb.png" style="width:100%; border-radius:4px; margin: 20px 0; border: 1px solid rgba(255,255,255,0.2);" alt="The Living Breath">
 
             <h3 style="color:var(--theme-main, #ff003c); font-family:'Orbitron'; margin-top:40px; letter-spacing:1px;">PHASE II: THE INVARIANT ARC</h3>
             <h4 style="color:#fff; font-family:'Orbitron'; margin-top:15px;">THE PRIMARY POSTULATE & DUAL-STATE ENGINE</h4>
@@ -452,7 +452,7 @@ window.Q_MANUSCRIPTS = {
                 To operate within The Quadrature is to integrate the True Ellipse into every facet of your existence. By accepting the 360-degree journey as our primary guide, we transition from passive observers of a ticking machine to active, conscious participants in the cosmos.
             </div>
 
-            <img src="./assets/w5tb.png" style="width:100%; border-radius:4px; margin: 20px 0; border: 1px solid rgba(255,255,255,0.2);" alt="Path of Solar Stream">
+            <img src="assets/w5tb.png" style="width:100%; border-radius:4px; margin: 20px 0; border: 1px solid rgba(255,255,255,0.2);" alt="Path of Solar Stream">
 
             <h4 style="color:#fff; font-family:'Orbitron'; margin-top:30px;">THE KEPLERIAN SMEAR</h4>
             <p><strong style="color:#fff;">The Stretching of Time</strong></p>
@@ -467,7 +467,7 @@ window.Q_MANUSCRIPTS = {
                 Your biology is not a mechanical gear; it is a sensitive organism inextricably linked to the solar stream. Mastering the smear means recognizing when to accelerate with the world and when to hold, actively choosing physical resonance over artificial friction.
             </div>
 
-            <img src="./assets/w6tb.png" style="width:100%; border-radius:4px; margin: 20px 0; border: 1px solid rgba(255,255,255,0.2);" alt="Stretching Time">
+            <img src="assets/w6tb.png" style="width:100%; border-radius:4px; margin: 20px 0; border: 1px solid rgba(255,255,255,0.2);" alt="Stretching Time">
 
             <h4 style="color:#fff; font-family:'Orbitron'; margin-top:30px;">THE CARDINAL PYLONS (ALPHA TO DELTA)</h4>
             <p><strong style="color:#fff;">The Stirring and the Apex</strong></p>
@@ -482,7 +482,7 @@ window.Q_MANUSCRIPTS = {
                 The Cardinal Pylons are the absolute structural pillars of our environment. They are the critical geometric flex points where our administrative ledgers naturally realign with physical reality.
             </div>
 
-            <img src="./assets/w7tb.png" style="width:100%; border-radius:4px; margin: 20px 0; border: 1px solid rgba(255,255,255,0.2);" alt="Cardinal Pylons">
+            <img src="assets/w7tb.png" style="width:100%; border-radius:4px; margin: 20px 0; border: 1px solid rgba(255,255,255,0.2);" alt="Cardinal Pylons">
 
             <h4 style="color:#fff; font-family:'Orbitron'; margin-top:30px;">EPSILON TERMINAL & NODAL SETTLEMENT</h4>
             <p><strong style="color:#fff;">Living Without the Leap</strong></p>
@@ -497,7 +497,7 @@ window.Q_MANUSCRIPTS = {
                 By choosing Nodal Settlement, we align our lives with the actual momentum of our world. We stop waiting for a future that doesn't exist, and we stop patching a past that is already gone. Here and Now are Infinitely One.
             </div>
 
-            <img src="./assets/w8tb.png" style="width:100%; border-radius:4px; margin: 20px 0; border: 1px solid rgba(255,255,255,0.2);" alt="Epsilon Terminal">
+            <img src="assets/w8tb.png" style="width:100%; border-radius:4px; margin: 20px 0; border: 1px solid rgba(255,255,255,0.2);" alt="Epsilon Terminal">
 
             <h3 style="color:var(--theme-main, #ff003c); font-family:'Orbitron'; margin-top:40px; letter-spacing:1px;">PHASE III: VECTOR CODIFICATION</h3>
             <h4 style="color:#fff; font-family:'Orbitron'; margin-top:15px;">VECTOR 01—THE MECHANICAL ROOT (PHYSICAL)</h4>
@@ -512,7 +512,7 @@ window.Q_MANUSCRIPTS = {
                 The universe cannot be adjusted by administrative decree. True autonomy begins when you reject the mechanical illusion and synchronize your daily existence directly to the invariant arc of the planet.
             </div>
 
-            <img src="./assets/w9tb.png" style="width:100%; border-radius:4px; margin: 20px 0; border: 1px solid rgba(255,255,255,0.2);" alt="Immutable Center">
+            <img src="assets/w9tb.png" style="width:100%; border-radius:4px; margin: 20px 0; border: 1px solid rgba(255,255,255,0.2);" alt="Immutable Center">
 
             <h4 style="color:#fff; font-family:'Orbitron'; margin-top:30px;">VECTOR 02—ENVIRONMENTAL ALMANAC (ENVIRONMENTAL)</h4>
             <p><strong style="color:#fff;">Governing Your Local Reality</strong></p>
@@ -527,7 +527,7 @@ window.Q_MANUSCRIPTS = {
                 You do not exist separately from your environment; you are a localized expression of its thermodynamic energy. Mastering the Environmental Vector means moving flawlessly with the climate, not against it.
             </div>
 
-            <img src="./assets/w10tb.png" style="width:100%; border-radius:4px; margin: 20px 0; border: 1px solid rgba(255,255,255,0.2);" alt="Thermodynamic Bond">
+            <img src="assets/w10tb.png" style="width:100%; border-radius:4px; margin: 20px 0; border: 1px solid rgba(255,255,255,0.2);" alt="Thermodynamic Bond">
 
             <h4 style="color:#fff; font-family:'Orbitron'; margin-top:30px;">VECTOR 03—BIOLOGICAL RESONANCE (PHYSIOLOGICAL)</h4>
             <p><strong style="color:#fff;">The Human Sensor vs. The Mechanical Gear</strong></p>
@@ -543,7 +543,7 @@ window.Q_MANUSCRIPTS = {
                 Your physiological energy ebbs and flows in direct parallel to the Keplerian Smear. Embracing the body as a cosmic sensor allows for the seamless integration of human intent with planetary momentum.
             </div>
 
-            <img src="./assets/w11tb.png" style="width:100%; border-radius:4px; margin: 20px 0; border: 1px solid rgba(255,255,255,0.2);" alt="Biological Breath">
+            <img src="assets/w11tb.png" style="width:100%; border-radius:4px; margin: 20px 0; border: 1px solid rgba(255,255,255,0.2);" alt="Biological Breath">
 
             <h4 style="color:#fff; font-family:'Orbitron'; margin-top:30px;">VECTOR 04—COMMUNAL METADATA (METAPHYSICAL)</h4>
             <p><strong style="color:#fff;">The Interoperability Bridge</strong></p>
@@ -557,7 +557,7 @@ window.Q_MANUSCRIPTS = {
                 The heavens are not a mythological abstraction; they are a measurable, thermodynamic matrix. By anchoring your personal origin point to the True Ellipse, you locate your precise geometric relationship to the Eternal Now.
             </div>
 
-            <img src="./assets/w12tb.png" style="width:100%; border-radius:4px; margin: 20px 0; border: 1px solid rgba(255,255,255,0.2);" alt="Objective Sky">
+            <img src="assets/w12tb.png" style="width:100%; border-radius:4px; margin: 20px 0; border: 1px solid rgba(255,255,255,0.2);" alt="Objective Sky">
 
             <h4 style="color:#fff; font-family:'Orbitron'; margin-top:30px;">THE COMMERCIAL QUAD—ENTERPRISE BIFURCATION</h4>
             <p><strong style="color:#fff;">The Geometry of the Collective</strong></p>
@@ -572,7 +572,7 @@ window.Q_MANUSCRIPTS = {
                 Human labor is a biological energy expenditure, not a mechanical constant. True enterprise scale is achieved only when the collective mirrors the geometric perfection of the individual. Aligning corporate logistics with orbital physics eradicates the artificial friction of the 40-hour work week.
             </div>
 
-            <img src="./assets/w13tb.png" style="width:100%; border-radius:4px; margin: 20px 0; border: 1px solid rgba(255,255,255,0.2);" alt="Harmonic Workforce">
+            <img src="assets/w13tb.png" style="width:100%; border-radius:4px; margin: 20px 0; border: 1px solid rgba(255,255,255,0.2);" alt="Harmonic Workforce">
 
             <h4 style="color:#fff; font-family:'Orbitron'; margin-top:30px;">SOVEREIGN COMMAND</h4>
             <p><strong style="color:#fff;">The Kairos Voice</strong></p>
@@ -585,7 +585,7 @@ window.Q_MANUSCRIPTS = {
                 Friction occurs in the gap between thought and execution. By removing the physical barrier of the interface, your intent becomes an immediate, unmediated action within the architecture of the Eternal Now.
             </div>
 
-            <img src="./assets/w14tb.png" style="width:100%; border-radius:4px; margin: 20px 0; border: 1px solid rgba(255,255,255,0.2);" alt="Sovereign Command">
+            <img src="assets/w14tb.png" style="width:100%; border-radius:4px; margin: 20px 0; border: 1px solid rgba(255,255,255,0.2);" alt="Sovereign Command">
 
             <h3 style="color:var(--theme-main, #ff003c); font-family:'Orbitron'; margin-top:40px; letter-spacing:1px;">PHASE IV: THE QUADIFIED LIFE</h3>
             <h4 style="color:#fff; font-family:'Orbitron'; margin-top:15px;">THE OMNI-PLANNER VISUALIZATION</h4>
@@ -600,7 +600,7 @@ window.Q_MANUSCRIPTS = {
                 To see the Arc is to master it. When you visually map your intent against planetary momentum, the friction of the civil world becomes an avoidable obstacle rather than an absolute law.
             </div>
 
-            <img src="./assets/w15tb.png" style="width:100%; border-radius:4px; margin: 20px 0; border: 1px solid rgba(255,255,255,0.2);" alt="Visual Reality">
+            <img src="assets/w15tb.png" style="width:100%; border-radius:4px; margin: 20px 0; border: 1px solid rgba(255,255,255,0.2);" alt="Visual Reality">
 
             <h4 style="color:#fff; font-family:'Orbitron'; margin-top:30px;">THE 90+1 ACCOUNTING LEDGER</h4>
             <p><strong style="color:#fff;">Freedom from Civil Drift</strong></p>
@@ -615,7 +615,7 @@ window.Q_MANUSCRIPTS = {
                 Commerce is the exchange of thermodynamic energy. Aligning your ledger with the invariant physics of the solar arc ensures your labor is captured, stored, and deployed with absolute physical precision.
             </div>
 
-            <img src="./assets/w16tb.png" style="width:100%; border-radius:4px; margin: 20px 0; border: 1px solid rgba(255,255,255,0.2);" alt="90+1 Ledger">
+            <img src="assets/w16tb.png" style="width:100%; border-radius:4px; margin: 20px 0; border: 1px solid rgba(255,255,255,0.2);" alt="90+1 Ledger">
 
             <h4 style="color:#fff; font-family:'Orbitron'; margin-top:30px;">GEOMETRIC RESONANCE DISCOVERY</h4>
             <p><strong style="color:#fff;">True Astrophysical Synchronization</strong></p>
@@ -629,7 +629,7 @@ window.Q_MANUSCRIPTS = {
                 True connection is geometric. By aligning your social and collaborative endeavors with the physical reality of the True Ellipse, you amplify your collective resonance and eradicate social friction.
             </div>
 
-            <img src="./assets/w17tb.png" style="width:100%; border-radius:4px; margin: 20px 0; border: 1px solid rgba(255,255,255,0.2);" alt="Resonance Discovery">
+            <img src="assets/w17tb.png" style="width:100%; border-radius:4px; margin: 20px 0; border: 1px solid rgba(255,255,255,0.2);" alt="Resonance Discovery">
 
             <h4 style="color:#fff; font-family:'Orbitron'; margin-top:30px;">THE SOVEREIGN MOBILE NODE</h4>
             <p><strong style="color:#fff;">The Digital Anchor</strong></p>
@@ -642,7 +642,7 @@ window.Q_MANUSCRIPTS = {
                 The ultimate realization of a philosophy is its behavioral manifestation. The Sovereign Mobile Node bridges the gap between digital telemetry and the psychological reality of the mind.
             </div>
 
-            <img src="./assets/w18tb.png" style="width:100%; border-radius:4px; margin: 20px 0; border: 1px solid rgba(255,255,255,0.2);" alt="Sovereign Mobile Node">
+            <img src="assets/w18tb.png" style="width:100%; border-radius:4px; margin: 20px 0; border: 1px solid rgba(255,255,255,0.2);" alt="Sovereign Mobile Node">
 
             <h4 style="color:#fff; font-family:'Orbitron'; margin-top:30px;">THE PRINCIPLE OF QUADIFICATION</h4>
             <p><strong style="color:#fff;">The Conscious Harmonization</strong></p>
@@ -659,7 +659,7 @@ window.Q_MANUSCRIPTS = {
                 <span style="color:var(--theme-main, #ff003c);">Friction Mitigation Baseline:</span> The mathematical suppression of the Gregorian Smear from the user's daily operations.
             </div>
 
-            <img src="./assets/w19tb.png" style="width:100%; border-radius:4px; margin: 20px 0; border: 1px solid rgba(255,255,255,0.2);" alt="Quadified Life">
+            <img src="assets/w19tb.png" style="width:100%; border-radius:4px; margin: 20px 0; border: 1px solid rgba(255,255,255,0.2);" alt="Quadified Life">
 
             <h4 style="color:#fff; font-family:'Orbitron'; margin-top:30px;">THE ETERNAL NOW</h4>
             <p><strong style="color:#fff;">The Dissolution of Space and Time</strong></p>
@@ -668,8 +668,8 @@ window.Q_MANUSCRIPTS = {
             <p>You are no longer waiting anxiously for a future that does not exist, nor are you mourning a past built on a broken ledger. Through Quadification, you have arrived at a state of absolute resonance. You are moving with the weight and the momentum of the Earth itself. The journey is complete, and yet, because it is an arc, it is eternally beginning.</p>
             <p>The legacy world traps the human mind in a perpetual state of temporal panic—always reaching for a tomorrow that is endlessly delayed, always attempting to reconcile a yesterday that was improperly measured. The Quadrature shatters this trap. When you stand at the center of the True Ellipse, the panic evaporates. You realize that the immense, thermodynamic power of the cosmos is not something you must race against, but a momentum you can ride. The journey is complete, and yet, because it is an arc, it is eternally beginning.</p>
 
-            <img src="./assets/w20tb.png" style="width:100%; border-radius:4px; margin: 20px 0; border: 1px solid rgba(255,255,255,0.2);" alt="Eternal Now">
-            <img src="./assets/w21tb.png" style="width:100%; border-radius:4px; margin: 20px 0; border: 1px solid rgba(255,255,255,0.2);" alt="Here and Now">
+            <img src="assets/w20tb.png" style="width:100%; border-radius:4px; margin: 20px 0; border: 1px solid rgba(255,255,255,0.2);" alt="Eternal Now">
+            <img src="assets/w21tb.png" style="width:100%; border-radius:4px; margin: 20px 0; border: 1px solid rgba(255,255,255,0.2);" alt="Here and Now">
 
             <p style="color:var(--theme-main, #ff003c); text-align:center; margin-top:40px; font-weight:bold; font-size:1.2rem;">HERE AND NOW ARE INFINITELY ONE.</p>
         `
@@ -765,8 +765,8 @@ window.Q_MANUSCRIPTS = {
 
             <h3 style="color:#fff; font-family:'Orbitron'; margin-top:20px; letter-spacing:1px;">PART 4: ADVANCED FEATURES & PRIVACY</h3>
             
-            <h4 style="color:var(--theme-main, #ff003c); font-family:'Orbitron'; margin-top:15px;">The AI Diplomatic Negotiator</h4>
-            <p>At higher membership tiers, your calendar becomes an active defender of your time. If someone sends you an invite that crashes into your biological recovery window, the AI Diplomat can automatically intercept it and suggest a new time that fits geometrically within your 'Deep Flow' state.</p>
+            <h4 style="color:var(--theme-main, #ff003c); font-family:'Orbitron'; margin-top:15px;">The AI Temporal Firewall</h4>
+            <p>At higher membership tiers, your calendar becomes an active defender of your time. If an Entity broadcasts a requirement that crashes into your biological recovery window, the AI Diplomat utilizes Asynchronous Buffering. It automatically intercepts the request, silently absorbing it and routing the execution parameters into your next 'Deep Flow' state without generating counter-proposals or negotiation friction.</p>
             
             <h4 style="color:var(--theme-main, #ff003c); font-family:'Orbitron'; margin-top:15px;">The Commercial Quad (Enterprise Bifurcation)</h4>
             <p>The Quadrature isn't just for individuals. By flipping the Global OS Toggle, the system transforms into a powerful B2B enterprise tool. It allows entire teams to overlay their natural rhythms, finding the perfect times for collective collaboration without burning out the workforce. (A complete guide to the Commercial Quad is available in our Enterprise documentation).</p>
@@ -1079,9 +1079,9 @@ window.Q_IntegrationHub = {
                         <span style="color:#00f0ff;">&#x25A0; Blue (Vent/Recovery):</span> Mandatory window to step back, rest, and recharge.
                     </div>
 
-                    <div style="font-family:'Orbitron'; font-size:0.75rem; color:#fff; font-weight:bold; margin-bottom:8px; border-bottom:1px dashed rgba(255,255,255,0.2); padding-bottom:4px;">ADVANCED: AI DIPLOMATIC NEGOTIATOR</div>
+                    <div style="font-family:'Orbitron'; font-size:0.75rem; color:#fff; font-weight:bold; margin-bottom:8px; border-bottom:1px dashed rgba(255,255,255,0.2); padding-bottom:4px;">ADVANCED: AI TEMPORAL FIREWALL</div>
                     <div style="font-size:0.6rem; color:#aaa; line-height: 1.5; margin-bottom: 10px;">
-                        As you upgrade your system, you unlock your own AI temporal firewall. If a colleague sends a calendar invite that crashes into your biological "Vent/Recovery" window, the Negotiator intercepts it before you even see it, proposing a new time that aligns perfectly with your peak energy.
+                        As you upgrade your system, you unlock your own AI temporal firewall. If an Entity broadcasts a sprint that crashes into your biological "Vent/Recovery" window, the system utilizes Unidirectional Target Broadcasting and Asynchronous Buffering. Non-resonant payloads are silently absorbed and automatically routed into your next available Deep Flow window, eradicating the need for negotiation or counter-proposals.
                     </div>
                 </div>
 

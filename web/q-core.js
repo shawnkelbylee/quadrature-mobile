@@ -4,9 +4,11 @@
 
 window.MS_DAY = 86400000;
 
-// --- ASYMMETRICAL GEAR CONSTANTS ---
+// --- NOMINAL SETTLEMENT GEARS (DYNAMIC Q-DELTA ABSORPTION) ---
+// These durations represent the baseline operational buffer. Actual settlement dynamically absorbs 
+// the exact mathematical variance accumulated since the previous node.
 window.Q_GEAR_CONSTANTS = {
-    ALPHA: 86400000,    // 24.0h
+    ALPHA: 86400000,    // 24.0h (Nominal Base)
     BETA: 84600000,     // 23.5h
     GAMMA: 89662680,    // 24.9063h
     DELTA: 102599640,   // 28.4999h
@@ -96,10 +98,12 @@ window.Q_EphemerisBridge = {
             if (data && data.holidays) {
                 window.Q_ACTIVE_EPHEMERIS = { year: year, data: data.holidays };
                 window.Q_LOG('STATE', 'PHYSICS', 'CLOUD_EPHEMERIS_SYNCED', { year });
+                window.Q_STATE.system_state.ephemeris_status = 'ACTIVE';
                 window.dispatchEvent(new CustomEvent('q-ephemeris-updated', { detail: { year } }));
             }
         } catch (err) {
-            window.Q_LOG('WARN', 'PHYSICS', 'EPHEMERIS_SYNC_FAILED', { error: err.message, fallback: 'STATIC_REGISTRY' });
+            window.Q_STATE.system_state.ephemeris_status = 'DEGRADED (CIVIL APPROXIMATION)';
+            window.Q_LOG('WARN', 'PHYSICS', 'EPHEMERIS_SYNC_FAILED', { error: err.message, fallback: 'CIVIL_APPROXIMATION_DEPLOYED' });
         }
     },
     
@@ -140,7 +144,9 @@ window.Q_LEXICON = {
     CIVIL: "Mean Circle",
     PHYSICS: "True Ellipse",
     INTERFACE: "The Quadrature HUD",
-    SYSTEM: "Q Logic"
+    SYSTEM: "Q Logic",
+    USER_INDIVIDUAL: "Sovereign",
+    USER_ENTERPRISE: "Entity"
 };
 
 // --- SUPABASE CLOUD BRIDGE & HYDRATION PROTOCOL ---
@@ -197,7 +203,7 @@ window.fetchCloudState = async function() {
     
     const { data: session } = await window.supabaseClient.auth.getSession();
     if (!session?.session?.user) {
-        window.Q_LOG('WARN', 'CORE', 'CLOUD_SYNC_ABORTED: No Active Supabase Auth Session.');
+        window.Q_LOG('WARN', 'CORE', 'CLOUD_SYNC_ABORTED: No Active Sovereign/Entity Session.');
         return; 
     }
 
@@ -250,7 +256,7 @@ window.fetchCloudState = async function() {
     }
 };
 
-// CENTRALIZED STATE MANAGEMENT (Ghost Keys Purged)
+// CENTRALIZED STATE MANAGEMENT
 window.Q_STATE = {
     persistence: { 
         db_migration: 'ACTIVE', 
@@ -292,7 +298,8 @@ window.Q_STATE = {
     },
     system_state: {
         q_time_fmt: localStorage.getItem('Q_TIME_FMT') || 'UTC_24',
-        asset_track_mode: localStorage.getItem('q_asset_mode') || 'STANDARD'
+        asset_track_mode: localStorage.getItem('q_asset_mode') || 'STANDARD',
+        ephemeris_status: 'STANDBY'
     }
 };
 
@@ -402,23 +409,35 @@ window.getActiveDLMO = function() {
     return val !== null && !isNaN(val) ? val : (parseInt(localStorage.getItem('q_dlmo_offset_mins')) || 90);
 };
 
-window.getBiologicalState = function(t) {
+// DECOUPLED BIOLOGICAL PHYSICS ENGINE: Calculates physiological phase via Keplerian Multiplier overlaid on 1440-min canvas.
+window.getBiologicalState = function(t, qData) {
+    if (!qData) {
+        const daysElapsed = (t - window.PYLON_ALPHA_DYNAMIC) / window.MS_DAY;
+        qData = window.getOrbitalData(daysElapsed);
+    }
+
     let anchorMins = window.getActiveWakeAnchor();
-    let cycleDuration = window.getActiveCycleDuration();
+    let baseCycleDuration = window.getActiveCycleDuration();
+
+    // Apply Keplerian Multiplier to Biological Phase
+    let radDist = (qData.trueArc - 14) * (Math.PI / 180);
+    let velocityMult = 1 + 0.0334 * Math.cos(radDist);
+    let activeCycleDuration = baseCycleDuration / velocityMult; 
+
     let activeMs = ((t % 86400000) - (anchorMins * 60000) + 86400000) % 86400000;
     let minsSinceWake = Math.floor(activeMs / 60000);
-    
+
     let sleepDuration = window.Q_STATE.metaphysical_layer.sleep_cycle_duration || 450;
-    let wakingDurationMins = 1440 - sleepDuration;
+    let wakingDurationMins = 1440 - sleepDuration; // 1440 Civil rendering canvas
     let inertiaMins = window.getActiveSleepInertia();
     let dlmoMins = window.getActiveDLMO();
-    
+
     if (minsSinceWake >= wakingDurationMins) return "SLEEP / RECOVERY";
     if (minsSinceWake < inertiaMins) return "SLEEP INERTIA";
     if (minsSinceWake >= wakingDurationMins - dlmoMins) return "DLMO WIND-DOWN";
-    
+
     let coreMins = minsSinceWake - inertiaMins;
-    let cyclePosFloat = (coreMins % cycleDuration) / cycleDuration;
+    let cyclePosFloat = (coreMins % activeCycleDuration) / activeCycleDuration;
     return (cyclePosFloat < 0.77) ? "DEEP FLOW" : "VENT/RECOVERY";
 };
 
@@ -607,8 +626,8 @@ window.Q_MobileBridge.init();
 window.Q_DeepFlowMonitor = {
     lastState: null,
     lastEnforcementState: null,
-    check: function(t) {
-        const currentState = window.getBiologicalState(t);
+    check: function(t, qData) {
+        const currentState = window.getBiologicalState(t, qData);
         const enforcementActive = window.Q_STATE.logic_layer.deep_flow_enforcement;
         
         const stateChanged = currentState !== this.lastState;
@@ -742,7 +761,6 @@ window.Q_KairosVoice = {
         }
     },
     processCommand: function(cmd) {
-        // SOVEREIGN COMMAND MATRIX (Phase E Integration)
         const normalized = cmd.toLowerCase().replace(/[^a-z0-9\s]/g, '').trim();
         window.Q_LOG('INFO', 'INTERFACE', 'SOVEREIGN_COMMAND_PROCESSING', { cmd: normalized });
 
@@ -760,7 +778,7 @@ window.Q_KairosVoice = {
             return;
         }
 
-        // 2. NAVIGATE / VECTOR INTENT (Regex-Driven)
+        // 2. NAVIGATE / VECTOR INTENT
         const navMatch = normalized.match(/(?:go to|navigate to|open|show|launch|switch to)\s+(the\s+)?(biological|bio|physiological|environmental|env|meteorological|communal|com|metaphysical|mechanical|mech|physical|chrono|main face|home|planner|omni planner)/);
         
         if (navMatch || normalized.includes('vector') || normalized.includes('quad')) {
@@ -795,7 +813,7 @@ window.Q_KairosVoice = {
             }
         }
 
-        // 3. PLANNER MANIPULATION INTENT (Only if planner is active)
+        // 3. PLANNER MANIPULATION INTENT
         if (sessionStorage.getItem('Q_PLANNER_ACTIVE') === 'true') {
             if (/(?:view|show)\s+(cycle|annual)/.test(normalized)) { window.Q_OmniPlanner.setViewMode('cycle'); return; }
             if (/(?:view|show)\s+(quadrant|quad)/.test(normalized)) { window.Q_OmniPlanner.setViewMode('quad'); return; }
@@ -907,7 +925,7 @@ window.Q_Onboarding = {
     }
 };
 
-// --- SOVEREIGN AUTHENTICATION (MERGED PROTOCOL: CORE + HUB) ---
+// --- SOVEREIGN AUTHENTICATION ---
 window.Q_Auth = {
     getRedirectVector: function() {
         const origin = window.location.origin;
@@ -943,7 +961,7 @@ window.Q_Auth = {
         }
     },
     triggerOAuth: function() {
-        window.Q_LOG('INFO', 'CORE', 'SOVEREIGN_IDENTITY_AUTH_TRIGGERED');
+        window.Q_LOG('INFO', 'CORE', 'IDENTITY_AUTH_TRIGGERED');
         if (window.ReactNativeWebView) {
             window.ReactNativeWebView.postMessage(JSON.stringify({ action: 'OAUTH_LOGIN' }));
         } else {
@@ -963,7 +981,7 @@ window.Q_Auth = {
             if (window.Q_STATE && window.Q_STATE.persistence) {
                 window.Q_STATE.persistence.auth_status = 'STANDBY';
             }
-            window.Q_LOG('STATE', 'CORE', 'SOVEREIGN_IDENTITY_DISCONNECTED');
+            window.Q_LOG('STATE', 'CORE', 'IDENTITY_DISCONNECTED');
             window.location.reload();
         } catch (err) {
             window.Q_LOG('ERROR', 'CORE', 'SIGNOUT_FAILED', { error: err.message });
@@ -979,7 +997,7 @@ window.Q_Auth = {
         overlay.innerHTML = `
             <div style="width: 90%; max-width: 400px; border: 1px solid #00f0ff; padding: 25px; background: rgba(0, 240, 255, 0.05); box-shadow: 0 0 30px rgba(0, 240, 255, 0.2); border-radius: 8px; position:relative;">
                 <button onclick="document.getElementById('q-auth-overlay').remove()" style="position:absolute; top:10px; right:10px; background:transparent; border:none; color:#ff003c; font-size:1.2rem; cursor:pointer;">✖</button>
-                <h3 style="text-align:center; letter-spacing:3px; text-shadow:0 0 10px #00f0ff; margin-top:0;">SOVEREIGN LOGIN</h3>
+                <h3 style="text-align:center; letter-spacing:3px; text-shadow:0 0 10px #00f0ff; margin-top:0;">SECURE LOGIN</h3>
                 <div style="font-family:'JetBrains Mono'; font-size:0.7rem; color:#aaa; margin-bottom: 20px; text-align:center; line-height: 1.5;">Authenticate to sync your temporal state across the Quadrature Matrix.</div>
                 
                 <div style="display:flex; gap:10px; margin-bottom:15px; justify-content:center;">
@@ -1050,8 +1068,6 @@ window.Q_Auth = {
         if (!window.supabaseClient) return;
         
         const { data: session } = await window.supabaseClient.auth.getSession();
-        
-        // CHECK NATIVE STORAGE VAULT FOR THE GOOGLE CALENDAR TOKEN
         const stashedGoogleToken = sessionStorage.getItem('Q_GOOGLE_TOKEN');
         
         if (session?.session?.user) {
@@ -1059,7 +1075,7 @@ window.Q_Auth = {
                 window.Q_STATE.persistence.auth_status = 'SOVEREIGN_AUTHENTICATED';
             }
             localStorage.setItem('Q_SOVEREIGN_AUTH', 'true');
-            window.Q_LOG('STATE', 'CORE', 'SOVEREIGN_IDENTITY_VERIFIED', { user: session.session.user.email });
+            window.Q_LOG('STATE', 'CORE', 'IDENTITY_VERIFIED', { user: session.session.user.email });
             
             // --- NATIVE ARCHITECT RECOGNITION & ENTITLEMENT LOCK ---
             const userEmail = (session.session.user.email || "").toUpperCase();
@@ -1070,33 +1086,17 @@ window.Q_Auth = {
             }
             // -------------------------------------------------------
 
-            // FIRE THE CALENDAR SYNC IF THE STASHED TOKEN EXISTS
             if (stashedGoogleToken) {
                 if (window.Q_UniversalSync && window.Q_UniversalSync.ingestGoogleCalendar) {
                     window.Q_LOG('INFO', 'CORE', 'EXECUTING_HARD_CALENDAR_SYNC');
                     const importedCount = await window.Q_UniversalSync.ingestGoogleCalendar(stashedGoogleToken);
-                    
-                    // EXPLICIT HARD ALERT TO THE USER
                     alert(`[ THE QUADRATURE: UNIVERSAL PAYLOAD SYNC ]\n\nSuccessfully mapped ${importedCount} Civil Constraints into the Matrix.`);
-                    
                     sessionStorage.removeItem('Q_GOOGLE_TOKEN');
                 }
             }
             
             if (window.ReactNativeWebView) {
                 window.ReactNativeWebView.postMessage(JSON.stringify({ action: 'SECURE_AUTH_SUCCESS', token: session.session.access_token }));
-            }
-            
-            const badge = document.getElementById('q-global-sim-badge');
-            if (badge) {
-                badge.style.border = "1px solid #39ff14";
-                badge.style.boxShadow = "0 0 10px rgba(57, 255, 20, 0.4)";
-                badge.innerText = "[ IN THE QUAD ]";
-                badge.style.color = "#000";
-                badge.style.background = "#39ff14";
-                
-                badge.onclick = () => window.Q_Auth.signOut();
-                badge.ontouchstart = (e) => { window.Q_Auth.signOut(); e.preventDefault(); };
             }
             
             const returnVector = sessionStorage.getItem('Q_AUTH_RETURN_VECTOR');
@@ -1158,7 +1158,7 @@ window.Q_MasterLoop = {
                 }
                 this.lastPylonIndex = currentPylonIndex;
 
-                if (window.Q_DeepFlowMonitor) window.Q_DeepFlowMonitor.check(t);
+                if (window.Q_DeepFlowMonitor) window.Q_DeepFlowMonitor.check(t, qData);
 
                 window.dispatchEvent(new CustomEvent('q-tick', {
                     detail: { t, isLive: state.isLive, activeTime, daysElapsed, qData, lagDays, legacyDateStr: formatted.dateStr, legacyTimeStr: formatted.timeStr, activePostulate }
@@ -1224,22 +1224,17 @@ window.Q_PHASE_III = {
                             document.removeEventListener('message', bioListener);
                             window.Q_LOG('INFO', 'BIOLOGICAL', 'NATIVE_HEALTH_PAYLOAD_RECEIVED', { status: 'AWAITING_PURGE' });
                             
-                            // Extract necessary abstract metrics
                             const derivedDuration = window.Q_BIOMETRICS.calculateUltradian(msg.payload.hrv);
                             
-                            // THE 256MS PURGE PROTOCOL (Ephemeral Conduit Enforcement)
                             setTimeout(() => {
-                                // Systematically destroy the raw PHI payload from active memory
                                 msg.payload.hrv = null;
                                 msg.payload.rhr = null;
                                 msg.payload.sleep_stage = null;
                                 delete msg.payload;
                                 
                                 window.Q_LOG('STATE', 'BIOLOGICAL', '256MS_PURGE_PROTOCOL_EXECUTED', { status: 'PHI_DESTROYED' });
-                                
-                                // Resolve with only the mathematically generated Q-metric
                                 resolve(derivedDuration);
-                            }, 256); // strictly 256ms
+                            }, 256); 
 
                         } else if (msg.type === 'NATIVE_BIOMETRIC_ERROR') {
                             document.removeEventListener('message', bioListener);
@@ -1396,12 +1391,13 @@ window.calculatePylonAlpha = async function() {
     return window.PYLON_ALPHA_DYNAMIC;
 };
 
-// OFFLINE EPHEMERIS ENGINE (WEB WORKER INTEGRATION)
+// OFFLINE EPHEMERIS ENGINE
 window.fetchJPLTelemetry = async function() {
     return new Promise((resolve, reject) => {
         if (!window.Worker) {
-            window.Q_LOG('WARN', 'CORE', 'WEB_WORKER_UNSUPPORTED', { action: 'ENGAGING_KEPLERIAN_FAILOVER' });
+            window.Q_LOG('WARN', 'CORE', 'WEB_WORKER_UNSUPPORTED', { action: 'ENGAGING_CIVIL_APPROXIMATION' });
             window.EPHEMERIS_LIVE = false;
+            window.Q_STATE.system_state.ephemeris_status = 'DEGRADED (CIVIL APPROXIMATION)';
             resolve(); 
             return;
         }
@@ -1413,6 +1409,7 @@ window.fetchJPLTelemetry = async function() {
                 const msg = e.data;
                 if (msg.type === 'TELEMETRY_SUCCESS') {
                     window.EPHEMERIS_LIVE = true;
+                    window.Q_STATE.system_state.ephemeris_status = 'ACTIVE';
                     window.Q_LOG('INFO', 'CORE', 'JPL_TELEMETRY_SYNCED', { source: msg.source, window: msg.window });
                     if (window.Q_PendingTelemetryResolve) {
                         window.Q_PendingTelemetryResolve();
@@ -1420,7 +1417,8 @@ window.fetchJPLTelemetry = async function() {
                     }
                 } else if (msg.type === 'TELEMETRY_FAILED') {
                     window.EPHEMERIS_LIVE = false;
-                    window.Q_LOG('WARN', 'CORE', 'JPL_DESYNC_DETECTED', { error: msg.error, action: 'ENGAGING_KEPLERIAN_FAILOVER' });
+                    window.Q_STATE.system_state.ephemeris_status = 'DEGRADED (CIVIL APPROXIMATION)';
+                    window.Q_LOG('WARN', 'CORE', 'JPL_DESYNC_DETECTED', { error: msg.error, action: 'CIVIL_APPROXIMATION_DEPLOYED' });
                     if (window.Q_PendingTelemetryResolve) {
                         window.Q_PendingTelemetryResolve(); 
                         window.Q_PendingTelemetryResolve = null;
@@ -1439,7 +1437,8 @@ window.fetchJPLTelemetry = async function() {
         setTimeout(() => {
             if (window.Q_PendingTelemetryResolve) {
                 window.EPHEMERIS_LIVE = false;
-                window.Q_LOG('WARN', 'CORE', 'JPL_WORKER_TIMEOUT', { action: 'ENGAGING_KEPLERIAN_FAILOVER' });
+                window.Q_STATE.system_state.ephemeris_status = 'DEGRADED (CIVIL APPROXIMATION)';
+                window.Q_LOG('WARN', 'CORE', 'JPL_WORKER_TIMEOUT', { action: 'CIVIL_APPROXIMATION_DEPLOYED' });
                 window.Q_PendingTelemetryResolve();
                 window.Q_PendingTelemetryResolve = null;
             }

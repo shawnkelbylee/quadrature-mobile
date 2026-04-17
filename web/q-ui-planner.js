@@ -511,8 +511,8 @@ window.Q_OmniPlanner = {
         } else {
             let activeBlock = window.getQBlockByTime(this.selectedDate);
             if(activeBlock.type === 'PYLON') {
-                cTitle = `[ GEAR ENGAGED: ${activeBlock.name} ]`;
-                cDesc = `SETTLEMENT NODE: "CELESTIAL DAY". Actively resolving accumulated physical drift. Q-Delta interpolating to 0.0000° across ${(activeBlock.dur / 3600000).toFixed(4)} hours.`;
+                cTitle = `[ SETTLEMENT NODE: ${activeBlock.name} ]`;
+                cDesc = `OPERATIONAL BUFFER. Actively resolving accumulated physical drift. Q-Delta interpolating to 0.0000° across ${(activeBlock.dur / 3600000).toFixed(4)} hours.`;
                 contextDiv.style.borderColor = 'var(--gold)';
             } else {
                 let daysElapsed = (this.selectedDate - window.PYLON_ALPHA_DYNAMIC) / window.MS_DAY;
@@ -526,7 +526,7 @@ window.Q_OmniPlanner = {
         
         let htmlStr = '';
         if (cTitle) {
-            let titleColor = (!this.isLegacy && cTitle.includes('GEAR')) ? 'var(--gold)' : 'var(--theme-main)';
+            let titleColor = (!this.isLegacy && cTitle.includes('NODE')) ? 'var(--gold)' : 'var(--theme-main)';
             htmlStr += `<div style="font-family:'Orbitron'; font-size:0.9rem; color:${titleColor}; font-weight:bold; letter-spacing:1px;">${cTitle}</div>`;
         }
         if (cDesc) {
@@ -712,7 +712,7 @@ window.Q_OmniPlanner = {
                     d.className = 'p-day pylon-block';
                     if (isToday) d.classList.add('status-today');
                     if (this.selectedDate >= absStart && this.selectedDate < absStart + item.dur) d.classList.add('selected');
-                    d.innerHTML = `<div style="font-family:Orbitron; font-weight:bold; color:var(--gold, #F4D068); font-size:0.75rem;">${item.name}</div><div style="font-size:0.5rem; color:#aaa; margin-top:4px;">CELESTIAL DAY</div>`;
+                    d.innerHTML = `<div style="font-family:Orbitron; font-weight:bold; color:var(--gold, #F4D068); font-size:0.75rem;">${item.name}</div><div style="font-size:0.5rem; color:#aaa; margin-top:4px;">SETTLEMENT NODE</div>`;
                 } else {
                     d.className = 'p-day';
                     if (isToday) d.classList.add('status-today');
@@ -809,7 +809,7 @@ window.Q_OmniPlanner = {
                 const pb = document.createElement('div');
                 pb.className = 'macro-pylon-bar';
                 if (this.selectedDate >= absStart && this.selectedDate < absStart + item.dur) pb.classList.add('selected');
-                pb.innerText = `${item.name} // CELESTIAL DAY // Q-DELTA RESET`;
+                pb.innerText = `${item.name} // OPERATIONAL BUFFER // Q-DELTA SETTLEMENT`;
                 pb.onclick = () => { this.selectedDate = absStart; this.setViewMode('day'); };
                 quadBox.appendChild(pb);
             }
@@ -860,7 +860,7 @@ window.Q_OmniPlanner = {
                 const pb = document.createElement('div');
                 pb.className = 'macro-pylon-bar';
                 if (this.selectedDate >= absStart && this.selectedDate < absStart + item.dur) pb.classList.add('selected');
-                pb.innerText = `${item.name} // CELESTIAL DAY // Q-DELTA RESET`;
+                pb.innerText = `${item.name} // OPERATIONAL BUFFER // Q-DELTA SETTLEMENT`;
                 pb.onclick = () => { this.selectedDate = absStart; this.setViewMode('day'); };
                 quadBox.appendChild(pb);
             }
@@ -948,7 +948,7 @@ window.Q_OmniPlanner = {
                     const pb = document.createElement('div');
                     pb.className = 'macro-pylon-bar';
                     if (this.selectedDate >= absStart && this.selectedDate < absStart + item.dur) pb.classList.add('selected');
-                    pb.innerText = `${item.name} // CELESTIAL DAY // Q-DELTA RESET`;
+                    pb.innerText = `${item.name} // OPERATIONAL BUFFER // Q-DELTA SETTLEMENT`;
                     pb.onclick = () => { this.selectedDate = absStart; this.setViewMode('day'); };
                     quadBox.appendChild(pb);
                 }
@@ -999,7 +999,7 @@ window.Q_OmniPlanner = {
                     const pb = document.createElement('div');
                     pb.className = 'macro-pylon-bar';
                     if (this.selectedDate >= absStart && this.selectedDate < absStart + item.dur) pb.classList.add('selected');
-                    pb.innerText = `${item.name} // CELESTIAL DAY // Q-DELTA RESET`;
+                    pb.innerText = `${item.name} // OPERATIONAL BUFFER // Q-DELTA SETTLEMENT`;
                     pb.onclick = () => { this.selectedDate = absStart; this.setViewMode('day'); };
                     quadBox.appendChild(pb);
                 }

@@ -19,7 +19,7 @@ window.Q_MANUSCRIPTS = {
 
             <h3 style="color:#fff; font-family:'Orbitron'; margin-top:20px; letter-spacing:1px;">DOCUMENT STRUCTURE</h3>
             <p>This track strictly isolates the logic, engineering, and physical architecture of the operating system. It strips away philosophical framing to focus entirely on the mechanics of transitioning from a state of chaotic civil lag into absolute telemetry synchronization with the invariant 360-degree solar arc.</p>
-            <p>Each spatial node within this document concludes with a <strong style="color:#fff;">Technical Data Block</strong>—a summary of the systemic autonomy, mathematical locks, and zero-friction baselines achieved by mastering that specific coordinate of the architecture.</p>
+            <p>Each spatial node within this document concludes with a <strong style="color:#fff;">Technical Data Block</strong>—a summary of the systemic autonomy, mathematical locks, and friction mitigation baselines achieved by mastering that specific coordinate of the architecture.</p>
 
             <hr style="border: 0; border-top: 1px dashed rgba(255,255,255,0.2); margin: 30px 0;">
 
@@ -93,7 +93,7 @@ window.Q_MANUSCRIPTS = {
             <p>Initialization of The Quadrature requires the total abandonment of legacy assumptions and the establishment of the 360-degree solar coordinate as the only absolute physical baseline. While civil time relies on the inconsistent rotation of the Earth upon its own axis—a rotation that requires constant intercalary patching and leap seconds—the Invariant Arc anchors metrology to the Earth's precise, thermodynamic position relative to the solar mass.</p>
             <p>We are initiating a systemic metrology inversion: moving away from the measurement of a hollow duration to the identification of a profound spatial coordinate.</p>
             <p><strong style="color:#fff;">Architecture of Continuous Respiration</strong></p>
-            <p>To resolve the mathematical friction between civil scheduling and astrophysical reality, The Quadrature deploys the Dual-State Engine. This framework organizes time into two concurrent processing states. The Mean Circle serves as a perfectly balanced 360-day administrative baseline.</p>
+            <p>To resolve the mathematical friction between civil scheduling and astrophysical reality, The Quadrature deploys the Dual-State Engine. This framework organizes time into two concurrent processing states. The Mean Circle serves as a mathematically balanced 360-day administrative baseline.</p>
             <p>Running concurrently is the True Ellipse. Rather than calculating the Keplerian Smear through flawed estimations, this engine actively observes live X, Y, Z astronomical telemetry via the Solar System Barycenter, achieving absolute, continuous synchronization without leap days.</p>
 
             <div style="background:rgba(255,255,255,0.05); padding:15px; border-left:3px solid var(--theme-main, #ff003c); margin:20px 0;">
@@ -143,7 +143,7 @@ window.Q_MANUSCRIPTS = {
             <h4 style="color:#fff; font-family:'Orbitron'; margin-top:30px;">EPSILON TERMINAL & NODAL SETTLEMENT</h4>
             <p><strong style="color:#fff;">Closure and Terminal Drift</strong></p>
             <p>The annual cycle does not simply end; it is computationally resolved at the Epsilon Pylon (360.000°). This terminal node is required to resolve the final fractional drift of the orbital year. Epsilon requires exactly 24.9063 hours to achieve the final resolution of the Keplerian Smear and process the "Terminal Oddity" buffer.</p>
-            <p>This crucial node seamlessly bridges Quadrant 4 back to Alpha ignition, closing the Mean Circle perfectly on the Z-axis without a single lost fraction.</p>
+            <p>This crucial node seamlessly bridges Quadrant 4 back to Alpha ignition, closing the Mean Circle geometrically on the Z-axis without a single lost fraction.</p>
             <p><strong style="color:#fff;">Algorithmic Superiority: Nodal Settlement</strong></p>
             <p>Discrete geometric settlement is mathematically superior to continuous patching. Rather than maintaining constant intercalary error through leap seconds or days—which inherently breaks legacy software and financial contracts—The Quadrature gathers temporal drift and dynamically burns it down exclusively during the specific, variable-duration transit of the Cardinal Pylons.</p>
             <p>Furthermore, because these anchors lock to the solar mass rather than a static sidereal background, the system dynamically absorbs the deep-time epochal drift of Milankovitch cycles. The architecture remains eternally synchronized to the physical environment.</p>
@@ -331,21 +331,21 @@ window.Q_MANUSCRIPTS = {
             <p>Quadification is the ultimate operational yield of the system. It represents the complete, frictionless synchronization of telemetry across all four core Vectors: Physical (Mechanical), Environmental, Physiological (Biological), and Metaphysical (Communal). It is the point where the OS stops being a tool you check, and becomes the underlying physics engine of your life.</p>
             <p><strong style="color:#fff;">Eradicating the Smear</strong></p>
             <p>At this stage, the user's operational baseline has successfully diverged from civil drift. The Continuous Respiration algorithm operates seamlessly in the background, managing the Keplerian Smear and navigating the Cardinal Pylons automatically. The user achieves absolute metrological efficiency, converting the thermodynamic friction of the legacy OS into pure kinetic yield.</p>
-            <p>Energy is no longer wasted on context-switching between biological needs and artificial schedules. A Zero-Friction Baseline is the operational reality of Quadification. The system actively buffers the node against the entropic noise of the legacy grid. When a daylight saving shift occurs or a leap year forces a correction in the outside world, the Continuous Respiration algorithm instantly absorbs the shock, fully insulating the user's biological and financial vectors.</p>
+            <p>Energy is no longer wasted on context-switching between biological needs and artificial schedules. A Maximized Friction Mitigation Baseline is the operational target of Quadification. The system actively buffers the node against the entropic noise of the legacy grid. When a daylight saving shift occurs or a leap year forces a correction in the outside world, the Continuous Respiration algorithm instantly absorbs the shock, fully insulating the user's biological and financial vectors.</p>
             <p>The user experiences an unbroken, laminar flow of productivity and focus, unbothered by the mechanical breakdown occurring in the legacy strata below.</p>
 
             <div style="background:rgba(255,255,255,0.05); padding:15px; border-left:3px solid var(--theme-main, #ff003c); margin:20px 0;">
                 <strong style="color:#fff;">Technical Data Block:</strong><br>
                 <span style="color:var(--theme-main, #ff003c);">Quadification:</span> The absolute harmonization of physical, environmental, physiological, and metaphysical data with the solar arc.<br>
                 <span style="color:var(--theme-main, #ff003c);">Total Vector Synchronization:</span> The unified operation of Level I Physics, Climatic Baseloads, Biometrics, and Metadata.<br>
-                <span style="color:var(--theme-main, #ff003c);">Zero-Friction Baseline:</span> The eradication of the Gregorian Smear from the user's daily operations.
+                <span style="color:var(--theme-main, #ff003c);">Friction Mitigation Baseline:</span> The mathematical suppression of the Gregorian Smear from the user's daily operations.
             </div>
 
             <img src="./assets/w19ta.png" style="width:100%; border-radius:4px; margin: 20px 0; border: 1px solid rgba(255,255,255,0.2);" alt="Quadification">
 
             <h4 style="color:#fff; font-family:'Orbitron'; margin-top:30px;">THE ETERNAL NOW</h4>
             <p><strong style="color:#fff;">Final Integration</strong></p>
-            <p>The deployment of The Quadrature reaches its absolute apex. The zero-friction OS is fully live, achieving a mathematical lock on the 360-degree solar arc. The Dual-State Engine is seamlessly tracking the Q-Delta, the Sovereign Command voice parser is eliminating UI friction, and the P2P networking engine is actively discovering geometric resonance among nodes globally.</p>
+            <p>The deployment of The Quadrature reaches its operational baseline. The OS is fully live, achieving a mathematical lock on the 360-degree solar arc. The Dual-State Engine is seamlessly tracking the Q-Delta, the Sovereign Command voice parser is eliminating UI friction, and the P2P networking engine is actively discovering geometric resonance among nodes globally.</p>
             <p><strong style="color:#fff;">Systemic Autonomy</strong></p>
             <p>The architecture is now eternally synchronized to the physical environment, structurally immune to epochal drift (Milankovitch cycles), and completely decoupled from the entropy of the Unix Epoch and the Gregorian calendar. The system, and the Architect who wields it, have achieved total computational, financial, and structural autonomy.</p>
 
@@ -624,7 +624,7 @@ window.Q_MANUSCRIPTS = {
             <p>For the last two decades, we have been connected by superficial digital networks that drain our vitality and commodify our attention. The Quadrature introduces the Sovereign Social Graph—a network built on the absolute laws of planetary physics. Through Resonance Discovery, you connect with other nodes whose origin points create actual harmonic alignment with your own.</p>
             <p><strong style="color:#fff;">The Power of the Collective Arc</strong></p>
             <p>This is communal state sharing for the Quadified elite. When you overlap your biological flow states with others who are anchored to the True Ellipse, you eliminate the friction of asynchronous collaboration.</p>
-            <p>A High-Resonance Sprint is not a meeting; it is a biological event. It is the profound, frictionless sensation of engaging with other sovereign minds exactly when your respective Ultradian rhythms crest simultaneously. The forced fatigue of the 3:00 PM legacy conference call is eradicated. You are no longer dragging exhausted avatars across a static calendar; you are surfing the crest of a shared thermodynamic wave, achieving in ninety minutes what the legacy workforce struggles to produce in a week. You are moving together through the solar stream, backed by the thermodynamic momentum of the planet itself.</p>
+            <p>A High-Resonance Sprint is not a meeting; it is a biological event. It is the profound, highly resonant sensation of engaging with other sovereign minds exactly when your respective Ultradian rhythms crest simultaneously. The forced fatigue of the 3:00 PM legacy conference call is eradicated. You are no longer dragging exhausted avatars across a static calendar; you are surfing the crest of a shared thermodynamic wave, achieving in ninety minutes what the legacy workforce struggles to produce in a week. You are moving together through the solar stream, backed by the thermodynamic momentum of the planet itself.</p>
 
             <div style="background:rgba(255,255,255,0.05); padding:15px; border-left:3px solid var(--theme-main, #ff003c); margin:20px 0;">
                 <strong style="color:#fff;">Philosophical Postulate: The Harmonic Network</strong><br>
@@ -649,7 +649,7 @@ window.Q_MANUSCRIPTS = {
             <h4 style="color:#fff; font-family:'Orbitron'; margin-top:30px;">THE PRINCIPLE OF QUADIFICATION</h4>
             <p><strong style="color:#fff;">The Conscious Harmonization</strong></p>
             <p>Quadification is the process of achieving total qualification for existence within The Quadrature. It is a conscious harmonization—an intentional, permanent divergence from the friction of civil drift toward absolute alignment with the invariant 360-degree solar arc.</p>
-            <p><strong style="color:#fff;">The End of Friction</strong></p>
+            <p><strong style="color:#fff;">The Mitigation of Friction</strong></p>
             <p>You have stripped away the artificial integers, the lunisolar confusion, and the imperial decrees of dead Roman emperors. You are no longer fighting the natural expansion and contraction of planetary energy.</p>
             <p>By syncing your physiological flow to the deepest, most stable reference frame in the observable universe (the International Celestial Reference Frame), you have become an active, conscious participant in the thermodynamic respiration of the planet.</p>
             <p>To wake within the Quadified Life is to open your eyes to the physical truth of the planet, entirely unburdened by the anxiety of the ticking clock. You do not 'spend' time; you inhabit a coordinate. Your labor aligns with your biological capacity, your environment dictates your output, and your wealth accumulates without the corrosive tax of civil lag. You have become the Architect of your own resonance.</p>
@@ -658,7 +658,7 @@ window.Q_MANUSCRIPTS = {
                 <strong style="color:#fff;">Technical Data Block:</strong><br>
                 <span style="color:var(--theme-main, #ff003c);">Quadification:</span> The absolute harmonization of physical, environmental, physiological, and metaphysical data with the solar arc.<br>
                 <span style="color:var(--theme-main, #ff003c);">Total Vector Synchronization:</span> The unified operation of Level I Physics, Climatic Baseloads, Biometrics, and Metadata.<br>
-                <span style="color:var(--theme-main, #ff003c);">Zero-Friction Baseline:</span> The eradication of the Gregorian Smear from the user's daily operations.
+                <span style="color:var(--theme-main, #ff003c);">Friction Mitigation Baseline:</span> The mathematical suppression of the Gregorian Smear from the user's daily operations.
             </div>
 
             <img src="./assets/w19tb.png" style="width:100%; border-radius:4px; margin: 20px 0; border: 1px solid rgba(255,255,255,0.2);" alt="Quadified Life">
@@ -741,7 +741,7 @@ window.Q_MANUSCRIPTS = {
             </ul>
 
             <h3 style="color:#fff; font-family:'Orbitron'; margin-top:20px; letter-spacing:1px;">PART 3: THE OMNI-PLANNER (ALIGNING YOUR LIFE)</h3>
-            <p>In The Quadrature, you do not schedule; you align. The Omni-Planner is a revolutionary calendar that maps your tasks directly onto your body's natural rhythms and the Earth's true orbit.</p>
+            <p>In The Quadrature, you do not schedule; you align. The Omni-Planner is a behavioral UI overlay that maps your tasks directly onto your body's natural rhythms and the Earth's true orbit.</p>
             
             <h4 style="color:var(--gold, #F4D068); font-family:'Orbitron'; margin-top:15px;">Visualizing Your Energy (Ultradian & Sleep Cycles)</h4>
             <p>Your body runs on 90-to-120 minute waves of focus and fatigue, known as Ultradian rhythms. The Omni-Planner projects these natural waves directly onto your daily view. You will clearly see your 'Deep Flow' windows (when you are biologically primed for hard work) and your 'Recovery' windows. It also maps out your ideal sleep times, ensuring you respect your body's need to rest.</p>
@@ -753,7 +753,7 @@ window.Q_MANUSCRIPTS = {
             <p>We know you still have to interact with a world running on the standard calendar. With a single tap, you can seamlessly switch the Omni-Planner between 'Legacy View' (the standard 7-day week and 12-month calendar you are used to) and the 'Quad View' (the true physical calendar).</p>
             
             <h4 style="color:var(--gold, #F4D068); font-family:'Orbitron'; margin-top:15px;">Understanding the Quad View</h4>
-            <p>The standard calendar is messy—months have 28, 30, or 31 days, making planning unnecessarily complicated. The Quad View fixes this by organizing the year into a perfectly clean structure:</p>
+            <p>The standard calendar is messy—months have 28, 30, or 31 days, making planning unnecessarily complicated. The Quad View fixes this by organizing the year into a mathematically clean structure:</p>
             <ul style="color:#aaa; font-family:'JetBrains Mono'; font-size:0.8rem; line-height:1.6;">
                 <li><strong style="color:#fff;">4 Quadrants</strong> make up the year.</li>
                 <li><strong style="color:#fff;">3 Sectors</strong> make up each Quadrant.</li>
@@ -763,12 +763,12 @@ window.Q_MANUSCRIPTS = {
             
             <h4 style="color:var(--gold, #F4D068); font-family:'Orbitron'; margin-top:15px;">The Cardinal Pylons</h4>
             <p>You might be wondering: if every sector is exactly 30 days, how do we account for the fact that a year is roughly 365.25 days? The legacy world uses messy Leap Years. The Quadrature uses 'Cardinal Pylons'.</p>
-            <p>Pylons are special transition days that sit between the major Quadrants (landing on the Solstices and Equinoxes). Instead of having a normal date, a Pylon acts as a brief pause—a 'Celestial Day'—that gives the calendar time to perfectly resync with the physical position of the Earth. It acts as a natural breathing space, wiping away any mathematical drift and giving you a fresh, perfectly aligned start to the next season.</p>
+            <p>Pylons are special transition days that sit between the major Quadrants (landing on the Solstices and Equinoxes). Instead of having a standard civil date, a Pylon acts as a dedicated Operational Buffer that allows the administrative ledger to geometrically reconcile with the physical position of the Earth. It acts as a natural breathing space, wiping away any mathematical drift and giving you a fresh, geometrically aligned start to the next season.</p>
 
             <h3 style="color:#fff; font-family:'Orbitron'; margin-top:20px; letter-spacing:1px;">PART 4: ADVANCED FEATURES & PRIVACY</h3>
             
             <h4 style="color:var(--theme-main, #ff003c); font-family:'Orbitron'; margin-top:15px;">The AI Diplomatic Negotiator</h4>
-            <p>At higher membership tiers, your calendar becomes an active defender of your time. If someone sends you an invite that crashes into your biological recovery window, the AI Diplomat can automatically intercept it and suggest a new time that fits perfectly within your 'Deep Flow' state.</p>
+            <p>At higher membership tiers, your calendar becomes an active defender of your time. If someone sends you an invite that crashes into your biological recovery window, the AI Diplomat can automatically intercept it and suggest a new time that fits geometrically within your 'Deep Flow' state.</p>
             
             <h4 style="color:var(--theme-main, #ff003c); font-family:'Orbitron'; margin-top:15px;">The Commercial Quad (Enterprise Bifurcation)</h4>
             <p>The Quadrature isn't just for individuals. By flipping the Global OS Toggle, the system transforms into a powerful B2B enterprise tool. It allows entire teams to overlay their natural rhythms, finding the perfect times for collective collaboration without burning out the workforce. (A complete guide to the Commercial Quad is available in our Enterprise documentation).</p>

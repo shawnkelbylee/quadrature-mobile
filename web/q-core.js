@@ -231,7 +231,6 @@ window.fetchCloudState = async function() {
             if (stateData.preferred_ai_diplomat) window.Q_UpdateStateLocal('logic_layer', 'preferred_ai_diplomat', stateData.preferred_ai_diplomat, 'q_ai_diplomat');
             if (stateData.asset_track_mode) window.Q_UpdateStateLocal('system_state', 'asset_track_mode', stateData.asset_track_mode, 'q_asset_mode');
             if (stateData.active_faiths) window.Q_UpdateStateLocal('metaphysical_layer', 'active_faiths', stateData.active_faiths, 'q_active_faiths');
-            if (stateData.zodiac_visible !== null) window.Q_UpdateStateLocal('metaphysical_layer', 'zodiac_visible', stateData.zodiac_visible, 'q_zodiac_visible');
             if (stateData.deep_flow_enforcement !== null) window.Q_UpdateStateLocal('logic_layer', 'deep_flow_enforcement', stateData.deep_flow_enforcement, 'q_deep_flow_enforcement');
         }
 
@@ -246,7 +245,6 @@ window.fetchCloudState = async function() {
             if (idData.sleep_cycle_duration !== null) window.Q_UpdateStateLocal('metaphysical_layer', 'sleep_cycle_duration', idData.sleep_cycle_duration, 'q_sleep_cycle_duration');
             if (idData.sleep_inertia_mins !== null) window.Q_UpdateStateLocal('metaphysical_layer', 'sleep_inertia_mins', idData.sleep_inertia_mins, 'q_sleep_inertia_mins');
             if (idData.dlmo_offset_mins !== null) window.Q_UpdateStateLocal('metaphysical_layer', 'dlmo_offset_mins', idData.dlmo_offset_mins, 'q_dlmo_offset_mins');
-            if (idData.natal_anchor) window.Q_UpdateStateLocal('metaphysical_layer', 'natal_anchor', idData.natal_anchor, 'q_natal_anchor');
             if (idData.fiat_routing_id) window.Q_UpdateStateLocal('capital_ledger', 'fiat_routing_id', idData.fiat_routing_id, 'q_fiat_routing_id');
         }
 
@@ -279,7 +277,6 @@ window.Q_STATE = {
         swiss_ephemeris: 'STANDBY', 
         patreon_gating: 'STANDBY', 
         access_tier: 0,
-        natal_anchor: localStorage.getItem('q_natal_anchor') || 'NONE',
         dob: localStorage.getItem('q_dob') || null,
         tob: localStorage.getItem('q_tob') || '12:00',
         tob_unknown: localStorage.getItem('q_tob_unknown') === 'true',
@@ -287,8 +284,7 @@ window.Q_STATE = {
         sleep_cycle_duration: parseInt(localStorage.getItem('q_sleep_cycle_duration')) || null,
         sleep_inertia_mins: parseInt(localStorage.getItem('q_sleep_inertia_mins')) || null,
         dlmo_offset_mins: parseInt(localStorage.getItem('q_dlmo_offset_mins')) || null,
-        active_faiths: localStorage.getItem('q_active_faiths') ? JSON.parse(localStorage.getItem('q_active_faiths')) : [],
-        zodiac_visible: localStorage.getItem('q_zodiac_visible') !== 'false'
+        active_faiths: localStorage.getItem('q_active_faiths') ? JSON.parse(localStorage.getItem('q_active_faiths')) : []
     },
     location: { 
         lat: parseFloat(localStorage.getItem('q_current_lat')) || 0, 
@@ -310,11 +306,11 @@ window.Q_UpdateState = async function(category, key, value) {
 
     const localMap = {
         'lat': 'q_current_lat', 'lon': 'q_current_lon', 'name': 'q_current_loc_name',
-        'natal_anchor': 'q_natal_anchor', 'dob': 'q_dob', 'tob': 'q_tob', 'tob_unknown': 'q_tob_unknown',
+        'dob': 'q_dob', 'tob': 'q_tob', 'tob_unknown': 'q_tob_unknown',
         'wake_anchor_mins': 'q_bio_anchor', 'sleep_cycle_duration': 'q_sleep_cycle_duration',
         'sleep_inertia_mins': 'q_sleep_inertia_mins', 'dlmo_offset_mins': 'q_dlmo_offset_mins',
         'fiat_routing_id': 'q_fiat_routing_id', 'q_time_fmt': 'Q_TIME_FMT', 'preferred_ai_diplomat': 'q_ai_diplomat',
-        'asset_track_mode': 'q_asset_mode', 'active_faiths': 'q_active_faiths', 'zodiac_visible': 'q_zodiac_visible',
+        'asset_track_mode': 'q_asset_mode', 'active_faiths': 'q_active_faiths',
         'deep_flow_enforcement': 'q_deep_flow_enforcement'
     };
 
@@ -331,8 +327,8 @@ window.Q_UpdateState = async function(category, key, value) {
         const { data: session } = await window.supabaseClient.auth.getSession();
         if (session?.session?.user) {
             try {
-                const identityKeys = ['dob', 'tob', 'tob_unknown', 'location_name', 'lat', 'lon', 'wake_anchor_mins', 'sleep_cycle_duration', 'sleep_inertia_mins', 'dlmo_offset_mins', 'natal_anchor', 'fiat_routing_id'];
-                const stateKeys = ['q_time_fmt', 'preferred_ai_diplomat', 'asset_track_mode', 'active_faiths', 'zodiac_visible', 'deep_flow_enforcement'];
+                const identityKeys = ['dob', 'tob', 'tob_unknown', 'location_name', 'lat', 'lon', 'wake_anchor_mins', 'sleep_cycle_duration', 'sleep_inertia_mins', 'dlmo_offset_mins', 'fiat_routing_id'];
+                const stateKeys = ['q_time_fmt', 'preferred_ai_diplomat', 'asset_track_mode', 'active_faiths', 'deep_flow_enforcement'];
                 
                 let targetTable = null;
                 let payload = { user_id: session.session.user.id };
@@ -1540,7 +1536,7 @@ window.addEventListener('DOMContentLoaded', async () => {
                 qData: oData, 
                 legacyDateStr: initFmt.dateStr, 
                 legacyTimeStr: initFmt.timeStr,
-                activePostulate: "HERE AND NOW ARE INFINITELY ONE!"
+                activePostulate: "HERE AND NOW ARE INFINITELY ONE"
             } }));
         }
     }, 1000);

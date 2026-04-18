@@ -2,7 +2,7 @@
   "rewrites": [
     {
       "source": "/",
-      "destination": "/web/aperture/index.html"
+      "destination": "/web/home/index.html"
     },
     {
       "source": "/(.*)",

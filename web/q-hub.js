@@ -1,7 +1,7 @@
 // THE QUADRATURE: GLOBAL DASHBOARD & PRO MATRIX
 // Architect: Kelby | Engineer: Kairos
 // PROTOCOL: Account Settings, Calibration Module, Tiered Access Gate & Native Library Reader
-// REVISION: 24.2.2 - 5-Phase Biological Logic & Manuscript Sync
+// REVISION: 24.2.3 - Commercial Tier Synchronization
 
 // --- NATIVE IMMERSIVE READER PAYLOADS ---
 window.Q_MANUSCRIPTS = {
@@ -1002,20 +1002,14 @@ window.Q_IntegrationHub = {
             try { ents = entitlementsRaw ? JSON.parse(entitlementsRaw) : []; } catch(e) {}
         }
 
-        const isBioActive = ents.includes('STANDARD');
-        const bioStatus = isBioActive ? renderBadge('#39ff14', '#000', 'ACTIVE') : renderUpgradeBtn('biometric_api', 'STANDARD TIER', 'hardware_hooks', '#39ff14');
+        const isPersonalActive = ents.includes('PERSONAL') || ents.includes('PRO') || ents.includes('ENTERPRISE') || ents.includes('TEAM');
+        const personalStatus = isPersonalActive ? renderBadge('#00f0ff', '#000', 'ACTIVE') : renderUpgradeBtn('biometric_api', 'PERSONAL TIER', 'hardware_hooks', '#00f0ff');
 
-        const isEphActive = ents.includes('PERSONAL');
-        const ephStatus = isEphActive ? renderBadge('#00f0ff', '#000', 'ACTIVE') : renderUpgradeBtn('swiss_ephemeris', 'PERSONAL TIER', 'metaphysical_layer', '#00f0ff');
+        const isProActive = ents.includes('PRO') || ents.includes('ENTERPRISE');
+        const proStatus = isProActive ? renderBadge('#b829ff', '#000', 'ACTIVE') : renderUpgradeBtn('ai_diplomat', 'PRO TIER', 'logic_layer', '#b829ff');
 
-        const isProActive = ents.includes('PRO');
-        const sovStatus = isProActive ? renderBadge('#b829ff', '#000', 'ACTIVE') : renderUpgradeBtn('ai_diplomat', 'PRO TIER', 'logic_layer', '#b829ff');
-
-        const isSyndicateActive = ents.includes('TEAM');
-        const syndicateStatus = isSyndicateActive ? renderBadge('#ff003c', '#fff', 'ACTIVE') : renderUpgradeBtn('patreon_gating', 'TEAM TIER', 'metaphysical_layer', '#ff003c');
-
-        const isFiatActive = ents.includes('ENTERPRISE');
-        const fiatStatus = isFiatActive ? renderBadge('#F4D068', '#000', 'ACTIVE') : renderUpgradeBtn('fiat_api', 'ENTERPRISE TIER', 'capital_ledger', '#F4D068');
+        const isEnterpriseActive = ents.includes('ENTERPRISE');
+        const enterpriseStatus = isEnterpriseActive ? renderBadge('#F4D068', '#000', 'ACTIVE') : renderUpgradeBtn('fiat_api', 'ENTERPRISE TIER', 'capital_ledger', '#F4D068');
 
         // Identity Data Retrieval
         const sDob = window.Q_STATE?.metaphysical_layer?.dob || "";
@@ -1036,7 +1030,7 @@ window.Q_IntegrationHub = {
 
         // Diagnostic Status Retrieval
         const jplStatus = window.EPHEMERIS_LIVE ? '<span style="color:#39ff14; text-shadow:0 0 5px rgba(57,255,20,0.5);">[ CONNECTED / LIVE ]</span>' : '<span style="color:#ff003c; text-shadow:0 0 5px rgba(255,0,60,0.5);">[ DISCONNECTED / FAILOVER ]</span>';
-        const swissStatus = isEphActive ? '<span style="color:#00f0ff; text-shadow:0 0 5px rgba(0,240,255,0.5);">[ API ACTIVE ]</span>' : '<span style="color:#aaa;">[ STANDBY / INACTIVE ]</span>';
+        const swissStatus = isPersonalActive ? '<span style="color:#00f0ff; text-shadow:0 0 5px rgba(0,240,255,0.5);">[ API ACTIVE ]</span>' : '<span style="color:#aaa;">[ STANDBY / INACTIVE ]</span>';
 
         dom.innerHTML = `
             <div class="q-hub-box" onclick="event.stopPropagation()">
@@ -1133,50 +1127,34 @@ window.Q_IntegrationHub = {
                 <div class="hub-tab-content ${this.activeTab === 'tiers' ? 'active' : ''}" id="tab-content-tiers">
                     <div class="hub-tier-row" style="border-color: rgba(255,255,255,0.3);">
                         <div>
-                            <div style="font-family:'Orbitron'; font-size:0.75rem; color:#fff; font-weight: bold;">BASIC TIER (FREE)</div>
-                            <div style="font-size:0.55rem; color:#888; margin-top: 4px;">Full Vector HUDs & Omni-Planner.</div>
+                            <div style="font-family:'Orbitron'; font-size:0.75rem; color:#fff; font-weight: bold;">STANDARD TIER (FREE)</div>
+                            <div style="font-size:0.55rem; color:#888; margin-top: 4px;">Omni-Planner & Standard Calendar Sync.</div>
                         </div>
                         ${renderBadge('#fff', '#000', 'ACTIVE')}
                     </div>
 
                     <div class="hub-tier-row">
                         <div>
-                            <div style="font-family:'Orbitron'; font-size:0.75rem; color:#39ff14; font-weight: bold;">STANDARD TIER ($14.99/mo)</div>
-                            <div style="font-size:0.55rem; color:#888; margin-top: 4px;">Health Connect/HealthKit integration.</div>
+                            <div style="font-family:'Orbitron'; font-size:0.75rem; color:#00f0ff; font-weight: bold;">PERSONAL TIER ($14.99/mo)</div>
+                            <div style="font-size:0.55rem; color:#888; margin-top: 4px;">Biometric Bridge, HRV/Sleep tracking, Environmental Vector.</div>
                         </div>
-                        ${bioStatus}
-                    </div>
-
-                    <div class="hub-tier-row">
-                        <div>
-                            <div style="font-family:'Orbitron'; font-size:0.75rem; color:#00f0ff; font-weight: bold;">PERSONAL TIER ($29.99/mo)</div>
-                            <div style="font-size:0.55rem; color:#888; margin-top: 4px;">Swiss Ephemeris precision mapping.</div>
-                        </div>
-                        ${ephStatus}
+                        ${personalStatus}
                     </div>
                     
                     <div class="hub-tier-row">
                         <div>
-                            <div style="font-family:'Orbitron'; font-size:0.75rem; color:#b829ff; font-weight: bold;">PRO TIER ($49.99/mo)</div>
-                            <div style="font-size:0.55rem; color:#888; margin-top: 4px;">AI Diplomatic Negotiator.</div>
+                            <div style="font-family:'Orbitron'; font-size:0.75rem; color:#b829ff; font-weight: bold;">PRO TIER ($19.00 - $29.99/mo)</div>
+                            <div style="font-size:0.55rem; color:#888; margin-top: 4px;">AI Temporal Firewall, P2P Sync, Deep Flow Enforcement.</div>
                         </div>
-                        ${sovStatus}
-                    </div>
-                    
-                    <div class="hub-tier-row" style="background: rgba(255,0,60,0.05);">
-                        <div>
-                            <div style="font-family:'Orbitron'; font-size:0.75rem; color:#ff003c; font-weight: bold;">TEAM TIER ($99.00/mo)</div>
-                            <div style="font-size:0.55rem; color:#888; margin-top: 4px;">Civil Exporter & 90+1 Ledger. [PHASE II LOCKED]</div>
-                        </div>
-                        ${syndicateStatus}
+                        ${proStatus}
                     </div>
 
-                    <div class="hub-tier-row">
+                    <div class="hub-tier-row" style="background: rgba(244, 208, 104, 0.05);">
                         <div>
-                            <div style="font-family:'Orbitron'; font-size:0.75rem; color:#F4D068; font-weight: bold;">ENTERPRISE TIER ($199.00+/mo)</div>
-                            <div style="font-size:0.55rem; color:#888; margin-top: 4px;">B2B Resonance & IoT Routing. [PHASE II LOCKED]</div>
+                            <div style="font-family:'Orbitron'; font-size:0.75rem; color:#F4D068; font-weight: bold;">ENTERPRISE TIER (CUSTOM PRICING)</div>
+                            <div style="font-size:0.55rem; color:#888; margin-top: 4px;">Macro-Infrastructure, Yield Metrology, IoT Webhooks. [PHASE II DEFERRED]</div>
                         </div>
-                        ${fiatStatus}
+                        ${enterpriseStatus}
                     </div>
                 </div>
 

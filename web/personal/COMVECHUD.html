@@ -392,7 +392,9 @@
 
                 const signs = ['\u2651\uFE0E','\u2652\uFE0E','\u2653\uFE0E','\u2648\uFE0E','\u2649\uFE0E','\u264A\uFE0E','\u264B\uFE0E','\u264C\uFE0E','\u264D\uFE0E','\u264E\uFE0E','\u264F\uFE0E','\u2650\uFE0E'];
                 const signNames = ['CAPRICORN','AQUARIUS','PISCES','ARIES','TAURUS','GEMINI','CANCER','LEO','VIRGO','LIBRA','SCORPIO','SAGITTARIUS'];
-                const savedAnchor = window.Q_STATE.metaphysical_layer.natal_anchor;
+                
+                // DECOUPLED OVERRIDE: Prioritize immediate local storage read to prevent async UI reset
+                const savedAnchor = localStorage.getItem('q_natal_anchor') || 'NONE';
                 
                 signs.forEach((sign, i) => {
                     let el = document.createElement('div'); el.className = 'zodiac-glyph'; el.innerText = sign;
@@ -406,7 +408,9 @@
                 });
             }
 
-            const savedDob = window.Q_STATE.metaphysical_layer.dob;
+            // DECOUPLED OVERRIDE: Fallback read logic for independent DOB metric
+            const savedDob = (window.Q_STATE && window.Q_STATE.metaphysical_layer && window.Q_STATE.metaphysical_layer.dob) ? window.Q_STATE.metaphysical_layer.dob : localStorage.getItem('q_dob');
+            
             if(savedDob) {
                 const dobParts = savedDob.split('-');
                 let y = parseInt(dobParts[0]); let m = parseInt(dobParts[1]) - 1; let d = parseInt(dobParts[2]);
@@ -483,8 +487,15 @@
                     </div>`;
             } else if(target === 'zod') {
                 title = "ZODIACAL CONFIGURATION";
-                const savedAnchor = window.Q_STATE.metaphysical_layer.natal_anchor;
-                let ephStatus = (window.Q_STATE && window.Q_STATE.metaphysical_layer) ? window.Q_STATE.metaphysical_layer.swiss_ephemeris : 'STANDBY';
+                
+                // DECOUPLED OVERRIDE: Prioritize local memory read
+                const savedAnchor = localStorage.getItem('q_natal_anchor') || 'NONE';
+                
+                let ephStatus = 'STANDBY';
+                if (window.Q_Plugin_Zodiacal && window.Q_Plugin_Zodiacal.engineState === 'ACTIVE') {
+                    ephStatus = 'ACTIVE (PLUGIN)';
+                }
+
                 html = `
                     <label class="chk-row" style="margin-bottom:10px; border-bottom:1px solid rgba(255,215,0,0.2); padding-bottom:10px; font-family:'JetBrains Mono'; font-size:0.75rem; color:var(--platinum);"><input type="checkbox" id="chk-show-zod" ${activeZodiac ? 'checked' : ''} style="accent-color:var(--gold-bright);"> DISPLAY ZODIACAL RING</label>
                     <label style="font-size:0.6rem; color:rgba(255,255,255,0.6); font-family:'Orbitron';">CALCULATION BASE:</label>
@@ -576,13 +587,14 @@
         }
 
         function openZodiacModal(clickedSign, clickedIndex) {
-            const savedAnchor = window.Q_STATE.metaphysical_layer.natal_anchor;
+            // DECOUPLED OVERRIDE: Local Memory Primary Read
+            const savedAnchor = localStorage.getItem('q_natal_anchor') || 'NONE';
             let relationshipHtml = "";
             
             if (savedAnchor !== 'NONE') {
                 const signNames = ['CAPRICORN','AQUARIUS','PISCES','ARIES','TAURUS','GEMINI','CANCER','LEO','VIRGO','LIBRA','SCORPIO','SAGITTARIUS'];
                 let natalIndex = signNames.indexOf(savedAnchor);
-                let currentIndex = Math.floor(trueArc / 30);
+                let currentIndex = Math.floor(window.CURRENT_TRUE_ARC / 30);
                 let diff = Math.abs(clickedIndex - natalIndex);
                 if (diff > 6) diff = 12 - diff; 
                 
@@ -647,8 +659,14 @@
             } else if (currentOptTarget === 'zod') {
                 activeZodiac = document.getElementById('chk-show-zod').checked;
                 localStorage.setItem('q_zodiac_visible', activeZodiac);
+                
                 const natal = document.getElementById('natal-select').value;
-                window.Q_UpdateState('metaphysical_layer', 'natal_anchor', natal);
+                // DECOUPLED OVERRIDE: Explicitly write to localStorage to bypass asynchronous boot delays in UI rendering
+                localStorage.setItem('q_natal_anchor', natal);
+                
+                // Allow the plugin (if mounted) to intercept this for cloud sync
+                if (window.Q_UpdateState) window.Q_UpdateState('metaphysical_layer', 'natal_anchor', natal);
+                
                 renderDynamicRing();
             } else if(currentOptTarget === 'int') {
                 const jText = document.getElementById('journal-text').value;
@@ -760,7 +778,9 @@
             document.getElementById('rel-next').innerText = nextRel ? `${nextRel.name.substring(0,8).toUpperCase()}.. (${nextRel.coord.toFixed(1)}°)` : "--";
 
             const zodiacNames = ["CAPRICORN", "AQUARIUS", "PISCES", "ARIES", "TAURUS", "GEMINI", "CANCER", "LEO", "VIRGO", "LIBRA", "SCORPIO", "SAGITTARIUS"];
-            const savedAnchor = window.Q_STATE?.metaphysical_layer?.natal_anchor || 'NONE';
+            
+            // DECOUPLED OVERRIDE: Local Memory Primary Read for Q-Tick Loop
+            const savedAnchor = localStorage.getItem('q_natal_anchor') || 'NONE';
             document.getElementById('zod-house').innerText = savedAnchor !== 'NONE' ? savedAnchor : "UNASSIGNED";
             
             if (savedAnchor !== 'NONE') {

@@ -10,7 +10,7 @@ window.Q_MANUSCRIPTS = {
         content: `<h2 style="color:#fff; font-family:'Orbitron'; letter-spacing:2px;">THE QUADRATURE</h2>
 <h4 style="color:var(--theme-main, #ff003c); font-family:'Orbitron'; margin-top:-10px;">AUTHOR: SHAWN K. LEE</h4>
 <div style="border-bottom: 1px dashed rgba(255,255,255,0.2); margin-bottom: 20px; padding-bottom: 10px; font-size:0.75rem;">
-    <strong style="color:#fff;">DOCUMENT TYPE:</strong> FOUNDATIONAL ESSAYS (TRACK A)<br>
+    <strong style="color:#fff;">DOCUMENT TYPE:</strong> ESSAYS: ENGINEERING & PHYSICS<br>
     <strong style="color:#fff;">FOCUS:</strong> ENGINEERING & PHYSICS
 </div>
 <p>DOCUMENT PURPOSE This volume serves as the mechanical foundation of The Quadrature. These essays are engineered to systematically dismantle the reader's reliance on the legacy Gregorian calendar by delivering the hard mathematical and thermodynamic proofs of the system. They diagnose the structural failures of civil metrology and detail the invariant physics engines—such as The Keplerian Smear and Nodal Settlement—required to correct them.</p>
@@ -298,7 +298,7 @@ window.Q_MANUSCRIPTS = {
         content: `<h2 style="color:#fff; font-family:'Orbitron'; letter-spacing:2px;">THE QUADRATURE</h2>
 <h4 style="color:var(--theme-main, #ff003c); font-family:'Orbitron'; margin-top:-10px;">AUTHOR: SHAWN K. LEE</h4>
 <div style="border-bottom: 1px dashed rgba(255,255,255,0.2); margin-bottom: 20px; padding-bottom: 10px; font-size:0.75rem;">
-    <strong style="color:#fff;">DOCUMENT TYPE:</strong> FOUNDATIONAL ESSAYS (TRACK B)<br>
+    <strong style="color:#fff;">DOCUMENT TYPE:</strong> ESSAYS: PHILOSOPHIAL & METAPHYSICAL<br>
     <strong style="color:#fff;">FOCUS:</strong> PHILOSOPHY & METAPHYSICS
 </div>
 <p>DOCUMENT PURPOSE This volume serves as the primary cognitive onboarding mechanism for The Quadrature. These essays are designed to transition the reader from a state of chaotic civil lag into full Quadification. By translating cold orbital mechanics into actionable visual anchors, this track directly addresses behavioral exhaustion, psychological friction, and restores cognitive alignment with the invariant 360-degree solar arc.</p>

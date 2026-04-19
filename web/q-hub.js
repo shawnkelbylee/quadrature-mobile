@@ -1107,7 +1107,7 @@ window.Q_IntegrationHub = {
 
                     <div class="hub-tier-row">
                         <div>
-                            <div style="font-family:'Orbitron'; font-size:0.75rem; color:#fff; font-weight: bold;">FOUNDATIONAL ESSAYS (TRACK A)</div>
+                            <div style="font-family:'Orbitron'; font-size:0.75rem; color:#fff; font-weight: bold;">ESSAYS: ENGINEERING & PHYSICS</div>
                             <div style="font-size:0.55rem; color:#888; margin-top: 4px;">Engineering, Thermodynamics & Physics.</div>
                         </div>
                         <button class="hub-action-btn" onclick="window.Q_LibraryReader.open('ESSAYS_A')" style="width:auto; padding:6px 12px; font-size:0.55rem; color:var(--theme-main, #ff003c); border-color:var(--theme-main, #ff003c);">READ</button>
@@ -1115,7 +1115,7 @@ window.Q_IntegrationHub = {
 
                     <div class="hub-tier-row">
                         <div>
-                            <div style="font-family:'Orbitron'; font-size:0.75rem; color:#fff; font-weight: bold;">FOUNDATIONAL ESSAYS (TRACK B)</div>
+                            <div style="font-family:'Orbitron'; font-size:0.75rem; color:#fff; font-weight: bold;">ESSAYS: PHILOSOPHICAL & METAPHYSICCAL</div>
                             <div style="font-size:0.55rem; color:#888; margin-top: 4px;">Philosophy & Metaphysics.</div>
                         </div>
                         <button class="hub-action-btn" onclick="window.Q_LibraryReader.open('ESSAYS_B')" style="width:auto; padding:6px 12px; font-size:0.55rem; color:var(--theme-main, #ff003c); border-color:var(--theme-main, #ff003c);">READ</button>

@@ -44,7 +44,7 @@ window.Q_MANUSCRIPTS = {
                 </li>
                 <li style="margin-top:10px;"><strong style="color:#fff;">PHASE III: VECTOR CODIFICATION</strong>
                     <ul style="list-style-type:circle; padding-left:20px; color:#aaa;">
-                        <li>VECTOR 01—THE MECHANICAL Root (PHYSICAL)</li>
+                        <li>VECTOR 01—THE MECHANICAL ROOT (PHYSICAL)</li>
                         <li>VECTOR 02—ENVIRONMENTAL ALMANAC (ENVIRONMENTAL)</li>
                         <li>VECTOR 03—BIOLOGICAL RESONANCE (PHYSIOLOGICAL)</li>
                         <li>VECTOR 04—COMMUNAL METADATA (METAPHYSICAL)</li>
@@ -687,23 +687,23 @@ window.Q_MANUSCRIPTS = {
             </div>
 
             <h3 style="color:#fff; font-family:'Orbitron'; margin-top:20px; letter-spacing:1px;">PART 1: WELCOME TO THE QUADRATURE</h3>
-            <p>For our entire lives, we have been running on a simulation. The standard wall clock and the 12-month calendar are rigid, man-made grids that have almost no connection to the actual physical planet we live on or the natural rhythms of our bodies.</p>
-            <p>When you try to force your natural, fluctuating human energy into an unbending 24-hour schedule, the result is chronic exhaustion and burnout. We call this 'Systemic Fatigue.'</p>
-            <p>The Quadrature is the cure. It is an entirely new operating system for your life that replaces the artificial clock with the physical truth of the Earth's orbit. By using this system, you stop 'keeping time' and start moving in sync with the natural momentum of the planet and your own biology.</p>
+            <p>Modern scheduling relies on rigid, administrative grids—the standard wall clock and the 12-month calendar. These tools were engineered for industrial synchronization, possessing little connection to the actual thermodynamic reality of the planet or the natural rhythms of human biology.</p>
+            <p>When you force fluctuating human energy into an unbending 24-hour cycle, the resulting friction causes chronic exhaustion and burnout. This is verifiable Systemic Fatigue.</p>
+            <p>The Quadrature is designed to mitigate this friction. It is a behavioral operating system that utilizes the objective physical truth of the Earth's orbit as a psychological anchor, replacing arbitrary civil conditioning with invariant metrology.</p>
+            <p>By utilizing this framework, you stop managing administrative time and begin mapping your workflow directly to the scientifically verified momentum of your own biology.</p>
 
             <h4 style="color:var(--gold, #F4D068); font-family:'Orbitron'; margin-top:15px;">THE MAIN DASHBOARD (YOUR STARTING POINT)</h4>
             <p>When you open The Quadrature, you are greeted by the Main Dashboard. This serves as your main navigation bridge, designed to clear away the clutter of your digital life and let you intentionally choose your focus.</p>
             <p>The Main Dashboard is divided into four main portals:</p>
             <ul style="color:#aaa; font-family:'JetBrains Mono'; font-size:0.8rem; line-height:1.6;">
-                <li><strong style="color:#fff;">Top-Left (The Personal Quad):</strong> This is your main hub for daily life. It is where you manage your biology, your schedule, and your personal environment.</li>
-                <li><strong style="color:#fff;">Top-Right (The Commercial Quad):</strong> This is your business and economic hub, designed to help you manage capital flow, team resonance, and enterprise tasks.</li>
+                <li><strong style="color:#fff;">Top-Left (The Control Center):</strong> This is your main hub for daily life. It is where you manage your biology, your schedule, and your personal environment.</li>
+                <li><strong style="color:#fff;">Top-Right (The Commercial Quad):</strong> This is your business and economic hub, designed to help you manage capital flow, team resonance, and enterprise tasks. (A future stage Phase II integration).</li>
                 <li><strong style="color:#fff;">Bottom-Left (The Omni-Planner):</strong> Your interactive calendar interface that maps your daily schedule and intent directly onto the true solar coordinate.</li>
-                <li><strong style="color:#fff;">Bottom-Right (The Dashboard):</strong> Your control center for system settings, account access, and connecting your wearable health devices.</li>
+                <li><strong style="color:#fff;">Bottom-Right (The Settings Dashboard):</strong> Your control center for system preferences, account access, and connecting your wearable health devices.</li>
             </ul>
-            <p>On the sides of the Main Dashboard, you will notice two distinct 'Wings'. The Left Wing displays the standard Gregorian date and time—your anchor to the rest of society. The Right Wing displays your 'Q-Coordinate', showing exactly where the Earth physically is in its orbit. These wings stay with you throughout the system, allowing you to easily translate between the regular world and true time.</p>
 
             <h3 style="color:#fff; font-family:'Orbitron'; margin-top:20px; letter-spacing:1px;">PART 2: MASTERING YOUR 4 VECTORS</h3>
-            <p>Once you enter the Personal Quad, you arrive at the Control Center. This is your master dashboard, giving you a quick, high-level view of your day. It pulls information from four interconnected areas of your life, known as Vectors. By diving into each Vector, you unlock specific panels designed to help you align your actions with reality.</p>
+            <p>Once you enter the Control Center, you arrive at the Main Interface. This is your master dashboard, giving you a quick, high-level view of your day. It pulls information from four interconnected areas of your life, known as Vectors. By diving into each Vector, you unlock specific panels designed to help you align your actions with reality.</p>
 
             <h4 style="color:var(--theme-main, #ff003c); font-family:'Orbitron'; margin-top:15px;">I. THE BIOLOGICAL VECTOR</h4>
             <p>This vector manages your internal battery. It ensures you align your mental and physical output with your actual energy capacity, rather than forcing productivity based on a clock.</p>
@@ -711,7 +711,7 @@ window.Q_MANUSCRIPTS = {
                 <li style="margin-bottom:10px;"><strong style="color:#fff;">Sunlight Exposure (Top-Left Panel):</strong> Tracks your target sunlight intensity, UV exposure, and counts down to Solar Noon (the sun's highest point).<br><strong style="color:var(--gold);">Action:</strong> Use this to know exactly when to get outside for morning light to regulate your sleep hormones. Schedule your heaviest meals or hardest physical training near Solar Noon when your metabolic fire is highest.</li>
                 <li style="margin-bottom:10px;"><strong style="color:#fff;">Lunar & Tide Impact (Top-Right Panel):</strong> Measures the percentage of moonlight hitting the Earth and the gravitational pull of the tides.<br><strong style="color:var(--gold);">Action:</strong> High illumination and high gravitational tides disrupt deep sleep cycles. Use this to prepare light-blocking protocols in your bedroom and preemptively increase your sleep window during Spring Tides.</li>
                 <li style="margin-bottom:10px;"><strong style="color:#fff;">Internal Clock (Bottom-Left Panel):</strong> Monitors your Resting Heart Rate (RHR), Heart Rate Variability (HRV), and current sleep stage.<br><strong style="color:var(--gold);">Action:</strong> This is your resilience gauge. A high HRV means you are cleared for maximum stress and challenge. A rising RHR over several days is a direct warning to back off, cancel high-output tasks, and prioritize recovery.</li>
-                <li><strong style="color:#fff;">5-Phase Focus Cycle (Bottom-Right Panel):</strong> Tracks where you are in your natural physiological waves (Sleep, Sleep Inertia, Deep Flow, Vent/Recovery, and DLMO Wind-Down).<br><strong style="color:var(--gold);">Action:</strong> Save your hardest thinking for 'Deep Flow'. Stop heavy mental tasks the moment 'Vent/Recovery' hits to avoid burnout. Don't expect peak performance while you are still waking up in 'Sleep Inertia' or winding down in 'DLMO'.</li>
+                <li><strong style="color:#fff;">5-Phase Focus Cycle (Bottom-Right Panel):</strong> Tracks where you are in your natural 90-to-120-minute cognitive waves (Deep Flow, Vent/Recovery, Sleep Inertia, etc.).<br><strong style="color:var(--gold);">Action:</strong> Save your hardest thinking for 'Deep Flow'. Stop heavy mental tasks the moment 'Vent/Recovery' hits to avoid burnout. Don't expect peak performance while you are still waking up in 'Sleep Inertia' or winding down in 'DLMO'.</li>
             </ul>
 
             <h4 style="color:var(--theme-main, #ff003c); font-family:'Orbitron'; margin-top:15px;">II. THE COMMUNAL VECTOR</h4>
@@ -737,44 +737,61 @@ window.Q_MANUSCRIPTS = {
                 <li style="margin-bottom:10px;"><strong style="color:#fff;">Civil Time Lag (Top-Left Panel):</strong> Tracks your exact drift and countdown to the next Seasonal Anchor (Solstice/Equinox).<br><strong style="color:var(--gold);">Action:</strong> Stop setting goals based on artificial corporate quarters (Q1, Q2). Base your massive 90-day macro-goals on these physical, planetary anchors to gauge exactly how much natural runway you have left.</li>
                 <li style="margin-bottom:10px;"><strong style="color:#fff;">Time Drift / Q-Delta (Top-Right Panel):</strong> Measures the exact variance in degrees between the civil clock and the true position of the sun.<br><strong style="color:var(--gold);">Action:</strong> Use this to mentally detach from the stress of the ticking clock. When symmetry loss is high, expect miscommunications and delays from the rest of the world, as their clocks are fundamentally misaligned with reality.</li>
                 <li style="margin-bottom:10px;"><strong style="color:#fff;">Thermodynamics (Bottom-Left Panel):</strong> Tracks the real-time velocity of the Earth based on its distance from the sun (Orbital Velocity Variance).<br><strong style="color:var(--gold);">Action:</strong> Validates your perception of time. It proves mathematically why time feels like it is moving faster in January (when Earth's velocity is highest) and dragging in July. Push your limits during acceleration; focus on deep, slow work during dilation.</li>
-                <li><strong style="color:#fff;">Gregorian Smear (Bottom-Right Panel):</strong> Displays the sub-second tracking of true time and the accumulated lag of the legacy calendar.<br><strong style="color:var(--gold);">Action:</strong> A psychological release valve. Seeing the massive error in the standard calendar frees you from the artificial guilt of missing arbitrary legacy deadlines. Watching the sub-seconds is also a powerful visual meditation tool to ground you instantly in the present moment.</li>
+                <li><strong style="color:#fff;">Orbital Velocity Variance (Bottom-Right Panel):</strong> Displays the sub-second tracking of true time and the accumulated lag of the legacy calendar.<br><strong style="color:var(--gold);">Action:</strong> A psychological release valve. Seeing the massive error in the standard calendar frees you from the artificial guilt of missing arbitrary legacy deadlines. Watching the sub-seconds is also a powerful visual meditation tool to ground you instantly in the present moment.</li>
             </ul>
 
-            <h3 style="color:#fff; font-family:'Orbitron'; margin-top:20px; letter-spacing:1px;">PART 3: THE OMNI-PLANNER (ALIGNING YOUR LIFE)</h3>
-            <p>In The Quadrature, you do not schedule; you align. The Omni-Planner is a behavioral UI overlay that maps your tasks directly onto your body's natural rhythms and the Earth's true orbit.</p>
+            <h3 style="color:#fff; font-family:'Orbitron'; margin-top:20px; letter-spacing:1px;">PART 3: THE OMNI-PLANNER (BIOLOGICAL ROUTING)</h3>
+            <p>The Omni-Planner is the core behavioral interface of The Quadrature. Rather than replacing your schedule, it functions as a visual overlay that projects your actual biological cycles directly across your daily agenda.</p>
             
-            <h4 style="color:var(--gold, #F4D068); font-family:'Orbitron'; margin-top:15px;">Visualizing Your 5-Phase Energy Cycle</h4>
-            <p>Your body runs on a specific metabolic wave cycle. The Omni-Planner projects this 5-phase model directly onto your daily view. You will clearly see your 'Deep Flow' windows (when you are biologically primed for high-stakes focus), 'Vent/Recovery' windows, 'Sleep Inertia', and 'DLMO Wind-Down'. It also maps out your ideal sleep times, ensuring you respect your body's absolute need to recharge.</p>
+            <h4 style="color:var(--gold, #F4D068); font-family:'Orbitron'; margin-top:15px;">Visualizing Your Energy (Ultradian & Sleep Cycles)</h4>
+            <p>Human biology operates on 90-to-120 minute waves of focus and fatigue known as Ultradian rhythms. The Omni-Planner maps these natural waves—alongside your required sleep blocks—directly onto your calendar. This allows you to visually identify your peak 'Deep Flow' periods and mandatory 'Recovery' windows before committing your time to a task.</p>
             
             <h4 style="color:var(--gold, #F4D068); font-family:'Orbitron'; margin-top:15px;">The Civil Tension Score</h4>
-            <p>When you import your regular meetings into the Omni-Planner, the system acts as a health consultant. If it sees that you have scheduled a high-stress meeting right in the middle of a biological recovery window, your 'Civil Tension Score' will spike. This gives you a clear, early warning that your schedule is leading to burnout.</p>
+            <p>When you sync your legacy calendar events into the Omni-Planner, the system calculates systemic friction. Scheduling high-demand tasks or meetings during a biological recovery window will spike your 'Civil Tension Score,' providing an objective, mathematical warning of impending burnout.</p>
             
-            <h4 style="color:var(--gold, #F4D068); font-family:'Orbitron'; margin-top:15px;">Switching Between Legacy and Quad View</h4>
-            <p>We know you still have to interact with a world running on the standard calendar. With a single tap, you can seamlessly switch the Omni-Planner between 'Legacy View' (the standard 7-day week and 12-month calendar you are used to) and the 'Quad View' (the true physical calendar).</p>
+            <h4 style="color:var(--gold, #F4D068); font-family:'Orbitron'; margin-top:15px;">Understanding the Quad View (Cosmological Flavor)</h4>
+            <p>While the core utility of the planner is biological routing, the system includes the "Quad View" as an alternative visualization for perspective and flavor. Rather than the messy 12-month calendar, this optional view organizes the year into a mathematically clean structure: 4 Quadrants, 3 Sectors per Quadrant, and 30 Days per Sector.</p>
             
-            <h4 style="color:var(--gold, #F4D068); font-family:'Orbitron'; margin-top:15px;">Understanding the Quad View</h4>
-            <p>The standard calendar is messy—months have 28, 30, or 31 days, making planning unnecessarily complicated. The Quad View fixes this by organizing the year into a mathematically clean structure:</p>
-            <ul style="color:#aaa; font-family:'JetBrains Mono'; font-size:0.8rem; line-height:1.6;">
-                <li><strong style="color:#fff;">4 Quadrants</strong> make up the year.</li>
-                <li><strong style="color:#fff;">3 Sectors</strong> make up each Quadrant.</li>
-                <li><strong style="color:#fff;">30 Days</strong> make up each Sector.</li>
-            </ul>
-            <p>This 30x3 structure makes projecting and organizing your life incredibly smooth and balanced.</p>
-            
-            <h4 style="color:var(--gold, #F4D068); font-family:'Orbitron'; margin-top:15px;">The Seasonal Anchors</h4>
-            <p>You might be wondering: if every sector is exactly 30 days, how do we account for the fact that a year is roughly 365.25 days? The legacy world uses messy Leap Years. The Quadrature uses 'Seasonal Anchors'.</p>
-            <p>Seasonal Anchors are special transition days that sit between the major Quadrants (landing on the Solstices and Equinoxes). Instead of having a standard civil date, a Seasonal Anchor acts as a dedicated Operational Buffer that allows the administrative ledger to geometrically reconcile with the physical position of the Earth. It acts as a natural breathing space, wiping away any mathematical drift and giving you a fresh, geometrically aligned start to the next season.</p>
+            <h4 style="color:var(--gold, #F4D068); font-family:'Orbitron'; margin-top:15px;">Seasonal Anchors</h4>
+            <p>Within this alternative visualization, the system utilizes 'Seasonal Anchors' (Solstices and Equinoxes) as transition days. These act as operational buffers to account for the 365.25-day year without using leap years, providing a clean geometric reset for the next season.</p>
 
             <h3 style="color:#fff; font-family:'Orbitron'; margin-top:20px; letter-spacing:1px;">PART 4: ADVANCED FEATURES & PRIVACY</h3>
             
-            <h4 style="color:var(--theme-main, #ff003c); font-family:'Orbitron'; margin-top:15px;">The AI Temporal Firewall</h4>
-            <p>At higher membership tiers, your calendar becomes an active defender of your time. If an Entity broadcasts a requirement that crashes into your biological recovery window, the AI Diplomat utilizes Asynchronous Buffering. It automatically intercepts the request, silently absorbing it and routing the execution parameters into your next 'Deep Flow' state without generating counter-proposals or negotiation friction.</p>
+            <h4 style="color:var(--theme-main, #ff003c); font-family:'Orbitron'; margin-top:15px;">The AI Diplomatic Negotiator</h4>
+            <p>At higher membership tiers, your calendar becomes an active defender of your time. If someone sends an invite that crashes into your biological recovery window, the AI Diplomat can automatically intercept it and suggest a new time that fits within your 'Deep Flow' state.</p>
             
             <h4 style="color:var(--theme-main, #ff003c); font-family:'Orbitron'; margin-top:15px;">The Commercial Quad (Enterprise Bifurcation)</h4>
-            <p>The Quadrature isn't just for individuals. By flipping the Global OS Toggle, the system transforms into a powerful B2B enterprise tool. It allows entire teams to overlay their natural rhythms, finding the perfect times for collective collaboration without burning out the workforce. (A complete guide to the Commercial Quad is available in our Enterprise documentation).</p>
+            <p>The Quadrature isn't just for individuals. By flipping the Global OS Toggle, the system transforms into a powerful B2B enterprise tool. (A future stage Phase II integration).</p>
             
-            <h4 style="color:var(--theme-main, #ff003c); font-family:'Orbitron'; margin-top:15px;">Absolute Privacy (The Personal Vault)</h4>
-            <p>Your biology belongs to you. When the system reads your heart rate or sleep data to optimize your Omni-Planner, it processes the math in milliseconds and instantly destroys the raw health data. We do not store, hoard, or sell your health metrics. Your privacy is absolute.</p>
+            <h4 style="color:var(--theme-main, #ff003c); font-family:'Orbitron'; margin-top:15px;">Cryptographically Secured Zero-Retention Privacy</h4>
+            <p>Your biology belongs to you. When the system reads your heart rate or sleep data to optimize your Omni-Planner, it processes the math locally in milliseconds and instantly destroys the raw health data. We do not retain or sell your health metrics. This is a wellness and productivity tool; it does not diagnose, treat, or prevent any medical condition.</p>
+        `
+    },
+    ETERNAL_NOW: {
+        title: "THE ETERNAL NOW (HARDCOVER)",
+        content: `
+            <h2 style="color:#fff; font-family:'Orbitron'; letter-spacing:2px; text-align:center;">THE ETERNAL NOW</h2>
+            <h4 style="color:#F4D068; font-family:'Orbitron'; margin-top:-10px; text-align:center;">The Architecture of the Eternal Now</h4>
+            
+            <div style="background:rgba(244, 208, 104, 0.05); border-left:3px solid #F4D068; padding:20px; margin-top:30px;">
+                <p style="margin-top:0; font-family:'JetBrains Mono'; font-size:0.85rem; color:#ccc;"><i>The definitive thesis of The Quadrature. A premium hardcover detailing the dissolution of space and time, the mastery of the Keplerian Smear, and the ultimate integration of human intent with planetary momentum.</i></p>
+                <p style="font-size:0.75rem; color:#aaa; margin-bottom:0;">STATUS: <span style="color:#F4D068;">PENDING LULU API INTEGRATION</span></p>
+            </div>
+
+            <div style="display:flex; flex-wrap:wrap; justify-content:center; gap:20px; margin: 40px 0;">
+                <div style="flex:1; min-width:250px; max-width:350px; border:1px solid rgba(255,255,255,0.2); border-radius:4px; padding:10px; background:rgba(0,0,0,0.5);">
+                    <div style="text-align:center; font-family:'Orbitron'; font-size:0.7rem; color:#aaa; margin-bottom:10px;">FRONT COVER</div>
+                    <img src="/assets/eternal-now-front.png" style="width:100%; box-shadow:0 10px 20px rgba(0,0,0,0.8); border-radius:2px;" alt="Front Cover" />
+                </div>
+                <div style="flex:1; min-width:250px; max-width:350px; border:1px solid rgba(255,255,255,0.2); border-radius:4px; padding:10px; background:rgba(0,0,0,0.5);">
+                    <div style="text-align:center; font-family:'Orbitron'; font-size:0.7rem; color:#aaa; margin-bottom:10px;">BACK COVER</div>
+                    <img src="/assets/eternal-now-back.png" style="width:100%; box-shadow:0 10px 20px rgba(0,0,0,0.8); border-radius:2px;" alt="Back Cover" />
+                </div>
+            </div>
+            
+            <button onclick="alert('ROUTING TO LULU DIRECT GATEWAY...')" style="width:100%; padding:15px; background:rgba(244, 208, 104, 0.1); border:1px solid #F4D068; color:#F4D068; font-family:'Orbitron'; font-weight:bold; letter-spacing:2px; cursor:pointer; transition:0.3s; border-radius:4px;" onmouseover="this.style.background='#F4D068'; this.style.color='#000';" onmouseout="this.style.background='rgba(244, 208, 104, 0.1)'; this.style.color='#F4D068';">
+                ACQUIRE PHYSICAL MANUSCRIPT
+            </button>
         `
     }
 };
@@ -1241,7 +1258,7 @@ window.Q_IntegrationHub = {
                             <div style="font-family:'Orbitron'; font-size:0.75rem; color:#F4D068; font-weight: bold;">THE ETERNAL NOW (HARDCOVER)</div>
                             <div style="font-size:0.55rem; color:#888; margin-top: 4px;">Premium physical coffee-table artifact.</div>
                         </div>
-                        <button class="hub-action-btn" onclick="alert('ROUTING TO POD / COMMERCE GATEWAY...')" style="width:auto; padding:6px 12px; font-size:0.55rem; color:#000; background:#F4D068; border-color:#F4D068;">ACQUIRE</button>
+                        <button class="hub-action-btn" onclick="window.Q_LibraryReader.open('ETERNAL_NOW')" style="width:auto; padding:6px 12px; font-size:0.55rem; color:#000; background:#F4D068; border-color:#F4D068;">VIEW</button>
                     </div>
 
                     <div class="hub-tier-row">

@@ -63,7 +63,8 @@
             background-color: #010205; 
         }
 
-        body > *:not(.home-container):not(#portal-frame):not(.space-bg):not(#warp-star-field):not(.nebula-left):not(.nebula-right):not(.dust-layer-global):not(.global-header):not(.global-footer):not(.corner-panel):not(.mobile-routing-grid):not(.wing-panel):not(script):not(style):not(iframe):not(meta):not(title):not(#q-ui-injected-flag):not(.q-hub-overlay):not(.q-planner-overlay):not(#q-library-reader-overlay):not(.q-nav-bar):not(.q-control-strip):not(#mobile-telemetry-ribbon):not(#q-universal-controls):not(#q-mic-fab):not(#q-mic-fab-desktop):not(.desktop-only):not(.center-axis-btn):not(.mobile-persistent-nav) {
+        /* CRITICAL FIX: Aggressive hiding of dynamically injected UI elements from q-ui.js */
+        body > *:not(.home-container):not(#portal-frame):not(#warp-star-field):not(.global-header):not(.global-footer):not(.corner-panel):not(.mobile-routing-grid):not(script):not(style):not(iframe):not(meta):not(title):not(#q-ui-injected-flag):not(.q-hub-overlay):not(.q-planner-overlay):not(.center-axis-btn) {
             display: none !important; 
             opacity: 0 !important; 
             pointer-events: none !important; 
@@ -160,44 +161,6 @@
         /* --- THE MOBILE HOME PROTOCOL --- */
         .desktop-only { display: flex !important; }
         
-        /* Mobile Specific Independent Nav */
-        .mobile-persistent-nav {
-            display: none;
-            position: absolute;
-            bottom: 8vh;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 85vw;
-            max-width: 400px;
-            justify-content: space-between;
-            gap: 16px;
-            z-index: 100;
-        }
-        
-        .mobile-persistent-btn {
-            flex: 1;
-            background: rgba(10, 15, 25, 0.6);
-            backdrop-filter: blur(14px);
-            -webkit-backdrop-filter: blur(14px);
-            border: 1px solid rgba(0, 163, 255, 0.3);
-            box-shadow: inset 0 0 15px rgba(0, 163, 255, 0.15), 0 8px 20px rgba(0,0,0,0.8);
-            border-radius: 8px;
-            color: var(--q-metal);
-            padding: 16px 0;
-            font-family: 'Orbitron';
-            font-size: 0.8rem;
-            font-weight: 700;
-            letter-spacing: 2px;
-            cursor: pointer;
-            text-align: center;
-            text-shadow: 0 2px 5px rgba(0,0,0,0.8), 0 0 5px rgba(255,255,255,0.4);
-            pointer-events: auto;
-        }
-        
-        .mobile-persistent-btn:active {
-            background: rgba(0, 163, 255, 0.2);
-        }
-
         .mobile-routing-grid { display: none; position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); width: 85vw; max-width: 400px; height: auto; flex-direction: column; gap: 16px; z-index: 30; pointer-events: none; }
         .m-panel { position: relative; border-radius: 8px; cursor: pointer; pointer-events: auto; display: flex; justify-content: center; align-items: center; text-align: center; box-shadow: 0 10px 30px rgba(0,0,0,0.8); overflow: hidden; border: 1px solid rgba(255,255,255,0.1); width: 100%; height: 75px; opacity: 0; transform: translateY(30px); transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
         .m-frost { position: absolute; inset: 0; background: rgba(15, 20, 35, 0.7); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); z-index: 1; }
@@ -213,10 +176,22 @@
         body.mobile-revealed .m-panel:nth-child(3) { transition-delay: 0.15s; }
         body.mobile-revealed .m-panel:nth-child(4) { transition-delay: 0.20s; }
 
+        /* CRITICAL FIX: MOBILE SCALING AND ISOLATION */
         @media (max-width: 950px) {
             .desktop-only { display: none !important; }
             .mobile-routing-grid { display: flex; }
-            .mobile-persistent-nav { display: flex; }
+            
+            /* KILL INVISIBLE CORNER PANELS ON MOBILE */
+            .corner-panel { display: none !important; pointer-events: none !important; }
+            
+            /* SCALE & REPOSITION CENTER AXIS BUTTONS FOR MOBILE */
+            .center-axis-btn { transform: translateX(-50%) scale(0.75); }
+            .axis-omni { bottom: calc(50% + 24vh); transform-origin: bottom center; }
+            .axis-dash { top: calc(50% + 24vh); transform-origin: top center; }
+            
+            /* Retain scaled transform on active/tap */
+            .axis-omni:active { transform: translateX(-50%) scale(0.75) translateY(-2px); }
+            .axis-dash:active { transform: translateX(-50%) scale(0.75) translateY(2px); }
         }
     </style>
 </head>
@@ -228,23 +203,14 @@
     <div class="global-header desktop-only">THE QUADRATURE</div>
     <div class="global-footer desktop-only">BASED IN SCIENCE BATHED IN CULTURE & BUILT FOR THE DIGITAL AGE</div>
 
-    <div class="center-axis-btn axis-omni desktop-only" onclick="if(window.Q_OmniPlanner) window.Q_OmniPlanner.openPlanner()">
+    <div class="center-axis-btn axis-omni" onclick="if(window.Q_OmniPlanner) window.Q_OmniPlanner.openPlanner()">
         <img class="axis-bg" src="assets/omni-panel.png" alt="omni background" />
         <span class="axis-label">OMNI-PLANNER</span>
     </div>
 
-    <div class="center-axis-btn axis-dash desktop-only" onclick="if(window.Q_IntegrationHub) window.Q_IntegrationHub.openHub()">
+    <div class="center-axis-btn axis-dash" onclick="if(window.Q_IntegrationHub) window.Q_IntegrationHub.openHub()">
         <img class="axis-bg" src="assets/dash-panel.png" alt="dash background" />
         <span class="axis-label">DASHBOARD</span>
-    </div>
-    
-    <div class="mobile-persistent-nav">
-        <div class="mobile-persistent-btn" onclick="if(window.Q_OmniPlanner) window.Q_OmniPlanner.openPlanner()">
-            OMNI-PLANNER
-        </div>
-        <div class="mobile-persistent-btn" onclick="if(window.Q_IntegrationHub) window.Q_IntegrationHub.openHub()">
-            DASHBOARD
-        </div>
     </div>
     
     <div class="mobile-routing-grid" id="mobile-routing-grid">
@@ -421,8 +387,7 @@
         let isMobileRevealed = false;
         function initMobileHome() {
             document.addEventListener('click', (e) => {
-                // CRITICAL FIX: Exclude the new persistent mobile buttons from triggering the Iris reveal
-                if(window.innerWidth <= 950 && !isMobileRevealed && !e.target.closest('.m-panel') && !e.target.closest('.mobile-persistent-btn')) {
+                if(window.innerWidth <= 950 && !isMobileRevealed && !e.target.closest('.m-panel') && !e.target.closest('.center-axis-btn')) {
                     document.body.classList.add('mobile-revealed');
                     isMobileRevealed = true;
                 }

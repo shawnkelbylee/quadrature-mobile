@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    <title>THE QUADRATURE // METAPHYSICAL VECTOR</title>
+    
+    <script src="q-ui.js"></script>
+    <script src="q-core.js"></script>
+    <script src="q-planner.js"></script>
+    <script src="q-hub.js"></script>
+    <script src="q-plugin-zodiacal.js"></script>
+    <script src="q-metaphysical.js"></script>
+    
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;800;900&family=JetBrains+Mono:wght@100;400;700&display=swap');
+
+        :root {
+            --void: #050301; --gold-bright: #ffd700; --gold-dim: rgba(255, 215, 0, 0.15);
+            --brass: #c5b358; --copper: #b87333; 
+            --active-glow: rgba(255, 215, 0, 0.3);
+            --theme-main: var(--gold-bright); --theme-dim: var(--gold-dim);
+            --starlight: rgba(255, 255, 255, 0.6);
+            --platinum: #E5E4E2;
+        }
+
+        body { 
+            margin: 0; padding: 0; height: 100vh; width: 100vw; overflow: hidden; 
+            background-color: var(--void); 
+            background: radial-gradient(circle at center, #1a1205 0%, var(--void) 85%); 
+            color: var(--theme-main); font-family: 'Orbitron', sans-serif; 
+            display: flex; justify-content: center; align-items: center; 
+            user-select: none; perspective: 1500px; transform-style: preserve-3d; color-scheme: dark; 
+            touch-action: manipulation;
+        }
+
+        .global-header {
+            position: absolute; top: 4vh; left: 0; width: 100vw;
+            display: flex; justify-content: center; align-items: center; text-align: center;
+            font-family: 'Courier New', Courier, monospace; font-weight: 900; font-size: 2.8rem; letter-spacing: 16px; padding-left: 16px;
+            color: var(--theme-main); z-index: 50; pointer-events: none;
+            text-shadow: 0 0 15px var(--theme-dim), 0 0 5px rgba(255, 255, 255, 0.5);
+        }
+
+        .v-head { 
+            position: absolute; white-space: nowrap;
+            font-family: 'Orbitron'; font-weight: 900; font-size: 0.75rem; letter-spacing: 2px; 
+            margin: 0; padding: 0; z-index: 25; border: none;
+            color: var(--theme-main);
+            text-shadow: 0 0 10px var(--theme-dim);
+            transition: color 0.3s, text-shadow 0.3s;
+        }
+        
+        #quad-tl .v-head { bottom: -16px; right: 0; text-align: right; transform: translateX(8px); }
+        #quad-tr .v-head { bottom: -16px; left: 0; text-align: left; transform: translateX(-8px); }
+        #quad-bl .v-head { top: -16px; right: 0; text-align: right; transform: translateX(8px); }
+        #quad-br .v-head { top: -16px; left: 0; text-align: left; transform: translateX(-8px); }
+
+        .tl .opt-oval { left: 35px !important; top: 42px !important; font-size: 0.45rem !important; pointer-events: auto !important; letter-spacing: 1px !important; color: var(--theme-main) !important; text-shadow: 0 0 8px var(--theme-dim) !important; }
+        .tr .opt-oval { right: 35px !important; top: 42px !important; font-size: 0.45rem !important; pointer-events: auto !important; letter-spacing: 1px !important; color: var(--theme-main) !important; text-shadow: 0 0 8px var(--theme-dim) !important; }
+        .bl .opt-oval { left: 35px !important; bottom: 42px !important; font-size: 0.45rem !important; pointer-events: auto !important; letter-spacing: 1px !important; color: var(--theme-main) !important; text-shadow: 0 0 8px var(--theme-dim) !important; }
+        .br .opt-oval { right: 35px !important; bottom: 42px !important; font-size: 0.45rem !important; pointer-events: auto !important; letter-spacing: 1px !important; color: var(--theme-main) !important; text-shadow: 0 0 8px var(--theme-dim) !important; }
+
+        .t-row { display: flex; justify-content: space-between; width: 100%; font-size: 0.55rem; font-family: 'JetBrains Mono'; font-weight: 700; align-items: center;}
+        .t-row span:first-child { color: #ffffff; text-shadow: 0 0 5px rgba(255,255,255,0.4); text-align: left; flex-shrink: 0; text-transform: uppercase; }
+
+        .val-sm { font-family: 'Orbitron'; font-weight: 700; font-size: 0.6rem; z-index: 20; text-align: right; white-space: nowrap; color: var(--theme-main); text-shadow: 0 0 10px var(--theme-dim); text-transform: uppercase; }
+
+        .panel-data-wrapper { position: relative; width: 280px; height: 100%; display: flex; flex-direction: column; justify-content: center; gap: 2px; margin: 0 auto; cursor: pointer; z-index: 20; }
+
+        .opt-btn { font-size: 0.6rem; font-weight: bold; color: var(--theme-main); background: rgba(0,0,0,0.6); border: 1px solid var(--theme-main); padding: 3px 12px; border-radius: 4px; cursor: pointer; box-shadow: 0 0 8px var(--theme-dim); transition: 0.3s; margin-top: auto; font-family: 'Orbitron'; pointer-events: auto;}
+        .opt-btn:hover { background: var(--theme-main); color: var(--void); box-shadow: 0 0 15px var(--theme-main); }
+        .opt-btn.active { background: var(--theme-dim); border-color: var(--theme-main); color: #fff; }
+
+        .astrolabe { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: var(--dial-size); height: var(--dial-size); max-width: 600px; max-height: 600px; display: flex; justify-content: center; align-items: center; z-index: 60; pointer-events: none; }
+        .ring { position: absolute; border-radius: 50%; display: flex; justify-content: center; align-items: center; border: 1px solid var(--theme-dim); box-shadow: inset 0 0 30px rgba(0,0,0,0.8); }
+        .ring-outer { width: 100%; height: 100%; border: 3px solid var(--brass); box-shadow: 0 0 40px var(--theme-dim); background: rgba(255, 215, 0, 0.02); }
+        .ring-dynamic { width: 70%; height: 70%; border: 2px dashed var(--brass); }
+        .ring-inner { width: 40%; height: 40%; border: 2px solid var(--theme-main); background: radial-gradient(circle, rgba(200, 150, 50, 0.05) 0%, rgba(0,0,0,0.8) 100%); box-shadow: inset 0 0 20px var(--brass); }
+        .node-layer { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 40; pointer-events: none; }
+
+        .cusp-wrapper { position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 38; transform-origin: center center; }
+        .cusp-line { position: absolute; top: 50%; left: 70%; width: 15%; height: 0; border-top: 1px dashed rgba(255, 215, 0, 0.35); transform: translateY(-50%); box-shadow: 0 0 5px rgba(255, 215, 0, 0.1); }
+
+        .zodiac-glyph { position: absolute; font-family: Arial, sans-serif; color: var(--platinum); font-size: 1.8rem; display: flex; justify-content: center; align-items: center; width: 30px; height: 30px; margin-top: -15px; margin-left: -15px; background: transparent !important; opacity: 0.4; transition: 0.3s; pointer-events: auto; cursor: pointer; }
+        .zodiac-glyph:hover { color: #fff; text-shadow: 0 0 20px #fff; transform: scale(1.5); opacity: 1; z-index: 70; }
+        .zodiac-glyph.natal-active { color: var(--theme-main); text-shadow: 0 0 15px var(--theme-main); opacity: 1; font-weight: bold; transform: scale(1.3); }
+        .zodiac-glyph.natal-active:hover { color: #fff; text-shadow: 0 0 25px var(--theme-main); transform: scale(1.6); }
+        
+        .origin-node { position: absolute; width: 14px; height: 14px; background: var(--theme-main); clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%); box-shadow: 0 0 20px var(--theme-main); z-index: 25; margin-top: -7px; margin-left: -7px; filter: drop-shadow(0 0 8px var(--theme-main)); pointer-events: none; }
+
+        .event-node { position: absolute; width: 22px; height: 22px; border-radius: 50%; margin-top: -11px; margin-left: -11px; cursor: pointer; transition: all 0.3s ease; display: flex; justify-content: center; align-items: center; z-index: 30; font-size: 0.8rem; font-family: sans-serif; background: var(--void); border: 1px solid transparent; pointer-events: auto; }
+        .node-jud { color: var(--theme-main); border-color: rgba(255,215,0,0.3); box-shadow: inset 0 0 10px rgba(255,215,0,0.2); }
+        .node-isl { color: var(--platinum); border-color: rgba(229,228,226,0.3); box-shadow: inset 0 0 10px rgba(229,228,226,0.2); }
+        .node-chr { color: var(--copper); border-color: rgba(184,115,51,0.3); box-shadow: inset 0 0 10px rgba(184,115,51,0.2); }
+        .node-civ { color: #4cc9f0; border-color: rgba(76,201,240,0.3); box-shadow: inset 0 0 10px rgba(76,201,240,0.2); }
+        .node-hin { color: #ff9933; border-color: rgba(255,153,51,0.3); box-shadow: inset 0 0 10px rgba(255,153,51,0.2); }
+        .node-bud { color: #f4c430; border-color: rgba(244,196,48,0.3); box-shadow: inset 0 0 10px rgba(244,196,48,0.2); }
+        .node-tao { color: #ffffff; border-color: rgba(255,255,255,0.3); box-shadow: inset 0 0 10px rgba(255,255,255,0.2); }
+        .node-hol { color: #ff66b2; border-color: rgba(255,102,178,0.3); box-shadow: inset 0 0 10px rgba(255,102,178,0.2); }
+        .node-sys { color: #00f0ff; border-color: rgba(0,240,255,0.3); box-shadow: inset 0 0 10px rgba(0,240,255,0.2); }
+        .node-cluster { color: #000; background: var(--theme-main); border-color: var(--theme-main); box-shadow: 0 0 15px var(--theme-main); font-weight: 900; font-family:'JetBrains Mono'; }
+        .node-anc { color: var(--theme-main); border-color: var(--theme-main); box-shadow: inset 0 0 10px var(--theme-dim); font-size: 1rem; z-index: 32; }
+
+        .event-label { position: absolute; font-family: 'JetBrains Mono'; font-size: 0.6rem; width: auto; white-space: nowrap; text-align: center; margin-top: 25px; transition: 0.3s; opacity: 0; font-weight: 700; color: var(--platinum); text-shadow: 0 0 8px #000, 0 0 15px var(--brass); background: rgba(0,0,0,0.8); border: 1px solid rgba(255,215,0,0.3); padding: 4px 8px; border-radius: 4px; pointer-events: none; z-index: 50; }
+        .event-node:hover { transform: scale(1.6); border-color: #fff; box-shadow: 0 0 25px #fff; z-index: 60; }
+        .event-node.flare { transform: scale(1.4); border-color: #fff; box-shadow: 0 0 20px #fff; z-index: 40; }
+        .event-node:hover + .event-label { opacity: 1; transform: scale(1.1); z-index: 60; color: #fff; border-color: #fff; }
+        .term-marker { position: absolute; width: 4px; height: 16px; background: var(--copper); margin-top: -8px; margin-left: -2px; z-index: 20; pointer-events: auto; }
+        .transit-arm { position: absolute; width: 100%; height: 100%; z-index: 35; pointer-events: none; transition: transform 0.1s linear; }
+        .pointer { position: absolute; top: -15px; left: 50%; transform: translateX(-50%); width: 0; height: 0; border-left: 12px solid transparent; border-right: 12px solid transparent; border-top: 30px solid var(--theme-main); filter: drop-shadow(0 5px 10px var(--theme-main)); }
+
+        .center-star { position: absolute; width: 120px; height: 120px; display: flex; justify-content: center; align-items: center; z-index: 10; pointer-events: none; }
+        .star-layer { position: absolute; width: 100%; height: 100%; background: var(--theme-main); clip-path: polygon(50% 0%, 52% 48%, 100% 50%, 52% 52%, 50% 100%, 48% 52%, 0% 50%, 48% 48%); }
+        .layer-1 { animation: glitter-1 0.7s infinite; } .layer-2 { background: #00f0ff; animation: glitter-2 0.9s infinite; } .layer-3 { animation: glitter-3 1.1s infinite; } .layer-4 { background: var(--platinum); animation: glitter-4 0.8s infinite; }
+
+        @keyframes glitter-1 { 0%, 100% { opacity: 1; transform: rotate(0deg) scale(1); filter: drop-shadow(0 0 10px var(--theme-main)); } 50% { opacity: 0.6; transform: rotate(0deg) scale(0.85); filter: drop-shadow(0 0 5px var(--theme-dim)); } }
+        @keyframes glitter-2 { 0%, 100% { opacity: 0.5; transform: rotate(22.5deg) scale(0.85); filter: drop-shadow(0 0 5px #00f0ff); } 50% { opacity: 1; transform: rotate(22.5deg) scale(1.05); filter: drop-shadow(0 0 15px #00f0ff); } }num)); } 50% { opacity: 1; transform: rotate(22.5deg) scale(1.05); filter: drop-shadow(0 0 15px var(--platinum)); } }
+        @keyframes glitter-3 { 0%, 100% { opacity: 1; transform: rotate(45deg) scale(0.95); filter: drop-shadow(0 0 12px var(--theme-main)); } 50% { opacity: 0.4; transform: rotate(45deg) scale(0.8); filter: drop-shadow(0 0 3px var(--theme-dim)); } }
+        @keyframes glitter-4 { 0%, 100% { opacity: 0.4; transform: rotate(67.5deg) scale(0.8); filter: drop-shadow(0 0 10px var(--platinum)); } 50% { opacity: 0.9; transform: rotate(67.5deg) scale(1); filter: drop-shadow(0 0 10px var(--platinum)); } }
+    </style>
+</head>
+<body class="mode-q">
+
+    <div class="global-header desktop-only">METAPHYSICAL</div>
+
+    <div class="astrolabe q-center-dial">
+        <div class="ring ring-outer"></div>
+        <div class="ring ring-dynamic" id="dynamic-ring"></div>
+        <div class="ring ring-inner">
+            <div class="center-star">
+                <div class="star-layer layer-1"></div>
+                <div class="star-layer layer-2"></div>
+                <div class="star-layer layer-3"></div>
+                <div class="star-layer layer-4"></div>
+            </div>
+        </div>
+        <div class="node-layer" id="node-layer"></div>
+        <div class="transit-arm" id="transit-arm">
+            <div class="pointer"></div>
+        </div>
+    </div>
+
+</body>
+</html>

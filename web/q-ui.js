@@ -1,12 +1,12 @@
-// THE QUADRATURE: PERSONAL UI MATRIX & RENDERER
+// THE QUADRATURE: UNIFIED UI MATRIX & RENDERER
 // Architect: Kelby | Engineer: Kairos
-// STATUS: Phase III UI Engine. Boot Sequence Purged. Spatial Routing & Pro User Auth Badge Locked. Master Access Override & System Home Tab Injected.
+// STATUS: Phase IV UI Engine. Hollow Shell Optimization. 
+// REVISION: Baseline Restoration, Universal Starfield Injection, Registry Purged
 
 window.injectUniversalUI = function() {
     if (window.self !== window.top) return;
     if (document.getElementById('q-ui-injected-flag')) return;
 
-    // CRITICAL FIX: Force removal of 'boot-active' lock to prevent mobile UI elements from remaining invisible
     if (document.body.classList.contains('boot-active')) {
         document.body.classList.remove('boot-active');
     }
@@ -22,60 +22,20 @@ window.injectUniversalUI = function() {
     let noCache2 = document.createElement('meta'); noCache2.httpEquiv = "Pragma"; noCache2.content = "no-cache"; document.head.appendChild(noCache2);
     let noCache3 = document.createElement('meta'); noCache3.httpEquiv = "Expires"; noCache3.content = "0"; document.head.appendChild(noCache3);
     
-    // --- DUAL-STATE PATH ROUTER ---
+    // --- PATH DETECTION & ROUTING LOGIC ---
     const path = window.location.pathname.toUpperCase();
-    const isHome = path.includes("HOME") || path === "/" || path === "/INDEX.HTML" || path === "";
+    const isHome = path.endsWith("/") || path.endsWith("INDEX.HTML") || path === "";
     
-    const bActive = path.includes("BIO");
-    const eActive = path.includes("ENV");
-    const mActive = path.includes("MEC");
-    const cActive = path.includes("COM");
+    const bActive = path.includes("PHYSIOLOGICAL");
+    const cActive = path.includes("METAPHYSICAL");
+    const eActive = path.includes("METEOROLOGICAL");
+    const mActive = path.includes("ASTROPHYSICAL");
     
-    const faceActive = (!isHome && !bActive && !eActive && !mActive && !cActive);
+    const faceActive = isHome;
     
-    if (faceActive) document.body.classList.add('q-control-center');
+    if (faceActive) document.body.classList.add('q-aperture-home');
     else document.body.classList.add('q-vector-hud');
     
-    // Vector Theme Colors
-    let micColor = "var(--sys-cyan, #00f0ff)";
-    let micGlow = "var(--neon-cyan-dim, rgba(0,240,255,0.2))";
-    let headerText = "THE QUADRATURE";
-
-    if (!isHome) {
-        if (bActive) { micColor = "var(--bio-purple, #b829ff)"; micGlow = "var(--bio-purple-dim, rgba(184, 41, 255, 0.15))"; headerText = "BIOLOGICAL VECTOR"; }
-        else if (eActive) { micColor = "var(--env-green, #a7ff83)"; micGlow = "var(--env-green-dim, rgba(167, 255, 131, 0.2))"; headerText = "ENVIRONMENTAL VECTOR"; }
-        else if (mActive) { micColor = "var(--sys-cyan, #00f0ff)"; micGlow = "var(--neon-cyan-dim, rgba(0, 240, 255, 0.2))"; headerText = "MECHANICAL VECTOR"; }
-        else if (cActive) { micColor = "var(--gold, #F4D068)"; micGlow = "var(--gold-dim, rgba(244, 208, 104, 0.15))"; headerText = "COMMUNAL VECTOR"; }
-        else { micColor = "var(--chrono-amber, #B97A35)"; micGlow = "var(--chrono-amber-dim, rgba(185, 122, 53, 0.15))"; headerText = "PERSONAL QUAD"; }
-    }
-
-    // OS Panel Data Colors dynamically tied to the Vector theme unless it's the System Home Gateway
-    let osPanelColor = isHome ? "#00f0ff" : micColor;
-    let osPanelGlow = isHome ? "rgba(0,240,255,0.2)" : micGlow;
-    
-    // Universal Nav Prefix logic to resolve locally and in production seamlessly
-    let navPrefix = isHome ? "../personal/" : "";
-    
-    // Dynamic Corner Panel & OPT Formatting
-    let panelColorsCSS = "";
-    if (isHome) {
-        panelColorsCSS = `.opt-oval { color: #00f0ff; text-shadow: 0 0 5px rgba(0,240,255,0.3); }`;
-    } else if (faceActive) {
-        panelColorsCSS = `
-            .tl .opt-oval { color: var(--bio-purple, #b829ff); text-shadow: 0 0 5px var(--bio-purple-dim, rgba(184, 41, 255, 0.15)); }
-            .tr .opt-oval { color: var(--gold, #F4D068); text-shadow: 0 0 5px var(--gold-dim, rgba(244, 208, 104, 0.15)); }
-            .bl .opt-oval { color: var(--env-green, #a7ff83); text-shadow: 0 0 5px var(--env-green-dim, rgba(167, 255, 131, 0.2)); }
-            .br .opt-oval { color: var(--sys-cyan, #00f0ff); text-shadow: 0 0 5px var(--sys-cyan-dim, rgba(0, 240, 255, 0.2)); }
-        `;
-    } else {
-        panelColorsCSS = `
-            .opt-oval { color: ${micColor}; text-shadow: 0 0 5px ${micGlow}; }
-            .frost-zone { box-shadow: inset 0 0 20px ${micGlow} !important; }
-            .corner-panel:hover .frost-zone { box-shadow: 0 0 20px ${micGlow}, inset 0 0 25px rgba(255, 255, 255, 0.1) !important; }
-        `;
-    }
-
-    // STRICT PERSISTENCE LOGIC: Bypasses state-load race condition by directly querying localStorage
     const authState = localStorage.getItem('Q_PRO_AUTH') === 'true' ? 'ACTIVE' : 'STANDBY';
     const authBg = authState === 'ACTIVE' ? '#39ff14' : 'transparent';
     const authColor = authState === 'ACTIVE' ? '#000' : '#ff003c';
@@ -84,7 +44,6 @@ window.injectUniversalUI = function() {
 
     const style = document.createElement('style');
     style.innerHTML = `
-        /* IRONCLAD VIEWPORT RECOVERY */
         html, body { 
             position: fixed !important; top: 0px !important; left: 0px !important; right: 0px !important; bottom: 0px !important; 
             width: 100vw !important; height: var(--app-height, 100vh) !important; 
@@ -98,8 +57,7 @@ window.injectUniversalUI = function() {
             --wing-w: 240px; --mod-w: 320px; --dial-size: 60vh; --wing-offset: calc((var(--dial-size) / 2) + 4vw); 
             --glass-med: rgba(2, 12, 25, 0.65); --blur-med: blur(16px); --white-pure: #ffffff; 
             --starlight: rgba(255, 255, 255, 0.7); --platinum: #E5E4E2; --chrono-amber: #B97A35; 
-            --chrono-amber-dim: rgba(185, 122, 53, 0.2); --bio-purple: #b829ff; --bio-purple-dim: rgba(184, 41, 255, 0.15); 
-            --bio-cobalt: #0055ff; --bio-cobalt-dim: rgba(0, 85, 255, 0.3);
+            --chrono-amber-dim: rgba(185, 122, 53, 0.2); 
             --q-blue-glow: rgba(0, 163, 255, 0.3); --q-metal: #e2e8f0;
             --center-gap-x: ${isHome ? '31vh' : '36vh'}; 
             --corner-gap-y: ${isHome ? '24vh' : '21vh'}; 
@@ -112,39 +70,24 @@ window.injectUniversalUI = function() {
         .modal-box { width: 400px; background: rgba(2, 6, 15, 0.95); border: 1px solid var(--theme-main, #00f0ff); border-radius: 12px; padding: 25px; box-shadow: 0 20px 50px rgba(0,0,0,0.9); display: flex; flex-direction: column; gap: 16px; cursor: default; pointer-events: auto; }
         .btn-close { background: transparent; border: 1px solid var(--platinum); color: var(--platinum); padding: 10px; font-family: 'Orbitron'; cursor: pointer; transition: 0.3s; width: 100%; margin-top: 10px; border-radius: 8px; font-weight: 700; letter-spacing: 2px; }
 
-        .global-header {
-            position: absolute; top: 4vh; left: 0; width: 100vw;
-            display: flex; justify-content: center; align-items: center; text-align: center;
-            font-family: 'Courier New', Courier, monospace; font-weight: 900; font-size: 2.8rem; letter-spacing: 16px; padding-left: 16px;
-            color: ${isHome ? '#ffffff' : osPanelColor}; z-index: 50; pointer-events: none;
-            text-shadow: 0 0 15px ${isHome ? 'rgba(0, 163, 255, 0.8)' : osPanelGlow}, 0 0 5px rgba(255, 255, 255, 0.5);
-        }
+        .space-bg { position: fixed; inset: 0; z-index: 0; background-image: radial-gradient(circle at 50% 50%, #030814 0%, #010205 100%); pointer-events: none;}
+        .star-container { position: absolute; inset: 0; z-index: 1; pointer-events: none; }
 
-        .global-footer {
-            position: absolute; bottom: 6vh; left: 0; width: 100vw;
-            display: flex; justify-content: center; align-items: center; text-align: center;
-            font-family: 'Courier New', Courier, monospace; font-weight: 700; font-size: 1.4rem; letter-spacing: 4px; padding-left: 4px;
-            color: rgba(255, 255, 255, 0.85); z-index: 50; pointer-events: none;
-            text-shadow: 0 2px 5px rgba(0,0,0,0.9), 0 0 10px rgba(0, 163, 255, 0.3);
-        }
-
-        .space-bg { position: fixed; inset: 0; z-index: 0; background-image: radial-gradient(circle at 50% 50%, #030814 0%, #010205 100%); }
-
-        .nebula-left { position: fixed; top: -10%; bottom: -10%; left: -10%; width: 55vw; z-index: 1; background: url('../assets/nebula-left.png') center/cover no-repeat; mix-blend-mode: screen; animation: nebula-drift-l 35s ease-in-out infinite alternate; -webkit-mask-image: radial-gradient(ellipse 100% 100% at 0% 50%, rgba(0,0,0,1) 20%, rgba(0,0,0,0) 80%); mask-image: radial-gradient(ellipse 100% 100% at 0% 50%, rgba(0,0,0,1) 20%, rgba(0,0,0,0) 80%); pointer-events: none; }
-        .nebula-right { position: fixed; top: -10%; bottom: -10%; right: -10%; width: 55vw; z-index: 1; background: url('../assets/nebula-right.png') center/cover no-repeat; mix-blend-mode: screen; animation: nebula-drift-r 42s ease-in-out infinite alternate-reverse; -webkit-mask-image: radial-gradient(ellipse 100% 100% at 100% 50%, rgba(0,0,0,1) 20%, rgba(0,0,0,0) 80%); mask-image: radial-gradient(ellipse 100% 100% at 100% 50%, rgba(0,0,0,1) 20%, rgba(0,0,0,0) 80%); pointer-events: none; }
+        .nebula-left { position: fixed; top: -10%; bottom: -10%; left: -10%; width: 55vw; z-index: 1; background: url('assets/nebula-left.png') center/cover no-repeat; mix-blend-mode: screen; animation: nebula-drift-l 35s ease-in-out infinite alternate; -webkit-mask-image: radial-gradient(ellipse 100% 100% at 0% 50%, rgba(0,0,0,1) 20%, rgba(0,0,0,0) 80%); mask-image: radial-gradient(ellipse 100% 100% at 0% 50%, rgba(0,0,0,1) 20%, rgba(0,0,0,0) 80%); pointer-events: none; }
+        .nebula-right { position: fixed; top: -10%; bottom: -10%; right: -10%; width: 55vw; z-index: 1; background: url('assets/nebula-right.png') center/cover no-repeat; mix-blend-mode: screen; animation: nebula-drift-r 42s ease-in-out infinite alternate-reverse; -webkit-mask-image: radial-gradient(ellipse 100% 100% at 100% 50%, rgba(0,0,0,1) 20%, rgba(0,0,0,0) 80%); mask-image: radial-gradient(ellipse 100% 100% at 100% 50%, rgba(0,0,0,1) 20%, rgba(0,0,0,0) 80%); pointer-events: none; }
 
         @keyframes nebula-drift-l { 0% { transform: scale(1) translate(0, 0); opacity: 0.5; } 50% { transform: scale(1.05) translate(2%, 2%); opacity: 0.85; } 100% { transform: scale(1.02) translate(-1%, -1%); opacity: 0.6; } }
         @keyframes nebula-drift-r { 0% { transform: scale(1) translate(0, 0); opacity: 0.6; } 50% { transform: scale(1.05) translate(-2%, 2%); opacity: 0.9; } 100% { transform: scale(1.02) translate(1%, -1%); opacity: 0.55; } }
         
         .dust-layer-global { position: fixed; inset: 0; z-index: 2; background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise2'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.012' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise2)' opacity='0.08'/%3E%3C/svg%3E"); mix-blend-mode: screen; pointer-events: none; }
 
-        .corner-panel { position: absolute; width: var(--panel-w); height: var(--panel-h); z-index: 20; cursor: pointer; transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+        .corner-panel { position: absolute; width: var(--panel-w); height: var(--panel-h); z-index: 20; transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
         .corner-panel:hover { transform: translate(var(--tx-hover), var(--ty-hover)) scale(1.03); }
 
-        .frost-zone { position: absolute; inset: 6px 12px; background: rgba(15, 20, 35, 0.5); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border-radius: 6px; z-index: -2; box-shadow: inset 0 0 20px rgba(0, 163, 255, 0.15); transition: 0.3s ease; }
-        .corner-panel:hover .frost-zone { background: rgba(20, 25, 45, 0.65); box-shadow: 0 0 20px rgba(0, 240, 255, 0.4), inset 0 0 25px rgba(255, 255, 255, 0.1); }
+        .frost-zone { position: absolute; inset: 6px 12px; background: rgba(15, 20, 35, 0.5); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border-radius: 6px; z-index: -2; box-shadow: inset 0 0 20px var(--theme-dim, rgba(0, 163, 255, 0.15)) !important; transition: 0.3s ease; }
+        .corner-panel:hover .frost-zone { background: rgba(20, 25, 45, 0.65); box-shadow: 0 0 20px var(--theme-dim, rgba(0, 240, 255, 0.4)), inset 0 0 25px rgba(255, 255, 255, 0.1) !important; }
 
-        .panel-bg { position: absolute; inset: 0; background: url('../assets/panel-frame.png') center/100% 100% no-repeat; z-index: -1; filter: drop-shadow(0 5px 10px rgba(0,0,0,0.6)); }
+        .panel-bg { position: absolute; inset: 0; background: url('assets/panel-frame.png') center/100% 100% no-repeat; z-index: -1; filter: drop-shadow(0 5px 10px rgba(0,0,0,0.6)); pointer-events: none; }
 
         .tl { bottom: calc(50% + var(--corner-gap-y)); right: calc(50% + var(--corner-gap-x)); --tx-hover: -2px; --ty-hover: -2px;}
         .tr { bottom: calc(50% + var(--corner-gap-y)); left: calc(50% + var(--corner-gap-x)); --tx-hover: 2px; --ty-hover: -2px;}
@@ -154,21 +97,9 @@ window.injectUniversalUI = function() {
         .br { top: calc(50% + var(--corner-gap-y)); left: calc(50% + var(--corner-gap-x)); --tx-hover: 2px; --ty-hover: 2px;}
         .br .panel-bg { transform: scale(-1, -1); }
 
-        .panel-label {
-            height: 100%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center;
-            font-size: 0.9rem; letter-spacing: 4px; padding-left: 4px; font-weight: 700; color: var(--q-metal);
-            text-shadow: 0 2px 5px rgba(0,0,0,0.8), 0 0 5px rgba(255,255,255,0.4);
-            position: relative; z-index: 2; box-sizing: border-box; font-family: 'Orbitron';
-        }
-        
-        .tl .panel-label { padding-left: 59px; }
-        .tr .panel-label { padding-right: 51px; }
-        .bl .panel-label { padding-left: 59px; }
-        .br .panel-label { padding-right: 51px; }
-
         .panel-data-container {
             height: 100%; width: 100%; display: flex; flex-direction: column; align-items: stretch; justify-content: center; text-align: left;
-            position: relative; z-index: 2; box-sizing: border-box;
+            position: relative; z-index: 2; box-sizing: border-box; pointer-events: none;
         }
 
         .tl .panel-data-container { padding: 12px 30px 12px 75px; }
@@ -176,18 +107,16 @@ window.injectUniversalUI = function() {
         .bl .panel-data-container { padding: 12px 30px 12px 75px; }
         .br .panel-data-container { padding: 12px 75px 12px 30px; }
 
-        .opt-oval { position: absolute; font-family: 'JetBrains Mono'; font-size: 0.55rem; font-weight: 700; letter-spacing: 1px; display: flex; justify-content: center; align-items: center; cursor: pointer; z-index: 30; transition: 0.3s; }
+        .opt-oval { position: absolute; font-family: 'JetBrains Mono'; font-size: 0.55rem; font-weight: 700; letter-spacing: 1px; display: flex; justify-content: center; align-items: center; cursor: pointer; z-index: 30; transition: 0.3s; pointer-events: auto !important; color: var(--theme-main, #00f0ff); text-shadow: 0 0 5px var(--theme-dim, rgba(0,240,255,0.2)); }
         .opt-oval:hover { color: #fff !important; text-shadow: 0 0 8px #fff !important; }
         .tl .opt-oval { top: 36px; left: 45px; }
         .tr .opt-oval { top: 36px; right: 45px; }
         .bl .opt-oval { bottom: 36px; left: 45px; }
         .br .opt-oval { bottom: 36px; right: 45px; }
-        
-        ${panelColorsCSS}
 
-        .wing-panel { position: absolute; width: 240px; height: 250px; z-index: 15; box-sizing: border-box; top: 50%; transform: translateY(-50%); text-align: center; }
-        .wing-frost { position: absolute; inset: 12px; background: rgba(10, 15, 25, 0.55); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); border-radius: 8px; z-index: -2; box-shadow: inset 0 0 30px rgba(0, 163, 255, 0.2); }
-        .wing-bg { position: absolute; inset: 0; background: url('../assets/wing-panel.png') center/100% 100% no-repeat; z-index: -1; filter: drop-shadow(0 15px 25px rgba(0,0,0,0.6)); }
+        .wing-panel { position: absolute; width: 240px; height: 250px; z-index: 15; box-sizing: border-box; top: 50%; transform: translateY(-50%); text-align: center; pointer-events: none; }
+        .wing-frost { position: absolute; inset: 12px; background: rgba(10, 15, 25, 0.55); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); border-radius: 8px; z-index: -2; box-shadow: inset 0 0 30px var(--theme-dim, rgba(0, 163, 255, 0.2)); }
+        .wing-bg { position: absolute; inset: 0; background: url('assets/wing-panel.png') center/100% 100% no-repeat; z-index: -1; filter: drop-shadow(0 15px 25px rgba(0,0,0,0.6)); }
 
         .wing-l { right: calc(50% + var(--center-gap-x)); }
         .wing-r { left: calc(50% + var(--center-gap-x)); }
@@ -195,16 +124,16 @@ window.injectUniversalUI = function() {
         
         .wing-r .wing-header, .wing-r .wing-data-center, .wing-r .wing-footer { padding-left: 15px; }
 
-        .wing-header { position: absolute; top: 25px; left: 0; width: 100%; z-index: 10; display: flex; justify-content: center; }
-        .wing-data-center { display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; height: 100%; width: 100%; padding: 40px 0; box-sizing: border-box; position: relative; z-index: 10; }
-        .wing-footer { position: absolute; bottom: 20px; left: 0; width: 100%; z-index: 10; display: flex; justify-content: center; }
+        .wing-header { position: absolute; top: 25px; left: 0; width: 100%; z-index: 10; display: flex; justify-content: center; pointer-events: none;}
+        .wing-data-center { display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; height: 100%; width: 100%; padding: 40px 0; box-sizing: border-box; position: relative; z-index: 10; pointer-events: none;}
+        .wing-footer { position: absolute; bottom: 20px; left: 0; width: 100%; z-index: 10; display: flex; justify-content: center; pointer-events: none;}
 
-        .w-head { font-family: 'Orbitron'; font-weight: 600; font-size: 0.75rem; letter-spacing: 3px; padding-left: 3px; color: rgba(255,255,255,0.6); border-bottom: 1px solid var(--theme-dim); padding-bottom: 4px; display: inline-block; z-index: 20; text-align: center; }
+        .w-head { font-family: 'Orbitron'; font-weight: 600; font-size: 0.75rem; letter-spacing: 3px; padding-left: 3px; color: rgba(255,255,255,0.6); border-bottom: 1px solid var(--theme-dim, rgba(0,240,255,0.2)); padding-bottom: 4px; display: inline-block; z-index: 20; text-align: center; }
         .w-lbl { font-family: 'JetBrains Mono'; font-size: 0.55rem; color: var(--starlight); letter-spacing: 1px; padding-left: 1px; text-transform: uppercase; margin-bottom: 2px; z-index: 20; text-align: center; }
         .val-lg { font-family: 'Orbitron'; font-size: 1.2rem; font-weight: 700; letter-spacing: 1px; padding-left: 1px; white-space: nowrap; color: #fff; text-shadow: 0 4px 10px rgba(0,0,0,0.5); z-index: 20; text-align: center; }
         .val-sm { font-family: 'Orbitron'; font-size: 0.85rem; font-weight: 700; z-index: 20; text-align: center; }
-        .fmt-toggle { font-family: 'JetBrains Mono'; font-weight: bold; font-size: 0.5rem; color: ${micColor}; cursor: pointer; border: 1px solid ${micGlow}; padding: 2px 8px; border-radius: 4px; background: rgba(0,0,0,0.6); pointer-events: auto; transition: 0.3s; white-space: nowrap; text-align: center; }
-        .fmt-toggle:hover { background: ${micColor}; color: #000; box-shadow: 0 0 10px ${micColor}; }
+        .fmt-toggle { font-family: 'JetBrains Mono'; font-weight: bold; font-size: 0.5rem; color: var(--theme-main, #00f0ff); cursor: pointer; border: 1px solid var(--theme-dim, rgba(0,240,255,0.2)); padding: 2px 8px; border-radius: 4px; background: rgba(0,0,0,0.6); pointer-events: auto; transition: 0.3s; white-space: nowrap; text-align: center; }
+        .fmt-toggle:hover { background: var(--theme-main, #00f0ff); color: #000; box-shadow: 0 0 10px var(--theme-main, #00f0ff); }
 
         /* --- NAVBAR & SCRUBBER INJECTION --- */
         .q-nav-bar { 
@@ -219,23 +148,24 @@ window.injectUniversalUI = function() {
         .q-nav-btn:hover { border-color: #fff; color: #fff; box-shadow: 0 0 10px rgba(255, 255, 255, 0.3); }
         
         .q-nav-btn.sim-badge { border-color: ${authBorder} !important; color: ${authColor} !important; background: ${authBg} !important; padding-left: 12px; }
+        
         .q-nav-btn.face-btn.active { border-color: var(--chrono-amber) !important; color: var(--chrono-amber) !important; box-shadow: inset 0 0 10px var(--chrono-amber-dim) !important; }
-        .q-nav-btn.bio-btn.active { border-color: var(--bio-purple) !important; color: var(--bio-purple) !important; box-shadow: inset 0 0 10px var(--bio-purple-dim) !important; }
+        .q-nav-btn.bio-btn.active { border-color: var(--bio-purple, #b829ff) !important; color: var(--bio-purple, #b829ff) !important; box-shadow: inset 0 0 10px rgba(184, 41, 255, 0.15) !important; }
         .q-nav-btn.com-btn.active { border-color: var(--gold, #F4D068) !important; color: var(--gold, #F4D068) !important; box-shadow: inset 0 0 10px rgba(244,208,104,0.2) !important; }
         .q-nav-btn.env-btn.active { border-color: var(--env-green, #a7ff83) !important; color: var(--env-green, #a7ff83) !important; box-shadow: inset 0 0 10px rgba(167,255,131,0.2) !important; }
         .q-nav-btn.mec-btn.active { border-color: var(--sys-cyan, #00f0ff) !important; color: var(--sys-cyan, #00f0ff) !important; box-shadow: inset 0 0 10px rgba(0,240,255,0.2) !important; }
 
-        #q-mic-fab-desktop { position: fixed; bottom: 20px; right: 20px; width: 50px; height: 50px; border-radius: 50%; background: rgba(5, 8, 15, 0.9); border: 1px solid ${micColor}; color: ${micColor}; display: flex; justify-content: center; align-items: center; z-index: 100000; box-shadow: 0 0 15px rgba(0,0,0,0.8); cursor: pointer; font-size: 1.2rem; transition: all 0.3s ease; pointer-events: auto !important; }
-        #q-mic-fab-desktop:hover { background: ${micColor}; color: #000; box-shadow: 0 0 20px ${micColor}; }
-        #q-mic-fab-desktop.listening { background: ${micColor}; color: #000; box-shadow: 0 0 20px ${micColor}; animation: pulse-mic-desktop 1.5s infinite; }
-        @keyframes pulse-mic-desktop { 0% { transform: scale(1); box-shadow: 0 0 10px ${micColor}; } 50% { transform: scale(1.1); box-shadow: 0 0 25px ${micColor}; } 100% { transform: scale(1); box-shadow: 0 0 10px ${micColor}; } }
+        #q-mic-fab-desktop { position: fixed; bottom: 20px; right: 20px; width: 50px; height: 50px; border-radius: 50%; background: rgba(5, 8, 15, 0.9); border: 1px solid var(--theme-main, #00f0ff); color: var(--theme-main, #00f0ff); display: flex; justify-content: center; align-items: center; z-index: 100000; box-shadow: 0 0 15px rgba(0,0,0,0.8); cursor: pointer; font-size: 1.2rem; transition: all 0.3s ease; pointer-events: auto !important; }
+        #q-mic-fab-desktop:hover, #q-mic-fab-desktop.listening { background: var(--theme-main, #00f0ff); color: #000; box-shadow: 0 0 20px var(--theme-main, #00f0ff); }
+        #q-mic-fab-desktop.listening { animation: pulse-mic-desktop 1.5s infinite; }
+        @keyframes pulse-mic-desktop { 0% { transform: scale(1); box-shadow: 0 0 10px var(--theme-main, #00f0ff); } 50% { transform: scale(1.1); box-shadow: 0 0 25px var(--theme-main, #00f0ff); } 100% { transform: scale(1); box-shadow: 0 0 10px var(--theme-main, #00f0ff); } }
         
         .q-global-controls { position: fixed; ${isHome ? 'display: none !important;' : 'bottom: calc(2.5vh + 60px);'} left: 50%; transform: translateX(-50%); z-index: 9995; display: flex; align-items: center; gap: 12px; background: rgba(10, 12, 18, 0.95); backdrop-filter: blur(20px); border-radius: 50px; padding: 10px 25px; justify-content: space-between; box-shadow: 0 10px 40px rgba(0,0,0,0.9), 0 0 20px rgba(255,255,255,0.05); border: 1px solid rgba(255, 255, 255, 0.1); pointer-events: auto; }
-        .q-ctrl-btn { background: transparent; border: 1px solid ${osPanelColor}; color: ${osPanelColor}; padding: 8px 14px; cursor: pointer; font-family: 'Orbitron'; font-size: 0.65rem; font-weight: 700; border-radius: 6px; transition: 0.3s; letter-spacing: 1px; padding-left: 15px; white-space: nowrap; pointer-events: auto; }
+        .q-ctrl-btn { background: transparent; border: 1px solid var(--theme-main, #00f0ff); color: var(--theme-main, #00f0ff); padding: 8px 14px; cursor: pointer; font-family: 'Orbitron'; font-size: 0.65rem; font-weight: 700; border-radius: 6px; transition: 0.3s; letter-spacing: 1px; padding-left: 15px; white-space: nowrap; pointer-events: auto; }
         .q-ctrl-btn:hover { background: rgba(255,255,255,0.1); color: #fff; }
-        .q-ctrl-btn.active { background: ${osPanelColor}; color: #000; }
-        .q-scrubber { flex-grow: 1; min-width: 250px; accent-color: ${osPanelColor}; cursor: pointer; height: 4px; -webkit-appearance: none; margin: 0 10px; border-radius: 2px; background: rgba(255,255,255,0.1); pointer-events: auto; }
-        .q-scrubber::-webkit-slider-thumb { -webkit-appearance: none; height: 22px; width: 22px; background: ${osPanelColor}; clip-path: polygon(50% 0%, 60% 40%, 100% 50%, 60% 60%, 50% 100%, 40% 60%, 0% 50%, 40% 40%); cursor: grab; pointer-events: auto; }
+        .q-ctrl-btn.active { background: var(--theme-main, #00f0ff); color: #000; }
+        .q-scrubber { flex-grow: 1; min-width: 250px; accent-color: var(--theme-main, #00f0ff); cursor: pointer; height: 4px; -webkit-appearance: none; margin: 0 10px; border-radius: 2px; background: rgba(255,255,255,0.1); pointer-events: auto; }
+        .q-scrubber::-webkit-slider-thumb { -webkit-appearance: none; height: 22px; width: 22px; background: var(--theme-main, #00f0ff); clip-path: polygon(50% 0%, 60% 40%, 100% 50%, 60% 60%, 50% 100%, 40% 60%, 0% 50%, 40% 40%); cursor: grab; pointer-events: auto; }
         .q-scrubber::-webkit-slider-thumb:active { cursor: grabbing; }
 
         .desktop-only { display: flex !important; }
@@ -251,14 +181,13 @@ window.injectUniversalUI = function() {
             body:not(.telemetry-open) .wing-panel { display: none !important; }
             body:not(.telemetry-open) .corner-panel { display: none !important; }
             
-            /* --- NAVBAR OVERRIDES --- */
             .q-nav-bar { 
                 top: 0px !important; margin-top: 0px !important; left: 0px !important; padding: 0 10px !important; 
                 height: 50px !important; width: 100vw !important; transform: none !important; border-radius: 0 !important; 
                 background: transparent !important; border: none !important; box-shadow: none !important; pointer-events: none !important; 
             }
             .q-nav-bar * { pointer-events: auto !important; }
-            .q-nav-menu .vector-link { display: none !important; } /* Hides redundant links */
+            .q-nav-menu .vector-link { display: none !important; } 
             
             #q-global-sim-badge { font-size: 0.45rem !important; padding: 2px 4px !important; letter-spacing: 0px !important; margin-left: 0 !important; white-space: nowrap; flex-shrink: 0; position: relative; z-index: 100000; pointer-events: auto !important; }
             
@@ -293,7 +222,6 @@ window.injectUniversalUI = function() {
             #mobile-telemetry-viewport .telemetry-node { display: flex !important; position: relative !important; top: auto !important; left: auto !important; right: auto !important; bottom: auto !important; transform: translateZ(0) !important; margin: 0 !important; width: 95vw !important; max-width: 360px !important; min-height: min-content !important; height: auto !important; box-sizing: border-box !important; backface-visibility: hidden !important; visibility: visible !important; flex-shrink: 0 !important; pointer-events: auto !important; opacity: 1 !important; }
             #mobile-telemetry-viewport .wing-panel { display: none !important; }
             
-            /* --- TELEMETRY PANEL OVERRIDES --- */
             #mobile-telemetry-viewport .corner-panel { height: auto !important; min-height: 120px !important; padding: 20px !important; }
             #mobile-telemetry-viewport .panel-bg { display: none !important; } 
             #mobile-telemetry-viewport .frost-zone { inset: 0 !important; border-radius: 8px !important; border: 1px solid rgba(255,255,255,0.1); }
@@ -303,7 +231,6 @@ window.injectUniversalUI = function() {
             
             body.telemetry-open .q-center-dial { display: none !important; }
 
-            /* --- SCRUBBER & MIC BRACKETING --- */
             .q-global-controls { 
                 display: flex !important; 
                 align-items: center !important; 
@@ -327,25 +254,15 @@ window.injectUniversalUI = function() {
                 order: 1 !important; 
                 flex-shrink: 0 !important;
                 background: rgba(5, 8, 15, 0.9);
-                border: 1px solid ${micColor};
-                color: ${micColor};
+                border: 1px solid var(--theme-main, #00f0ff);
+                color: var(--theme-main, #00f0ff);
                 display: flex; justify-content: center; align-items: center;
                 cursor: pointer; transition: all 0.3s ease; pointer-events: auto !important;
             }
-            #q-mic-fab.listening { animation: pulse-mic 1.5s infinite; background: ${micColor}; color: #000; box-shadow: 0 0 25px ${micColor} !important; }
+            #q-mic-fab.listening { animation: pulse-mic 1.5s infinite; background: var(--theme-main, #00f0ff); color: #000; box-shadow: 0 0 25px var(--theme-main, #00f0ff) !important; }
             
-            /* The < button */
             .q-global-controls > .q-ctrl-btn:nth-child(1) { order: 2 !important; padding: 0 8px !important; height: 32px !important; min-width: 24px !important; flex-shrink: 0; }
-            
-            .q-scrubber { 
-                order: 3 !important; 
-                min-width: 0 !important; 
-                width: 100% !important; 
-                margin: 0 !important; 
-                flex-grow: 1 !important;
-            }
-            
-            /* The > button */
+            .q-scrubber { order: 3 !important; min-width: 0 !important; width: 100% !important; margin: 0 !important; flex-grow: 1 !important; }
             .q-global-controls > .q-ctrl-btn:nth-child(3) { order: 4 !important; padding: 0 8px !important; height: 32px !important; min-width: 24px !important; flex-shrink: 0; }
 
             #q-live-toggle {
@@ -364,82 +281,24 @@ window.injectUniversalUI = function() {
 
     const uiContainer = document.createElement('div');
     uiContainer.id = 'q-ui-injected-flag';
-    
-    // Build Corner Panels HTML
-    let panelsHTML = "";
-    if (isHome) {
-        panelsHTML = `
-            <div class="corner-panel tl desktop-only" onclick="location.href='../personal/index.html'">
-                <div class="frost-zone"></div>
-                <div class="panel-bg"></div>
-                <div class="panel-label">PERSONAL QUAD</div>
-            </div>
-            <div class="corner-panel tr desktop-only" onclick="location.href='../commercial/index.html'">
-                <div class="frost-zone"></div>
-                <div class="panel-bg"></div>
-                <div class="panel-label">COMMERCIAL QUAD</div>
-            </div>
-            <div class="corner-panel bl desktop-only" onclick="if(window.Q_OmniPlanner) window.Q_OmniPlanner.openPlanner()">
-                <div class="frost-zone"></div>
-                <div class="panel-bg"></div>
-                <div class="panel-label">OMNI-PLANNER</div>
-            </div>
-            <div class="corner-panel br desktop-only" onclick="if(window.Q_IntegrationHub) window.Q_IntegrationHub.openHub()">
-                <div class="frost-zone"></div>
-                <div class="panel-bg"></div>
-                <div class="panel-label">DASHBOARD</div>
-            </div>
-        `;
-    } else {
-        panelsHTML = `
-            <div class="corner-panel tl telemetry-node desktop-only">
-                <div class="frost-zone"></div>
-                <div class="panel-bg"></div>
-                <div class="opt-oval" onclick="if(window.openSlotRoutingModal) window.openSlotRoutingModal('BIO')">OPT</div>
-                <div class="panel-data-container" id="quad-BIO"></div>
-            </div>
-            <div class="corner-panel tr telemetry-node desktop-only">
-                <div class="frost-zone"></div>
-                <div class="panel-bg"></div>
-                <div class="opt-oval" onclick="if(window.openSlotRoutingModal) window.openSlotRoutingModal('COM')">OPT</div>
-                <div class="panel-data-container" id="quad-COM"></div>
-            </div>
-            <div class="corner-panel bl telemetry-node desktop-only">
-                <div class="frost-zone"></div>
-                <div class="panel-bg"></div>
-                <div class="opt-oval" onclick="if(window.openSlotRoutingModal) window.openSlotRoutingModal('ENV')">OPT</div>
-                <div class="panel-data-container" id="quad-ENV"></div>
-            </div>
-            <div class="corner-panel br telemetry-node desktop-only">
-                <div class="frost-zone"></div>
-                <div class="panel-bg"></div>
-                <div class="opt-oval" onclick="if(window.openSlotRoutingModal) window.openSlotRoutingModal('MEC')">OPT</div>
-                <div class="panel-data-container" id="quad-MEC"></div>
-            </div>
-        `;
-    }
 
+    // THE HOLLOW SHELL: Only injecting empty frames for the local files to target.
     uiContainer.innerHTML = `
         <div class="space-bg"></div>
+        <div class="star-container" id="stars"></div>
         <div class="nebula-left"></div>
         <div class="nebula-right"></div>
         <div class="dust-layer-global"></div>
 
-        <div class="global-header desktop-only">${headerText}</div>
-        ${isHome ? `<div class="global-footer desktop-only">BASED IN SCIENCE BATHED IN CULTURE AND BUILT FOR THE DIGITAL AGE</div>` : ``}
-
         <div class="q-nav-bar">
             <div style="display:flex; width: 100%; justify-content: center; align-items: center;">
                 <div class="q-nav-menu" id="q-nav-menu">
-                    <a href="${isHome ? '#' : '../home/index.html'}" class="q-nav-btn" style="border-color: var(--chrono-amber); color: var(--chrono-amber);" onclick="window.location.href=this.href; return false;">SYSTEM HOME</a>
                     <button id="q-global-sim-badge" class="q-nav-btn sim-badge" style="display: inline-block; border-color:${authBorder} !important; color:${authColor} !important; background:${authBg} !important;" onclick="window.triggerDomainShift(event)">${authText}</button>
-                    <a href="${navPrefix}index.html?v=20.0" class="q-nav-btn face-btn vector-link ${faceActive ? 'active' : ''}" onclick="window.location.href=this.href; return false;">CONTROL CENTER</a>
-                    <a href="${navPrefix}BIOVECHUD.html?v=20.0" class="q-nav-btn bio-btn vector-link ${bActive ? 'active' : ''}" onclick="window.location.href=this.href; return false;">BIOLOGICAL</a>
-                    
-                    <a href="${navPrefix}COMVECHUD.html?v=20.0" class="q-nav-btn com-btn vector-link ${cActive ? 'active' : ''}" onclick="window.location.href=this.href; return false;">COMMUNAL</a>
-                    
-                    <a href="${navPrefix}ENVVECHUD.html?v=20.0" class="q-nav-btn env-btn vector-link ${eActive ? 'active' : ''}" onclick="window.location.href=this.href; return false;">ENVIRONMENTAL</a>
-                    <a href="${navPrefix}MECVECHUD.html?v=20.0" class="q-nav-btn mec-btn vector-link ${mActive ? 'active' : ''}" onclick="window.location.href=this.href; return false;">MECHANICAL</a>
+                    <a href="index.html" class="q-nav-btn face-btn vector-link ${faceActive ? 'active' : ''}" onclick="window.location.href=this.href; return false;">THE APERTURE</a>
+                    <a href="PHYSIOLOGICAL.html" class="q-nav-btn bio-btn vector-link ${bActive ? 'active' : ''}" onclick="window.location.href=this.href; return false;">PHYSIOLOGICAL</a>
+                    <a href="METAPHYSICAL.html" class="q-nav-btn com-btn vector-link ${cActive ? 'active' : ''}" onclick="window.location.href=this.href; return false;">METAPHYSICAL</a>
+                    <a href="METEOROLOGICAL.html" class="q-nav-btn env-btn vector-link ${eActive ? 'active' : ''}" onclick="window.location.href=this.href; return false;">METEOROLOGICAL</a>
+                    <a href="ASTROPHYSICAL.html" class="q-nav-btn mec-btn vector-link ${mActive ? 'active' : ''}" onclick="window.location.href=this.href; return false;">ASTROPHYSICAL</a>
                     <button class="q-nav-btn omni desktop-only" style="border-color: var(--chrono-amber); color: var(--chrono-amber); display: inline-block;" onclick="if(typeof window.Q_OmniPlanner !== 'undefined') window.Q_OmniPlanner.openPlanner()">[ OMNI-PLANNER ]</button>
                     <button class="q-nav-btn special desktop-only" style="border-color: var(--chrono-amber); color: var(--chrono-amber); display: inline-block;" onclick="if(typeof window.Q_IntegrationHub !== 'undefined') window.Q_IntegrationHub.openHub()">[ DASHBOARD ]</button>
                 </div>
@@ -460,25 +319,25 @@ window.injectUniversalUI = function() {
                 <svg id="tele-icon" viewBox="0 0 24 24" width="22" height="22" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"><path d="M18 20V10M12 20V4M6 20v-6"/></svg>
                 <span class="strip-lbl">DATA</span>
             </button>
-            <a href="${navPrefix}BIOVECHUD.html?v=20.0" class="strip-btn bio-strip ${bActive ? 'active' : ''}" onclick="window.location.href=this.href; return false;">
+            <a href="PHYSIOLOGICAL.html" class="strip-btn bio-strip ${bActive ? 'active' : ''}" onclick="window.location.href=this.href; return false;">
                 <svg viewBox="0 0 24 24" width="22" height="22" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
-                <span class="strip-lbl">BIO</span>
+                <span class="strip-lbl">PHY</span>
             </a>
-            <a href="${navPrefix}COMVECHUD.html?v=20.0" class="strip-btn com-strip ${cActive ? 'active' : ''}" onclick="window.location.href=this.href; return false;">
+            <a href="METAPHYSICAL.html" class="strip-btn com-strip ${cActive ? 'active' : ''}" onclick="window.location.href=this.href; return false;">
                 <svg viewBox="0 0 24 24" width="22" height="22" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"><circle cx="12" cy="5" r="3"/><line x1="12" y1="8" x2="12" y2="16"/><circle cx="6" cy="20" r="3"/><circle cx="18" cy="20" r="3"/><line x1="12" y1="16" x2="6" y2="17"/><line x1="12" y1="16" x2="18" y2="17"/></svg>
-                <span class="strip-lbl">COM</span>
+                <span class="strip-lbl">MET</span>
             </a>
-            <a href="${navPrefix}index.html?v=20.0" class="strip-btn face-strip ${faceActive ? 'active' : ''}" onclick="window.location.href=this.href; return false;">
+            <a href="index.html" class="strip-btn face-strip ${faceActive ? 'active' : ''}" onclick="window.location.href=this.href; return false;">
                 <svg viewBox="0 0 24 24" width="22" height="22" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>
-                <span class="strip-lbl">CTRL</span>
+                <span class="strip-lbl">APT</span>
             </a>
-            <a href="${navPrefix}ENVVECHUD.html?v=20.0" class="strip-btn env-strip ${eActive ? 'active' : ''}" onclick="window.location.href=this.href; return false;">
+            <a href="METEOROLOGICAL.html" class="strip-btn env-strip ${eActive ? 'active' : ''}" onclick="window.location.href=this.href; return false;">
                 <svg viewBox="0 0 24 24" width="22" height="22" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"><path d="M2 22h20L12 2z"/></svg>
-                <span class="strip-lbl">ENV</span>
+                <span class="strip-lbl">MTR</span>
             </a>
-            <a href="${navPrefix}MECVECHUD.html?v=20.0" class="strip-btn mec-strip ${mActive ? 'active' : ''}" onclick="window.location.href=this.href; return false;">
-                <svg viewBox="0 0 24 24" width="22" height="22" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
-                <span class="strip-lbl">MEC</span>
+            <a href="ASTROPHYSICAL.html" class="strip-btn mec-strip ${mActive ? 'active' : ''}" onclick="window.location.href=this.href; return false;">
+                <svg viewBox="0 0 24 24" width="22" height="22" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+                <span class="strip-lbl">AST</span>
             </a>
             <button class="strip-btn" onclick="if(typeof window.Q_OmniPlanner !== 'undefined') window.Q_OmniPlanner.openPlanner()">
                 <svg viewBox="0 0 24 24" width="22" height="22" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="9" y1="21" x2="9" y2="9"/></svg>
@@ -489,7 +348,30 @@ window.injectUniversalUI = function() {
         <button id="q-mic-fab" class="mobile-only-flex" onclick="if(window.Q_KairosVoice) window.Q_KairosVoice.toggle()">🎙</button>
         <button id="q-mic-fab-desktop" class="desktop-only" onclick="if(window.Q_KairosVoice) window.Q_KairosVoice.toggle()">🎙</button>
 
-        ${panelsHTML}
+        <div class="corner-panel tl telemetry-node desktop-only">
+            <div class="frost-zone"></div>
+            <div class="panel-bg"></div>
+            <div class="opt-oval" id="opt-tl">OPT</div>
+            <div class="panel-data-container" id="quad-tl"></div>
+        </div>
+        <div class="corner-panel tr telemetry-node desktop-only">
+            <div class="frost-zone"></div>
+            <div class="panel-bg"></div>
+            <div class="opt-oval" id="opt-tr">OPT</div>
+            <div class="panel-data-container" id="quad-tr"></div>
+        </div>
+        <div class="corner-panel bl telemetry-node desktop-only">
+            <div class="frost-zone"></div>
+            <div class="panel-bg"></div>
+            <div class="opt-oval" id="opt-bl">OPT</div>
+            <div class="panel-data-container" id="quad-bl"></div>
+        </div>
+        <div class="corner-panel br telemetry-node desktop-only">
+            <div class="frost-zone"></div>
+            <div class="panel-bg"></div>
+            <div class="opt-oval" id="opt-br">OPT</div>
+            <div class="panel-data-container" id="quad-br"></div>
+        </div>
 
         <div class="wing-panel wing-l telemetry-node" id="q-wing-left">
             <div class="wing-frost"></div>
@@ -500,18 +382,18 @@ window.injectUniversalUI = function() {
             <div class="wing-data-center">
                 <div style="margin-bottom: 15px;">
                     <div class="w-lbl">DATE</div>
-                    <div class="val-lg" id="leg-date" style="color: ${osPanelColor}; text-shadow: 0 0 10px ${osPanelGlow};">--</div>
+                    <div class="val-lg" id="leg-date" style="color: var(--theme-main, #00f0ff); text-shadow: 0 0 10px var(--theme-dim, rgba(0,240,255,0.2));">--</div>
                 </div>
                 <div>
                     <div style="display:flex; align-items:center; justify-content:center; gap: 5px;">
                         <div class="w-lbl" style="margin:0;">TIME</div>
-                        <div class="fmt-toggle" onclick="window.toggleTimeFmt('fmt-btn')" id="fmt-btn" style="border-color:${osPanelColor}; color:${osPanelColor};">UTC</div>
+                        <div class="fmt-toggle" onclick="window.toggleTimeFmt('fmt-btn')" id="fmt-btn">UTC</div>
                     </div>
-                    <div class="val-lg" id="leg-time" style="color: ${osPanelColor}; text-shadow: 0 0 10px ${osPanelGlow};">--</div>
+                    <div class="val-lg" id="leg-time" style="color: var(--theme-main, #00f0ff); text-shadow: 0 0 10px var(--theme-dim, rgba(0,240,255,0.2));">--</div>
                 </div>
             </div>
             <div class="wing-footer">
-                <div style="font-size:0.5rem; color:var(--starlight); border-top: 1px dashed ${osPanelGlow}; padding-top: 8px; width: 85%; margin: 0 auto;">STATUS: CONTINUITY ACTIVE</div>
+                <div style="font-size:0.5rem; color:var(--starlight); border-top: 1px dashed var(--theme-dim, rgba(0,240,255,0.2)); padding-top: 8px; width: 85%; margin: 0 auto;">STATUS: CONTINUITY ACTIVE</div>
             </div>
         </div>
 
@@ -524,21 +406,21 @@ window.injectUniversalUI = function() {
             <div class="wing-data-center">
                 <div style="margin-bottom: 15px;">
                     <div class="w-lbl">Q COORDINATE</div>
-                    <div class="val-lg" id="q-coord-wing" style="margin-top: 4px; color: ${osPanelColor}; text-shadow: 0 0 10px ${osPanelGlow};">--</div>
+                    <div class="val-lg" id="q-coord-wing" style="margin-top: 4px; color: var(--theme-main, #00f0ff); text-shadow: 0 0 10px var(--theme-dim, rgba(0,240,255,0.2));">--</div>
                 </div>
                 <div style="display:flex; width: 100%; justify-content: space-around;">
                     <div style="display:flex; flex-direction:column; align-items:center;">
                         <div class="w-lbl">MEAN CIRCLE (CIVIL)</div>
-                        <div class="val-sm" id="mean-deg" style="color:${osPanelColor} !important; text-shadow:0 0 10px ${osPanelGlow}; margin-top: 4px;">--</div>
+                        <div class="val-sm" id="mean-deg" style="color:var(--theme-main, #00f0ff) !important; text-shadow:0 0 10px var(--theme-dim, rgba(0,240,255,0.2)); margin-top: 4px;">--</div>
                     </div>
                     <div style="display:flex; flex-direction:column; align-items:center;">
                         <div class="w-lbl">TRUE ELLIPSE (PHYSICS)</div>
-                        <div class="val-sm" id="true-deg" style="color:${osPanelColor} !important; text-shadow:0 0 10px ${osPanelGlow}; margin-top: 4px;">--</div>
+                        <div class="val-sm" id="true-deg" style="color:var(--theme-main, #00f0ff) !important; text-shadow:0 0 10px var(--theme-dim, rgba(0,240,255,0.2)); margin-top: 4px;">--</div>
                     </div>
                 </div>
             </div>
             <div class="wing-footer">
-                <div style="font-size:0.5rem; color:var(--starlight); border-top: 1px dashed ${osPanelGlow}; padding-top: 8px; width: 85%; margin: 0 auto;">DUAL-STATE ENGINE</div>
+                <div style="font-size:0.5rem; color:var(--starlight); border-top: 1px dashed var(--theme-dim, rgba(0,240,255,0.2)); padding-top: 8px; width: 85%; margin: 0 auto;">DUAL-STATE ENGINE</div>
             </div>
         </div>
 
@@ -576,7 +458,6 @@ window.injectUniversalUI = function() {
                 return out;
             }
 
-            // --- CRITICAL FIX: Strip Z and LCL for mobile ribbon to prevent visual crowding ---
             let cleanTimeStr = e.detail.legacyTimeStr.replace(/Z|LCL/gi, '').trim();
             ribbonLeg.innerHTML = formatDualColorMobile(cleanTimeStr);
             
@@ -599,7 +480,7 @@ window.injectUniversalUI = function() {
 
         function formatDualColorWing(str) {
             const letterStyle = "color:var(--starlight); font-family:'Orbitron'; font-size:0.8rem; margin-right:2px;";
-            const numStyle = `color:${osPanelColor}; font-size:1.1rem; font-weight:bold;`;
+            const numStyle = `color:var(--theme-main, #00f0ff); font-size:1.1rem; font-weight:bold;`;
             let out = "";
             let tokens = str.match(/([0-9]+)|([^0-9]+)/g);
             if (tokens) {
@@ -609,7 +490,7 @@ window.injectUniversalUI = function() {
         }
 
         const legDateEl = document.getElementById('leg-date');
-        if (legDateEl) legDateEl.innerHTML = `<span style="color:${osPanelColor}; font-weight:bold; text-shadow:0 0 10px ${osPanelGlow};">${e.detail.legacyDateStr.toUpperCase()}</span>`;
+        if (legDateEl) legDateEl.innerHTML = `<span style="color:var(--theme-main, #00f0ff); font-weight:bold; text-shadow:0 0 10px var(--theme-dim, rgba(0,240,255,0.2));">${e.detail.legacyDateStr.toUpperCase()}</span>`;
 
         const legTimeEl = document.getElementById('leg-time');
         if (legTimeEl) legTimeEl.innerHTML = formatDualColorWing(e.detail.legacyTimeStr);
@@ -625,18 +506,99 @@ window.injectUniversalUI = function() {
         
         if (qCoordWing) {
             if (activeBlock && activeBlock.type === 'ANCHOR') {
-                qCoordWing.innerHTML = `<span style="font-size:0.9rem; color:${osPanelColor}; font-family:'Orbitron'; font-weight:bold;">${activeBlock.name}</span>`;
+                qCoordWing.innerHTML = `<span style="font-size:0.9rem; color:var(--theme-main, #00f0ff); font-family:'Orbitron'; font-weight:bold;">${activeBlock.name}</span>`;
             } else {
-                qCoordWing.innerHTML = `<span style="color:var(--starlight); font-family:'Orbitron'; font-size:0.8rem;">QC</span><span style="color:${osPanelColor}; font-size:1.1rem; font-weight:bold;">${activeBlock ? activeBlock.cycle : 0}</span> ` +
-                                       `<span style="color:var(--starlight); font-family:'Orbitron'; font-size:0.8rem; margin-left:6px;">Q</span><span style="color:${osPanelColor}; font-size:1.1rem; font-weight:bold;">${e.detail.qData.quad}</span> ` +
-                                       `<span style="color:var(--starlight); font-family:'Orbitron'; font-size:0.8rem; margin-left:6px;">S</span><span style="color:${osPanelColor}; font-size:1.1rem; font-weight:bold;">${e.detail.qData.sect}</span> ` +
-                                       `<span style="color:var(--starlight); font-family:'Orbitron'; font-size:0.8rem; margin-left:6px;">DAY</span><span style="color:${osPanelColor}; font-size:1.1rem; font-weight:bold;">${e.detail.qData.day}</span>`;
+                qCoordWing.innerHTML = `<span style="color:var(--starlight); font-family:'Orbitron'; font-size:0.8rem;">QC</span><span style="color:var(--theme-main, #00f0ff); font-size:1.1rem; font-weight:bold;">${activeBlock ? activeBlock.cycle : 0}</span> ` +
+                                       `<span style="color:var(--starlight); font-family:'Orbitron'; font-size:0.8rem; margin-left:6px;">Q</span><span style="color:var(--theme-main, #00f0ff); font-size:1.1rem; font-weight:bold;">${e.detail.qData.quad}</span> ` +
+                                       `<span style="color:var(--starlight); font-family:'Orbitron'; font-size:0.8rem; margin-left:6px;">S</span><span style="color:var(--theme-main, #00f0ff); font-size:1.1rem; font-weight:bold;">${e.detail.qData.sect}</span> ` +
+                                       `<span style="color:var(--starlight); font-family:'Orbitron'; font-size:0.8rem; margin-left:6px;">DAY</span><span style="color:var(--theme-main, #00f0ff); font-size:1.1rem; font-weight:bold;">${e.detail.qData.day}</span>`;
             }
         }
     });
+
+    // --- DECOUPLED MOUNT EVENT DISPATCH ---
+    // Signals to local HTML files that the hollow frames are ready for data injection.
+    window.dispatchEvent(new Event('q-ui-mounted'));
 };
 
-// --- DOMAIN SHIFT PROTOCOL (PERSONAL) ---
+// Global Tax Day Deselection Interceptor
+window.addEventListener('click', (e) => {
+    let el = e.target;
+    if (el && el.id === 'q-modal-btn' && document.getElementById('btn-sys')) {
+        const sysActive = document.getElementById('btn-sys').classList.contains('active');
+        if (!sysActive) {
+            window.SYS_DB = [];
+        } else {
+            window.SYS_DB = [ { name: "Tax Day (US)", coord: 113.4, type: 'node-sys', glyph: '$' } ];
+        }
+    }
+});
+
+// --- GLOBAL ROUTING INTERCEPTOR ---
+window.addEventListener('click', (e) => {
+    try {
+        let el = e.target;
+        if (el && el.nodeType === Node.TEXT_NODE) el = el.parentNode;
+        if (!el || typeof el.closest !== 'function') return;
+
+        if (el.closest('.q-hub-overlay') || el.closest('.modal-overlay') || el.closest('.q-planner-overlay') || el.closest('.opt-oval') || el.id === 'btn-return-home') {
+            return; 
+        }
+
+        let targetUrl = null;
+        let depth = 0;
+        let checkEl = el;
+
+        while (checkEl && depth < 5 && checkEl !== document.body) {
+            const text = (checkEl.textContent || '').trim().toLowerCase();
+            const onClickStr = (checkEl.getAttribute && checkEl.getAttribute('onclick') || '').toLowerCase();
+            const hrefStr = (checkEl.getAttribute && checkEl.getAttribute('href') || '').toLowerCase();
+            const dataTarget = (checkEl.getAttribute && checkEl.getAttribute('data-target') || '').toLowerCase();
+            const dataRoute = (checkEl.getAttribute && checkEl.getAttribute('data-route') || '').toLowerCase();
+
+            let isShortText = text.length > 0 && text.length < 40;
+
+            if (dataTarget === 'dashboard' || dataRoute === 'dashboard' || hrefStr.includes('dashboard') || onClickStr.includes('dashboard') || (isShortText && text.includes('dashboard'))) {
+                e.preventDefault(); e.stopPropagation();
+                if (window.Q_IntegrationHub && typeof window.Q_IntegrationHub.openHub === 'function') window.Q_IntegrationHub.openHub();
+                return; 
+            }
+
+            if (dataTarget === 'planner' || dataRoute === 'planner' || hrefStr.includes('planner') || onClickStr.includes('planner') || (isShortText && text.includes('omni-planner')) || (isShortText && text.includes('omni planner'))) {
+                e.preventDefault(); e.stopPropagation();
+                if (window.Q_OmniPlanner && typeof window.Q_OmniPlanner.openPlanner === 'function') window.Q_OmniPlanner.openPlanner();
+                return; 
+            }
+
+            if (dataTarget.includes('physiological') || dataRoute.includes('physiological') || hrefStr.includes('physiological') || onClickStr.includes('physiological') || (isShortText && text.includes('physiological'))) {
+                targetUrl = 'PHYSIOLOGICAL.html'; break;
+            } else if (dataTarget.includes('metaphysical') || dataRoute.includes('metaphysical') || hrefStr.includes('metaphysical') || onClickStr.includes('metaphysical') || (isShortText && text.includes('metaphysical'))) {
+                targetUrl = 'METAPHYSICAL.html'; break;
+            } else if (dataTarget.includes('meteorological') || dataRoute.includes('meteorological') || hrefStr.includes('meteorological') || onClickStr.includes('meteorological') || (isShortText && text.includes('meteorological'))) {
+                targetUrl = 'METEOROLOGICAL.html'; break;
+            } else if (dataTarget.includes('astrophysical') || dataRoute.includes('astrophysical') || hrefStr.includes('astrophysical') || onClickStr.includes('astrophysical') || (isShortText && text.includes('astrophysical'))) {
+                targetUrl = 'ASTROPHYSICAL.html'; break;
+            } else if (dataTarget.includes('aperture') || dataRoute.includes('aperture') || hrefStr.includes('index') || onClickStr.includes('aperture') || (isShortText && text.includes('aperture'))) {
+                targetUrl = 'index.html'; break;
+            }
+
+            checkEl = checkEl.parentElement;
+            depth++;
+        }
+
+        if (targetUrl) {
+            e.preventDefault(); e.stopPropagation(); 
+            if (typeof window.executeHomeSequence === 'function') {
+                window.executeHomeSequence(targetUrl);
+            } else {
+                window.location.href = targetUrl;
+            }
+        }
+    } catch (err) {
+        console.error("Q-OS Routing Intercept Failed:", err);
+    }
+}, true);
+
 window.triggerDomainShift = function(e) {
     if(e && typeof e.preventDefault === 'function') e.preventDefault();
     let authState = localStorage.getItem('Q_PRO_AUTH') === 'true' ? 'ACTIVE' : 'STANDBY';
@@ -646,40 +608,8 @@ window.triggerDomainShift = function(e) {
         else alert("OAuth Service Unavailable. Boot from System Home Gateway.");
         return;
     }
-
-    let rawEnt = localStorage.getItem('Q_ENTITLEMENTS');
-    let entitlements = [];
-    try { entitlements = JSON.parse(rawEnt) || []; } catch(err) {}
-
-    let authUser = localStorage.getItem('Q_PRO_USER') || 'GUEST';
-    let isLocalEnv = (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' || window.location.protocol === 'file:');
     
-    if (isLocalEnv || authUser.toUpperCase().includes('KELBY') || authUser.toUpperCase().includes('MASTER') || localStorage.getItem('Q_ARCHITECT_MODE') === 'TRUE') {
-        if (!entitlements.includes("PERSONAL")) entitlements.push("PERSONAL");
-        if (!entitlements.includes("COMMERCIAL")) entitlements.push("COMMERCIAL");
-        if (!entitlements.includes("ENTERPRISE")) entitlements.push("ENTERPRISE");
-        localStorage.setItem('Q_ENTITLEMENTS', JSON.stringify(entitlements));
-    }
-
-    if(entitlements.includes("PERSONAL") && entitlements.includes("COMMERCIAL")) {
-        const html = `
-            <div style="font-family:'JetBrains Mono'; font-size:0.7rem; color:#aaa; margin-bottom: 15px; text-align:center;">
-                Dual entitlements detected. Select operating domain.
-            </div>
-            <div style="display:flex; flex-direction:column; gap:10px;">
-                <button onclick="if(window.Q_ModalEngine) window.Q_ModalEngine.close()" style="padding: 15px; background: rgba(0,0,0,0.8); border: 1px solid #F4D068; color: #F4D068; font-family: 'Orbitron'; font-size: 0.9rem; cursor: pointer; border-radius: 4px; box-shadow: 0 0 15px rgba(244,208,104,0.4);">
-                    REMAIN IN PERSONAL MATRIX
-                </button>
-                <button onclick="window.location.href='../commercial/index.html'" style="padding: 15px; background: rgba(0,0,0,0.8); border: 1px solid #ffffff; color: #ffffff; font-family: 'Orbitron'; font-size: 0.9rem; cursor: pointer; border-radius: 4px; box-shadow: 0 0 15px rgba(255,255,255,0.2);">
-                    SWITCH TO ENTERPRISE LEDGER
-                </button>
-            </div>
-        `;
-        if(window.Q_ModalEngine) window.Q_ModalEngine.render('DOMAIN SHIFT PROTOCOL', html);
-        else alert("Routing Module Unavailable.");
-    } else {
-        if(window.Q_Auth && typeof window.Q_Auth.triggerOAuth === 'function') window.Q_Auth.triggerOAuth(); 
-    }
+    if(window.Q_Auth && typeof window.Q_Auth.triggerOAuth === 'function') window.Q_Auth.triggerOAuth(); 
 };
 
 window.toggleTimeFmt = function(btnId) {
@@ -695,7 +625,6 @@ window.toggleTimeFmt = function(btnId) {
     });
     
     if (window.Q_MobileBridge) window.Q_MobileBridge.pulse('LIGHT');
-    if (window.Q_LOG) window.Q_LOG('INFO', 'INTERFACE', 'TIME_FORMAT_TOGGLED', { format: newFmt });
 };
 
 window.toggleTelemetry = function() {
@@ -722,33 +651,6 @@ window.toggleTelemetry = function() {
         }
     }
     if(window.Q_MobileBridge) window.Q_MobileBridge.pulse('LIGHT');
-};
-
-window.openQuadrantAssignmentModal = function(quadrantId) {
-    const html = `
-        <div style="display:flex; flex-direction:column; gap:12px;">
-            <div style="font-size:0.65rem; color:#aaa; font-family:'JetBrains Mono'; text-align:center;">
-                Assign a distinct telemetry pool to this sector of the Control Center.
-            </div>
-            <select id="quad-pool-select" style="background: rgba(0,0,0,0.8); border: 1px solid var(--theme-main, #00f0ff); color: #fff; padding: 12px; font-family: 'Orbitron'; font-size: 0.75rem; border-radius: 4px; outline: none; width: 100%;">
-                <option value="BIO">BIOLOGICAL VECTOR</option>
-                <option value="COM">COMMUNAL VECTOR</option>
-                <option value="ENV">ENVIRONMENTAL VECTOR</option>
-                <option value="MEC">MECHANICAL VECTOR</option>
-            </select>
-        </div>
-    `;
-    
-    if (window.Q_ModalEngine) {
-        window.Q_ModalEngine.render('DYNAMIC ROUTING: ASSIGN POOL', html, 'LOCK ASSIGNMENT', () => {
-            const selected = document.getElementById('quad-pool-select').value;
-            localStorage.setItem('Q_FACE_QUAD_' + quadrantId, selected);
-            if(window.Q_LOG) window.Q_LOG('STATE', 'INTERFACE', 'CONTROL_CENTER_QUADRANT_REASSIGNED', { quadrant: quadrantId, pool: selected });
-            if (typeof window.refreshControlCenter === 'function') window.refreshControlCenter();
-            window.Q_ModalEngine.close();
-            if(window.Q_MobileBridge) window.Q_MobileBridge.pulse('LIGHT');
-        });
-    }
 };
 
 window.generateStars = function(containerId) {
@@ -893,8 +795,9 @@ window.syncScrubberUI = function() {
 
 window.addEventListener('DOMContentLoaded', () => {
     window.injectUniversalUI();
+    // Fire global star generation now that the universal #stars container is mounted
+    if (window.generateStars) window.generateStars('stars');
 
-    // Relocate the Mic to the Scrubber Panel for Mobile Bracketing
     if (window.innerWidth <= 950) {
         const micFab = document.getElementById('q-mic-fab');
         const controlsPanel = document.getElementById('q-universal-controls');

@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>THE QUADRATURE // ASTROPHYSICAL VECTOR</title>
+    
+    <script src="q-ui.js"></script>
+    <script src="q-core.js"></script>
+    <script src="q-planner.js"></script>
+    <script src="q-hub.js"></script>
+    <script src="q-astrophysical.js?v=22.8"></script>
+    
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;800;900&family=JetBrains+Mono:wght@100;400;700;800&display=swap');
+
+        :root {
+            --void: #030406; --core-plat: #e2e8f0; --core-dim: rgba(226, 232, 240, 0.15); --core-glow: rgba(226, 232, 240, 0.4);
+            --cyan-glow: #00f0ff; --cyan-dim: rgba(0, 240, 255, 0.2); --cyan-dark: #0088aa;
+            --magenta-glow: #ff003c; --magenta-dim: rgba(255, 0, 60, 0.2); --magenta-dark: #880020;
+            --titanium: #334155; --carbon: #0f172a; --steel: #64748b;
+            --blur-heavy: blur(20px);
+            --theme-main: var(--cyan-glow); --theme-dim: var(--cyan-dim); --gold: #F4D068;
+            --starlight: rgba(255, 255, 255, 0.6);
+            
+            /* Dynamic variables updated via JS */
+            --dyn-phase-color: var(--magenta-glow);
+            --dyn-phase-dim: var(--magenta-dim);
+        }
+
+        body { margin: 0; padding: 0; height: 100vh; width: 100vw; overflow: hidden; background-color: var(--void); background: radial-gradient(circle at center, #0a0f1a 0%, var(--void) 85%); color: var(--core-plat); font-family: 'JetBrains Mono', monospace; display: flex; justify-content: center; align-items: center; user-select: none; color-scheme: dark; perspective: 1500px; transform-style: preserve-3d; touch-action: manipulation; }
+        
+        /* --- HAPTIC & MODAL Z-INDEX OVERRIDES --- */
+        #q-universal-modal { z-index: 999999 !important; }
+        .radar-box, .opt-btn, .globe, .fmt-toggle { pointer-events: auto !important; position: relative; z-index: 100 !important; }
+
+        .matrix-layer { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 2; background-image: linear-gradient(rgba(0, 240, 255, 0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(0, 240, 255, 0.03) 1px, transparent 1px); background-size: 40px 40px; pointer-events: none; }
+        #stars { z-index: 1; }
+
+        .global-header {
+            position: absolute; top: 4vh; left: 0; width: 100vw;
+            display: flex; justify-content: center; align-items: center; text-align: center;
+            font-family: 'Courier New', Courier, monospace; font-weight: 900; font-size: 2.8rem; letter-spacing: 16px; padding-left: 16px;
+            color: var(--theme-main); z-index: 50; pointer-events: none;
+            text-shadow: 0 0 15px var(--theme-dim), 0 0 5px rgba(255, 255, 255, 0.5);
+        }
+
+        /* Headers bound strictly to the 280px text wrapper edge, shifted outwards by 1 character (8px) */
+        .v-head { 
+            position: absolute; white-space: nowrap;
+            font-family: 'Orbitron'; font-weight: 900; font-size: 0.75rem; letter-spacing: 2px; 
+            margin: 0; padding: 0; z-index: 25; border: none;
+            color: var(--theme-main);
+            text-shadow: 0 0 10px var(--theme-dim);
+            transition: color 0.3s, text-shadow 0.3s;
+        }
+        
+        /* Top Panels: Headers tight BELOW the frame */
+        #quad-BIO .v-head, #quad-tl .v-head { bottom: -16px; right: 0; text-align: right; transform: translateX(8px); }
+        #quad-COM .v-head, #quad-tr .v-head { bottom: -16px; left: 0; text-align: left; transform: translateX(-8px); }
+        
+        /* Bottom Panels: Headers tight ABOVE the frame */
+        #quad-ENV .v-head, #quad-bl .v-head { top: -16px; right: 0; text-align: right; transform: translateX(8px); }
+        #quad-MEC .v-head, #quad-br .v-head { top: -16px; left: 0; text-align: left; transform: translateX(-8px); }
+
+        /* Override global OPT positioning for the OPT Tags to center them in the frame rings */
+        .tl .opt-oval { left: 50px !important; top: 42px !important; font-size: 0.55rem !important; pointer-events: auto !important; letter-spacing: 1px !important; cursor:pointer;}
+        .tr .opt-oval { right: 50px !important; top: 42px !important; font-size: 0.55rem !important; pointer-events: auto !important; letter-spacing: 1px !important; cursor:pointer;}
+        .bl .opt-oval { left: 50px !important; bottom: 42px !important; font-size: 0.55rem !important; pointer-events: auto !important; letter-spacing: 1px !important; cursor:pointer;}
+        .br .opt-oval { right: 50px !important; bottom: 42px !important; font-size: 0.55rem !important; pointer-events: auto !important; letter-spacing: 1px !important; cursor:pointer;}
+
+        .t-row { display: flex; justify-content: space-between; width: 100%; font-size: 0.55rem; font-family: 'JetBrains Mono'; font-weight: 700; align-items: center;}
+        .t-row span:first-child { color: var(--steel); text-shadow: none; text-align: left; flex-shrink: 0; text-transform: uppercase; }
+
+        .val-sm { font-family: 'Orbitron'; font-weight: 900; font-size: 0.6rem; z-index: 20; text-align: right; white-space: nowrap; color: var(--theme-main); text-shadow: 0 0 8px var(--theme-dim); text-transform: uppercase; }
+
+        .panel-data-wrapper { position: relative; width: 280px; height: 100%; display: flex; flex-direction: column; justify-content: center; gap: 4px; margin: 0 auto; z-index: 20; }
+        
+        .val-display { background: rgba(0,0,0,0.8); border: 1px solid var(--titanium); padding: 4px 8px; border-radius: 4px; box-shadow: inset 0 0 15px rgba(0,0,0,0.9); margin-bottom: 2px; }
+
+        .respiration-wave { position: absolute; width: 200%; height: 100%; transition: background 1s ease, border 1s ease; left: 0; }
+        @keyframes wave-shift { 0% { transform: translateX(0); } 100% { transform: translateX(-50px); } }
+
+        .radar-box { width: 100%; height: 2.5vh; min-height: 20px; background: rgba(0,0,0,0.8); border: 1px solid var(--titanium); border-radius: 4px; position: relative; overflow: hidden; display: flex; justify-content: center; align-items: center; box-shadow: inset 0 0 15px rgba(0,240,255,0.1); cursor: pointer; transition: 0.3s; }
+        .radar-box:hover { border-color: var(--cyan-glow); box-shadow: inset 0 0 20px rgba(0,240,255,0.3), 0 0 15px var(--cyan-dim); }
+        .radar-sweep { position: absolute; top: 0; left: -100%; width: 50%; height: 100%; background: linear-gradient(90deg, transparent, rgba(0, 240, 255, 0.4)); animation: sweep 2.5s linear infinite; }
+        .radar-text { font-family: 'Orbitron'; font-size: 0.55rem; font-weight: 900; color: var(--core-plat); z-index: 2; text-shadow: 0 0 5px #000; }
+        @keyframes sweep { 0% { left: -100%; } 100% { left: 200%; } }
+
+        .variance-container { width: 100%; height: 2vh; min-height: 16px; background: #000; border: 1px inset var(--titanium); position: relative; overflow: hidden; display: flex; align-items: center; }
+        .variance-wave { position: absolute; height: 100%; width: 200%; background: repeating-linear-gradient(45deg, transparent, transparent 5px, rgba(0, 240, 255, 0.4) 5px, rgba(0, 240, 255, 0.4) 10px); transition: opacity 0.3s; animation: variance-shift 0.5s linear infinite; }
+        .variance-val { font-family: 'JetBrains Mono'; font-size: 0.55rem; color: #fff; width: 100%; text-align: center; z-index: 2; text-shadow: 0 0 5px #000; font-weight: bold; }
+        @keyframes variance-shift { 0% { transform: translateX(0); } 100% { transform: translateX(-50px); } }
+        
+        #needle-hud { position: absolute; top: 12vh; left: 50%; transform: translateX(-50%); background: rgba(15, 23, 42, 0.9); border: 1px solid var(--titanium); padding: 8px 18px; font-family: 'Orbitron'; font-size: 0.75rem; font-weight: bold; border-radius: 4px; box-shadow: 0 0 20px rgba(0,0,0,0.8); z-index: 100; opacity: 0; transition: opacity 0.3s ease, border-color 0.3s ease; text-align: center; pointer-events: none; letter-spacing: 1px; color: #fff; }
+
+        .gearbox { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: var(--dial-size); height: var(--dial-size); display: flex; justify-content: center; align-items: center; z-index: 5; }
+        .gear { position: absolute; border-radius: 50%; display: flex; justify-content: center; align-items: center; }
+        .gear-outer { width: 100%; height: 100%; border: 2px solid var(--titanium); background: rgba(15, 23, 42, 0.3); backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px); border-radius: 50%; box-shadow: inset 0 0 40px rgba(0,240,255,0.05), 0 0 40px rgba(0,240,255,0.05); }
+        .gear-outer::before { content: ''; position: absolute; top: -6px; left: -6px; right: -6px; bottom: -6px; border-radius: 50%; border: 1px dashed var(--cyan-glow); opacity: 0.4; animation: spin-slow 120s linear infinite reverse; }
+
+        .orbital-marker { position: absolute; width: 14px; height: 14px; border-radius: 50%; z-index: 35; cursor: help; pointer-events: auto; }
+        .marker-peri { background: var(--magenta-glow); box-shadow: 0 0 20px var(--magenta-glow), 0 0 10px #fff; top: 50%; left: 50%; transform: translate(-50%, -50%) rotateZ(14deg) translateY(calc(var(--dial-size) / -2)); }
+        .marker-aph { background: var(--cyan-glow); box-shadow: 0 0 20px var(--cyan-glow), 0 0 10px #fff; top: 50%; left: 50%; transform: translate(-50%, -50%) rotateZ(194deg) translateY(calc(var(--dial-size) / -2)); }
+
+        .globe { position: absolute; width: 2.2vh; height: 2.2vh; min-width: 22px; min-height: 22px; background: var(--carbon); border: 2px solid var(--core-plat); margin-top: calc(-1.1vh - 2px); margin-left: calc(-1.1vh - 2px); z-index: 10; display: flex; justify-content: center; align-items: center; box-shadow: 0 0 15px rgba(0,0,0,0.8); cursor: pointer; transition: 0.2s; pointer-events: auto; }
+        .globe:hover { box-shadow: 0 0 20px var(--cyan-glow); border-color: #fff; z-index: 30; }
+        .globe::before { content: ''; width: 40%; height: 40%; background: var(--core-plat); box-shadow: 0 0 10px #fff; }
+        
+        .silver-globe { border-color: var(--cyan-glow); } .silver-globe::before { background: var(--cyan-glow); box-shadow: 0 0 15px var(--cyan-glow); } .silver-globe:hover { transform: scale(1.2); }
+        .gold-globe { border-color: var(--magenta-glow); } .gold-globe::before { background: var(--magenta-glow); box-shadow: 0 0 15px var(--magenta-glow); } .gold-globe:hover { transform: scale(1.2); }
+
+        .p-alpha { top: 0%; left: 50%; transform: rotate(45deg); } .p-beta { top: 50%; left: 100%; transform: rotate(45deg); } .p-gamma { top: 100%; left: 50%; transform: rotate(45deg); } .p-delta { top: 50%; left: 0%; transform: rotate(45deg); }
+
+        /* Dynamic Ring bound to phase color */
+        .gear-mid { width: 75%; height: 75%; border: 1px solid var(--dyn-phase-dim); border-radius: 50%; background: transparent; box-shadow: inset 0 0 60px var(--dyn-phase-dim); transition: border-color 0.2s, box-shadow 0.2s, transform 0.1s linear; }
+        .gear-mid::after { content: ''; position: absolute; inset: -3px; border-radius: 50%; border: 2px dashed var(--dyn-phase-color); opacity: 0.5; transition: border-color 0.2s; }
+        
+        .gear-inner { width: 48%; height: 48%; border: 2px solid var(--titanium); background: rgba(15, 23, 42, 0.6); border-radius: 50%; box-shadow: inset 0 0 50px rgba(0,0,0,0.9); animation: spin-fast-reverse 15s linear infinite; }
+        .gear-inner::before { content: ''; position: absolute; inset: 6px; border-radius: 50%; border: 2px dotted var(--cyan-dim); }
+
+        .core-container { position: absolute; width: 45%; height: 45%; display: flex; justify-content: center; align-items: center; z-index: 20; }
+        .earth-core { position: absolute; width: 100%; height: 100%; border-radius: 50%; background-color: #020813; overflow: hidden; box-shadow: 0 0 30px rgba(0, 240, 255, 0.4), inset -6px -6px 15px rgba(0,0,0,0.9); }
+        .core-star-overlay { position: absolute; width: 100%; height: 100%; z-index: 20; mix-blend-mode: screen; display: flex; justify-content: center; align-items: center; pointer-events: none; opacity: 0.8; }
+        
+        .earth-surface { position: absolute; width: 100%; height: 100%; z-index: 30; background-image: url('https://raw.githubusercontent.com/mrdoob/three.js/master/examples/textures/planets/earth_atmos_2048.jpg'); background-size: 200% 100%; opacity: 0.85; }
+
+        .center-star-sm { position: absolute; width: 30%; height: 30%; display: flex; justify-content: center; align-items: center; z-index: 50; }
+        .star-layer { position: absolute; width: 100%; height: 100%; background: var(--cyan-glow); clip-path: polygon(50% 0%, 52% 48%, 100% 50%, 52% 52%, 50% 100%, 48% 52%, 0% 50%, 48% 48%); }
+        .layer-1 { background: var(--magenta-glow); animation: glitter-fast-1 0.15s infinite; } .layer-2 { background: var(--cyan-glow); animation: glitter-fast-2 0.2s infinite; } .layer-3 { background: #fff; animation: glitter-fast-3 0.18s infinite; } .layer-4 { background: var(--magenta-glow); animation: glitter-fast-4 0.22s infinite; }
+
+        @keyframes glitter-fast-1 { 0%, 100% { opacity: 1; transform: rotate(0deg) scale(1); filter: drop-shadow(0 0 15px var(--magenta-glow)); } 50% { opacity: 0.6; transform: rotate(0deg) scale(0.85); filter: drop-shadow(0 0 8px var(--magenta-dim)); } }
+        @keyframes glitter-fast-2 { 0%, 100% { opacity: 0.5; transform: rotate(22.5deg) scale(0.85); filter: drop-shadow(0 0 8px var(--cyan-glow)); } 50% { opacity: 1; transform: rotate(22.5deg) scale(1.1); filter: drop-shadow(0 0 20px var(--cyan-glow)); } }
+        @keyframes glitter-fast-3 { 0%, 100% { opacity: 1; transform: rotate(45deg) scale(0.95); filter: drop-shadow(0 0 15px #fff); } 50% { opacity: 0.4; transform: rotate(45deg) scale(0.8); filter: drop-shadow(0 0 5px var(--core-dim)); } }
+        @keyframes glitter-fast-4 { 0%, 100% { opacity: 0.4; transform: rotate(67.5deg) scale(0.8); filter: drop-shadow(0 0 5px var(--magenta-glow)); } 50% { opacity: 0.9; transform: rotate(67.5deg) scale(1); filter: drop-shadow(0 0 15px var(--magenta-glow)); } }
+
+        @keyframes spin-slow { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        @keyframes spin-fast-reverse { 0% { transform: rotate(0deg); } 100% { transform: rotate(-360deg); } }
+        
+        @keyframes diamond-pulse {
+            0% { transform: translate(-50%, -50%) rotate(45deg) scale(1); filter: brightness(1); }
+            100% { transform: translate(-50%, -50%) rotate(45deg) scale(1.4); filter: brightness(1.5); }
+        }
+
+        .data-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; border-top: 1px dashed var(--titanium); padding-top: 10px; }
+        .data-col { display: flex; flex-direction: column; }
+        .data-lbl { font-family: 'Orbitron'; font-size: 0.5rem; color: var(--steel); letter-spacing: 1px; }
+        .data-val { font-size: 0.8rem; font-weight: bold; color: var(--core-plat); text-shadow: 0 0 5px var(--core-glow); }
+        .data-val-cy { color: var(--cyan-glow); text-shadow: 0 0 8px var(--cyan-dim); }
+    </style>
+</head>
+<body class="mode-q">
+
+    <div class="global-header desktop-only">ASTROPHYSICAL</div>
+
+    <div class="matrix-layer"></div>
+    <div class="star-container" id="stars"></div>
+    <div id="needle-hud">SYSTEMIC CONTEXT</div>
+
+    <div class="gearbox q-center-dial">
+        <div class="gear gear-outer">
+            <div class="orbital-marker marker-peri" onmouseover="showNeedleHUD('PERIHELION (14.00°): Maximum orbital velocity. True Ellipse acceleration.', 'var(--magenta-glow)')" onmouseout="hideNeedleHUD()"></div>
+            <div class="orbital-marker marker-aph" onmouseover="showNeedleHUD('APHELION (194.00°): Minimum orbital velocity. True Ellipse deceleration.', 'var(--cyan-glow)')" onmouseout="hideNeedleHUD()"></div>
+            <div class="globe silver-globe p-alpha" onmouseover="showNeedleHUD('ALPHA: WINTER SOLSTICE (0.000°)', 'var(--cyan-glow)')" onmouseout="hideNeedleHUD()" onclick="openAnchorModal('ALPHA')" ontouchstart="event.stopPropagation(); openAnchorModal('ALPHA'); event.preventDefault();"></div>
+            <div class="globe gold-globe p-beta" onmouseover="showNeedleHUD('BETA: VERNAL EQUINOX (90.000°)', 'var(--magenta-glow)')" onmouseout="hideNeedleHUD()" onclick="openAnchorModal('BETA')" ontouchstart="event.stopPropagation(); openAnchorModal('BETA'); event.preventDefault();"></div>
+            <div class="globe silver-globe p-gamma" onmouseover="showNeedleHUD('GAMMA: SUMMER SOLSTICE (180.000°)', 'var(--cyan-glow)')" onmouseout="hideNeedleHUD()" onclick="openAnchorModal('GAMMA')" ontouchstart="event.stopPropagation(); openAnchorModal('GAMMA'); event.preventDefault();"></div>
+            <div class="globe gold-globe p-delta" onmouseover="showNeedleHUD('DELTA: AUTUMNAL EQUINOX (270.000°)', 'var(--magenta-glow)')" onmouseout="hideNeedleHUD()" onclick="openAnchorModal('DELTA')" ontouchstart="event.stopPropagation(); openAnchorModal('DELTA'); event.preventDefault();"></div>
+        </div>
+        <div class="gear gear-mid" id="kepler-ring"></div>
+        <div class="gear gear-inner"></div>
+        
+        <div class="core-container">
+            <div class="earth-core">
+                <div class="core-star-overlay">
+                    <div class="center-star-sm">
+                        <div class="star-layer layer-1"></div>
+                        <div class="star-layer layer-2"></div>
+                        <div class="star-layer layer-3"></div>
+                        <div class="star-layer layer-4"></div>
+                    </div>
+                </div>
+                <div class="earth-surface"></div>
+            </div>
+        </div>
+
+        <div id="transit-diamond-arm" style="position: absolute; width: 100%; height: 100%; z-index: 45; pointer-events: none; transition: transform 0.1s linear;">
+            <div id="q-delta-diamond" style="position: absolute; top: 12.5%; left: 50%; width: 14px; height: 14px; background: #fff; transform: translate(-50%, -50%) rotate(45deg); box-shadow: 0 0 10px #fff; transition: background 0.2s, box-shadow 0.2s; pointer-events: auto; cursor: help;" onmouseover="showNeedleHUD('Q-DELTA DIAMOND: Mathmatically anchored to the Keplerian Ring. Modulates rotational speed and chromatic intensity based on orbital velocity.', '#fff')" onmouseout="hideNeedleHUD()"></div>
+        </div>
+    </div>
+
+</body>
+</html>

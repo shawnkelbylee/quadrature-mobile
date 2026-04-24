@@ -1,12 +1,36 @@
 // THE QUADRATURE: OMNI-PLANNER & UI ABSTRACTION (ZERO-REDUNDANCY ENGINE)
 // Architect: Kelby | Builder: Kairos
 // PROTOCOL: Pragmatic Interoperability, Strict Phase Bordering, & Civil Tension Scoring
-// REVISION: 24.2.1 - Corrected Sector Navigation Logic & Anchor Handshake
+// REVISION: 24.2.4 - Hotfix: Native Data Utilities & Modal CSS Restored
+
+// --- DATA PERSISTENCE & UTILITIES ---
+window.qData = window.qData || JSON.parse(localStorage.getItem('q_planner_data_v2') || '{}');
+
+window.savePlannerData = function() {
+    localStorage.setItem('q_planner_data_v2', JSON.stringify(window.qData));
+};
+
+window.getDataKey = function(d, h, m) {
+    return `${d.getFullYear()}-${(d.getMonth()+1).toString().padStart(2,'0')}-${d.getDate().toString().padStart(2,'0')}-${h.toString().padStart(2,'0')}-${m.toString().padStart(2,'0')}`;
+};
+
+window.hasDataInDay = function(date) {
+    if (!window.qData) return false;
+    for(let h=0; h<24; h++) {
+        for(let m=0; m<60; m+=5) {
+            let key = window.getDataKey(date, h, m);
+            if(window.qData[key] && window.qData[key].text && window.qData[key].text.trim() !== "") return true;
+        }
+    }
+    return false;
+};
 
 // --- DUAL-STATE ASYMMETRICAL GEAR ENGINE ---
 
 // Initialize Absolute Block Array (365 Total Blocks per Cycle)
-(function initQBlocks() {
+window.initQBlocks = function() {
+    if (!window.Q_GEAR_CONSTANTS) return;
+
     window.Q_BLOCK_DEFS = [];
     window.Q_BLOCK_DEFS.push({ type: 'ANCHOR', name: 'ALPHA ANCHOR', dur: window.Q_GEAR_CONSTANTS.ALPHA, quad: 1, sect: 1 });
     
@@ -34,10 +58,10 @@
     });
 
     window.Q_YEAR_MS = acc;
-})();
+};
 
 window.getQBlockByTime = function(ts) {
-    if(!window.ANCHOR_ALPHA_DYNAMIC) return null;
+    if(!window.ANCHOR_ALPHA_DYNAMIC || !window.Q_BLOCKS) return null;
     let diff = ts - window.ANCHOR_ALPHA_DYNAMIC;
     let cycleIdx = Math.floor(diff / window.Q_YEAR_MS);
     let rem = diff % window.Q_YEAR_MS;
@@ -73,7 +97,6 @@ window.stepQSector = function(ts, n) {
     let dir = n > 0 ? 1 : -1;
     
     for(let i=0; i<steps; i++) {
-        // CORRECTED LOGIC: Stop if we hit an Anchor OR Day 1 of a new sector
         do {
             cIdx += dir;
             if(cIdx >= window.Q_BLOCKS.length) { cIdx -= window.Q_BLOCKS.length; cCycle++; }
@@ -130,6 +153,7 @@ window.Q_ModalEngine = {
     },
     
     render: function(title, contentHtml, btnText = "ACKNOWLEDGE", onBtnClick = null) {
+        if (!document.getElementById('q-universal-modal')) this.init();
         document.getElementById('q-modal-title').innerText = title;
         document.getElementById('q-modal-content').innerHTML = contentHtml;
         const btn = document.getElementById('q-modal-btn');
@@ -273,6 +297,14 @@ window.Q_OmniPlanner = {
     injectCSS: function() {
         const style = document.createElement('style');
         style.innerHTML = `
+            /* CRITICAL HOTFIX: MODAL ENGINE CSS RESTORED */
+            .modal-overlay { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.85); backdrop-filter: blur(10px); z-index: 999999; display: none; justify-content: center; align-items: center; }
+            .modal-box { background: rgba(5,8,15,0.95); border: 1px solid var(--theme-main, #ff003c); border-radius: 8px; padding: 25px; box-shadow: 0 20px 50px rgba(0,0,0,0.9); min-width: 300px; max-width: 90vw; text-align: center; font-family: 'JetBrains Mono'; color: #fff; pointer-events: auto; }
+            .modal-head { font-family: 'Orbitron'; font-size: 1.2rem; font-weight: 900; color: var(--theme-main, #ff003c); margin-bottom: 15px; letter-spacing: 2px; }
+            .btn-close { background: rgba(0,0,0,0.6); border: 1px solid var(--theme-main, #ff003c); color: var(--theme-main, #ff003c); font-family: 'Orbitron'; font-weight: bold; padding: 10px 20px; cursor: pointer; border-radius: 4px; transition: 0.3s; margin-top: 20px; }
+            .btn-close:hover { background: var(--theme-main, #ff003c); color: #000; box-shadow: 0 0 15px var(--theme-main, #ff003c); }
+
+            /* PLANNER CSS */
             .q-planner-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); backdrop-filter: blur(10px); z-index: 10005; display: none; justify-content: center; align-items: center; }
             .q-planner-overlay.active { display: flex; }
             .q-planner-box { width: 95vw; height: 90vh; background: rgba(5, 5, 10, 0.95); border: 1px solid var(--theme-main, #ff003c); border-radius: 12px; overflow: hidden; display: flex; flex-direction: column; box-shadow: 0 20px 50px rgba(0,0,0,0.9); pointer-events: auto; }
@@ -508,11 +540,11 @@ window.Q_OmniPlanner = {
             cTitle = ""; cDesc = "";
         } else {
             let activeBlock = window.getQBlockByTime(this.selectedDate);
-            if(activeBlock.type === 'ANCHOR') {
+            if(activeBlock && activeBlock.type === 'ANCHOR') {
                 cTitle = `[ SETTLEMENT NODE: ${activeBlock.name} ]`;
                 cDesc = `OPERATIONAL BUFFER. Actively resolving accumulated physical drift. Q-Delta interpolating to 0.0000° across ${(activeBlock.dur / 3600000).toFixed(4)} hours.`;
                 contextDiv.style.borderColor = 'var(--gold)';
-            } else {
+            } else if (activeBlock) {
                 let daysElapsed = (this.selectedDate - window.ANCHOR_ALPHA_DYNAMIC) / window.MS_DAY;
                 let oData = window.getOrbitalData(daysElapsed);
                 let driftDeg = oData.trueArc - oData.meanArc;
@@ -692,7 +724,11 @@ window.Q_OmniPlanner = {
             if (aQuad === 1 && aSect === 1 && d1Index > 0 && window.Q_BLOCKS[d1Index - 1].type === 'ANCHOR') {
                 gridItems.push(window.Q_BLOCKS[d1Index - 1]);
             }
-            for(let i=0; i<30; i++) gridItems.push(window.Q_BLOCKS[d1Index + i]);
+            for(let i=0; i<30; i++) {
+                if (window.Q_BLOCKS[d1Index + i]) {
+                    gridItems.push(window.Q_BLOCKS[d1Index + i]);
+                }
+            }
             
             let lastDayIdx = d1Index + 29;
             if (aSect === 3 && lastDayIdx + 1 < window.Q_BLOCKS.length && window.Q_BLOCKS[lastDayIdx + 1].type === 'ANCHOR') {
@@ -1244,4 +1280,13 @@ window.Q_OmniPlanner = {
     }
 };
 
-window.addEventListener('DOMContentLoaded', () => window.Q_OmniPlanner.init());
+window.addEventListener('DOMContentLoaded', () => {
+    // Ensure Q_GEAR_CONSTANTS is loaded from q-core before initializing planner
+    const checkCore = setInterval(() => {
+        if (window.Q_GEAR_CONSTANTS) {
+            clearInterval(checkCore);
+            window.initQBlocks();
+            window.Q_OmniPlanner.init();
+        }
+    }, 50);
+});

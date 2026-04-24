@@ -63,7 +63,7 @@
             background-color: #010205; 
         }
 
-        body > *:not(.home-container):not(#portal-frame):not(.space-bg):not(#warp-star-field):not(.nebula-left):not(.nebula-right):not(.dust-layer-global):not(.global-header):not(.global-footer):not(.corner-panel):not(.mobile-routing-grid):not(.wing-panel):not(script):not(style):not(iframe):not(meta):not(title):not(#q-ui-injected-flag):not(.q-hub-overlay):not(.q-planner-overlay):not(#q-library-reader-overlay):not(.q-nav-bar):not(.q-control-strip):not(#mobile-telemetry-ribbon):not(#q-universal-controls):not(#q-mic-fab):not(#q-mic-fab-desktop):not(.desktop-only):not(.center-axis-btn) {
+        body > *:not(.home-container):not(#portal-frame):not(.space-bg):not(#warp-star-field):not(.nebula-left):not(.nebula-right):not(.dust-layer-global):not(.global-header):not(.global-footer):not(.corner-panel):not(.mobile-routing-grid):not(.wing-panel):not(script):not(style):not(iframe):not(meta):not(title):not(#q-ui-injected-flag):not(.q-hub-overlay):not(.q-planner-overlay):not(#q-library-reader-overlay):not(.q-nav-bar):not(.q-control-strip):not(#mobile-telemetry-ribbon):not(#q-universal-controls):not(#q-mic-fab):not(#q-mic-fab-desktop):not(.desktop-only):not(.center-axis-btn):not(.mobile-persistent-nav) {
             display: none !important; 
             opacity: 0 !important; 
             pointer-events: none !important; 
@@ -108,13 +108,13 @@
 
         @keyframes q-core-portal { 0% { transform: translate(-50%, -50%) scale(1); filter: brightness(1) drop-shadow(0 0 25px var(--q-blue-glow)); opacity: 1; } 40% { transform: translate(-50%, -50%) scale(1.5); filter: brightness(3) drop-shadow(0 0 60px var(--white-flash)); opacity: 1; } 70% { transform: translate(-50%, -50%) scale(10); filter: brightness(5) drop-shadow(0 0 100px var(--white-flash)); opacity: 0.5; } 100% { transform: translate(-50%, -50%) scale(40); filter: brightness(8) drop-shadow(0 0 0px var(--white-flash)); opacity: 0; } }
 
-        /* --- THE CENTER AXIS BUTTONS --- */
+        /* --- GEOMETRIC CENTER AXIS BUTTONS --- */
         .center-axis-btn {
             position: absolute;
             left: 50%;
             transform: translateX(-50%);
-            width: 320px; /* CRITICAL FIX: Expanded width to match your native asset */
-            height: 85px; /* CRITICAL FIX: Expanded height to match your native asset */
+            width: 320px;
+            height: 85px; 
             z-index: 100;
             cursor: pointer;
             pointer-events: auto;
@@ -135,7 +135,6 @@
             filter: drop-shadow(0 8px 12px rgba(0,0,0,0.6));
         }
 
-        /* Pushed outward to perfect alignment */
         .axis-omni { bottom: calc(50% + 30.5vh); }
         .axis-dash { top: calc(50% + 30.5vh); }
 
@@ -152,7 +151,6 @@
             pointer-events: none;
         }
 
-        /* Optical Centering: Counters the gravity of the curved edge */
         .axis-omni .axis-label { transform: translateY(-4px); }
         .axis-dash .axis-label { transform: translateY(4px); }
 
@@ -161,6 +159,45 @@
 
         /* --- THE MOBILE HOME PROTOCOL --- */
         .desktop-only { display: flex !important; }
+        
+        /* Mobile Specific Independent Nav */
+        .mobile-persistent-nav {
+            display: none;
+            position: absolute;
+            bottom: 8vh;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 85vw;
+            max-width: 400px;
+            justify-content: space-between;
+            gap: 16px;
+            z-index: 100;
+        }
+        
+        .mobile-persistent-btn {
+            flex: 1;
+            background: rgba(10, 15, 25, 0.6);
+            backdrop-filter: blur(14px);
+            -webkit-backdrop-filter: blur(14px);
+            border: 1px solid rgba(0, 163, 255, 0.3);
+            box-shadow: inset 0 0 15px rgba(0, 163, 255, 0.15), 0 8px 20px rgba(0,0,0,0.8);
+            border-radius: 8px;
+            color: var(--q-metal);
+            padding: 16px 0;
+            font-family: 'Orbitron';
+            font-size: 0.8rem;
+            font-weight: 700;
+            letter-spacing: 2px;
+            cursor: pointer;
+            text-align: center;
+            text-shadow: 0 2px 5px rgba(0,0,0,0.8), 0 0 5px rgba(255,255,255,0.4);
+            pointer-events: auto;
+        }
+        
+        .mobile-persistent-btn:active {
+            background: rgba(0, 163, 255, 0.2);
+        }
+
         .mobile-routing-grid { display: none; position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); width: 85vw; max-width: 400px; height: auto; flex-direction: column; gap: 16px; z-index: 30; pointer-events: none; }
         .m-panel { position: relative; border-radius: 8px; cursor: pointer; pointer-events: auto; display: flex; justify-content: center; align-items: center; text-align: center; box-shadow: 0 10px 30px rgba(0,0,0,0.8); overflow: hidden; border: 1px solid rgba(255,255,255,0.1); width: 100%; height: 75px; opacity: 0; transform: translateY(30px); transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
         .m-frost { position: absolute; inset: 0; background: rgba(15, 20, 35, 0.7); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); z-index: 1; }
@@ -179,6 +216,7 @@
         @media (max-width: 950px) {
             .desktop-only { display: none !important; }
             .mobile-routing-grid { display: flex; }
+            .mobile-persistent-nav { display: flex; }
         }
     </style>
 </head>
@@ -200,6 +238,15 @@
         <span class="axis-label">DASHBOARD</span>
     </div>
     
+    <div class="mobile-persistent-nav">
+        <div class="mobile-persistent-btn" onclick="if(window.Q_OmniPlanner) window.Q_OmniPlanner.openPlanner()">
+            OMNI-PLANNER
+        </div>
+        <div class="mobile-persistent-btn" onclick="if(window.Q_IntegrationHub) window.Q_IntegrationHub.openHub()">
+            DASHBOARD
+        </div>
+    </div>
+    
     <div class="mobile-routing-grid" id="mobile-routing-grid">
         <div class="m-panel" data-route="PHYSIOLOGICAL.html">
             <div class="m-frost"></div><div class="m-bg"></div>
@@ -216,15 +263,6 @@
         <div class="m-panel" data-route="ASTROPHYSICAL.html">
             <div class="m-frost"></div><div class="m-bg" style="transform: scale(-1, -1);"></div>
             <div class="m-label">ASTROPHYSICAL</div>
-        </div>
-        
-        <div style="display:flex; justify-content:space-between; gap:10px; width:100%; margin-top: 10px;">
-            <button onclick="if(window.Q_OmniPlanner) window.Q_OmniPlanner.openPlanner()" style="flex:1; background: rgba(0,0,0,0.6); border: 1px solid rgba(255,255,255,0.2); color: rgba(255,255,255,0.8); padding: 12px; font-family: 'Orbitron'; font-size: 0.65rem; font-weight: bold; letter-spacing: 1px; cursor: pointer; border-radius: 4px; pointer-events:auto;">
-                OMNI-PLANNER
-            </button>
-            <button onclick="if(window.Q_IntegrationHub) window.Q_IntegrationHub.openHub()" style="flex:1; background: rgba(0,0,0,0.6); border: 1px solid rgba(255,255,255,0.2); color: rgba(255,255,255,0.8); padding: 12px; font-family: 'Orbitron'; font-size: 0.65rem; font-weight: bold; letter-spacing: 1px; cursor: pointer; border-radius: 4px; pointer-events:auto;">
-                DASHBOARD
-            </button>
         </div>
     </div>
 
@@ -383,7 +421,8 @@
         let isMobileRevealed = false;
         function initMobileHome() {
             document.addEventListener('click', (e) => {
-                if(window.innerWidth <= 950 && !isMobileRevealed && !e.target.closest('.m-panel')) {
+                // CRITICAL FIX: Exclude the new persistent mobile buttons from triggering the Iris reveal
+                if(window.innerWidth <= 950 && !isMobileRevealed && !e.target.closest('.m-panel') && !e.target.closest('.mobile-persistent-btn')) {
                     document.body.classList.add('mobile-revealed');
                     isMobileRevealed = true;
                 }

@@ -17,9 +17,6 @@
         window.initBoot = function() { return; };
         window.triggerBoot = function() { return; };
 
-        // Mark body early for targeted UI suppression
-        document.documentElement.classList.add('is-aperture');
-
         const purgeObserver = new MutationObserver((mutations) => {
             mutations.forEach((mutation) => {
                 mutation.addedNodes.forEach((node) => {
@@ -37,7 +34,6 @@
         
         window.addEventListener('DOMContentLoaded', () => {
             purgeObserver.observe(document.body, { childList: true, subtree: true });
-            document.body.classList.add('is-aperture');
         });
     </script>
 
@@ -67,6 +63,14 @@
             background-color: #010205; 
         }
 
+        body > *:not(.home-container):not(#portal-frame):not(.space-bg):not(#warp-star-field):not(.nebula-left):not(.nebula-right):not(.dust-layer-global):not(.global-header):not(.global-footer):not(.corner-panel):not(.mobile-routing-grid):not(.wing-panel):not(script):not(style):not(iframe):not(meta):not(title):not(#q-ui-injected-flag):not(.q-hub-overlay):not(.q-planner-overlay):not(#q-library-reader-overlay):not(.q-nav-bar):not(.q-control-strip):not(#mobile-telemetry-ribbon):not(#q-universal-controls):not(#q-mic-fab):not(#q-mic-fab-desktop):not(.desktop-only):not(.center-axis-btn) {
+            display: none !important; 
+            opacity: 0 !important; 
+            pointer-events: none !important; 
+            visibility: hidden !important;
+            z-index: -9999 !important;
+        }
+
         body.sequencing > *:not(.home-container):not(#portal-frame):not(script):not(style):not(.mobile-routing-grid) {
             opacity: 0 !important; transition: opacity 0.4s ease-out; pointer-events: none;
         }
@@ -78,15 +82,15 @@
         .tl .panel-label { padding-left: 59px; } .tr .panel-label { padding-right: 51px; } .bl .panel-label { padding-left: 59px; } .br .panel-label { padding-right: 51px; }
 
         /* --- THE HOME CORE --- */
-        .home-container { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); width: 52vh; height: 52vh; z-index: 10; display: flex; justify-content: center; align-items: center; pointer-events: none; }
+        .home-container { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); width: 52vh; height: 52vh; z-index: 10; display: flex; justify-content: center; align-items: center; }
         .iris-ring, .core-void { position: absolute; inset: 0; display: flex; justify-content: center; align-items: center; pointer-events: none; transition: transform 0.8s cubic-bezier(0.5, 0, 0.2, 1); }
-        .iris-ring { z-index: 10; filter: drop-shadow(0 0 35px rgba(0,0,0,0.95)); pointer-events: auto; cursor: pointer; }
-        .core-void { width: 68%; height: 68%; background: #000; border-radius: 50%; z-index: 5; overflow: hidden; box-shadow: inset 0 0 50px rgba(0,0,0,1); margin: auto; opacity: 1; pointer-events: none; }
+        .iris-ring { z-index: 10; filter: drop-shadow(0 0 35px rgba(0,0,0,0.95)); }
+        .core-void { width: 68%; height: 68%; background: #000; border-radius: 50%; z-index: 5; overflow: hidden; box-shadow: inset 0 0 50px rgba(0,0,0,1); margin: auto; opacity: 1; }
 
         .star-field { position: absolute; inset: 0; z-index: 3; pointer-events: none;}
         .star { position: absolute; background: #fff; border-radius: 50%; }
 
-        .q-core-asset { position: absolute; width: 50%; height: 50%; left: 51.2%; top: 50%; transform: translate(-50%, -50%); background: url('assets/core-q.png') center/contain no-repeat; z-index: 15; filter: drop-shadow(0 0 25px var(--q-blue-glow)); animation: subtle-pulse 4s ease-in-out infinite; transition: all 0.5s ease; pointer-events: none; }
+        .q-core-asset { position: absolute; width: 50%; height: 50%; left: 51.2%; top: 50%; transform: translate(-50%, -50%); background: url('assets/core-q.png') center/contain no-repeat; z-index: 15; filter: drop-shadow(0 0 25px var(--q-blue-glow)); animation: subtle-pulse 4s ease-in-out infinite; transition: all 0.5s ease; }
 
         @keyframes subtle-pulse { 0%, 100% { transform: translate(-50%, -50%) scale(1); filter: brightness(1) drop-shadow(0 0 25px var(--q-blue-glow)); } 50% { transform: translate(-50%, -50%) scale(1.05); filter: brightness(1.2) drop-shadow(0 0 40px var(--q-blue-glow)); } }
         @keyframes hyper-jump { 0% { transform: translate(-50%, -50%) scale(0.1); opacity: 0; } 5% { opacity: var(--max-op, 1); } 100% { transform: translate(calc(-50% + var(--tx)), calc(-50% + var(--ty))) scale(1.2); opacity: 0; } }
@@ -104,13 +108,13 @@
 
         @keyframes q-core-portal { 0% { transform: translate(-50%, -50%) scale(1); filter: brightness(1) drop-shadow(0 0 25px var(--q-blue-glow)); opacity: 1; } 40% { transform: translate(-50%, -50%) scale(1.5); filter: brightness(3) drop-shadow(0 0 60px var(--white-flash)); opacity: 1; } 70% { transform: translate(-50%, -50%) scale(10); filter: brightness(5) drop-shadow(0 0 100px var(--white-flash)); opacity: 0.5; } 100% { transform: translate(-50%, -50%) scale(40); filter: brightness(8) drop-shadow(0 0 0px var(--white-flash)); opacity: 0; } }
 
-        /* --- GEOMETRIC CENTER AXIS BUTTONS --- */
+        /* --- THE CENTER AXIS BUTTONS --- */
         .center-axis-btn {
             position: absolute;
             left: 50%;
             transform: translateX(-50%);
-            width: 320px;
-            height: 85px; 
+            width: 320px; /* CRITICAL FIX: Expanded width to match your native asset */
+            height: 85px; /* CRITICAL FIX: Expanded height to match your native asset */
             z-index: 100;
             cursor: pointer;
             pointer-events: auto;
@@ -131,6 +135,7 @@
             filter: drop-shadow(0 8px 12px rgba(0,0,0,0.6));
         }
 
+        /* Pushed outward to perfect alignment */
         .axis-omni { bottom: calc(50% + 30.5vh); }
         .axis-dash { top: calc(50% + 30.5vh); }
 
@@ -147,31 +152,22 @@
             pointer-events: none;
         }
 
+        /* Optical Centering: Counters the gravity of the curved edge */
         .axis-omni .axis-label { transform: translateY(-4px); }
         .axis-dash .axis-label { transform: translateY(4px); }
 
         .axis-omni:hover { transform: translateX(-50%) translateY(-2px); filter: brightness(1.2) drop-shadow(0 0 15px rgba(0, 163, 255, 0.4)); }
         .axis-dash:hover { transform: translateX(-50%) translateY(2px); filter: brightness(1.2) drop-shadow(0 0 15px rgba(0, 163, 255, 0.4)); }
 
-        /* --- MOBILE REFINEMENT --- */
-        @media (max-width: 950px) {
-            .desktop-only { display: none !important; }
-            .corner-panel { display: none !important; pointer-events: none !important; }
-            
-            /* EQUIDISTANT ALIGNMENT: Counter-weighting the -3vh Iris shift */
-            .center-axis-btn { transform: translateX(-50%) scale(0.75); display: flex !important; }
-            .axis-omni { bottom: calc(50% + 32vh); transform-origin: bottom center; }
-            .axis-dash { top: calc(50% + 26vh); transform-origin: top center; }
-            
-            .mobile-routing-grid { display: none; position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); width: 85vw; max-width: 400px; height: auto; flex-direction: column; gap: 16px; z-index: 110; pointer-events: none; }
-            body.mobile-revealed .mobile-routing-grid { display: flex; pointer-events: auto; }
-        }
-
+        /* --- THE MOBILE HOME PROTOCOL --- */
+        .desktop-only { display: flex !important; }
+        .mobile-routing-grid { display: none; position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); width: 85vw; max-width: 400px; height: auto; flex-direction: column; gap: 16px; z-index: 30; pointer-events: none; }
         .m-panel { position: relative; border-radius: 8px; cursor: pointer; pointer-events: auto; display: flex; justify-content: center; align-items: center; text-align: center; box-shadow: 0 10px 30px rgba(0,0,0,0.8); overflow: hidden; border: 1px solid rgba(255,255,255,0.1); width: 100%; height: 75px; opacity: 0; transform: translateY(30px); transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
         .m-frost { position: absolute; inset: 0; background: rgba(15, 20, 35, 0.7); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); z-index: 1; }
         .m-bg { position: absolute; inset: 0; background: url('assets/panel-frame.png') center/150% 150% no-repeat; z-index: 2; opacity: 0.5; filter: drop-shadow(0 5px 10px rgba(0,0,0,0.6)); }
         .m-label { position: relative; z-index: 3; font-family: 'Orbitron'; font-size: 0.9rem; font-weight: 700; color: var(--q-metal); letter-spacing: 4px; text-shadow: 0 2px 5px rgba(0,0,0,0.9), 0 0 8px rgba(255,255,255,0.3); display: flex; align-items: center; gap: 8px; }
 
+        body.mobile-revealed .mobile-routing-grid { pointer-events: auto; }
         body.mobile-revealed .q-core-asset { opacity: 0.15; filter: blur(8px); }
         body.mobile-revealed .iris-ring { transform: rotate(45deg); filter: drop-shadow(0 0 15px rgba(0,0,0,0.95)); }
         body.mobile-revealed .m-panel { opacity: 1; transform: translateY(0); }
@@ -179,6 +175,11 @@
         body.mobile-revealed .m-panel:nth-child(2) { transition-delay: 0.10s; }
         body.mobile-revealed .m-panel:nth-child(3) { transition-delay: 0.15s; }
         body.mobile-revealed .m-panel:nth-child(4) { transition-delay: 0.20s; }
+
+        @media (max-width: 950px) {
+            .desktop-only { display: none !important; }
+            .mobile-routing-grid { display: flex; }
+        }
     </style>
 </head>
 <body class="mode-q">
@@ -189,12 +190,12 @@
     <div class="global-header desktop-only">THE QUADRATURE</div>
     <div class="global-footer desktop-only">BASED IN SCIENCE BATHED IN CULTURE & BUILT FOR THE DIGITAL AGE</div>
 
-    <div class="center-axis-btn axis-omni" onclick="if(window.Q_OmniPlanner) window.Q_OmniPlanner.openPlanner()">
+    <div class="center-axis-btn axis-omni desktop-only" onclick="if(window.Q_OmniPlanner) window.Q_OmniPlanner.openPlanner()">
         <img class="axis-bg" src="assets/omni-panel.png" alt="omni background" />
         <span class="axis-label">OMNI-PLANNER</span>
     </div>
 
-    <div class="center-axis-btn axis-dash" onclick="if(window.Q_IntegrationHub) window.Q_IntegrationHub.openHub()">
+    <div class="center-axis-btn axis-dash desktop-only" onclick="if(window.Q_IntegrationHub) window.Q_IntegrationHub.openHub()">
         <img class="axis-bg" src="assets/dash-panel.png" alt="dash background" />
         <span class="axis-label">DASHBOARD</span>
     </div>
@@ -215,6 +216,15 @@
         <div class="m-panel" data-route="ASTROPHYSICAL.html">
             <div class="m-frost"></div><div class="m-bg" style="transform: scale(-1, -1);"></div>
             <div class="m-label">ASTROPHYSICAL</div>
+        </div>
+        
+        <div style="display:flex; justify-content:space-between; gap:10px; width:100%; margin-top: 10px;">
+            <button onclick="if(window.Q_OmniPlanner) window.Q_OmniPlanner.openPlanner()" style="flex:1; background: rgba(0,0,0,0.6); border: 1px solid rgba(255,255,255,0.2); color: rgba(255,255,255,0.8); padding: 12px; font-family: 'Orbitron'; font-size: 0.65rem; font-weight: bold; letter-spacing: 1px; cursor: pointer; border-radius: 4px; pointer-events:auto;">
+                OMNI-PLANNER
+            </button>
+            <button onclick="if(window.Q_IntegrationHub) window.Q_IntegrationHub.openHub()" style="flex:1; background: rgba(0,0,0,0.6); border: 1px solid rgba(255,255,255,0.2); color: rgba(255,255,255,0.8); padding: 12px; font-family: 'Orbitron'; font-size: 0.65rem; font-weight: bold; letter-spacing: 1px; cursor: pointer; border-radius: 4px; pointer-events:auto;">
+                DASHBOARD
+            </button>
         </div>
     </div>
 
@@ -373,11 +383,9 @@
         let isMobileRevealed = false;
         function initMobileHome() {
             document.addEventListener('click', (e) => {
-                if(window.innerWidth <= 950 && !isMobileRevealed) {
-                    if (!e.target.closest('.m-panel') && !e.target.closest('.center-axis-btn')) {
-                        document.body.classList.add('mobile-revealed');
-                        isMobileRevealed = true;
-                    }
+                if(window.innerWidth <= 950 && !isMobileRevealed && !e.target.closest('.m-panel')) {
+                    document.body.classList.add('mobile-revealed');
+                    isMobileRevealed = true;
                 }
             });
         }

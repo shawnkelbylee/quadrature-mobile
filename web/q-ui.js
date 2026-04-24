@@ -1,7 +1,7 @@
 // THE QUADRATURE: UNIFIED UI MATRIX & RENDERER
 // Architect: Kelby | Engineer: Kairos
 // STATUS: Phase IV UI Engine. Hollow Shell Optimization. 
-// REVISION: Hard-Coded Injection Logic (Legacy Parity Restored)
+// REVISION: Top Navbar Sub-Node Recovery
 
 window.injectUniversalUI = function() {
     if (window.self !== window.top) return;
@@ -22,7 +22,7 @@ window.injectUniversalUI = function() {
     let noCache2 = document.createElement('meta'); noCache2.httpEquiv = "Pragma"; noCache2.content = "no-cache"; document.head.appendChild(noCache2);
     let noCache3 = document.createElement('meta'); noCache3.httpEquiv = "Expires"; noCache3.content = "0"; document.head.appendChild(noCache3);
     
-    // --- PATH DETECTION & ROUTING LOGIC ---
+    // --- BULLETPROOF PATH DETECTION (Android/Expo Safe) ---
     const href = window.location.href.toUpperCase();
     
     const bActive = href.includes("PHYSIOLOGICAL");
@@ -31,7 +31,15 @@ window.injectUniversalUI = function() {
     const mActive = href.includes("ASTROPHYSICAL");
     
     const isVector = bActive || cActive || eActive || mActive;
-    const isHome = !isVector; 
+    const faceActive = !isVector; 
+    
+    if (faceActive) {
+        document.body.classList.add('q-aperture-home');
+        document.body.classList.remove('q-vector-hud');
+    } else {
+        document.body.classList.add('q-vector-hud');
+        document.body.classList.remove('q-aperture-home');
+    }
     
     const authState = localStorage.getItem('Q_PRO_AUTH') === 'true' ? 'ACTIVE' : 'STANDBY';
     const authBg = authState === 'ACTIVE' ? '#39ff14' : 'transparent';
@@ -44,11 +52,12 @@ window.injectUniversalUI = function() {
         /* --- CORE NORMALIZATION --- */
         html, body { 
             position: fixed !important; top: 0px !important; left: 0px !important; right: 0px !important; bottom: 0px !important; 
-            width: 100vw !important; height: var(--app-height, 100vh) !important; 
+            width: 100% !important; height: var(--app-height, 100vh) !important; 
             margin: 0px !important; padding: 0px !important; 
             overflow: hidden !important; touch-action: none !important; overscroll-behavior: none !important; transform: none !important; 
             background-color: #010205; 
         }
+        #mobile-telemetry-btn { display: none !important; pointer-events: none !important; }
 
         :root { 
             --wing-w: 240px; --mod-w: 320px; --dial-size: 60vh; --wing-offset: calc((var(--dial-size) / 2) + 4vw); 
@@ -56,24 +65,22 @@ window.injectUniversalUI = function() {
             --starlight: rgba(255, 255, 255, 0.7); --platinum: #E5E4E2; --chrono-amber: #B97A35; 
             --chrono-amber-dim: rgba(185, 122, 53, 0.2); 
             --q-blue-glow: rgba(0, 163, 255, 0.3); --q-metal: #e2e8f0;
-            --center-gap-x: ${isHome ? '31vh' : '36vh'}; 
-            --corner-gap-y: ${isHome ? '24vh' : '21vh'}; 
-            --corner-gap-x: ${isHome ? '23vh' : '32vh'};
-            --panel-w: ${isHome ? '340px' : '460px'};
-            --panel-h: ${isHome ? '80px' : '170px'};
+            --center-gap-x: 36vh; 
+            --corner-gap-y: 21vh; 
+            --corner-gap-x: 32vh;
+            --panel-w: 460px;
+            --panel-h: 170px;
         }
-
-        .desktop-only { display: flex !important; }
-        .mobile-only-flex { display: none !important; }
-
-        @media (max-width: 950px) {
-            :root { --dial-size: min(48vh, 85vw) !important; } 
-            .desktop-only { display: none !important; }
-            .mobile-only-flex { display: flex !important; }
+        
+        body.q-aperture-home {
+            --center-gap-x: 31vh; 
+            --corner-gap-y: 24vh; 
+            --corner-gap-x: 23vh;
+            --panel-w: 340px;
+            --panel-h: 80px;
         }
-
-        /* --- THE INJECTED ASSETS --- */
-        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); backdrop-filter: blur(10px); z-index: 100000; display: none; justify-content: center; align-items: center; cursor: pointer; }
+        
+        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); backdrop-filter: blur(10px); z-index: 10000; display: none; justify-content: center; align-items: center; cursor: pointer; }
         .modal-box { width: 400px; background: rgba(2, 6, 15, 0.95); border: 1px solid var(--theme-main, #00f0ff); border-radius: 12px; padding: 25px; box-shadow: 0 20px 50px rgba(0,0,0,0.9); display: flex; flex-direction: column; gap: 16px; cursor: default; pointer-events: auto; }
         .btn-close { background: transparent; border: 1px solid var(--platinum); color: var(--platinum); padding: 10px; font-family: 'Orbitron'; cursor: pointer; transition: 0.3s; width: 100%; margin-top: 10px; border-radius: 8px; font-weight: 700; letter-spacing: 2px; }
 
@@ -142,59 +149,57 @@ window.injectUniversalUI = function() {
         .fmt-toggle { font-family: 'JetBrains Mono'; font-weight: bold; font-size: 0.5rem; color: var(--theme-main, #00f0ff); cursor: pointer; border: 1px solid var(--theme-dim, rgba(0,240,255,0.2)); padding: 2px 8px; border-radius: 4px; background: rgba(0,0,0,0.6); pointer-events: auto; transition: 0.3s; white-space: nowrap; text-align: center; }
         .fmt-toggle:hover { background: var(--theme-main, #00f0ff); color: #000; box-shadow: 0 0 10px var(--theme-main, #00f0ff); }
 
-        /* --- THE NAVIGATION ENGINE (ONLY INJECTED ON VECTORS) --- */
-        .q-nav-bar { 
-            position: fixed; 
-            bottom: 2.5vh; left: 50%; transform: translateX(-50%); width: max-content; padding: 0 20px; border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.9), inset 0 0 20px rgba(255,255,255,0.05);
-            height: 45px; background: rgba(2, 6, 15, 0.95); 
-            display: flex; justify-content: center; align-items: center; box-sizing: border-box; z-index: 100000; font-family: 'Orbitron'; pointer-events: auto !important; 
-        }
-        
-        .q-nav-menu { display: flex; align-items: center; gap: 0.8vw; pointer-events: auto !important; width: 100%; justify-content: center; }
-        .q-nav-btn { background: transparent; border: 1px solid rgba(255,255,255,0.2); color: rgba(255,255,255,0.6); padding: 6px 12px; border-radius: 4px; font-family: 'Orbitron'; font-size: 0.6rem; font-weight: bold; cursor: pointer; transition: 0.3s; letter-spacing: 1px; padding-left: 13px; text-decoration: none; display: inline-block; text-align: center; pointer-events: auto !important; white-space: nowrap; }
-        .q-nav-btn:hover { border-color: #fff; color: #fff; box-shadow: 0 0 10px rgba(255, 255, 255, 0.3); }
-        
-        .q-nav-btn.sim-badge { border-color: ${authBorder} !important; color: ${authColor} !important; background: ${authBg} !important; padding-left: 12px; }
-        
-        .q-nav-btn.face-btn.active { border-color: var(--chrono-amber) !important; color: var(--chrono-amber) !important; box-shadow: inset 0 0 10px var(--chrono-amber-dim) !important; }
-        .q-nav-btn.bio-btn.active { border-color: var(--bio-purple, #b829ff) !important; color: var(--bio-purple, #b829ff) !important; box-shadow: inset 0 0 10px rgba(184, 41, 255, 0.15) !important; }
-        .q-nav-btn.com-btn.active { border-color: var(--gold, #F4D068) !important; color: var(--gold, #F4D068) !important; box-shadow: inset 0 0 10px rgba(244,208,104,0.2) !important; }
-        .q-nav-btn.env-btn.active { border-color: var(--env-green, #a7ff83) !important; color: var(--env-green, #a7ff83) !important; box-shadow: inset 0 0 10px rgba(167,255,131,0.2) !important; }
-        .q-nav-btn.mec-btn.active { border-color: var(--sys-cyan, #00f0ff) !important; color: var(--sys-cyan, #00f0ff) !important; box-shadow: inset 0 0 10px rgba(0,240,255,0.2) !important; }
+        .desktop-only { display: flex !important; }
+        .mobile-only-flex { display: none !important; }
 
-        .q-global-controls { position: fixed; left: 50%; transform: translateX(-50%); z-index: 99990; align-items: center; gap: 12px; background: rgba(10, 12, 18, 0.95); backdrop-filter: blur(20px); border-radius: 50px; padding: 10px 25px; justify-content: space-between; box-shadow: 0 10px 40px rgba(0,0,0,0.9), 0 0 20px rgba(255,255,255,0.05); border: 1px solid rgba(255, 255, 255, 0.1); pointer-events: auto; display: flex; bottom: calc(2.5vh + 60px); }
-        
-        .q-ctrl-btn { background: transparent; border: 1px solid var(--theme-main, #00f0ff); color: var(--theme-main, #00f0ff); padding: 8px 14px; cursor: pointer; font-family: 'Orbitron'; font-size: 0.65rem; font-weight: 700; border-radius: 6px; transition: 0.3s; letter-spacing: 1px; padding-left: 15px; white-space: nowrap; pointer-events: auto; }
-        .q-ctrl-btn:hover { background: rgba(255,255,255,0.1); color: #fff; }
-        .q-ctrl-btn.active { background: var(--theme-main, #00f0ff); color: #000; }
-        .q-scrubber { flex-grow: 1; min-width: 250px; accent-color: var(--theme-main, #00f0ff); cursor: pointer; height: 4px; -webkit-appearance: none; margin: 0 10px; border-radius: 2px; background: rgba(255,255,255,0.1); pointer-events: auto; }
-        .q-scrubber::-webkit-slider-thumb { -webkit-appearance: none; height: 22px; width: 22px; background: var(--theme-main, #00f0ff); clip-path: polygon(50% 0%, 60% 40%, 100% 50%, 60% 60%, 50% 100%, 40% 60%, 0% 50%, 40% 40%); cursor: grab; pointer-events: auto; }
-        .q-scrubber::-webkit-slider-thumb:active { cursor: grabbing; }
-
-        #q-mic-fab-desktop { position: fixed; bottom: 20px; right: 20px; width: 50px; height: 50px; border-radius: 50%; background: rgba(5, 8, 15, 0.9); border: 1px solid var(--theme-main, #00f0ff); color: var(--theme-main, #00f0ff); display: flex; justify-content: center; align-items: center; z-index: 100000; box-shadow: 0 0 15px rgba(0,0,0,0.8); cursor: pointer; font-size: 1.2rem; transition: all 0.3s ease; pointer-events: auto !important; }
-        #q-mic-fab-desktop:hover, #q-mic-fab-desktop.listening { background: var(--theme-main, #00f0ff); color: #000; box-shadow: 0 0 20px var(--theme-main, #00f0ff); }
-        #q-mic-fab-desktop.listening { animation: pulse-mic-desktop 1.5s infinite; }
-        @keyframes pulse-mic-desktop { 0% { transform: scale(1); box-shadow: 0 0 10px var(--theme-main, #00f0ff); } 50% { transform: scale(1.1); box-shadow: 0 0 25px var(--theme-main, #00f0ff); } 100% { transform: scale(1); box-shadow: 0 0 10px var(--theme-main, #00f0ff); } }
-
-        /* --- MOBILE NAVIGATION (ONLY INJECTED ON VECTORS) --- */
         @media (max-width: 950px) {
+            .desktop-only { display: none !important; }
+            .mobile-only-flex { display: flex !important; }
+            
             body:not(.telemetry-open) .telemetry-node { display: none !important; visibility: hidden !important; }
             body:not(.telemetry-open) .vector-anchor { display: none !important; visibility: hidden !important; }
             body:not(.telemetry-open) .wing-panel { display: none !important; }
             body:not(.telemetry-open) .corner-panel { display: none !important; }
             
             .q-center-dial { margin-top: -3vh !important; }
-
-            .q-nav-bar { 
+            
+            /* --- APERTURE MOBILE SUPPRESSION MATRIX --- */
+            body.q-aperture-home .q-control-strip,
+            body.q-aperture-home #mobile-telemetry-ribbon,
+            body.q-aperture-home #q-universal-controls,
+            body.q-aperture-home .q-nav-bar {
+                display: none !important;
+                visibility: hidden !important;
+                opacity: 0 !important;
+                pointer-events: none !important;
+            }
+            
+            /* --- VECTOR HUD MOBILE ACTIVATION MATRIX --- */
+            
+            /* 1. TOP NAVBAR (Hamburger Menu Container) */
+            body.q-vector-hud .q-nav-bar { 
                 display: flex !important;
                 position: fixed !important;
-                top: 0px !important; margin-top: 0px !important; left: 0px !important; padding: 0 10px !important; 
-                height: 50px !important; width: 100% !important; transform: none !important; border-radius: 0 !important; 
-                background: transparent !important; border: none !important; box-shadow: none !important; pointer-events: none !important; 
+                top: 0px !important; 
+                margin-top: 0px !important; 
+                left: 0px !important; 
+                padding: 0 10px !important; 
+                height: 50px !important; 
+                width: 100vw !important; 
+                transform: none !important; 
+                border-radius: 0 !important; 
+                background: rgba(2, 6, 15, 0.95) !important; /* Visible background for Vectors */
+                border-bottom: 1px solid rgba(255,255,255,0.1) !important; 
+                box-shadow: 0 5px 15px rgba(0,0,0,0.9) !important; 
+                pointer-events: none !important; 
                 z-index: 2147483647 !important;
+                visibility: visible !important;
+                opacity: 1 !important;
             }
-            .q-nav-menu { display: none !important; }
-            .hamburger-btn {
+            body.q-vector-hud .q-nav-bar * { pointer-events: auto !important; }
+            
+            /* 2. THE HAMBURGER MENU BUTTON */
+            body.q-vector-hud .hamburger-btn {
                 display: block !important;
                 pointer-events: auto !important; 
                 position: absolute !important;
@@ -202,17 +207,100 @@ window.injectUniversalUI = function() {
                 top: 10px !important;
                 z-index: 2147483647 !important;
             }
+
+            /* 2.5 RESTORE MENU CONTENTS (Badge + Aperture) */
+            body.q-vector-hud .q-nav-menu { 
+                display: flex !important; 
+                position: static !important;
+                flex-direction: row !important;
+                justify-content: flex-start !important;
+                align-items: center !important;
+                width: calc(100% - 50px) !important; /* Make room for the hamburger */
+                background: transparent !important;
+                border: none !important;
+                box-shadow: none !important;
+                overflow-x: auto !important;
+                padding-bottom: 0 !important;
+                gap: 8px !important;
+            } 
+            body.q-vector-hud .q-nav-menu::-webkit-scrollbar { display: none; }
+
+            /* Strip out the redundant buttons from the top bar so only Auth + Aperture remain */
+            body.q-vector-hud .q-nav-menu .bio-btn,
+            body.q-vector-hud .q-nav-menu .com-btn,
+            body.q-vector-hud .q-nav-menu .env-btn,
+            body.q-vector-hud .q-nav-menu .mec-btn {
+                display: none !important;
+            }
+
+            /* Ensure Aperture and Badge explicitly render */
+            body.q-vector-hud .q-nav-menu .face-btn,
+            body.q-vector-hud .q-nav-menu .sim-badge {
+                display: inline-block !important;
+            }
+
+            /* Small adjustments for badge fit */
+            body.q-vector-hud #q-global-sim-badge { font-size: 0.45rem !important; padding: 2px 4px !important; letter-spacing: 0px !important; margin-left: 0 !important; white-space: nowrap; flex-shrink: 0; position: relative; z-index: 100000; pointer-events: auto !important; }
+            body.q-vector-hud .q-nav-btn { padding: 4px 8px; font-size: 0.55rem; margin-right: 0; border-radius: 4px; border: 1px solid rgba(255,255,255,0.2) !important; }
             
-            .q-control-strip {
+            /* 3. BOTTOM CONTROL STRIP (Vector Tabs) */
+            body.q-vector-hud .q-control-strip {
                 display: flex !important;
                 position: fixed !important;
-                bottom: 0px !important; left: 0px !important; width: 100% !important; height: 65px !important;
+                bottom: 0px !important;
+                left: 0px !important;
+                width: 100% !important;
+                height: 65px !important;
                 padding-bottom: env(safe-area-inset-bottom) !important;
                 z-index: 2147483647 !important;
                 background: rgba(2, 6, 15, 0.98) !important;
                 border-top: 1px solid var(--theme-dim, rgba(0, 240, 255, 0.2)) !important;
-                justify-content: space-around !important; align-items: center !important;
+                justify-content: space-around !important;
+                align-items: center !important;
                 box-shadow: 0 -10px 30px rgba(0,0,0,0.9) !important;
+                visibility: visible !important;
+                opacity: 1 !important;
+                pointer-events: auto !important;
+            }
+
+            /* 4. THE SCRUBBER (Raised above the bottom strip) */
+            body.q-vector-hud #q-universal-controls {
+                display: flex !important;
+                position: fixed !important;
+                bottom: calc(75px + env(safe-area-inset-bottom)) !important;
+                z-index: 2147483646 !important;
+                visibility: visible !important;
+                opacity: 1 !important;
+                pointer-events: auto !important;
+                align-items: center !important; 
+                justify-content: space-between !important;
+                width: 95% !important; 
+                min-width: unset !important; 
+                box-sizing: border-box !important; 
+                padding: 6px 8px !important; 
+                gap: 4px !important;
+            }
+
+            /* 5. THE TELEMETRY RIBBON (Top Info Bar) */
+            body.q-vector-hud #mobile-telemetry-ribbon {
+                display: flex !important;
+                position: fixed !important;
+                top: 50px !important;
+                margin-top: 0 !important;
+                left: 0px !important;
+                height: 45px !important;
+                width: 100% !important;
+                background: rgba(2, 6, 15, 0.98) !important;
+                border-bottom: 1px solid var(--theme-dim, rgba(0, 240, 255, 0.2)) !important;
+                z-index: 2147483645 !important;
+                justify-content: space-between !important;
+                align-items: center !important;
+                box-shadow: 0 5px 15px rgba(0,0,0,0.9) !important;
+                padding: 0 10px !important;
+                box-sizing: border-box !important;
+                white-space: nowrap !important;
+                visibility: visible !important;
+                opacity: 1 !important;
                 pointer-events: auto !important;
             }
             
@@ -230,16 +318,17 @@ window.injectUniversalUI = function() {
             .strip-btn.mec-strip.active .strip-lbl { color: var(--sys-cyan, #00f0ff) !important; }
             .strip-lbl { font-family: 'Orbitron'; font-size: 0.4rem; font-weight: 900; letter-spacing: 1px; padding-left: 1px; color: rgba(255,255,255,0.5); transition: 0.3s; }
 
-            .q-global-controls {
-                display: flex !important;
-                position: fixed !important;
-                bottom: calc(75px + env(safe-area-inset-bottom)) !important;
-                z-index: 2147483646 !important;
-                pointer-events: auto !important;
-                align-items: center !important; justify-content: space-between !important;
-                width: 95% !important; min-width: unset !important; box-sizing: border-box !important; 
-                padding: 6px 8px !important; gap: 4px !important;
-            }
+            #mobile-telemetry-viewport { display: none; position: fixed !important; top: 95px !important; bottom: 65px !important; height: auto !important; left: 0; width: 100vw; background: rgba(5,5,8,0.95); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px); z-index: 99900; overflow-y: scroll !important; overflow-x: hidden !important; -webkit-overflow-scrolling: touch; overscroll-behavior: contain; flex-direction: column; align-items: center; justify-content: flex-start; padding-top: 15px !important; margin-top: 0 !important; padding-bottom: 20px !important; box-sizing: border-box !important; gap: 15px; pointer-events: auto !important; }
+            #mobile-telemetry-viewport .telemetry-node { display: flex !important; position: relative !important; top: auto !important; left: auto !important; right: auto !important; bottom: auto !important; transform: translateZ(0) !important; margin: 0 !important; width: 95vw !important; max-width: 360px !important; min-height: min-content !important; height: auto !important; box-sizing: border-box !important; backface-visibility: hidden !important; visibility: visible !important; flex-shrink: 0 !important; pointer-events: auto !important; opacity: 1 !important; }
+            #mobile-telemetry-viewport .wing-panel { display: none !important; }
+            #mobile-telemetry-viewport .corner-panel { height: auto !important; min-height: 120px !important; padding: 20px !important; }
+            #mobile-telemetry-viewport .panel-bg { display: none !important; } 
+            #mobile-telemetry-viewport .frost-zone { inset: 0 !important; border-radius: 8px !important; border: 1px solid rgba(255,255,255,0.1); }
+            #mobile-telemetry-viewport .panel-data-container { padding: 0 !important; margin-top: 10px !important; align-items: center !important; text-align: center !important; }
+            #mobile-telemetry-viewport .panel-label { padding: 0 !important; position: relative !important; }
+            #mobile-telemetry-viewport .opt-oval { position: absolute !important; top: 15px !important; right: 15px !important; left: auto !important; bottom: auto !important; }
+            
+            body.telemetry-open .q-center-dial { display: none !important; }
 
             #q-mic-fab { 
                 position: static !important; transform: none !important;
@@ -252,31 +341,6 @@ window.injectUniversalUI = function() {
             .q-scrubber { order: 3 !important; min-width: 0 !important; width: 100% !important; margin: 0 !important; flex-grow: 1 !important; }
             .q-global-controls > .q-ctrl-btn:nth-child(3) { order: 4 !important; padding: 0 8px !important; height: 32px !important; min-width: 24px !important; flex-shrink: 0; }
             #q-live-toggle { order: 5 !important; width: auto !important; min-width: 32px !important; height: 32px !important; padding: 0 6px !important; font-size: 0.55rem !important; flex-shrink: 0 !important; margin: 0 !important; }
-
-            #mobile-telemetry-ribbon {
-                display: flex !important;
-                position: fixed !important;
-                top: 50px !important; margin-top: 0 !important; left: 0px !important; height: 45px !important; width: 100% !important;
-                background: rgba(2, 6, 15, 0.98) !important; border-bottom: 1px solid var(--theme-dim, rgba(0, 240, 255, 0.2)) !important;
-                z-index: 2147483645 !important;
-                justify-content: space-between !important; align-items: center !important;
-                box-shadow: 0 5px 15px rgba(0,0,0,0.9) !important; padding: 0 10px !important; box-sizing: border-box !important; white-space: nowrap !important;
-                pointer-events: auto !important;
-            }
-            #ribbon-leg-date { white-space: nowrap; font-size: 0.6rem !important; }
-            #ribbon-leg { white-space: nowrap; font-size: 0.65rem !important; }
-
-            #mobile-telemetry-viewport { display: none; position: fixed !important; top: 95px !important; bottom: 65px !important; height: auto !important; left: 0; width: 100vw; background: rgba(5,5,8,0.95); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px); z-index: 99900; overflow-y: scroll !important; overflow-x: hidden !important; -webkit-overflow-scrolling: touch; overscroll-behavior: contain; flex-direction: column; align-items: center; justify-content: flex-start; padding-top: 15px !important; margin-top: 0 !important; padding-bottom: 20px !important; box-sizing: border-box !important; gap: 15px; pointer-events: auto !important; }
-            #mobile-telemetry-viewport .telemetry-node { display: flex !important; position: relative !important; top: auto !important; left: auto !important; right: auto !important; bottom: auto !important; transform: translateZ(0) !important; margin: 0 !important; width: 95vw !important; max-width: 360px !important; min-height: min-content !important; height: auto !important; box-sizing: border-box !important; backface-visibility: hidden !important; visibility: visible !important; flex-shrink: 0 !important; pointer-events: auto !important; opacity: 1 !important; }
-            #mobile-telemetry-viewport .wing-panel { display: none !important; }
-            #mobile-telemetry-viewport .corner-panel { height: auto !important; min-height: 120px !important; padding: 20px !important; }
-            #mobile-telemetry-viewport .panel-bg { display: none !important; } 
-            #mobile-telemetry-viewport .frost-zone { inset: 0 !important; border-radius: 8px !important; border: 1px solid rgba(255,255,255,0.1); }
-            #mobile-telemetry-viewport .panel-data-container { padding: 0 !important; margin-top: 10px !important; align-items: center !important; text-align: center !important; }
-            #mobile-telemetry-viewport .panel-label { padding: 0 !important; position: relative !important; }
-            #mobile-telemetry-viewport .opt-oval { position: absolute !important; top: 15px !important; right: 15px !important; left: auto !important; bottom: auto !important; }
-            
-            body.telemetry-open .q-center-dial { display: none !important; }
         }
     `;
     document.head.appendChild(style);
@@ -284,7 +348,6 @@ window.injectUniversalUI = function() {
     const uiContainer = document.createElement('div');
     uiContainer.id = 'q-ui-injected-flag';
 
-    // --- BASE ASSETS INJECTED EVERYWHERE ---
     let htmlPayload = `
         <div class="space-bg"></div>
         <div class="star-container" id="stars"></div>
@@ -371,7 +434,6 @@ window.injectUniversalUI = function() {
         </div>
     `;
 
-    // --- CONDITIONAL INJECTION: ONLY IF ON A VECTOR HUD ---
     if (isVector) {
         htmlPayload += `
             <div class="q-nav-bar">

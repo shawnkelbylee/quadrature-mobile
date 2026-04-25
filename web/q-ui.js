@@ -1,7 +1,7 @@
 // THE QUADRATURE: UNIFIED UI MATRIX & RENDERER
 // Architect: Kelby | Engineer: Kairos
 // STATUS: Phase IV UI Engine. Hollow Shell Optimization. 
-// REVISION: Mobile Y-Axis Calibration & Native Typography Scaling
+// REVISION: Stacking Context Reversion & Precision Mobile Spacing
 
 window.injectUniversalUI = function() {
     if (window.self !== window.top) return;
@@ -150,6 +150,7 @@ window.injectUniversalUI = function() {
         .desktop-only { display: flex !important; }
         .mobile-only-flex { display: none !important; }
 
+        /* --- GLOBAL DESKTOP NAVBAR --- */
         .q-nav-bar { 
             position: fixed; 
             ${isHome ? 'display: none !important;' : 'bottom: 2.5vh; left: 50%; transform: translateX(-50%); width: max-content; padding: 0 20px; border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.9), inset 0 0 20px rgba(255,255,255,0.05);'}
@@ -212,8 +213,8 @@ window.injectUniversalUI = function() {
                 pointer-events: none !important;
             }
             
-            /* CRITICAL FIX: Explicit override forcing the corner panels to render over the Iris */
-            body.q-aperture-home.mobile-panels-revealed div.corner-panel.telemetry-node {
+            /* CRITICAL FIX: Override Desktop-Only to reveal panels over Iris on Mobile */
+            body.q-aperture-home.mobile-panels-revealed div.corner-panel.desktop-only {
                 display: flex !important;
                 opacity: 1 !important;
                 visibility: visible !important; 
@@ -223,7 +224,7 @@ window.injectUniversalUI = function() {
                 transform: translateX(-50%) !important;
                 right: auto !important;
                 width: 220px !important;
-                height: 50px !important; /* Compressed for Native Viewports */
+                height: 45px !important;
                 position: fixed !important;
                 background: rgba(10, 15, 25, 0.95) !important;
                 border: 1px solid rgba(255,255,255,0.2) !important;
@@ -232,24 +233,25 @@ window.injectUniversalUI = function() {
             }
             
             /* Typography Scaling for Native Expo Alignment */
-            body.q-aperture-home.mobile-panels-revealed div.corner-panel.telemetry-node .panel-label {
+            body.q-aperture-home.mobile-panels-revealed div.corner-panel.desktop-only .panel-label {
                 padding: 0 !important;
-                font-size: 0.75rem !important;
-                letter-spacing: 2px !important;
+                font-size: 0.65rem !important;
+                letter-spacing: 1px !important;
+                line-height: 45px !important;
             }
             
             /* Hide the visual artifacts that do not fit the mobile panel layout */
-            body.q-aperture-home.mobile-panels-revealed div.corner-panel.telemetry-node .frost-zone,
-            body.q-aperture-home.mobile-panels-revealed div.corner-panel.telemetry-node .panel-bg,
-            body.q-aperture-home.mobile-panels-revealed div.corner-panel.telemetry-node .opt-oval {
+            body.q-aperture-home.mobile-panels-revealed div.corner-panel.desktop-only .frost-zone,
+            body.q-aperture-home.mobile-panels-revealed div.corner-panel.desktop-only .panel-bg,
+            body.q-aperture-home.mobile-panels-revealed div.corner-panel.desktop-only .opt-oval {
                 display: none !important;
             }
             
-            /* Precision Mobile Positioning: Centered evenly between Omni-Planner and Dashboard */
-            body.q-aperture-home.mobile-panels-revealed div.corner-panel.tl { top: 27vh !important; bottom: auto !important; border-color: var(--bio-purple) !important; }
-            body.q-aperture-home.mobile-panels-revealed div.corner-panel.tr { top: 40vh !important; bottom: auto !important; border-color: var(--gold, #F4D068) !important; }
-            body.q-aperture-home.mobile-panels-revealed div.corner-panel.bl { top: 53vh !important; bottom: auto !important; border-color: var(--env-green, #a7ff83) !important; }
-            body.q-aperture-home.mobile-panels-revealed div.corner-panel.br { top: 66vh !important; bottom: auto !important; border-color: var(--sys-cyan, #00f0ff) !important; }
+            /* Precision Mobile Positioning: Centered evenly between Omni-Planner (19.5vh) and Dashboard (80.5vh) */
+            body.q-aperture-home.mobile-panels-revealed div.corner-panel.tl { top: 28vh !important; bottom: auto !important; border-color: var(--bio-purple, #b829ff) !important; }
+            body.q-aperture-home.mobile-panels-revealed div.corner-panel.tr { top: 43vh !important; bottom: auto !important; border-color: var(--gold, #F4D068) !important; }
+            body.q-aperture-home.mobile-panels-revealed div.corner-panel.bl { top: 58vh !important; bottom: auto !important; border-color: var(--env-green, #a7ff83) !important; }
+            body.q-aperture-home.mobile-panels-revealed div.corner-panel.br { top: 73vh !important; bottom: auto !important; border-color: var(--sys-cyan, #00f0ff) !important; }
 
             /* Dim Iris when panels are active */
             body.q-aperture-home.mobile-panels-revealed .q-center-dial {
@@ -266,7 +268,7 @@ window.injectUniversalUI = function() {
             .q-nav-bar * { pointer-events: auto !important; }
             
             /* CRITICAL FIX: Ensure Aperture Nav Button is Visible on Vectors */
-            .q-nav-menu .vector-link:not(.face-btn) { display: none !important; } 
+            .q-nav-menu > *:not(.face-btn):not(.sim-badge) { display: none !important; } 
             body.q-vector-hud .q-nav-menu .face-btn { display: inline-block !important; margin-left: 8px !important; }
             
             #q-global-sim-badge { font-size: 0.45rem !important; padding: 2px 4px !important; letter-spacing: 0px !important; margin-left: 0 !important; white-space: nowrap; flex-shrink: 0; position: relative; z-index: 100000; pointer-events: auto !important; }
@@ -361,9 +363,13 @@ window.injectUniversalUI = function() {
 
     const uiContainer = document.createElement('div');
     uiContainer.id = 'q-ui-injected-flag';
-    uiContainer.style.cssText = "position:absolute; inset:0; pointer-events:none; z-index:20;";
+    // CRITICAL FIX: Empty flag injected safely. No inline styles. No Z-Index flattening.
+    document.body.appendChild(uiContainer);
+
+    const uiWrapper = document.createElement('div');
     
-    uiContainer.innerHTML = `
+    // CRITICAL FIX: The .desktop-only class is RESTORED to the corner panels here so index.html doesn't purge them on Desktop.
+    uiWrapper.innerHTML = `
         <div class="space-bg"></div>
         <div class="star-container" id="stars"></div>
         <div class="nebula-left"></div>
@@ -428,25 +434,25 @@ window.injectUniversalUI = function() {
         <button id="q-mic-fab" class="mobile-only-flex" onclick="if(window.Q_KairosVoice) window.Q_KairosVoice.toggle()">🎙</button>
         <button id="q-mic-fab-desktop" class="desktop-only" onclick="if(window.Q_KairosVoice) window.Q_KairosVoice.toggle()">🎙</button>
 
-        <div class="corner-panel tl telemetry-node">
+        <div class="corner-panel tl telemetry-node desktop-only">
             <div class="frost-zone"></div>
             <div class="panel-bg"></div>
             <div class="opt-oval" id="opt-tl">OPT</div>
             <div class="panel-data-container" id="quad-tl"></div>
         </div>
-        <div class="corner-panel tr telemetry-node">
+        <div class="corner-panel tr telemetry-node desktop-only">
             <div class="frost-zone"></div>
             <div class="panel-bg"></div>
             <div class="opt-oval" id="opt-tr">OPT</div>
             <div class="panel-data-container" id="quad-tr"></div>
         </div>
-        <div class="corner-panel bl telemetry-node">
+        <div class="corner-panel bl telemetry-node desktop-only">
             <div class="frost-zone"></div>
             <div class="panel-bg"></div>
             <div class="opt-oval" id="opt-bl">OPT</div>
             <div class="panel-data-container" id="quad-bl"></div>
         </div>
-        <div class="corner-panel br telemetry-node">
+        <div class="corner-panel br telemetry-node desktop-only">
             <div class="frost-zone"></div>
             <div class="panel-bg"></div>
             <div class="opt-oval" id="opt-br">OPT</div>
@@ -512,7 +518,10 @@ window.injectUniversalUI = function() {
         </div>
     `;
     
-    document.body.appendChild(uiContainer);
+    // CRITICAL FIX 3: Unpacking directly to body. No wrapper. Global Z-Index maintained.
+    while(uiWrapper.firstChild) {
+        document.body.appendChild(uiWrapper.firstChild);
+    }
     
     window.bindMasterTickScrubber();
     window.syncScrubberUI();
@@ -604,9 +613,13 @@ window.addEventListener('click', (e) => {
         const dial = e.target.closest('.q-center-dial');
         const panel = e.target.closest('.corner-panel');
         
-        if (dial && !document.body.classList.contains('mobile-panels-revealed')) {
-            document.body.classList.add('mobile-panels-revealed');
-        } else if (!panel) {
+        if (dial) {
+            if (document.body.classList.contains('mobile-panels-revealed')) {
+                document.body.classList.remove('mobile-panels-revealed');
+            } else {
+                document.body.classList.add('mobile-panels-revealed');
+            }
+        } else if (!panel && document.body.classList.contains('mobile-panels-revealed')) {
             document.body.classList.remove('mobile-panels-revealed');
         }
     }
@@ -723,11 +736,15 @@ window.toggleTelemetry = function() {
     const icon = document.getElementById('tele-icon');
     if(icon) icon.innerHTML = isOpen ? "✖" : `<path d="M18 20V10M12 20V4M6 20v-6"/>`;
     let viewport = document.getElementById('mobile-telemetry-viewport');
+    
+    // CRITICAL FIX 4: Telemetry Viewport injected into safe wrapper flag, dodging index.html purge
+    const container = document.getElementById('q-ui-injected-flag') || document.body;
+    
     if (isOpen) {
         if (!viewport) { 
             viewport = document.createElement('div'); 
             viewport.id = 'mobile-telemetry-viewport'; 
-            document.body.appendChild(viewport); 
+            container.appendChild(viewport); 
         }
         viewport.style.display = 'flex';
         document.querySelectorAll('.telemetry-node').forEach(node => {
@@ -737,7 +754,9 @@ window.toggleTelemetry = function() {
         });
     } else {
         if (viewport) { 
-            Array.from(viewport.childNodes).forEach(node => document.body.appendChild(node)); 
+            Array.from(viewport.childNodes).forEach(node => {
+                document.body.appendChild(node);
+            }); 
             viewport.style.display = 'none'; 
         }
     }

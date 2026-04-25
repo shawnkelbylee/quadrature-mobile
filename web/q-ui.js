@@ -1,7 +1,7 @@
 // THE QUADRATURE: UNIFIED UI MATRIX & RENDERER
 // Architect: Kelby | Engineer: Kairos
 // STATUS: Phase IV UI Engine. Hollow Shell Optimization. 
-// REVISION: DOM Unpacking Restoration & Mobile Iris Visibility Override
+// REVISION: Encapsulation Restored & Mobile Iris Routing Enforced
 
 window.injectUniversalUI = function() {
     if (window.self !== window.top) return;
@@ -50,6 +50,8 @@ window.injectUniversalUI = function() {
     const authBorder = authState === 'ACTIVE' ? '#39ff14' : '#ff003c';
     const authText = authState === 'ACTIVE' ? '[ IN THE QUAD ]' : '[ AUTHENTICATE ]';
 
+    const faceActive = isHome;
+
     const style = document.createElement('style');
     style.innerHTML = `
         /* --- CORE NORMALIZATION & WEBKIT Z-INDEX FIX --- */
@@ -69,19 +71,11 @@ window.injectUniversalUI = function() {
             --starlight: rgba(255, 255, 255, 0.7); --platinum: #E5E4E2; --chrono-amber: #B97A35; 
             --chrono-amber-dim: rgba(185, 122, 53, 0.2); 
             --q-blue-glow: rgba(0, 163, 255, 0.3); --q-metal: #e2e8f0;
-            --center-gap-x: 36vh; 
-            --corner-gap-y: 21vh; 
-            --corner-gap-x: 32vh;
-            --panel-w: 460px;
-            --panel-h: 170px;
-        }
-        
-        body.q-aperture-home {
-            --center-gap-x: 31vh; 
-            --corner-gap-y: 24vh; 
-            --corner-gap-x: 23vh;
-            --panel-w: 340px;
-            --panel-h: 80px;
+            --center-gap-x: ${isHome ? '31vh' : '36vh'}; 
+            --corner-gap-y: ${isHome ? '24vh' : '21vh'}; 
+            --corner-gap-x: ${isHome ? '23vh' : '32vh'};
+            --panel-w: ${isHome ? '340px' : '460px'};
+            --panel-h: ${isHome ? '80px' : '170px'};
         }
         
         .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); backdrop-filter: blur(10px); z-index: 10000; display: none; justify-content: center; align-items: center; cursor: pointer; }
@@ -218,8 +212,8 @@ window.injectUniversalUI = function() {
                 pointer-events: none !important;
             }
             
-            /* CRITICAL FIX: Override visibility rules specifically when revealed */
-            body.q-aperture-home.mobile-panels-revealed .corner-panel {
+            /* CRITICAL FIX: Explicit override forcing the corner panels to render over the Iris */
+            body.q-aperture-home.mobile-panels-revealed div.corner-panel.telemetry-node {
                 display: flex !important;
                 opacity: 1 !important;
                 visibility: visible !important; 
@@ -228,18 +222,36 @@ window.injectUniversalUI = function() {
                 left: 50% !important;
                 transform: translateX(-50%) !important;
                 right: auto !important;
-                width: 220px !important;
-                height: 70px !important;
+                width: 240px !important;
+                height: 60px !important;
+                position: fixed !important;
+                background: rgba(10, 15, 25, 0.95) !important;
+                border: 1px solid rgba(255,255,255,0.2) !important;
+                border-radius: 8px !important;
+                box-shadow: 0 10px 30px rgba(0,0,0,0.9) !important;
             }
-            body.q-aperture-home.mobile-panels-revealed .corner-panel.tl { top: 20vh !important; bottom: auto !important; }
-            body.q-aperture-home.mobile-panels-revealed .corner-panel.tr { top: 35vh !important; bottom: auto !important; }
-            body.q-aperture-home.mobile-panels-revealed .corner-panel.bl { top: 50vh !important; bottom: auto !important; }
-            body.q-aperture-home.mobile-panels-revealed .corner-panel.br { top: 65vh !important; bottom: auto !important; }
+            body.q-aperture-home.mobile-panels-revealed div.corner-panel.telemetry-node .panel-label {
+                padding: 0 !important;
+                font-size: 1rem !important;
+            }
+            /* Hide the visual artifacts that do not fit the mobile panel layout */
+            body.q-aperture-home.mobile-panels-revealed div.corner-panel.telemetry-node .frost-zone,
+            body.q-aperture-home.mobile-panels-revealed div.corner-panel.telemetry-node .panel-bg,
+            body.q-aperture-home.mobile-panels-revealed div.corner-panel.telemetry-node .opt-oval {
+                display: none !important;
+            }
+            
+            /* Precision Mobile Positioning */
+            body.q-aperture-home.mobile-panels-revealed div.corner-panel.tl { top: 15vh !important; bottom: auto !important; border-color: var(--bio-purple) !important; }
+            body.q-aperture-home.mobile-panels-revealed div.corner-panel.tr { top: 30vh !important; bottom: auto !important; border-color: var(--gold, #F4D068) !important; }
+            body.q-aperture-home.mobile-panels-revealed div.corner-panel.bl { top: 45vh !important; bottom: auto !important; border-color: var(--env-green, #a7ff83) !important; }
+            body.q-aperture-home.mobile-panels-revealed div.corner-panel.br { top: 60vh !important; bottom: auto !important; border-color: var(--sys-cyan, #00f0ff) !important; }
 
             /* Dim Iris when panels are active */
             body.q-aperture-home.mobile-panels-revealed .q-center-dial {
-                opacity: 0.3 !important;
-                transition: opacity 0.3s ease;
+                opacity: 0.2 !important;
+                filter: blur(4px) !important;
+                transition: opacity 0.3s ease, filter 0.3s ease;
             }
             
             .q-nav-bar { 
@@ -341,9 +353,9 @@ window.injectUniversalUI = function() {
     document.head.appendChild(style);
 
     const uiContainer = document.createElement('div');
+    uiContainer.id = 'q-ui-injected-flag';
     
-    /* CRITICAL FIX 1: The corner panels are stripped of the 'desktop-only' class. 
-       This prevents them from being completely erased from the DOM on mobile viewports. */
+    // CRITICAL FIX: The .desktop-only class is completely stripped from the corner panels so they can render on mobile.
     uiContainer.innerHTML = `
         <div class="space-bg"></div>
         <div class="star-container" id="stars"></div>
@@ -493,17 +505,8 @@ window.injectUniversalUI = function() {
         </div>
     `;
     
-    /* CRITICAL FIX 2: Restoring the Unpacking Protocol.
-       This bypasses index.html's strict child suppression rules, returning visibility to the Desktop. */
-    const flag = document.createElement('div');
-    flag.id = 'q-ui-injected-flag';
-    flag.style.display = 'none';
-    document.body.appendChild(flag);
-    
-    const refNode = document.body.firstChild;
-    while (uiContainer.firstChild) {
-        document.body.insertBefore(uiContainer.firstChild, refNode);
-    }
+    // CRITICAL FIX: The wrapper must be appended to the body to comply with the index.html whitelist.
+    document.body.appendChild(uiContainer);
     
     window.bindMasterTickScrubber();
     window.syncScrubberUI();
@@ -877,6 +880,7 @@ window.syncScrubberUI = function() {
 
 window.addEventListener('DOMContentLoaded', () => {
     window.injectUniversalUI();
+    // Fire global star generation now that the universal #stars container is mounted
     if (window.generateStars) window.generateStars('stars');
 
     if (window.innerWidth <= 950) {

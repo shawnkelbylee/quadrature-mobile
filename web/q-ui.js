@@ -1,7 +1,7 @@
 // THE QUADRATURE: UNIFIED UI MATRIX & RENDERER
 // Architect: Kelby | Engineer: Kairos
 // STATUS: Phase IV UI Engine. Hollow Shell Optimization. 
-// REVISION: Webkit 3D Perspective Fix & Aperture Suppression Logic
+// REVISION: Desktop Restoration & Mobile Aperture Iris Routing
 
 window.injectUniversalUI = function() {
     if (window.self !== window.top) return;
@@ -156,6 +156,7 @@ window.injectUniversalUI = function() {
         .desktop-only { display: flex !important; }
         .mobile-only-flex { display: none !important; }
 
+        /* --- GLOBAL DESKTOP NAVBAR --- */
         .q-nav-bar { 
             position: fixed; 
             ${isHome ? 'display: none !important;' : 'bottom: 2.5vh; left: 50%; transform: translateX(-50%); width: max-content; padding: 0 20px; border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.9), inset 0 0 20px rgba(255,255,255,0.05);'}
@@ -207,7 +208,37 @@ window.injectUniversalUI = function() {
             body:not(.telemetry-open) .telemetry-node { display: none !important; visibility: hidden !important; }
             body:not(.telemetry-open) .vector-anchor { display: none !important; visibility: hidden !important; }
             body:not(.telemetry-open) .wing-panel { display: none !important; }
-            body:not(.telemetry-open) .corner-panel { display: none !important; }
+            
+            /* --- MOBILE IRIS PANEL ROUTING --- */
+            /* Hide corner panels on Aperture home by default */
+            body.q-aperture-home:not(.mobile-panels-revealed) .corner-panel { 
+                display: none !important; 
+                opacity: 0 !important;
+                pointer-events: none !important;
+            }
+            
+            /* Show panels clustered over the Iris when revealed */
+            body.q-aperture-home.mobile-panels-revealed .corner-panel {
+                display: flex !important;
+                opacity: 1 !important;
+                pointer-events: auto !important;
+                z-index: 100 !important;
+                left: 50% !important;
+                transform: translateX(-50%) !important;
+                right: auto !important;
+                width: 220px !important;
+                height: 70px !important;
+            }
+            body.q-aperture-home.mobile-panels-revealed .corner-panel.tl { top: 20vh !important; bottom: auto !important; }
+            body.q-aperture-home.mobile-panels-revealed .corner-panel.tr { top: 35vh !important; bottom: auto !important; }
+            body.q-aperture-home.mobile-panels-revealed .corner-panel.bl { top: 50vh !important; bottom: auto !important; }
+            body.q-aperture-home.mobile-panels-revealed .corner-panel.br { top: 65vh !important; bottom: auto !important; }
+
+            /* Dim Iris when panels are active */
+            body.q-aperture-home.mobile-panels-revealed .q-center-dial {
+                opacity: 0.3 !important;
+                transition: opacity 0.3s ease;
+            }
             
             .q-nav-bar { 
                 top: 0px !important; margin-top: 0px !important; left: 0px !important; padding: 0 10px !important; 
@@ -225,7 +256,7 @@ window.injectUniversalUI = function() {
             
             .q-center-dial { margin-top: -3vh !important; z-index: 10 !important;}
             
-            .q-control-strip { position: fixed; bottom: 0 !important; left: 0; width: 100%; background: rgba(2, 6, 15, 0.98); border-top: 1px solid var(--theme-dim, rgba(0, 240, 255, 0.2)); display: flex; justify-content: space-around; align-items: center; z-index: 100000; height: 65px !important; padding-bottom: 0 !important; box-shadow: 0 -10px 30px rgba(0,0,0,0.9); pointer-events: auto !important; }
+            .q-control-strip { position: fixed; bottom: 0 !important; left: 0; width: 100%; background: rgba(2, 6, 15, 0.98); border-top: 1px solid var(--theme-dim, rgba(0, 240, 255, 0.2)); display: flex; justify-content: space-around; align-items: center; z-index: 100000; height: 65px !important; padding-bottom: env(safe-area-inset-bottom, 15px) !important; box-shadow: 0 -10px 30px rgba(0,0,0,0.9); pointer-events: auto !important; box-sizing: content-box !important; }
             .strip-btn { background: transparent; border: none; color: var(--platinum); display: flex; flex-direction: column; align-items: center; gap: 4px; cursor: pointer; text-decoration: none; padding: 5px; pointer-events: auto !important; }
             .strip-btn svg { transition: 0.3s; }
             
@@ -246,7 +277,7 @@ window.injectUniversalUI = function() {
             #ribbon-leg-date { white-space: nowrap; font-size: 0.6rem !important; }
             #ribbon-leg { white-space: nowrap; font-size: 0.65rem !important; }
 
-            #mobile-telemetry-viewport { display: none; position: fixed !important; top: 95px !important; bottom: 65px !important; height: auto !important; left: 0; width: 100vw; background: rgba(5,5,8,0.95); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px); z-index: 99900; overflow-y: scroll !important; overflow-x: hidden !important; -webkit-overflow-scrolling: touch; overscroll-behavior: contain; flex-direction: column; align-items: center; justify-content: flex-start; padding-top: 15px !important; margin-top: 0 !important; padding-bottom: 20px !important; box-sizing: border-box !important; gap: 15px; pointer-events: auto !important; }
+            #mobile-telemetry-viewport { display: none; position: fixed !important; top: 95px !important; bottom: calc(65px + env(safe-area-inset-bottom, 15px)) !important; height: auto !important; left: 0; width: 100vw; background: rgba(5,5,8,0.95); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px); z-index: 99900; overflow-y: scroll !important; overflow-x: hidden !important; -webkit-overflow-scrolling: touch; overscroll-behavior: contain; flex-direction: column; align-items: center; justify-content: flex-start; padding-top: 15px !important; margin-top: 0 !important; padding-bottom: 20px !important; box-sizing: border-box !important; gap: 15px; pointer-events: auto !important; }
             #mobile-telemetry-viewport .telemetry-node { display: flex !important; position: relative !important; top: auto !important; left: auto !important; right: auto !important; bottom: auto !important; transform: translateZ(0) !important; margin: 0 !important; width: 95vw !important; max-width: 360px !important; min-height: min-content !important; height: auto !important; box-sizing: border-box !important; backface-visibility: hidden !important; visibility: visible !important; flex-shrink: 0 !important; pointer-events: auto !important; opacity: 1 !important; }
             #mobile-telemetry-viewport .wing-panel { display: none !important; }
             
@@ -268,7 +299,7 @@ window.injectUniversalUI = function() {
                 box-sizing: border-box !important; 
                 padding: 6px 8px !important; 
                 gap: 4px !important;
-                ${isHome ? 'display: none !important;' : 'bottom: calc(2.5vh + 65px) !important;'}
+                ${isHome ? 'display: none !important;' : 'bottom: calc(65px + env(safe-area-inset-bottom, 15px)) !important;'}
             } 
             
             #q-mic-fab { 
@@ -309,8 +340,9 @@ window.injectUniversalUI = function() {
 
     const uiContainer = document.createElement('div');
     uiContainer.id = 'q-ui-injected-flag';
+    // CRITICAL FIX: Ensure the wrapper doesn't block interactions, while preserving direct child CSS inheritance.
+    uiContainer.style.cssText = "position:absolute; inset:0; pointer-events:none; z-index:20;";
 
-    // THE HOLLOW SHELL: Only injecting empty frames for the local files to target.
     uiContainer.innerHTML = `
         <div class="space-bg"></div>
         <div class="star-container" id="stars"></div>
@@ -376,25 +408,25 @@ window.injectUniversalUI = function() {
         <button id="q-mic-fab" class="mobile-only-flex" onclick="if(window.Q_KairosVoice) window.Q_KairosVoice.toggle()">🎙</button>
         <button id="q-mic-fab-desktop" class="desktop-only" onclick="if(window.Q_KairosVoice) window.Q_KairosVoice.toggle()">🎙</button>
 
-        <div class="corner-panel tl telemetry-node desktop-only">
+        <div class="corner-panel tl telemetry-node">
             <div class="frost-zone"></div>
             <div class="panel-bg"></div>
             <div class="opt-oval" id="opt-tl">OPT</div>
             <div class="panel-data-container" id="quad-tl"></div>
         </div>
-        <div class="corner-panel tr telemetry-node desktop-only">
+        <div class="corner-panel tr telemetry-node">
             <div class="frost-zone"></div>
             <div class="panel-bg"></div>
             <div class="opt-oval" id="opt-tr">OPT</div>
             <div class="panel-data-container" id="quad-tr"></div>
         </div>
-        <div class="corner-panel bl telemetry-node desktop-only">
+        <div class="corner-panel bl telemetry-node">
             <div class="frost-zone"></div>
             <div class="panel-bg"></div>
             <div class="opt-oval" id="opt-bl">OPT</div>
             <div class="panel-data-container" id="quad-bl"></div>
         </div>
-        <div class="corner-panel br telemetry-node desktop-only">
+        <div class="corner-panel br telemetry-node">
             <div class="frost-zone"></div>
             <div class="panel-bg"></div>
             <div class="opt-oval" id="opt-br">OPT</div>
@@ -460,8 +492,8 @@ window.injectUniversalUI = function() {
         </div>
     `;
     
-    const refNode = document.body.firstChild;
-    while (uiContainer.firstChild) document.body.insertBefore(uiContainer.firstChild, refNode);
+    // CRITICAL FIX: Standard element injection to preserve index.html visibility
+    document.body.appendChild(uiContainer);
     
     window.bindMasterTickScrubber();
     window.syncScrubberUI();
@@ -544,10 +576,22 @@ window.injectUniversalUI = function() {
         }
     });
 
-    // --- DECOUPLED MOUNT EVENT DISPATCH ---
-    // Signals to local HTML files that the hollow frames are ready for data injection.
     window.dispatchEvent(new Event('q-ui-mounted'));
 };
+
+// --- MOBILE IRIS TOGGLE LOGIC ---
+window.addEventListener('click', (e) => {
+    if (window.innerWidth <= 950 && document.body.classList.contains('q-aperture-home')) {
+        const dial = e.target.closest('.q-center-dial');
+        const panel = e.target.closest('.corner-panel');
+        
+        if (dial && !document.body.classList.contains('mobile-panels-revealed')) {
+            document.body.classList.add('mobile-panels-revealed');
+        } else if (!panel) {
+            document.body.classList.remove('mobile-panels-revealed');
+        }
+    }
+});
 
 // Global Tax Day Deselection Interceptor
 window.addEventListener('click', (e) => {
@@ -823,7 +867,6 @@ window.syncScrubberUI = function() {
 
 window.addEventListener('DOMContentLoaded', () => {
     window.injectUniversalUI();
-    // Fire global star generation now that the universal #stars container is mounted
     if (window.generateStars) window.generateStars('stars');
 
     if (window.innerWidth <= 950) {

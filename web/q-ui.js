@@ -247,11 +247,11 @@ window.injectUniversalUI = function() {
                 display: none !important;
             }
             
-            /* Precision Mobile Positioning: Centered evenly between Omni-Planner (19.5vh) and Dashboard (80.5vh) */
-            body.q-aperture-home.mobile-panels-revealed div.corner-panel.tl { top: 28vh !important; bottom: auto !important; border-color: var(--bio-purple, #b829ff) !important; }
-            body.q-aperture-home.mobile-panels-revealed div.corner-panel.tr { top: 43vh !important; bottom: auto !important; border-color: var(--gold, #F4D068) !important; }
-            body.q-aperture-home.mobile-panels-revealed div.corner-panel.bl { top: 58vh !important; bottom: auto !important; border-color: var(--env-green, #a7ff83) !important; }
-            body.q-aperture-home.mobile-panels-revealed div.corner-panel.br { top: 73vh !important; bottom: auto !important; border-color: var(--sys-cyan, #00f0ff) !important; }
+            /* Precision Mobile Positioning: Centered exactly over shifted Iris (47vh) */
+            body.q-aperture-home.mobile-panels-revealed div.corner-panel.tl { top: 26vh !important; bottom: auto !important; border-color: var(--bio-purple, #b829ff) !important; }
+            body.q-aperture-home.mobile-panels-revealed div.corner-panel.tr { top: 38vh !important; bottom: auto !important; border-color: var(--gold, #F4D068) !important; }
+            body.q-aperture-home.mobile-panels-revealed div.corner-panel.bl { top: 50vh !important; bottom: auto !important; border-color: var(--env-green, #a7ff83) !important; }
+            body.q-aperture-home.mobile-panels-revealed div.corner-panel.br { top: 62vh !important; bottom: auto !important; border-color: var(--sys-cyan, #00f0ff) !important; }
 
             /* Dim Iris when panels are active */
             body.q-aperture-home.mobile-panels-revealed .q-center-dial {

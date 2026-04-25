@@ -1,17 +1,17 @@
 // THE QUADRATURE: SOVEREIGN MOBILE NODE (NATIVE WRAPPER)
 // STATUS: Phase IV Native Engine. Deep-Link Interceptor & Webview Bridge.
-// REVISION: Expo-Linking Auth Bypass
+// REVISION: SafeAreaView Deprecation Crash Fix
 
 import React, { useEffect, useState } from 'react';
-import { SafeAreaView, StyleSheet, StatusBar, View } from 'react-native';
+import { StyleSheet, StatusBar, View } from 'react-native';
 import { WebView } from 'react-native-webview';
 import * as Linking from 'expo-linking';
 import 'react-native-url-polyfill/auto';
 import { createClient } from '@supabase/supabase-js';
 
 // ARCHITECT NOTE: Inject your live Supabase credentials here
-const supabaseUrl = 'https://wnfpxozpeucrwqmrqpzv.supabase.co';
-const supabaseAnonKey = 'sb_publishable_g6JfCH6FefIwEmXztgkdTw_Md1z4se5';
+const supabaseUrl = 'YOUR_SUPABASE_URL';
+const supabaseAnonKey = 'YOUR_SUPABASE_ANON_KEY';
 const supabase = createClient(supabaseUrl, supabaseAnonKey);
 
 export default function App() {
@@ -30,7 +30,7 @@ export default function App() {
             setSession(session);
         });
 
-        // 3. Deep-Link Interceptor (Bypasses manual "Code/ID" fallback)
+        // 3. Deep-Link Interceptor
         const handleDeepLink = async (url) => {
             if (!url) return;
             if (url.includes('#access_token') || url.includes('?code=')) {
@@ -58,7 +58,7 @@ export default function App() {
     `;
 
     return (
-        <SafeAreaView style={styles.container}>
+        <View style={styles.container}>
             <StatusBar barStyle="light-content" backgroundColor="#010205" />
             <WebView 
                 source={{ uri: 'https://thequadrature.com' }} 
@@ -68,11 +68,11 @@ export default function App() {
                 bounces={false}
                 overScrollMode="never"
             />
-        </SafeAreaView>
+        </View>
     );
 }
 
 const styles = StyleSheet.create({
-    container: { flex: 1, backgroundColor: '#010205' },
+    container: { flex: 1, backgroundColor: '#010205', paddingTop: StatusBar.currentHeight || 0 },
     webview: { flex: 1, backgroundColor: '#010205' }
 });

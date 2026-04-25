@@ -1,7 +1,7 @@
 // THE QUADRATURE: UNIFIED UI MATRIX & RENDERER
 // Architect: Kelby | Engineer: Kairos
 // STATUS: Phase IV UI Engine. Hollow Shell Optimization. 
-// REVISION: Absolute Desktop Parity for Mobile Viewports & Hardware Bezel Clearance.
+// REVISION: Baseline Restoration, Universal Starfield Injection, Registry Purged
 
 window.injectUniversalUI = function() {
     if (window.self !== window.top) return;
@@ -22,27 +22,19 @@ window.injectUniversalUI = function() {
     let noCache2 = document.createElement('meta'); noCache2.httpEquiv = "Pragma"; noCache2.content = "no-cache"; document.head.appendChild(noCache2);
     let noCache3 = document.createElement('meta'); noCache3.httpEquiv = "Expires"; noCache3.content = "0"; document.head.appendChild(noCache3);
     
-    // --- EXACT PATH DETECTION (Aperture Override) ---
+    // --- PATH DETECTION & ROUTING LOGIC ---
     const path = window.location.pathname.toUpperCase();
-    const href = window.location.href.toUpperCase();
-    const docTitle = document.title.toUpperCase();
+    const isHome = path.endsWith("/") || path.endsWith("INDEX.HTML") || path === "";
     
-    const isHome = path.endsWith("/") || path.endsWith("INDEX.HTML") || path === "" || href.includes("APERTURE") || docTitle.includes("APERTURE");
+    const bActive = path.includes("PHYSIOLOGICAL");
+    const cActive = path.includes("METAPHYSICAL");
+    const eActive = path.includes("METEOROLOGICAL");
+    const mActive = path.includes("ASTROPHYSICAL");
     
-    const bActive = href.includes("PHYSIOLOGICAL") || docTitle.includes("PHYSIOLOGICAL");
-    const cActive = href.includes("METAPHYSICAL") || docTitle.includes("METAPHYSICAL");
-    const eActive = href.includes("METEOROLOGICAL") || docTitle.includes("METEOROLOGICAL");
-    const mActive = href.includes("ASTROPHYSICAL") || docTitle.includes("ASTROPHYSICAL");
+    const faceActive = isHome;
     
-    const isVector = bActive || cActive || eActive || mActive;
-    
-    if (isHome && !isVector) {
-        document.body.classList.add('q-aperture-home');
-        document.body.classList.remove('q-vector-hud');
-    } else {
-        document.body.classList.add('q-vector-hud');
-        document.body.classList.remove('q-aperture-home');
-    }
+    if (faceActive) document.body.classList.add('q-aperture-home');
+    else document.body.classList.add('q-vector-hud');
     
     const authState = localStorage.getItem('Q_PRO_AUTH') === 'true' ? 'ACTIVE' : 'STANDBY';
     const authBg = authState === 'ACTIVE' ? '#39ff14' : 'transparent';
@@ -52,10 +44,9 @@ window.injectUniversalUI = function() {
 
     const style = document.createElement('style');
     style.innerHTML = `
-        /* --- CORE NORMALIZATION --- */
         html, body { 
             position: fixed !important; top: 0px !important; left: 0px !important; right: 0px !important; bottom: 0px !important; 
-            width: 100% !important; height: var(--app-height, 100vh) !important; 
+            width: 100vw !important; height: var(--app-height, 100vh) !important; 
             margin: 0px !important; padding: 0px !important; 
             overflow: hidden !important; touch-action: none !important; overscroll-behavior: none !important; transform: none !important; 
             background-color: #010205; 
@@ -68,19 +59,11 @@ window.injectUniversalUI = function() {
             --starlight: rgba(255, 255, 255, 0.7); --platinum: #E5E4E2; --chrono-amber: #B97A35; 
             --chrono-amber-dim: rgba(185, 122, 53, 0.2); 
             --q-blue-glow: rgba(0, 163, 255, 0.3); --q-metal: #e2e8f0;
-            --center-gap-x: 36vh; 
-            --corner-gap-y: 21vh; 
-            --corner-gap-x: 32vh;
-            --panel-w: 460px;
-            --panel-h: 170px;
-        }
-        
-        body.q-aperture-home {
-            --center-gap-x: 31vh; 
-            --corner-gap-y: 24vh; 
-            --corner-gap-x: 23vh;
-            --panel-w: 340px;
-            --panel-h: 80px;
+            --center-gap-x: ${isHome ? '31vh' : '36vh'}; 
+            --corner-gap-y: ${isHome ? '24vh' : '21vh'}; 
+            --corner-gap-x: ${isHome ? '23vh' : '32vh'};
+            --panel-w: ${isHome ? '340px' : '460px'};
+            --panel-h: ${isHome ? '80px' : '170px'};
         }
         
         .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); backdrop-filter: blur(10px); z-index: 10000; display: none; justify-content: center; align-items: center; cursor: pointer; }
@@ -98,7 +81,7 @@ window.injectUniversalUI = function() {
         
         .dust-layer-global { position: fixed; inset: 0; z-index: 2; background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise2'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.012' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise2)' opacity='0.08'/%3E%3C/svg%3E"); mix-blend-mode: screen; pointer-events: none; }
 
-        .corner-panel { position: absolute; width: var(--panel-w); height: var(--panel-h); z-index: 20; transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); pointer-events: auto; }
+        .corner-panel { position: absolute; width: var(--panel-w); height: var(--panel-h); z-index: 20; transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
         .corner-panel:hover { transform: translate(var(--tx-hover), var(--ty-hover)) scale(1.03); }
 
         .frost-zone { position: absolute; inset: 6px 12px; background: rgba(15, 20, 35, 0.5); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border-radius: 6px; z-index: -2; box-shadow: inset 0 0 20px var(--theme-dim, rgba(0, 163, 255, 0.15)) !important; transition: 0.3s ease; }
@@ -152,18 +135,13 @@ window.injectUniversalUI = function() {
         .fmt-toggle { font-family: 'JetBrains Mono'; font-weight: bold; font-size: 0.5rem; color: var(--theme-main, #00f0ff); cursor: pointer; border: 1px solid var(--theme-dim, rgba(0,240,255,0.2)); padding: 2px 8px; border-radius: 4px; background: rgba(0,0,0,0.6); pointer-events: auto; transition: 0.3s; white-space: nowrap; text-align: center; }
         .fmt-toggle:hover { background: var(--theme-main, #00f0ff); color: #000; box-shadow: 0 0 10px var(--theme-main, #00f0ff); }
 
-        .desktop-only { display: flex !important; }
-        .mobile-only-flex { display: none !important; }
-
-        /* --- GLOBAL DESKTOP NAVBAR --- */
+        /* --- NAVBAR & SCRUBBER INJECTION --- */
         .q-nav-bar { 
             position: fixed; 
-            bottom: 2.5vh; left: 50%; transform: translateX(-50%); width: max-content; padding: 0 20px; border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.9), inset 0 0 20px rgba(255,255,255,0.05);
+            ${isHome ? 'display: none !important;' : 'bottom: 2.5vh; left: 50%; transform: translateX(-50%); width: max-content; padding: 0 20px; border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.9), inset 0 0 20px rgba(255,255,255,0.05);'}
             height: 45px; background: rgba(2, 6, 15, 0.95); 
             display: flex; justify-content: center; align-items: center; box-sizing: border-box; z-index: 100000; font-family: 'Orbitron'; pointer-events: auto !important; 
         }
-        
-        body.q-aperture-home .q-nav-bar { display: none !important; }
         
         .q-nav-menu { display: flex; align-items: center; gap: 0.8vw; pointer-events: auto !important; width: 100%; justify-content: center; }
         .q-nav-btn { background: transparent; border: 1px solid rgba(255,255,255,0.2); color: rgba(255,255,255,0.6); padding: 6px 12px; border-radius: 4px; font-family: 'Orbitron'; font-size: 0.6rem; font-weight: bold; cursor: pointer; transition: 0.3s; letter-spacing: 1px; padding-left: 13px; text-decoration: none; display: inline-block; text-align: center; pointer-events: auto !important; white-space: nowrap; }
@@ -182,9 +160,7 @@ window.injectUniversalUI = function() {
         #q-mic-fab-desktop.listening { animation: pulse-mic-desktop 1.5s infinite; }
         @keyframes pulse-mic-desktop { 0% { transform: scale(1); box-shadow: 0 0 10px var(--theme-main, #00f0ff); } 50% { transform: scale(1.1); box-shadow: 0 0 25px var(--theme-main, #00f0ff); } 100% { transform: scale(1); box-shadow: 0 0 10px var(--theme-main, #00f0ff); } }
         
-        .q-global-controls { position: fixed; left: 50%; transform: translateX(-50%); z-index: 9995; align-items: center; gap: 12px; background: rgba(10, 12, 18, 0.95); backdrop-filter: blur(20px); border-radius: 50px; padding: 10px 25px; justify-content: space-between; box-shadow: 0 10px 40px rgba(0,0,0,0.9), 0 0 20px rgba(255,255,255,0.05); border: 1px solid rgba(255, 255, 255, 0.1); pointer-events: auto; display: flex; bottom: calc(2.5vh + 60px); }
-        body.q-aperture-home .q-global-controls { display: none !important; }
-        
+        .q-global-controls { position: fixed; ${isHome ? 'display: none !important;' : 'bottom: calc(2.5vh + 60px);'} left: 50%; transform: translateX(-50%); z-index: 9995; display: flex; align-items: center; gap: 12px; background: rgba(10, 12, 18, 0.95); backdrop-filter: blur(20px); border-radius: 50px; padding: 10px 25px; justify-content: space-between; box-shadow: 0 10px 40px rgba(0,0,0,0.9), 0 0 20px rgba(255,255,255,0.05); border: 1px solid rgba(255, 255, 255, 0.1); pointer-events: auto; }
         .q-ctrl-btn { background: transparent; border: 1px solid var(--theme-main, #00f0ff); color: var(--theme-main, #00f0ff); padding: 8px 14px; cursor: pointer; font-family: 'Orbitron'; font-size: 0.65rem; font-weight: 700; border-radius: 6px; transition: 0.3s; letter-spacing: 1px; padding-left: 15px; white-space: nowrap; pointer-events: auto; }
         .q-ctrl-btn:hover { background: rgba(255,255,255,0.1); color: #fff; }
         .q-ctrl-btn.active { background: var(--theme-main, #00f0ff); color: #000; }
@@ -192,250 +168,113 @@ window.injectUniversalUI = function() {
         .q-scrubber::-webkit-slider-thumb { -webkit-appearance: none; height: 22px; width: 22px; background: var(--theme-main, #00f0ff); clip-path: polygon(50% 0%, 60% 40%, 100% 50%, 60% 60%, 50% 100%, 40% 60%, 0% 50%, 40% 40%); cursor: grab; pointer-events: auto; }
         .q-scrubber::-webkit-slider-thumb:active { cursor: grabbing; }
 
+        .desktop-only { display: flex !important; }
+        .mobile-only-flex { display: none !important; }
+
         @media (max-width: 950px) {
-            /* 1. FORCE DESKTOP PARITY ON MOBILE */
-            /* Eradicate the `.desktop-only` suppression entirely to allow graphical frames to render */
-            .desktop-only { display: flex !important; } 
-            
-            /* Purge the fallback raw HTML buttons from index.html */
-            .mobile-routing-grid { display: none !important; pointer-events: none !important; } 
-            
+            :root { --dial-size: min(48vh, 85vw) !important; } 
+            .desktop-only { display: none !important; }
             .mobile-only-flex { display: flex !important; }
             
-            /* 2. SCALE APERTURE HOME (INDEX.HTML) FOR MOBILE VIEWPORT */
-            body.q-aperture-home {
-                --dial-size: 45vw !important; /* Scale down the Iris */
-                --panel-w: 160px !important; /* Scale down corner panels */
-                --panel-h: 50px !important;
-                --corner-gap-x: 12vw !important; /* Pull panels inward */
-                --corner-gap-y: 18vh !important;
-            }
-            
-            body.q-aperture-home .panel-label { font-size: 0.55rem !important; letter-spacing: 2px !important; }
-            body.q-aperture-home .tl .panel-label { padding-left: 30px !important; }
-            body.q-aperture-home .tr .panel-label { padding-right: 30px !important; }
-            body.q-aperture-home .bl .panel-label { padding-left: 30px !important; }
-            body.q-aperture-home .br .panel-label { padding-right: 30px !important; }
-
-            /* Scale down the graphical Omni-Planner/Dashboard buttons */
-            body.q-aperture-home .center-axis-btn {
-                transform: translateX(-50%) scale(0.65) !important; 
-            }
-            body.q-aperture-home .center-axis-btn:hover {
-                transform: translateX(-50%) scale(0.7) !important;
-            }
-            
-            /* Ensure Aperture Iris stays perfectly centered */
-            body.q-aperture-home .q-center-dial {
-                margin-top: 0 !important;
-                z-index: 10 !important;
-            }
-
-            /* --- VECTOR HUD DIAL POSITIONING (PHY/MET/ENV/AST) --- */
-            body.q-vector-hud .q-center-dial { 
-                margin-top: 5vh !important; /* Push dial slightly down to clear mobile navbar */
-                transform: translate(-50%, -50%) scale(0.8) !important; /* Scale 3D physics dials */
-                z-index: 10 !important; 
-            }
-
-            /* Hide injected q-ui panels on Vector HUDs until Data View is opened */
             body:not(.telemetry-open) .telemetry-node { display: none !important; visibility: hidden !important; }
             body:not(.telemetry-open) .vector-anchor { display: none !important; visibility: hidden !important; }
             body:not(.telemetry-open) .wing-panel { display: none !important; }
+            body:not(.telemetry-open) .corner-panel { display: none !important; }
             
-            /* --- APERTURE MOBILE SUPPRESSION MATRIX --- */
-            body.q-aperture-home .q-control-strip,
-            body.q-aperture-home #mobile-telemetry-ribbon,
-            body.q-aperture-home #q-universal-controls,
-            body.q-aperture-home .q-nav-bar {
-                display: none !important;
-                visibility: hidden !important;
-                opacity: 0 !important;
-                pointer-events: none !important;
+            .q-nav-bar { 
+                top: 0px !important; margin-top: 0px !important; left: 0px !important; padding: 0 10px !important; 
+                height: 50px !important; width: 100vw !important; transform: none !important; border-radius: 0 !important; 
+                background: transparent !important; border: none !important; box-shadow: none !important; pointer-events: none !important; 
             }
+            .q-nav-bar * { pointer-events: auto !important; }
+            .q-nav-menu .vector-link { display: none !important; } 
             
-            /* --- PURE 2D VECTOR HUD MOBILE ACTIVATION MATRIX --- */
-            body.q-vector-hud .q-nav-bar { 
-                display: flex !important;
-                position: fixed !important;
-                top: 0px !important; 
-                left: 0px !important; 
-                padding: 0 10px !important; 
-                height: 50px !important; 
-                width: 100% !important; 
-                background: rgba(2, 6, 15, 0.95) !important; 
-                border-bottom: 1px solid rgba(255,255,255,0.1) !important; 
-                box-shadow: 0 5px 15px rgba(0,0,0,0.9) !important; 
-                z-index: 2147483647 !important;
-                visibility: visible !important;
-                opacity: 1 !important;
-                transform: none !important; 
-                pointer-events: none !important;
-                box-sizing: border-box !important;
-            }
-            body.q-vector-hud .q-nav-bar * { pointer-events: auto !important; }
+            #q-global-sim-badge { font-size: 0.45rem !important; padding: 2px 4px !important; letter-spacing: 0px !important; margin-left: 0 !important; white-space: nowrap; flex-shrink: 0; position: relative; z-index: 100000; pointer-events: auto !important; }
             
-            body.q-vector-hud .hamburger-btn {
-                display: block !important;
-                pointer-events: auto !important; 
-                position: absolute !important;
-                right: 15px !important;
-                top: 10px !important;
-            }
-
-            body.q-vector-hud .q-nav-menu { 
-                display: flex !important; 
-                position: static !important;
-                flex-direction: row !important;
-                justify-content: flex-start !important;
-                align-items: center !important;
-                width: calc(100% - 50px) !important; 
-                background: transparent !important;
-                overflow-x: auto !important;
-                gap: 8px !important;
-            } 
-            body.q-vector-hud .q-nav-menu::-webkit-scrollbar { display: none; }
-
-            body.q-vector-hud .q-nav-menu .bio-btn,
-            body.q-vector-hud .q-nav-menu .com-btn,
-            body.q-vector-hud .q-nav-menu .env-btn,
-            body.q-vector-hud .q-nav-menu .mec-btn,
-            body.q-vector-hud .q-nav-menu .omni,
-            body.q-vector-hud .q-nav-menu .special {
-                display: none !important;
-            }
-
-            body.q-vector-hud .q-nav-menu .face-btn,
-            body.q-vector-hud .q-nav-menu .sim-badge {
-                display: inline-block !important;
-            }
-
-            body.q-vector-hud #q-global-sim-badge { font-size: 0.45rem !important; padding: 2px 4px !important; letter-spacing: 0px !important; white-space: nowrap; flex-shrink: 0; pointer-events: auto !important; }
-            body.q-vector-hud .q-nav-btn { padding: 4px 8px; font-size: 0.55rem; border-radius: 4px; border: 1px solid rgba(255,255,255,0.2) !important; }
+            .q-nav-menu { position: static; flex-direction: row; overflow-x: auto; white-space: nowrap; background: transparent; box-shadow: none; transform: none; width: auto; -webkit-overflow-scrolling: touch; border: none; padding-bottom: 0; gap: 5px; justify-content: flex-start; }
+            .q-nav-menu::-webkit-scrollbar { display: none; }
+            .q-nav-btn { padding: 4px 8px; font-size: 0.55rem; margin-right: 0; border-radius: 4px; border: 1px solid rgba(255,255,255,0.2) !important; }
             
-            /* --- CONTROL STRIP GATEWAY (FIXED VISIBILITY) --- */
-            body.q-vector-hud .q-control-strip {
-                display: flex !important;
-                position: fixed !important;
-                bottom: 0px !important; 
-                left: 0px !important;
-                transform: none !important; 
-                width: 100% !important; 
-                height: 65px !important;
-                padding-bottom: env(safe-area-inset-bottom, 15px) !important; /* CLEARANCE FOR IOS/ANDROID BOTTOM BAR */
-                z-index: 2147483647 !important;
-                background: rgba(2, 6, 15, 0.98) !important;
-                border-top: 1px solid var(--theme-dim, rgba(0, 240, 255, 0.2)) !important;
-                justify-content: space-around !important;
-                align-items: center !important;
-                box-shadow: 0 -10px 30px rgba(0,0,0,0.9) !important;
-                visibility: visible !important;
-                opacity: 1 !important;
-                pointer-events: auto !important;
-                box-sizing: content-box !important; /* Essential to prevent squishing strip icons */
-            }
-
-            body.q-vector-hud #q-universal-controls {
-                display: flex !important;
-                position: fixed !important;
-                bottom: calc(65px + env(safe-area-inset-bottom, 15px)) !important; 
-                left: 0px !important;
-                transform: none !important; 
-                z-index: 2147483646 !important;
-                visibility: visible !important;
-                opacity: 1 !important;
-                pointer-events: auto !important;
-                align-items: center !important; 
-                justify-content: space-between !important;
-                width: 100% !important; 
-                box-sizing: border-box !important; 
-                padding: 6px 12px !important; 
-                gap: 4px !important;
-            }
-
-            body.q-vector-hud #mobile-telemetry-ribbon {
-                display: flex !important;
-                position: fixed !important;
-                top: 50px !important;
-                left: 0px !important;
-                height: 45px !important;
-                width: 100% !important;
-                background: rgba(2, 6, 15, 0.98) !important;
-                border-bottom: 1px solid var(--theme-dim, rgba(0, 240, 255, 0.2)) !important;
-                z-index: 2147483645 !important;
-                transform: none !important; 
-                justify-content: space-between !important;
-                align-items: center !important;
-                box-shadow: 0 5px 15px rgba(0,0,0,0.9) !important;
-                padding: 0 10px !important;
-                box-sizing: border-box !important;
-                white-space: nowrap !important;
-                visibility: visible !important;
-                opacity: 1 !important;
-                pointer-events: auto !important;
-            }
+            .q-center-dial { margin-top: -3vh !important; }
             
-            .strip-btn { background: transparent; border: none; color: var(--platinum); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; cursor: pointer; text-decoration: none; padding: 5px; pointer-events: auto !important; height: 100%; }
+            .q-control-strip { position: fixed; bottom: 0 !important; left: 0; width: 100%; background: rgba(2, 6, 15, 0.98); border-top: 1px solid var(--theme-dim, rgba(0, 240, 255, 0.2)); display: flex; justify-content: space-around; align-items: center; z-index: 100000; height: 65px !important; padding-bottom: 0 !important; box-shadow: 0 -10px 30px rgba(0,0,0,0.9); pointer-events: auto !important; }
+            .strip-btn { background: transparent; border: none; color: var(--platinum); display: flex; flex-direction: column; align-items: center; gap: 4px; cursor: pointer; text-decoration: none; padding: 5px; pointer-events: auto !important; }
             .strip-btn svg { transition: 0.3s; }
+            
             .strip-btn.face-strip.active svg { color: var(--chrono-amber) !important; filter: drop-shadow(0 0 8px var(--chrono-amber)) !important; }
             .strip-btn.face-strip.active .strip-lbl { color: var(--chrono-amber) !important; }
-            .strip-btn.bio-strip.active svg { color: var(--bio-purple, #b829ff) !important; filter: drop-shadow(0 0 8px var(--bio-purple, #b829ff)) !important; }
-            .strip-btn.bio-strip.active .strip-lbl { color: var(--bio-purple, #b829ff) !important; }
+            .strip-btn.bio-strip.active svg { color: var(--bio-purple) !important; filter: drop-shadow(0 0 8px var(--bio-purple)) !important; }
+            .strip-btn.bio-strip.active .strip-lbl { color: var(--bio-purple) !important; }
             .strip-btn.com-strip.active svg { color: var(--gold, #F4D068) !important; filter: drop-shadow(0 0 8px var(--gold, #F4D068)) !important; }
             .strip-btn.com-strip.active .strip-lbl { color: var(--gold, #F4D068) !important; }
             .strip-btn.env-strip.active svg { color: var(--env-green, #a7ff83) !important; filter: drop-shadow(0 0 8px var(--env-green, #a7ff83)) !important; }
             .strip-btn.env-strip.active .strip-lbl { color: var(--env-green, #a7ff83) !important; }
             .strip-btn.mec-strip.active svg { color: var(--sys-cyan, #00f0ff) !important; filter: drop-shadow(0 0 8px var(--sys-cyan, #00f0ff)) !important; }
             .strip-btn.mec-strip.active .strip-lbl { color: var(--sys-cyan, #00f0ff) !important; }
-            .strip-lbl { font-family: 'Orbitron'; font-size: 0.4rem; font-weight: 900; letter-spacing: 1px; padding-left: 1px; color: rgba(255,255,255,0.5); transition: 0.3s; }
 
-            /* Telemetry Viewport (Data Panels) */
-            #mobile-telemetry-viewport { 
-                display: none; 
-                position: fixed !important; 
-                top: 45vh !important; 
-                bottom: calc(65px + env(safe-area-inset-bottom, 15px)) !important; 
-                height: auto !important; 
-                left: 0; 
-                width: 100vw; 
-                background: linear-gradient(to bottom, transparent 0%, rgba(5,5,8,0.85) 15%, rgba(5,5,8,0.98) 100%); 
-                backdrop-filter: blur(8px); 
-                -webkit-backdrop-filter: blur(8px); 
-                z-index: 50 !important; /* Stacks panels above the dial */
-                overflow-y: scroll !important; 
-                overflow-x: hidden !important; 
-                -webkit-overflow-scrolling: touch; 
-                overscroll-behavior: contain; 
-                flex-direction: column; 
-                align-items: center; 
-                justify-content: flex-start; 
-                padding-top: 15px !important; 
-                margin-top: 0 !important; 
-                padding-bottom: 20px !important; 
-                box-sizing: border-box !important; 
-                gap: 15px; 
-                pointer-events: auto !important; 
-            }
+            .strip-lbl { font-family: 'Orbitron'; font-size: 0.4rem; font-weight: 900; letter-spacing: 1px; padding-left: 1px; color: rgba(255,255,255,0.5); transition: 0.3s; }
+            
+            #mobile-telemetry-ribbon { display: flex !important; position: fixed; top: 50px !important; margin-top: 0 !important; left: 0px !important; height: 45px !important; width: 100vw !important; background: rgba(2, 6, 15, 0.98); border-bottom: 1px solid var(--theme-dim, rgba(0, 240, 255, 0.2)); z-index: 99998 !important; justify-content: space-between; align-items: center; box-shadow: 0 5px 15px rgba(0,0,0,0.9); padding: 0 10px !important; box-sizing: border-box; white-space: nowrap; overflow: hidden; }
+            #ribbon-leg-date { white-space: nowrap; font-size: 0.6rem !important; }
+            #ribbon-leg { white-space: nowrap; font-size: 0.65rem !important; }
+
+            #mobile-telemetry-viewport { display: none; position: fixed !important; top: 95px !important; bottom: 65px !important; height: auto !important; left: 0; width: 100vw; background: rgba(5,5,8,0.95); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px); z-index: 99900; overflow-y: scroll !important; overflow-x: hidden !important; -webkit-overflow-scrolling: touch; overscroll-behavior: contain; flex-direction: column; align-items: center; justify-content: flex-start; padding-top: 15px !important; margin-top: 0 !important; padding-bottom: 20px !important; box-sizing: border-box !important; gap: 15px; pointer-events: auto !important; }
             #mobile-telemetry-viewport .telemetry-node { display: flex !important; position: relative !important; top: auto !important; left: auto !important; right: auto !important; bottom: auto !important; transform: translateZ(0) !important; margin: 0 !important; width: 95vw !important; max-width: 360px !important; min-height: min-content !important; height: auto !important; box-sizing: border-box !important; backface-visibility: hidden !important; visibility: visible !important; flex-shrink: 0 !important; pointer-events: auto !important; opacity: 1 !important; }
             #mobile-telemetry-viewport .wing-panel { display: none !important; }
-            #mobile-telemetry-viewport .corner-panel { height: auto !important; min-height: 120px !important; padding: 20px !important; pointer-events: auto !important; }
+            
+            #mobile-telemetry-viewport .corner-panel { height: auto !important; min-height: 120px !important; padding: 20px !important; }
             #mobile-telemetry-viewport .panel-bg { display: none !important; } 
             #mobile-telemetry-viewport .frost-zone { inset: 0 !important; border-radius: 8px !important; border: 1px solid rgba(255,255,255,0.1); }
             #mobile-telemetry-viewport .panel-data-container { padding: 0 !important; margin-top: 10px !important; align-items: center !important; text-align: center !important; }
             #mobile-telemetry-viewport .panel-label { padding: 0 !important; position: relative !important; }
             #mobile-telemetry-viewport .opt-oval { position: absolute !important; top: 15px !important; right: 15px !important; left: auto !important; bottom: auto !important; }
+            
+            body.telemetry-open .q-center-dial { display: none !important; }
 
+            .q-global-controls { 
+                display: flex !important; 
+                align-items: center !important; 
+                justify-content: space-between !important;
+                width: 95vw !important; 
+                min-width: unset !important; 
+                box-sizing: border-box !important; 
+                padding: 6px 8px !important; 
+                gap: 4px !important;
+                ${isHome ? 'display: none !important;' : 'bottom: calc(2.5vh + 65px) !important;'}
+            } 
+            
             #q-mic-fab { 
-                position: static !important; transform: none !important;
-                width: 32px !important; height: 32px !important; border-radius: 6px !important; font-size: 1rem !important; box-shadow: none !important; order: 1 !important; flex-shrink: 0 !important;
-                background: rgba(5, 8, 15, 0.9); border: 1px solid var(--theme-main, #00f0ff); color: var(--theme-main, #00f0ff);
-                display: flex; justify-content: center; align-items: center; cursor: pointer; transition: all 0.3s ease; pointer-events: auto !important;
+                position: static !important; 
+                transform: none !important;
+                width: 32px !important; 
+                height: 32px !important; 
+                border-radius: 6px !important; 
+                font-size: 1rem !important; 
+                box-shadow: none !important;
+                order: 1 !important; 
+                flex-shrink: 0 !important;
+                background: rgba(5, 8, 15, 0.9);
+                border: 1px solid var(--theme-main, #00f0ff);
+                color: var(--theme-main, #00f0ff);
+                display: flex; justify-content: center; align-items: center;
+                cursor: pointer; transition: all 0.3s ease; pointer-events: auto !important;
             }
             #q-mic-fab.listening { animation: pulse-mic 1.5s infinite; background: var(--theme-main, #00f0ff); color: #000; box-shadow: 0 0 25px var(--theme-main, #00f0ff) !important; }
+            
             .q-global-controls > .q-ctrl-btn:nth-child(1) { order: 2 !important; padding: 0 8px !important; height: 32px !important; min-width: 24px !important; flex-shrink: 0; }
             .q-scrubber { order: 3 !important; min-width: 0 !important; width: 100% !important; margin: 0 !important; flex-grow: 1 !important; }
             .q-global-controls > .q-ctrl-btn:nth-child(3) { order: 4 !important; padding: 0 8px !important; height: 32px !important; min-width: 24px !important; flex-shrink: 0; }
-            #q-live-toggle { order: 5 !important; width: auto !important; min-width: 32px !important; height: 32px !important; padding: 0 6px !important; font-size: 0.55rem !important; flex-shrink: 0 !important; margin: 0 !important; }
+
+            #q-live-toggle {
+                order: 5 !important; 
+                width: auto !important;
+                min-width: 32px !important;
+                height: 32px !important;
+                padding: 0 6px !important;
+                font-size: 0.55rem !important; 
+                flex-shrink: 0 !important;
+                margin: 0 !important;
+            }
         }
     `;
     document.head.appendChild(style);
@@ -443,6 +282,7 @@ window.injectUniversalUI = function() {
     const uiContainer = document.createElement('div');
     uiContainer.id = 'q-ui-injected-flag';
 
+    // THE HOLLOW SHELL: Only injecting empty frames for the local files to target.
     uiContainer.innerHTML = `
         <div class="space-bg"></div>
         <div class="star-container" id="stars"></div>
@@ -454,7 +294,7 @@ window.injectUniversalUI = function() {
             <div style="display:flex; width: 100%; justify-content: center; align-items: center;">
                 <div class="q-nav-menu" id="q-nav-menu">
                     <button id="q-global-sim-badge" class="q-nav-btn sim-badge" style="display: inline-block; border-color:${authBorder} !important; color:${authColor} !important; background:${authBg} !important;" onclick="window.triggerDomainShift(event)">${authText}</button>
-                    <a href="index.html" class="q-nav-btn face-btn vector-link ${isHome ? 'active' : ''}" onclick="window.location.href=this.href; return false;">THE APERTURE</a>
+                    <a href="index.html" class="q-nav-btn face-btn vector-link ${faceActive ? 'active' : ''}" onclick="window.location.href=this.href; return false;">THE APERTURE</a>
                     <a href="PHYSIOLOGICAL.html" class="q-nav-btn bio-btn vector-link ${bActive ? 'active' : ''}" onclick="window.location.href=this.href; return false;">PHYSIOLOGICAL</a>
                     <a href="METAPHYSICAL.html" class="q-nav-btn com-btn vector-link ${cActive ? 'active' : ''}" onclick="window.location.href=this.href; return false;">METAPHYSICAL</a>
                     <a href="METEOROLOGICAL.html" class="q-nav-btn env-btn vector-link ${eActive ? 'active' : ''}" onclick="window.location.href=this.href; return false;">METEOROLOGICAL</a>
@@ -463,7 +303,7 @@ window.injectUniversalUI = function() {
                     <button class="q-nav-btn special desktop-only" style="border-color: var(--chrono-amber); color: var(--chrono-amber); display: inline-block;" onclick="if(typeof window.Q_IntegrationHub !== 'undefined') window.Q_IntegrationHub.openHub()">[ DASHBOARD ]</button>
                 </div>
             </div>
-            <button class="mobile-only-flex hamburger-btn" style="background:transparent; border:none; color:var(--theme-main, #00f0ff); font-size:1.5rem; padding:0; margin:0; cursor:pointer;" onclick="if(typeof window.Q_IntegrationHub !== 'undefined') window.Q_IntegrationHub.openHub()">☰</button>
+            <button class="mobile-only-flex" style="background:transparent; border:none; color:var(--theme-main, #00f0ff); font-size:1.5rem; padding:0; margin:0; position:absolute; right:15px; cursor:pointer;" onclick="if(typeof window.Q_IntegrationHub !== 'undefined') window.Q_IntegrationHub.openHub()">☰</button>
         </div>
 
         <div id="mobile-telemetry-ribbon" class="mobile-only-flex">
@@ -487,7 +327,7 @@ window.injectUniversalUI = function() {
                 <svg viewBox="0 0 24 24" width="22" height="22" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"><circle cx="12" cy="5" r="3"/><line x1="12" y1="8" x2="12" y2="16"/><circle cx="6" cy="20" r="3"/><circle cx="18" cy="20" r="3"/><line x1="12" y1="16" x2="6" y2="17"/><line x1="12" y1="16" x2="18" y2="17"/></svg>
                 <span class="strip-lbl">MET</span>
             </a>
-            <a href="index.html" class="strip-btn face-strip ${isHome ? 'active' : ''}" onclick="window.location.href=this.href; return false;">
+            <a href="index.html" class="strip-btn face-strip ${faceActive ? 'active' : ''}" onclick="window.location.href=this.href; return false;">
                 <svg viewBox="0 0 24 24" width="22" height="22" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>
                 <span class="strip-lbl">APT</span>
             </a>
@@ -505,35 +345,28 @@ window.injectUniversalUI = function() {
             </button>
         </div>
 
-        <div class="q-global-controls" id="q-universal-controls">
-            <button class="q-ctrl-btn" onclick="window.stepScrubber(-1)">&lt;</button>
-            <input type="range" min="0" max="365" step="1" value="0" class="q-scrubber" id="q-global-scrubber" oninput="window.scrubTime(this.value)">
-            <button class="q-ctrl-btn" onclick="window.stepScrubber(1)">&gt;</button>
-            <button class="q-ctrl-btn" id="q-live-toggle" onclick="window.setLiveClock()">LIVE</button>
-        </div>
-
         <button id="q-mic-fab" class="mobile-only-flex" onclick="if(window.Q_KairosVoice) window.Q_KairosVoice.toggle()">🎙</button>
         <button id="q-mic-fab-desktop" class="desktop-only" onclick="if(window.Q_KairosVoice) window.Q_KairosVoice.toggle()">🎙</button>
-        
-        <div class="corner-panel tl telemetry-node">
+
+        <div class="corner-panel tl telemetry-node desktop-only">
             <div class="frost-zone"></div>
             <div class="panel-bg"></div>
             <div class="opt-oval" id="opt-tl">OPT</div>
             <div class="panel-data-container" id="quad-tl"></div>
         </div>
-        <div class="corner-panel tr telemetry-node">
+        <div class="corner-panel tr telemetry-node desktop-only">
             <div class="frost-zone"></div>
             <div class="panel-bg"></div>
             <div class="opt-oval" id="opt-tr">OPT</div>
             <div class="panel-data-container" id="quad-tr"></div>
         </div>
-        <div class="corner-panel bl telemetry-node">
+        <div class="corner-panel bl telemetry-node desktop-only">
             <div class="frost-zone"></div>
             <div class="panel-bg"></div>
             <div class="opt-oval" id="opt-bl">OPT</div>
             <div class="panel-data-container" id="quad-bl"></div>
         </div>
-        <div class="corner-panel br telemetry-node">
+        <div class="corner-panel br telemetry-node desktop-only">
             <div class="frost-zone"></div>
             <div class="panel-bg"></div>
             <div class="opt-oval" id="opt-br">OPT</div>
@@ -590,9 +423,17 @@ window.injectUniversalUI = function() {
                 <div style="font-size:0.5rem; color:var(--starlight); border-top: 1px dashed var(--theme-dim, rgba(0,240,255,0.2)); padding-top: 8px; width: 85%; margin: 0 auto;">DUAL-STATE ENGINE</div>
             </div>
         </div>
-    `;
 
-    document.body.appendChild(uiContainer);
+        <div class="q-global-controls" id="q-universal-controls">
+            <button class="q-ctrl-btn" onclick="window.stepScrubber(-1)">&lt;</button>
+            <input type="range" min="0" max="365" step="1" value="0" class="q-scrubber" id="q-global-scrubber" oninput="window.scrubTime(this.value)">
+            <button class="q-ctrl-btn" onclick="window.stepScrubber(1)">&gt;</button>
+            <button class="q-ctrl-btn" id="q-live-toggle" onclick="window.setLiveClock()">LIVE</button>
+        </div>
+    `;
+    
+    const refNode = document.body.firstChild;
+    while (uiContainer.firstChild) document.body.insertBefore(uiContainer.firstChild, refNode);
     
     window.bindMasterTickScrubber();
     window.syncScrubberUI();
@@ -675,9 +516,12 @@ window.injectUniversalUI = function() {
         }
     });
 
+    // --- DECOUPLED MOUNT EVENT DISPATCH ---
+    // Signals to local HTML files that the hollow frames are ready for data injection.
     window.dispatchEvent(new Event('q-ui-mounted'));
 };
 
+// Global Tax Day Deselection Interceptor
 window.addEventListener('click', (e) => {
     let el = e.target;
     if (el && el.id === 'q-modal-btn' && document.getElementById('btn-sys')) {
@@ -690,6 +534,7 @@ window.addEventListener('click', (e) => {
     }
 });
 
+// --- GLOBAL ROUTING INTERCEPTOR ---
 window.addEventListener('click', (e) => {
     try {
         let el = e.target;
@@ -950,6 +795,7 @@ window.syncScrubberUI = function() {
 
 window.addEventListener('DOMContentLoaded', () => {
     window.injectUniversalUI();
+    // Fire global star generation now that the universal #stars container is mounted
     if (window.generateStars) window.generateStars('stars');
 
     if (window.innerWidth <= 950) {

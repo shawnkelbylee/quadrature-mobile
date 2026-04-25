@@ -10,8 +10,8 @@ import 'react-native-url-polyfill/auto';
 import { createClient } from '@supabase/supabase-js';
 
 // ARCHITECT NOTE: Inject your live Supabase credentials here
-const supabaseUrl = 'YOUR_SUPABASE_URL';
-const supabaseAnonKey = 'YOUR_SUPABASE_ANON_KEY';
+const supabaseUrl = 'https://wnfpxozpeucrwqmrqpzv.supabase.co';
+const supabaseAnonKey = 'sb_publishable_g6JfCH6FefIwEmXztgkdTw_Md1z4se5;
 const supabase = createClient(supabaseUrl, supabaseAnonKey);
 
 export default function App() {

@@ -110,7 +110,8 @@
 
         window.getQBlockByTime = function(ts) {
             if(!window.ANCHOR_ALPHA_DYNAMIC || !window.Q_BLOCKS) return null;
-            let diff = ts - window.ANCHOR_ALPHA_DYNAMIC;
+            // CRITICAL FIX: Inject 5ms buffer to absorb IEEE 754 float precision loss on boundary calculations
+            let diff = (ts + 5) - window.ANCHOR_ALPHA_DYNAMIC;
             let cycleIdx = Math.floor(diff / window.Q_YEAR_MS);
             let rem = diff % window.Q_YEAR_MS;
             if(rem < 0) { rem += window.Q_YEAR_MS; cycleIdx -= 1; }
@@ -124,7 +125,7 @@
             return null;
         };
 
-        window.stepQBlock = function(ts, n) {
+       window.stepQBlock = function(ts, n) {
             let current = window.getQBlockByTime(ts);
             if(!current) return ts;
             let targetIdx = current.blockIndex + n;
@@ -133,7 +134,8 @@
             while(targetIdx >= window.Q_BLOCKS.length) { targetIdx -= window.Q_BLOCKS.length; targetCycle += 1; }
             while(targetIdx < 0) { targetIdx += window.Q_BLOCKS.length; targetCycle -= 1; }
             
-            return window.ANCHOR_ALPHA_DYNAMIC + (targetCycle * window.Q_YEAR_MS) + window.Q_BLOCKS[targetIdx].relStart;
+            let targetBlock = window.Q_BLOCKS[targetIdx];
+            return window.ANCHOR_ALPHA_DYNAMIC + (targetCycle * window.Q_YEAR_MS) + targetBlock.relStart + (targetBlock.dur / 2);
         };
 
         window.stepQSector = function(ts, n) {
@@ -151,7 +153,8 @@
                     if(cIdx < 0) { cIdx += window.Q_BLOCKS.length; cCycle--; }
                 } while (window.Q_BLOCKS[cIdx].deg !== 1);
             }
-            return window.ANCHOR_ALPHA_DYNAMIC + (cCycle * window.Q_YEAR_MS) + window.Q_BLOCKS[cIdx].relStart;
+            let targetBlock = window.Q_BLOCKS[cIdx];
+            return window.ANCHOR_ALPHA_DYNAMIC + (cCycle * window.Q_YEAR_MS) + targetBlock.relStart + (targetBlock.dur / 2);
         };
 
         // Call the array generator immediately
